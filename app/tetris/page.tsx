@@ -6,7 +6,8 @@ const COLS = 10;
 const ROWS = 20;
 const HIDDEN_ROWS = 2;
 const TOTAL_ROWS = ROWS + HIDDEN_ROWS;
-const CELL = 28;
+const CELL_DESKTOP = 28;
+const CELL_MIN = 18;
 
 type Cell = 0 | TetrominoKey;
 type DisplayCell = Cell | "ghost";
@@ -265,6 +266,25 @@ export default function TetrisPage() {
   const [running, setRunning] = useState(false);
   const [paused, setPaused] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const [cellSize, setCellSize] = useState(CELL_DESKTOP);
+
+  useEffect(() => {
+    const compute = () => {
+      const horizontalPadding = window.innerWidth < 768 ? 24 : 64;
+      const available = window.innerWidth - horizontalPadding;
+      const byWidth = Math.floor((available - 10) / COLS);
+      const byHeight = Math.floor((window.innerHeight - 360) / ROWS);
+      const limit = Math.min(byWidth, byHeight, CELL_DESKTOP);
+      setCellSize(Math.max(CELL_MIN, limit));
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    window.addEventListener("orientationchange", compute);
+    return () => {
+      window.removeEventListener("resize", compute);
+      window.removeEventListener("orientationchange", compute);
+    };
+  }, []);
 
   const stateRef = useRef({ board, piece, bag, next, hold, canHold, level, running, paused, gameOver });
   useEffect(() => {
@@ -500,25 +520,42 @@ export default function TetrisPage() {
     return b.slice(HIDDEN_ROWS);
   }, [board, piece, ghost]);
 
+  const togglePause = useCallback(() => {
+    if (!running || gameOver) return;
+    setPaused((v) => !v);
+  }, [running, gameOver]);
+
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div
+      className="min-h-[100svh] bg-slate-900 text-slate-100 flex flex-col items-center px-3 py-4 md:p-6 relative overflow-hidden"
+      style={{ touchAction: "manipulation" }}
+    >
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <div className="absolute -top-32 -left-32 w-[40rem] h-[40rem] bg-indigo-600/20 rounded-full blur-[140px]" />
         <div className="absolute -bottom-32 -right-32 w-[40rem] h-[40rem] bg-fuchsia-500/15 rounded-full blur-[140px]" />
       </div>
 
-      <header className="mb-6 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-indigo-500 flex items-center justify-center font-black text-slate-900 shadow-lg shadow-cyan-500/30">
+      <header className="mb-3 md:mb-6 flex items-center gap-3 self-start md:self-auto">
+        <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-indigo-500 flex items-center justify-center font-black text-slate-900 shadow-lg shadow-cyan-500/30">
           T
         </div>
         <div>
-          <h1 className="text-2xl font-black tracking-tight">TETRIS</h1>
-          <p className="text-[10px] text-slate-500 uppercase tracking-[0.4em]">Next.js 16 · React 19.2</p>
+          <h1 className="text-xl md:text-2xl font-black tracking-tight">TETRIS</h1>
+          <p className="text-[9px] md:text-[10px] text-slate-500 uppercase tracking-[0.4em]">Next.js 16 · React 19.2</p>
         </div>
       </header>
 
+      {/* Mobile compact stats bar */}
+      <div className="md:hidden w-full max-w-sm grid grid-cols-5 gap-2 mb-3">
+        <CompactSlot label="HOLD" keyOf={hold} dim={!canHold} />
+        <CompactStat label="SCORE" value={score.toLocaleString()} />
+        <CompactStat label="LINES" value={lines.toString()} />
+        <CompactStat label="LEVEL" value={level.toString()} />
+        <CompactSlot label="NEXT" keyOf={next} />
+      </div>
+
       <div className="flex gap-6 items-start">
-        <Sidebar label="HOLD">
+        <Sidebar className="hidden md:block" label="HOLD">
           <MiniPreview keyOf={hold} dim={!canHold} />
           <div className="mt-6 text-[10px] uppercase tracking-[0.3em] text-slate-500">Controls</div>
           <ul className="mt-3 text-[11px] text-slate-400 space-y-1 leading-relaxed">
@@ -534,9 +571,9 @@ export default function TetrisPage() {
 
         <div
           className="relative rounded-2xl border border-slate-700/60 bg-slate-950/80 shadow-2xl shadow-indigo-900/40"
-          style={{ width: COLS * CELL + 8, height: ROWS * CELL + 8, padding: 4 }}
+          style={{ width: COLS * cellSize + 8, height: ROWS * cellSize + 8, padding: 4, touchAction: "none" }}
         >
-          <Grid display={display} />
+          <Grid display={display} cellSize={cellSize} />
           {(!running || paused || gameOver) && (
             <Overlay
               gameOver={gameOver}
@@ -548,7 +585,7 @@ export default function TetrisPage() {
           )}
         </div>
 
-        <Sidebar label="NEXT">
+        <Sidebar className="hidden md:block" label="NEXT">
           <MiniPreview keyOf={next} />
           <div className="mt-6 space-y-4">
             <Stat label="SCORE" value={score.toLocaleString()} />
@@ -558,17 +595,168 @@ export default function TetrisPage() {
         </Sidebar>
       </div>
 
-      <p className="mt-8 text-[10px] uppercase tracking-[0.4em] text-slate-600">Enter で開始 / リスタート</p>
+      {/* Touch controls — visible on mobile, helpful on touch desktop too */}
+      <TouchPad
+        onLeft={() => tryMove(0, -1)}
+        onRight={() => tryMove(0, 1)}
+        onDown={softDrop}
+        onRotateLeft={() => tryRotate(-1)}
+        onRotateRight={() => tryRotate(1)}
+        onHardDrop={hardDrop}
+        onHold={doHold}
+        onPause={togglePause}
+        disabled={!running || gameOver || paused}
+      />
+
+      <p className="mt-3 md:mt-6 text-[10px] uppercase tracking-[0.4em] text-slate-600 text-center">
+        <span className="md:hidden">タップで操作 / 開始ボタンから</span>
+        <span className="hidden md:inline">Enter で開始 / リスタート</span>
+      </p>
     </div>
   );
 }
 
-function Sidebar({ label, children }: { label: string; children: React.ReactNode }) {
+function Sidebar({
+  label,
+  children,
+  className = "",
+}: {
+  label: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <aside className="w-40 rounded-2xl border border-slate-700/60 bg-slate-900/60 backdrop-blur p-4">
+    <aside className={`w-40 rounded-2xl border border-slate-700/60 bg-slate-900/60 backdrop-blur p-4 ${className}`}>
       <div className="text-[10px] uppercase tracking-[0.3em] text-slate-500 mb-3">{label}</div>
       {children}
     </aside>
+  );
+}
+
+function CompactStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-slate-700/60 bg-slate-900/60 px-2 py-1.5 text-center">
+      <div className="text-[8px] uppercase tracking-[0.2em] text-slate-500">{label}</div>
+      <div className="text-sm font-black tabular-nums text-white leading-tight">{value}</div>
+    </div>
+  );
+}
+
+function CompactSlot({
+  label,
+  keyOf,
+  dim = false,
+}: {
+  label: string;
+  keyOf: TetrominoKey | null;
+  dim?: boolean;
+}) {
+  return (
+    <div className="rounded-xl border border-slate-700/60 bg-slate-900/60 px-1 py-1 flex flex-col items-center">
+      <div className="text-[8px] uppercase tracking-[0.2em] text-slate-500">{label}</div>
+      <div className="h-8 flex items-center justify-center">
+        <MiniPreview keyOf={keyOf} dim={dim} size={8} />
+      </div>
+    </div>
+  );
+}
+
+function TouchPad({
+  onLeft,
+  onRight,
+  onDown,
+  onRotateLeft,
+  onRotateRight,
+  onHardDrop,
+  onHold,
+  onPause,
+  disabled,
+}: {
+  onLeft: () => void;
+  onRight: () => void;
+  onDown: () => void;
+  onRotateLeft: () => void;
+  onRotateRight: () => void;
+  onHardDrop: () => void;
+  onHold: () => void;
+  onPause: () => void;
+  disabled: boolean;
+}) {
+  return (
+    <div className="mt-4 md:mt-6 w-full max-w-sm select-none" style={{ touchAction: "manipulation" }}>
+      <div className="grid grid-cols-4 gap-2 mb-2">
+        <TouchBtn label="Hold" onPress={onHold} variant="ghost">
+          HOLD
+        </TouchBtn>
+        <TouchBtn label="Rotate left" onPress={onRotateLeft} variant="accent">
+          ⟲
+        </TouchBtn>
+        <TouchBtn label="Rotate right" onPress={onRotateRight} variant="accent">
+          ⟳
+        </TouchBtn>
+        <TouchBtn label="Pause" onPress={onPause} variant="ghost">
+          ‖
+        </TouchBtn>
+      </div>
+      <div className="grid grid-cols-3 gap-2 mb-2">
+        <TouchBtn label="Move left" onPress={onLeft} disabled={disabled} large>
+          ◀
+        </TouchBtn>
+        <TouchBtn label="Soft drop" onPress={onDown} disabled={disabled} large>
+          ▼
+        </TouchBtn>
+        <TouchBtn label="Move right" onPress={onRight} disabled={disabled} large>
+          ▶
+        </TouchBtn>
+      </div>
+      <TouchBtn label="Hard drop" onPress={onHardDrop} disabled={disabled} variant="primary">
+        HARD DROP
+      </TouchBtn>
+    </div>
+  );
+}
+
+function TouchBtn({
+  label,
+  onPress,
+  disabled = false,
+  large = false,
+  variant = "default",
+  children,
+}: {
+  label: string;
+  onPress: () => void;
+  disabled?: boolean;
+  large?: boolean;
+  variant?: "default" | "primary" | "accent" | "ghost";
+  children: React.ReactNode;
+}) {
+  const base =
+    "w-full rounded-2xl font-bold flex items-center justify-center select-none active:scale-[0.97] transition-transform";
+  const sizing = large ? "h-16 text-2xl" : "h-12 text-base";
+  const palette =
+    variant === "primary"
+      ? "bg-gradient-to-r from-cyan-400 to-indigo-500 text-slate-900 shadow-lg shadow-cyan-500/30"
+      : variant === "accent"
+        ? "bg-slate-800 border border-indigo-500/50 text-indigo-200"
+        : variant === "ghost"
+          ? "bg-slate-900/60 border border-slate-700 text-slate-300"
+          : "bg-slate-800 border border-slate-600 text-white";
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      disabled={disabled && variant !== "ghost" && variant !== "accent"}
+      onPointerDown={(e) => {
+        e.preventDefault();
+        onPress();
+      }}
+      onContextMenu={(e) => e.preventDefault()}
+      className={`${base} ${sizing} ${palette} disabled:opacity-40 disabled:active:scale-100`}
+      style={{ touchAction: "none" }}
+    >
+      {children}
+    </button>
   );
 }
 
@@ -581,8 +769,15 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function MiniPreview({ keyOf, dim = false }: { keyOf: TetrominoKey | null; dim?: boolean }) {
-  const size = 18;
+function MiniPreview({
+  keyOf,
+  dim = false,
+  size = 18,
+}: {
+  keyOf: TetrominoKey | null;
+  dim?: boolean;
+  size?: number;
+}) {
   const grid = useMemo(() => {
     if (!keyOf) return null;
     const shape = SHAPES[keyOf][0];
@@ -592,7 +787,7 @@ function MiniPreview({ keyOf, dim = false }: { keyOf: TetrominoKey | null; dim?:
   }, [keyOf]);
 
   return (
-    <div className="h-20 flex items-center justify-center">
+    <div className="flex items-center justify-center" style={{ minHeight: size * 4 }}>
       {grid && keyOf ? (
         <div
           className={dim ? "opacity-40" : "opacity-100"}
@@ -626,13 +821,13 @@ function MiniPreview({ keyOf, dim = false }: { keyOf: TetrominoKey | null; dim?:
   );
 }
 
-function Grid({ display }: { display: DisplayCell[][] }) {
+function Grid({ display, cellSize }: { display: DisplayCell[][]; cellSize: number }) {
   return (
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: `repeat(${COLS}, ${CELL}px)`,
-        gridTemplateRows: `repeat(${ROWS}, ${CELL}px)`,
+        gridTemplateColumns: `repeat(${COLS}, ${cellSize}px)`,
+        gridTemplateRows: `repeat(${ROWS}, ${cellSize}px)`,
         gap: 1,
         background: "rgba(15,23,42,0.9)",
         borderRadius: 12,
@@ -647,8 +842,8 @@ function Grid({ display }: { display: DisplayCell[][] }) {
               <div
                 key={key}
                 style={{
-                  width: CELL,
-                  height: CELL,
+                  width: cellSize,
+                  height: cellSize,
                   background: "rgba(30,41,59,0.5)",
                   borderRadius: 3,
                 }}
@@ -660,8 +855,8 @@ function Grid({ display }: { display: DisplayCell[][] }) {
               <div
                 key={key}
                 style={{
-                  width: CELL,
-                  height: CELL,
+                  width: cellSize,
+                  height: cellSize,
                   background: "transparent",
                   border: "1px dashed rgba(148,163,184,0.45)",
                   borderRadius: 3,
@@ -674,8 +869,8 @@ function Grid({ display }: { display: DisplayCell[][] }) {
             <div
               key={key}
               style={{
-                width: CELL,
-                height: CELL,
+                width: cellSize,
+                height: cellSize,
                 background: `linear-gradient(135deg, ${palette.edge}, ${palette.fill})`,
                 border: `1px solid ${palette.edge}`,
                 borderRadius: 4,

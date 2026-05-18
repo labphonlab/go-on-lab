@@ -7,6 +7,7 @@ import {
   downloadFile,
   resultToJson,
   trialsToCsv,
+  trialsToTsv,
   headphoneTrialsToCsv,
 } from "../lib/csv";
 
@@ -158,6 +159,17 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
             }
           >
             本試行 CSV
+          </SecondaryButton>
+          <SecondaryButton
+            onClick={() =>
+              downloadFile(
+                `${result.participantId}_main-trials.tsv`,
+                trialsToTsv(result.participantId, result.mainTrials),
+                "text/tab-separated-values;charset=utf-8",
+              )
+            }
+          >
+            本試行 TSV (Praat互換)
           </SecondaryButton>
           <SecondaryButton
             onClick={() =>

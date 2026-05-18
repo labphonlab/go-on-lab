@@ -45,15 +45,33 @@ export function InstructionsPhase({
             ため、難しく感じても問題ありません。
           </p>
           {forBlock === "practice" && (
-            <p className="text-emerald-300">
-              まず<strong>8試行の練習</strong>を行います。練習では正誤フィードバックが表示されます。
-            </p>
+            <>
+              <p className="text-emerald-300">
+                まず<strong>8試行の練習</strong>を行います。練習では正誤フィードバックが表示されます。
+              </p>
+              <p>
+                練習中に音を聞き逃した場合は、回答前に「もう一度聴く」
+                (<kbd className="px-1.5 py-0.5 mx-1 bg-slate-800 border border-slate-600 rounded text-[11px] font-mono">R</kbd>キー)
+                を押すと最大2回まで再生できます。
+                押し間違いに気づいた場合は、回答直後に「↶ 前の回答を取り消す」
+                (<kbd className="px-1.5 py-0.5 mx-1 bg-slate-800 border border-slate-600 rounded text-[11px] font-mono">U</kbd>キー)
+                を押すと、その試行をやり直せます。
+              </p>
+            </>
           )}
           {forBlock === "main" && (
-            <p className="text-amber-300">
-              本試行ではフィードバックは表示されません。
-              全体で約 10〜15 分かかります。途中で休憩はありません。
-            </p>
+            <>
+              <p className="text-amber-300">
+                本試行ではフィードバックは表示されません。
+                測定の妥当性を保つため、刺激の再生は<strong>1回のみ</strong>です。
+              </p>
+              <p>
+                押し間違いの取り消し
+                (<kbd className="px-1.5 py-0.5 mx-1 bg-slate-800 border border-slate-600 rounded text-[11px] font-mono">U</kbd>キー)
+                は引き続き利用できます。30試行ごとに短い休憩が入ります。
+                全体で約 10〜15 分です。
+              </p>
+            </>
           )}
         </div>
       </Card>

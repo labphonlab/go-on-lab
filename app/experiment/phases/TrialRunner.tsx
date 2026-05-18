@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Card } from "./Shell";
+import { Card, PrimaryButton } from "./Shell";
 import { AudioEngine } from "../lib/audio";
-import { EXPERIMENT_CONFIG } from "../config";
+import { EXPERIMENT_CONFIG, TEXTS } from "../config";
 import {
   createStaircase,
   StaircaseConfig,
@@ -20,7 +20,8 @@ type TrialPhase =
   | "playingInterval2"
   | "awaitingResponse"
   | "feedback"
-  | "iti";
+  | "iti"
+  | "blockPause";
 
 interface RunnerProps {
   engine: AudioEngine;
@@ -30,12 +31,21 @@ interface RunnerProps {
   practiceDelta?: number;
   practiceTrialCount?: number;
   feedback: boolean;
+  maxReplays: number;
   onTrialComplete: (t: DiscriminationTrial) => void;
+  onUndoLastTrial?: () => void;
   onBlockComplete: (info: {
     finishedStaircases: StaircaseState[];
     totalTrials: number;
   }) => void;
   seed: number;
+}
+
+interface TrialSnapshot {
+  staircaseId: number;
+  prevStaircase: StaircaseState | null;
+  wasInFinished: boolean;
+  trial: DiscriminationTrial;
 }
 
 export function TrialRunner({
@@ -46,7 +56,9 @@ export function TrialRunner({
   practiceDelta,
   practiceTrialCount,
   feedback,
+  maxReplays,
   onTrialComplete,
+  onUndoLastTrial,
   onBlockComplete,
   seed,
 }: RunnerProps) {
@@ -55,8 +67,11 @@ export function TrialRunner({
   const finishedRef = useRef<StaircaseState[]>([]);
   const practiceCountRef = useRef(0);
   const trialCountRef = useRef(0);
+  const trialsSinceBreakRef = useRef(0);
   const responseTimeStartRef = useRef<number>(0);
   const lastTrialRef = useRef<DiscriminationTrial | null>(null);
+  const replayCountRef = useRef(0);
+  const lastSnapshotRef = useRef<TrialSnapshot | null>(null);
   const phaseRef = useRef<TrialPhase>("idle");
   const completedRef = useRef(false);
   const handleResponseRef = useRef<
@@ -70,6 +85,12 @@ export function TrialRunner({
     "correct" | "incorrect" | null
   >(null);
   const [progress, setProgress] = useState(0);
+  const [replayCount, setReplayCount] = useState(0);
+  const [undoAvailableUntil, setUndoAvailableUntil] = useState<number | null>(
+    null,
+  );
+  const [hasUndoSnapshot, setHasUndoSnapshot] = useState(false);
+  const [pauseCountdown, setPauseCountdown] = useState<number>(0);
 
   useEffect(() => {
     if (mode === "main" && staircaseConfig) {
@@ -83,7 +104,9 @@ export function TrialRunner({
     finishedRef.current = [];
     practiceCountRef.current = 0;
     trialCountRef.current = 0;
+    trialsSinceBreakRef.current = 0;
     completedRef.current = false;
+    lastSnapshotRef.current = null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, blockIndex]);
 
@@ -98,6 +121,72 @@ export function TrialRunner({
     const idx = Math.floor(rngRef.current() * active.length);
     return active[idx];
   }, []);
+
+  const scheduleStimulusPair = useCallback(
+    (f1: number, f2: number) => {
+      const start =
+        engine.currentTime + 0.05 + EXPERIMENT_CONFIG.stimulusInitialSilenceSec;
+      const dur = EXPERIMENT_CONFIG.toneDurationSec;
+      const isi = EXPERIMENT_CONFIG.isiSec;
+      const onset1 = start;
+      const onset2 = start + dur + isi;
+      engine.scheduleTone(
+        {
+          frequencyHz: f1,
+          durationSec: dur,
+          rampSec: EXPERIMENT_CONFIG.rampDurationSec,
+          level: EXPERIMENT_CONFIG.outputLevel,
+        },
+        onset1,
+      );
+      engine.scheduleTone(
+        {
+          frequencyHz: f2,
+          durationSec: dur,
+          rampSec: EXPERIMENT_CONFIG.rampDurationSec,
+          level: EXPERIMENT_CONFIG.outputLevel,
+        },
+        onset2,
+      );
+      return { onset1, onset2, dur };
+    },
+    [engine],
+  );
+
+  const playStimulusAndWait = useCallback(
+    async (
+      f1: number,
+      f2: number,
+      trial: DiscriminationTrial,
+      isReplay: boolean,
+    ) => {
+      const { onset1, onset2, dur } = scheduleStimulusPair(f1, f2);
+      if (!isReplay) {
+        trial.stimulusOnsetAudioTime = onset1;
+        trial.scheduledIntervalOnsets = [onset1, onset2];
+        trial.responseDeadlineAudioTime =
+          onset2 +
+          dur +
+          EXPERIMENT_CONFIG.stimulusFinalSilenceSec +
+          EXPERIMENT_CONFIG.responseTimeoutSec;
+      }
+      setPhase("playingInterval1");
+      await engine.waitUntil(onset1 + dur);
+      if (completedRef.current || lastTrialRef.current !== trial) return false;
+      setPhase("isiGap");
+      await engine.waitUntil(onset2);
+      if (completedRef.current || lastTrialRef.current !== trial) return false;
+      setPhase("playingInterval2");
+      await engine.waitUntil(
+        onset2 + dur + EXPERIMENT_CONFIG.stimulusFinalSilenceSec,
+      );
+      if (completedRef.current || lastTrialRef.current !== trial) return false;
+      setPhase("awaitingResponse");
+      responseTimeStartRef.current = performance.now();
+      return true;
+    },
+    [engine, scheduleStimulusPair, setPhase],
+  );
 
   const runTrial = useCallback(async () => {
     if (completedRef.current) return;
@@ -132,38 +221,8 @@ export function TrialRunner({
     const ref = EXPERIMENT_CONFIG.referenceFrequencyHz;
     const cmp = ref + delta;
     const comparisonIs2 = rngRef.current() < 0.5;
-
-    const start = engine.currentTime + 0.1;
-    const dur = EXPERIMENT_CONFIG.toneDurationSec;
-    const isi = EXPERIMENT_CONFIG.isiSec;
-
     const f1 = comparisonIs2 ? ref : cmp;
     const f2 = comparisonIs2 ? cmp : ref;
-    const onset1 = start;
-    const onset2 = start + dur + isi;
-
-    engine.scheduleTone(
-      {
-        frequencyHz: f1,
-        durationSec: dur,
-        rampSec: EXPERIMENT_CONFIG.rampDurationSec,
-        level: EXPERIMENT_CONFIG.outputLevel,
-      },
-      onset1,
-    );
-    engine.scheduleTone(
-      {
-        frequencyHz: f2,
-        durationSec: dur,
-        rampSec: EXPERIMENT_CONFIG.rampDurationSec,
-        level: EXPERIMENT_CONFIG.outputLevel,
-      },
-      onset2,
-    );
-
-    const stimulusOnsetAudioTime = start;
-    const responseDeadlineAudioTime =
-      onset2 + dur + EXPERIMENT_CONFIG.responseTimeoutSec;
 
     const trial: DiscriminationTrial = {
       block: mode,
@@ -175,12 +234,14 @@ export function TrialRunner({
       deltaHz: delta,
       comparisonFrequencyHz: cmp,
       comparisonIntervalIs2: comparisonIs2,
-      stimulusOnsetAudioTime,
-      responseDeadlineAudioTime,
-      scheduledIntervalOnsets: [onset1, onset2],
+      stimulusOnsetAudioTime: 0,
+      responseDeadlineAudioTime: 0,
+      scheduledIntervalOnsets: [0, 0],
       response: null,
       correct: null,
       rtMs: null,
+      replayCount: 0,
+      undone: false,
       staircaseDirectionBefore: directionBefore,
       reversal: false,
       stepFactorBefore,
@@ -192,18 +253,12 @@ export function TrialRunner({
       timestamp: new Date().toISOString(),
     };
     lastTrialRef.current = trial;
+    replayCountRef.current = 0;
+    setReplayCount(0);
+    setUndoAvailableUntil(null);
 
-    setPhase("playingInterval1");
-    await engine.waitUntil(onset1 + dur);
-    if (completedRef.current) return;
-    setPhase("isiGap");
-    await engine.waitUntil(onset2);
-    if (completedRef.current) return;
-    setPhase("playingInterval2");
-    await engine.waitUntil(onset2 + dur);
-    if (completedRef.current) return;
-    setPhase("awaitingResponse");
-    responseTimeStartRef.current = performance.now();
+    const ok = await playStimulusAndWait(f1, f2, trial, false);
+    if (!ok) return;
 
     if (EXPERIMENT_CONFIG.responseTimeoutSec > 0) {
       setTimeout(
@@ -219,7 +274,65 @@ export function TrialRunner({
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [engine, mode, blockIndex, practiceDelta, pickNextStaircase, setPhase]);
+  }, [
+    engine,
+    mode,
+    blockIndex,
+    practiceDelta,
+    pickNextStaircase,
+    playStimulusAndWait,
+  ]);
+
+  const replay = useCallback(async () => {
+    if (phaseRef.current !== "awaitingResponse") return;
+    if (replayCountRef.current >= maxReplays) return;
+    const trial = lastTrialRef.current;
+    if (!trial) return;
+    replayCountRef.current += 1;
+    trial.replayCount = replayCountRef.current;
+    setReplayCount(replayCountRef.current);
+    const f1 = trial.comparisonIntervalIs2
+      ? trial.referenceFrequencyHz
+      : trial.comparisonFrequencyHz;
+    const f2 = trial.comparisonIntervalIs2
+      ? trial.comparisonFrequencyHz
+      : trial.referenceFrequencyHz;
+    await playStimulusAndWait(f1, f2, trial, true);
+  }, [maxReplays, playStimulusAndWait]);
+
+  const proceedAfterResponse = useCallback(() => {
+    if (completedRef.current) return;
+
+    const finishedAll =
+      mode === "practice"
+        ? practiceCountRef.current >=
+          (practiceTrialCount ?? EXPERIMENT_CONFIG.numPracticeTrials)
+        : staircasesRef.current.every((s) => s.finished);
+
+    if (finishedAll) {
+      completedRef.current = true;
+      onBlockComplete({
+        finishedStaircases: finishedRef.current.slice(),
+        totalTrials: trialCountRef.current,
+      });
+      return;
+    }
+
+    const shouldBreak =
+      mode === "main" &&
+      EXPERIMENT_CONFIG.breakAfterEvery > 0 &&
+      trialsSinceBreakRef.current >= EXPERIMENT_CONFIG.breakAfterEvery;
+
+    if (shouldBreak) {
+      trialsSinceBreakRef.current = 0;
+      setPhase("blockPause");
+      setPauseCountdown(EXPERIMENT_CONFIG.breakMinDurationSec);
+      return;
+    }
+
+    setPhase("iti");
+    setTimeout(() => runTrialRef.current?.(), EXPERIMENT_CONFIG.itiSec * 1000);
+  }, [mode, onBlockComplete, practiceTrialCount, setPhase]);
 
   const handleResponse = useCallback(
     (response: 1 | 2 | null, sUsed: StaircaseState | null) => {
@@ -238,6 +351,13 @@ export function TrialRunner({
       trial.correct = correct;
       trial.rtMs = rt;
 
+      const snapshot: TrialSnapshot = {
+        staircaseId: trial.staircaseId,
+        prevStaircase: sUsed ? { ...sUsed } : null,
+        wasInFinished: false,
+        trial,
+      };
+
       if (mode === "main" && sUsed && staircaseConfig) {
         const updated = updateStaircase(sUsed, correct, staircaseConfig);
         trial.reversal =
@@ -248,6 +368,7 @@ export function TrialRunner({
         if (updated.finished) {
           if (!finishedRef.current.find((x) => x.id === updated.id)) {
             finishedRef.current.push(updated);
+            snapshot.wasInFinished = true;
           }
         }
       } else if (mode === "practice") {
@@ -255,14 +376,11 @@ export function TrialRunner({
       }
 
       trialCountRef.current += 1;
+      trialsSinceBreakRef.current += 1;
+      lastSnapshotRef.current = snapshot;
+      setHasUndoSnapshot(true);
       onTrialComplete(trial);
       setTrialIndex(trialCountRef.current);
-
-      const finishedAll =
-        mode === "practice"
-          ? practiceCountRef.current >=
-            (practiceTrialCount ?? EXPERIMENT_CONFIG.numPracticeTrials)
-          : staircasesRef.current.every((s) => s.finished);
 
       if (mode === "main" && staircaseConfig) {
         const totalReversalsTarget =
@@ -272,7 +390,10 @@ export function TrialRunner({
           0,
         );
         setProgress(
-          Math.min(100, Math.round((totalReversals / totalReversalsTarget) * 100)),
+          Math.min(
+            100,
+            Math.round((totalReversals / totalReversalsTarget) * 100),
+          ),
         );
       } else {
         setProgress(
@@ -287,43 +408,21 @@ export function TrialRunner({
         );
       }
 
+      if (EXPERIMENT_CONFIG.allowUndo) {
+        const until =
+          performance.now() + EXPERIMENT_CONFIG.undoWindowSec * 1000;
+        setUndoAvailableUntil(until);
+      }
+
       if (feedback) {
         setLastFeedback(correct ? "correct" : "incorrect");
         setPhase("feedback");
         setTimeout(() => {
-          if (finishedAll) {
-            completedRef.current = true;
-            onBlockComplete({
-              finishedStaircases: finishedRef.current.slice(),
-              totalTrials: trialCountRef.current,
-            });
-            return;
-          }
           setLastFeedback(null);
-          setPhase("iti");
-          setTimeout(
-            () => runTrialRef.current?.(),
-            EXPERIMENT_CONFIG.itiSec * 1000,
-          );
+          proceedAfterResponse();
         }, EXPERIMENT_CONFIG.feedbackDurationSec * 1000);
       } else {
-        setPhase("iti");
-        if (finishedAll) {
-          completedRef.current = true;
-          setTimeout(
-            () =>
-              onBlockComplete({
-                finishedStaircases: finishedRef.current.slice(),
-                totalTrials: trialCountRef.current,
-              }),
-            300,
-          );
-          return;
-        }
-        setTimeout(
-          () => runTrialRef.current?.(),
-          EXPERIMENT_CONFIG.itiSec * 1000,
-        );
+        proceedAfterResponse();
       }
     },
     [
@@ -331,11 +430,59 @@ export function TrialRunner({
       staircaseConfig,
       feedback,
       onTrialComplete,
-      onBlockComplete,
       practiceTrialCount,
       setPhase,
+      proceedAfterResponse,
     ],
   );
+
+  const undo = useCallback(() => {
+    const snap = lastSnapshotRef.current;
+    if (!snap) return;
+    if (
+      undoAvailableUntil === null ||
+      performance.now() > undoAvailableUntil
+    ) {
+      return;
+    }
+    if (
+      phaseRef.current !== "feedback" &&
+      phaseRef.current !== "iti" &&
+      phaseRef.current !== "blockPause"
+    ) {
+      return;
+    }
+    snap.trial.undone = true;
+
+    if (mode === "main" && snap.prevStaircase) {
+      const idx = staircasesRef.current.findIndex(
+        (x) => x.id === snap.staircaseId,
+      );
+      if (idx >= 0) staircasesRef.current[idx] = snap.prevStaircase;
+      if (snap.wasInFinished) {
+        finishedRef.current = finishedRef.current.filter(
+          (x) => x.id !== snap.staircaseId,
+        );
+      }
+    } else if (mode === "practice") {
+      practiceCountRef.current = Math.max(0, practiceCountRef.current - 1);
+    }
+    trialCountRef.current = Math.max(0, trialCountRef.current - 1);
+    trialsSinceBreakRef.current = Math.max(0, trialsSinceBreakRef.current - 1);
+    setTrialIndex(trialCountRef.current);
+    setUndoAvailableUntil(null);
+    setHasUndoSnapshot(false);
+    lastSnapshotRef.current = null;
+    onUndoLastTrial?.();
+    setPhase("iti");
+    setTimeout(() => runTrialRef.current?.(), 300);
+  }, [mode, onUndoLastTrial, setPhase, undoAvailableUntil]);
+
+  const continueAfterBreak = useCallback(() => {
+    if (phaseRef.current !== "blockPause") return;
+    setPhase("iti");
+    setTimeout(() => runTrialRef.current?.(), 300);
+  }, [setPhase]);
 
   useEffect(() => {
     handleResponseRef.current = handleResponse;
@@ -346,6 +493,13 @@ export function TrialRunner({
     const timer = setTimeout(() => runTrialRef.current?.(), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (phaseRef.current !== "blockPause") return;
+    if (pauseCountdown <= 0) return;
+    const t = setTimeout(() => setPauseCountdown((c) => Math.max(0, c - 1)), 1000);
+    return () => clearTimeout(t);
+  }, [pauseCountdown]);
 
   const respond = useCallback(
     (n: 1 | 2) => {
@@ -364,15 +518,68 @@ export function TrialRunner({
     const handler = (e: KeyboardEvent) => {
       if (e.key === "1") respond(1);
       else if (e.key === "2") respond(2);
+      else if (e.key === "r" || e.key === "R") replay();
+      else if (e.key === "u" || e.key === "U") undo();
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [respond]);
+  }, [respond, replay, undo]);
 
   const totalLabel =
     mode === "practice"
       ? `${trialIndex} / ${practiceTrialCount ?? EXPERIMENT_CONFIG.numPracticeTrials}`
       : `${trialIndex} 試行 完了`;
+
+  const canReplay =
+    trialPhase === "awaitingResponse" && replayCount < maxReplays;
+  const canUndo =
+    (trialPhase === "feedback" ||
+      trialPhase === "iti" ||
+      trialPhase === "blockPause") &&
+    undoAvailableUntil !== null &&
+    hasUndoSnapshot;
+
+  if (trialPhase === "blockPause") {
+    return (
+      <div className="space-y-6">
+        <Card>
+          <h2 className="text-lg font-bold text-emerald-400 mb-3">
+            小休憩
+          </h2>
+          <p className="text-sm text-slate-300 leading-relaxed mb-6">
+            {TEXTS.pauseText}
+          </p>
+          <div className="text-xs text-slate-500 mb-2">
+            進捗: {trialIndex} 試行完了 / 約 {progress}%
+          </div>
+          <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden mb-6">
+            <div
+              className="h-full bg-emerald-500 transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row items-center gap-3 justify-end">
+            {canUndo && (
+              <button
+                onClick={undo}
+                className="text-amber-300 hover:text-amber-200 text-xs underline"
+              >
+                {TEXTS.undoLabel}
+              </button>
+            )}
+            <PrimaryButton
+              disabled={pauseCountdown > 0}
+              onClick={continueAfterBreak}
+            >
+              {pauseCountdown > 0
+                ? `あと ${pauseCountdown} 秒…`
+                : TEXTS.continueLabel}
+            </PrimaryButton>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -393,8 +600,7 @@ export function TrialRunner({
         <div className="flex flex-col items-center justify-center min-h-[260px] py-4">
           <IntervalIndicator phase={trialPhase} feedback={lastFeedback} />
           <div className="mt-8 text-sm text-slate-400 h-6 text-center">
-            {trialPhase === "awaitingResponse" &&
-              "どちらの音が より高かった ですか?"}
+            {trialPhase === "awaitingResponse" && TEXTS.runText}
             {trialPhase === "feedback" && lastFeedback === "correct" && (
               <span className="text-emerald-400 font-bold">○ 正解</span>
             )}
@@ -423,6 +629,43 @@ export function TrialRunner({
             disabled={trialPhase !== "awaitingResponse"}
             onClick={() => respond(2)}
           />
+        </div>
+
+        <div className="flex flex-wrap gap-3 mt-5 justify-between items-center min-h-[2.25rem]">
+          <div>
+            {maxReplays > 0 && (
+              <button
+                type="button"
+                onClick={replay}
+                disabled={!canReplay}
+                className="text-xs font-medium text-slate-300 hover:text-emerald-300 disabled:text-slate-700 disabled:cursor-not-allowed underline"
+              >
+                {TEXTS.replayLabel}
+                {maxReplays > 1 && (
+                  <span className="ml-1 text-slate-500 font-mono text-[10px]">
+                    ({replayCount}/{maxReplays})
+                  </span>
+                )}{" "}
+                <kbd className="ml-1 px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] font-mono text-slate-400">
+                  R
+                </kbd>
+              </button>
+            )}
+          </div>
+          <div>
+            {canUndo && (
+              <button
+                type="button"
+                onClick={undo}
+                className="text-xs font-medium text-amber-300 hover:text-amber-200 underline"
+              >
+                {TEXTS.undoLabel}{" "}
+                <kbd className="ml-1 px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] font-mono text-slate-400">
+                  U
+                </kbd>
+              </button>
+            )}
+          </div>
         </div>
       </Card>
     </div>

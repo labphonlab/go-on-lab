@@ -72,6 +72,8 @@ export interface DiscriminationTrial {
   response: 1 | 2 | null;
   correct: boolean | null;
   rtMs: number | null;
+  replayCount: number;
+  undone: boolean;
 
   staircaseDirectionBefore: "up" | "down" | "init";
   reversal: boolean;

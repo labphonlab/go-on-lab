@@ -133,6 +133,10 @@ export default function ExperimentPage() {
     [],
   );
 
+  const onUndoPracticeTrial = useCallback(() => {
+    setPracticeTrials((prev) => prev.slice(0, -1));
+  }, []);
+
   const onPracticeBlockComplete = useCallback(() => {
     setPhase("rest");
   }, []);
@@ -141,6 +145,10 @@ export default function ExperimentPage() {
     (t: DiscriminationTrial) => setMainTrials((prev) => [...prev, t]),
     [],
   );
+
+  const onUndoMainTrial = useCallback(() => {
+    setMainTrials((prev) => prev.slice(0, -1));
+  }, []);
 
   const onMainBlockComplete = useCallback(
     ({ finishedStaircases }: { finishedStaircases: StaircaseState[] }) => {
@@ -253,7 +261,9 @@ export default function ExperimentPage() {
           practiceDelta={EXPERIMENT_CONFIG.practiceDeltaHz}
           practiceTrialCount={EXPERIMENT_CONFIG.numPracticeTrials}
           feedback={true}
+          maxReplays={EXPERIMENT_CONFIG.maxReplaysPractice}
           onTrialComplete={onPracticeTrial}
+          onUndoLastTrial={onUndoPracticeTrial}
           onBlockComplete={onPracticeBlockComplete}
           seed={session.seed}
         />
@@ -277,7 +287,9 @@ export default function ExperimentPage() {
           blockIndex={1}
           staircaseConfig={STAIRCASE_CONFIG}
           feedback={false}
+          maxReplays={EXPERIMENT_CONFIG.maxReplaysMain}
           onTrialComplete={onMainTrial}
+          onUndoLastTrial={onUndoMainTrial}
           onBlockComplete={onMainBlockComplete}
           seed={(session.seed + 7919) >>> 0}
         />

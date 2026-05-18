@@ -13,10 +13,24 @@ function csvEscape(v: unknown): string {
   return s;
 }
 
+function tsvEscape(v: unknown): string {
+  if (v === null || v === undefined) return "";
+  const s = typeof v === "string" ? v : JSON.stringify(v);
+  return s.replace(/\t/g, " ").replace(/[\r\n]+/g, " ");
+}
+
 function rowsToCsv(headers: string[], rows: unknown[][]): string {
   const lines = [headers.join(",")];
   for (const row of rows) {
     lines.push(row.map(csvEscape).join(","));
+  }
+  return lines.join("\n");
+}
+
+function rowsToTsv(headers: string[], rows: unknown[][]): string {
+  const lines = [headers.join("\t")];
+  for (const row of rows) {
+    lines.push(row.map(tsvEscape).join("\t"));
   }
   return lines.join("\n");
 }
@@ -35,6 +49,8 @@ const TRIAL_HEADERS: (keyof DiscriminationTrial | "participantId")[] = [
   "response",
   "correct",
   "rtMs",
+  "replayCount",
+  "undone",
   "staircaseDirectionBefore",
   "reversal",
   "stepFactorBefore",
@@ -62,6 +78,21 @@ export function trialsToCsv(
     ),
   );
   return rowsToCsv(headers, rows);
+}
+
+export function trialsToTsv(
+  participantId: string,
+  trials: DiscriminationTrial[],
+): string {
+  const headers = TRIAL_HEADERS.map(String);
+  const rows = trials.map((t) =>
+    TRIAL_HEADERS.map((h) =>
+      h === "participantId"
+        ? participantId
+        : (t as unknown as Record<string, unknown>)[h as string],
+    ),
+  );
+  return rowsToTsv(headers, rows);
 }
 
 const HEADPHONE_HEADERS: (keyof HeadphoneTrial | "participantId")[] = [

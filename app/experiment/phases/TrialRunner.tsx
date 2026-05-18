@@ -3,7 +3,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Card, PrimaryButton } from "./Shell";
 import { AudioEngine } from "../lib/audio";
-import { EXPERIMENT_CONFIG, TEXTS } from "../config";
 import {
   createStaircase,
   StaircaseConfig,
@@ -12,6 +11,8 @@ import {
 } from "../lib/staircase";
 import { mulberry32 } from "../lib/rng";
 import type { DiscriminationTrial } from "../types";
+import { useLocale } from "../contexts/LocaleProvider";
+import type { ExperimentDesign } from "@/app/lib/design";
 
 type TrialPhase =
   | "idle"
@@ -25,6 +26,7 @@ type TrialPhase =
 
 interface RunnerProps {
   engine: AudioEngine;
+  design: ExperimentDesign;
   mode: "practice" | "main";
   blockIndex: number;
   staircaseConfig: StaircaseConfig | null;
@@ -50,6 +52,7 @@ interface TrialSnapshot {
 
 export function TrialRunner({
   engine,
+  design,
   mode,
   blockIndex,
   staircaseConfig,
@@ -62,6 +65,7 @@ export function TrialRunner({
   onBlockComplete,
   seed,
 }: RunnerProps) {
+  const { t } = useLocale();
   const rngRef = useRef(mulberry32(seed));
   const staircasesRef = useRef<StaircaseState[]>([]);
   const finishedRef = useRef<StaircaseState[]>([]);
@@ -95,7 +99,7 @@ export function TrialRunner({
   useEffect(() => {
     if (mode === "main" && staircaseConfig) {
       staircasesRef.current = Array.from(
-        { length: EXPERIMENT_CONFIG.numStaircases },
+        { length: design.numStaircases },
         (_, i) => createStaircase(i, staircaseConfig),
       );
     } else {
@@ -125,17 +129,17 @@ export function TrialRunner({
   const scheduleStimulusPair = useCallback(
     (f1: number, f2: number) => {
       const start =
-        engine.currentTime + 0.05 + EXPERIMENT_CONFIG.stimulusInitialSilenceSec;
-      const dur = EXPERIMENT_CONFIG.toneDurationSec;
-      const isi = EXPERIMENT_CONFIG.isiSec;
+        engine.currentTime + 0.05 + design.stimulusInitialSilenceSec;
+      const dur = design.toneDurationSec;
+      const isi = design.isiSec;
       const onset1 = start;
       const onset2 = start + dur + isi;
       engine.scheduleTone(
         {
           frequencyHz: f1,
           durationSec: dur,
-          rampSec: EXPERIMENT_CONFIG.rampDurationSec,
-          level: EXPERIMENT_CONFIG.outputLevel,
+          rampSec: design.rampDurationSec,
+          level: design.outputLevel,
         },
         onset1,
       );
@@ -143,14 +147,21 @@ export function TrialRunner({
         {
           frequencyHz: f2,
           durationSec: dur,
-          rampSec: EXPERIMENT_CONFIG.rampDurationSec,
-          level: EXPERIMENT_CONFIG.outputLevel,
+          rampSec: design.rampDurationSec,
+          level: design.outputLevel,
         },
         onset2,
       );
       return { onset1, onset2, dur };
     },
-    [engine],
+    [
+      design.isiSec,
+      design.outputLevel,
+      design.rampDurationSec,
+      design.stimulusInitialSilenceSec,
+      design.toneDurationSec,
+      engine,
+    ],
   );
 
   const playStimulusAndWait = useCallback(
@@ -167,8 +178,8 @@ export function TrialRunner({
         trial.responseDeadlineAudioTime =
           onset2 +
           dur +
-          EXPERIMENT_CONFIG.stimulusFinalSilenceSec +
-          EXPERIMENT_CONFIG.responseTimeoutSec;
+          design.stimulusFinalSilenceSec +
+          design.responseTimeoutSec;
       }
       setPhase("playingInterval1");
       await engine.waitUntil(onset1 + dur);
@@ -177,15 +188,19 @@ export function TrialRunner({
       await engine.waitUntil(onset2);
       if (completedRef.current || lastTrialRef.current !== trial) return false;
       setPhase("playingInterval2");
-      await engine.waitUntil(
-        onset2 + dur + EXPERIMENT_CONFIG.stimulusFinalSilenceSec,
-      );
+      await engine.waitUntil(onset2 + dur + design.stimulusFinalSilenceSec);
       if (completedRef.current || lastTrialRef.current !== trial) return false;
       setPhase("awaitingResponse");
       responseTimeStartRef.current = performance.now();
       return true;
     },
-    [engine, scheduleStimulusPair, setPhase],
+    [
+      design.responseTimeoutSec,
+      design.stimulusFinalSilenceSec,
+      engine,
+      scheduleStimulusPair,
+      setPhase,
+    ],
   );
 
   const runTrial = useCallback(async () => {
@@ -199,7 +214,7 @@ export function TrialRunner({
     let directionBefore: "up" | "down" | "init" = "init";
 
     if (mode === "practice") {
-      delta = practiceDelta ?? EXPERIMENT_CONFIG.practiceDeltaHz;
+      delta = practiceDelta ?? design.practiceDeltaHz;
       trialIndexInStaircase = practiceCountRef.current;
     } else {
       staircase = pickNextStaircase();
@@ -218,7 +233,7 @@ export function TrialRunner({
       directionBefore = staircase.direction;
     }
 
-    const ref = EXPERIMENT_CONFIG.referenceFrequencyHz;
+    const ref = design.referenceFrequencyHz;
     const cmp = ref + delta;
     const comparisonIs2 = rngRef.current() < 0.5;
     const f1 = comparisonIs2 ? ref : cmp;
@@ -246,10 +261,10 @@ export function TrialRunner({
       reversal: false,
       stepFactorBefore,
       deltaAfter: delta,
-      isiSec: EXPERIMENT_CONFIG.isiSec,
-      toneDurationSec: EXPERIMENT_CONFIG.toneDurationSec,
-      rampDurationSec: EXPERIMENT_CONFIG.rampDurationSec,
-      outputLevel: EXPERIMENT_CONFIG.outputLevel,
+      isiSec: design.isiSec,
+      toneDurationSec: design.toneDurationSec,
+      rampDurationSec: design.rampDurationSec,
+      outputLevel: design.outputLevel,
       timestamp: new Date().toISOString(),
     };
     lastTrialRef.current = trial;
@@ -260,27 +275,30 @@ export function TrialRunner({
     const ok = await playStimulusAndWait(f1, f2, trial, false);
     if (!ok) return;
 
-    if (EXPERIMENT_CONFIG.responseTimeoutSec > 0) {
-      setTimeout(
-        () => {
-          if (
-            phaseRef.current === "awaitingResponse" &&
-            lastTrialRef.current === trial
-          ) {
-            handleResponseRef.current?.(null, staircase);
-          }
-        },
-        EXPERIMENT_CONFIG.responseTimeoutSec * 1000,
-      );
+    if (design.responseTimeoutSec > 0) {
+      setTimeout(() => {
+        if (
+          phaseRef.current === "awaitingResponse" &&
+          lastTrialRef.current === trial
+        ) {
+          handleResponseRef.current?.(null, staircase);
+        }
+      }, design.responseTimeoutSec * 1000);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    engine,
-    mode,
     blockIndex,
-    practiceDelta,
+    design.isiSec,
+    design.outputLevel,
+    design.practiceDeltaHz,
+    design.rampDurationSec,
+    design.referenceFrequencyHz,
+    design.responseTimeoutSec,
+    design.toneDurationSec,
+    mode,
+    onBlockComplete,
     pickNextStaircase,
     playStimulusAndWait,
+    practiceDelta,
   ]);
 
   const replay = useCallback(async () => {
@@ -306,7 +324,7 @@ export function TrialRunner({
     const finishedAll =
       mode === "practice"
         ? practiceCountRef.current >=
-          (practiceTrialCount ?? EXPERIMENT_CONFIG.numPracticeTrials)
+          (practiceTrialCount ?? design.numPracticeTrials)
         : staircasesRef.current.every((s) => s.finished);
 
     if (finishedAll) {
@@ -320,19 +338,28 @@ export function TrialRunner({
 
     const shouldBreak =
       mode === "main" &&
-      EXPERIMENT_CONFIG.breakAfterEvery > 0 &&
-      trialsSinceBreakRef.current >= EXPERIMENT_CONFIG.breakAfterEvery;
+      design.breakAfterEvery > 0 &&
+      trialsSinceBreakRef.current >= design.breakAfterEvery;
 
     if (shouldBreak) {
       trialsSinceBreakRef.current = 0;
       setPhase("blockPause");
-      setPauseCountdown(EXPERIMENT_CONFIG.breakMinDurationSec);
+      setPauseCountdown(design.breakMinDurationSec);
       return;
     }
 
     setPhase("iti");
-    setTimeout(() => runTrialRef.current?.(), EXPERIMENT_CONFIG.itiSec * 1000);
-  }, [mode, onBlockComplete, practiceTrialCount, setPhase]);
+    setTimeout(() => runTrialRef.current?.(), design.itiSec * 1000);
+  }, [
+    design.breakAfterEvery,
+    design.breakMinDurationSec,
+    design.itiSec,
+    design.numPracticeTrials,
+    mode,
+    onBlockComplete,
+    practiceTrialCount,
+    setPhase,
+  ]);
 
   const handleResponse = useCallback(
     (response: 1 | 2 | null, sUsed: StaircaseState | null) => {
@@ -384,7 +411,7 @@ export function TrialRunner({
 
       if (mode === "main" && staircaseConfig) {
         const totalReversalsTarget =
-          EXPERIMENT_CONFIG.numStaircases * staircaseConfig.reversalsToStop;
+          design.numStaircases * staircaseConfig.reversalsToStop;
         const totalReversals = staircasesRef.current.reduce(
           (a, b) => a + b.reversalCount,
           0,
@@ -401,16 +428,15 @@ export function TrialRunner({
             100,
             Math.round(
               (practiceCountRef.current /
-                (practiceTrialCount ?? EXPERIMENT_CONFIG.numPracticeTrials)) *
+                (practiceTrialCount ?? design.numPracticeTrials)) *
                 100,
             ),
           ),
         );
       }
 
-      if (EXPERIMENT_CONFIG.allowUndo) {
-        const until =
-          performance.now() + EXPERIMENT_CONFIG.undoWindowSec * 1000;
+      if (design.allowUndo) {
+        const until = performance.now() + design.undoWindowSec * 1000;
         setUndoAvailableUntil(until);
       }
 
@@ -420,38 +446,39 @@ export function TrialRunner({
         setTimeout(() => {
           setLastFeedback(null);
           proceedAfterResponse();
-        }, EXPERIMENT_CONFIG.feedbackDurationSec * 1000);
+        }, design.feedbackDurationSec * 1000);
       } else {
         proceedAfterResponse();
       }
     },
     [
-      mode,
-      staircaseConfig,
+      design.allowUndo,
+      design.feedbackDurationSec,
+      design.numPracticeTrials,
+      design.numStaircases,
+      design.undoWindowSec,
       feedback,
+      mode,
       onTrialComplete,
       practiceTrialCount,
-      setPhase,
       proceedAfterResponse,
+      setPhase,
+      staircaseConfig,
     ],
   );
 
   const undo = useCallback(() => {
     const snap = lastSnapshotRef.current;
     if (!snap) return;
-    if (
-      undoAvailableUntil === null ||
-      performance.now() > undoAvailableUntil
-    ) {
+    if (undoAvailableUntil === null || performance.now() > undoAvailableUntil)
       return;
-    }
     if (
       phaseRef.current !== "feedback" &&
       phaseRef.current !== "iti" &&
       phaseRef.current !== "blockPause"
-    ) {
+    )
       return;
-    }
+
     snap.trial.undone = true;
 
     if (mode === "main" && snap.prevStaircase) {
@@ -497,8 +524,11 @@ export function TrialRunner({
   useEffect(() => {
     if (phaseRef.current !== "blockPause") return;
     if (pauseCountdown <= 0) return;
-    const t = setTimeout(() => setPauseCountdown((c) => Math.max(0, c - 1)), 1000);
-    return () => clearTimeout(t);
+    const tmr = setTimeout(
+      () => setPauseCountdown((c) => Math.max(0, c - 1)),
+      1000,
+    );
+    return () => clearTimeout(tmr);
   }, [pauseCountdown]);
 
   const respond = useCallback(
@@ -527,8 +557,8 @@ export function TrialRunner({
 
   const totalLabel =
     mode === "practice"
-      ? `${trialIndex} / ${practiceTrialCount ?? EXPERIMENT_CONFIG.numPracticeTrials}`
-      : `${trialIndex} 試行 完了`;
+      ? `${trialIndex} / ${practiceTrialCount ?? design.numPracticeTrials}`
+      : `${trialIndex}`;
 
   const canReplay =
     trialPhase === "awaitingResponse" && replayCount < maxReplays;
@@ -544,13 +574,13 @@ export function TrialRunner({
       <div className="space-y-6">
         <Card>
           <h2 className="text-lg font-bold text-emerald-400 mb-3">
-            小休憩
+            {t.break.heading}
           </h2>
           <p className="text-sm text-slate-300 leading-relaxed mb-6">
-            {TEXTS.pauseText}
+            {t.break.text}
           </p>
           <div className="text-xs text-slate-500 mb-2">
-            進捗: {trialIndex} 試行完了 / 約 {progress}%
+            {t.break.progressLabel(trialIndex, progress)}
           </div>
           <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden mb-6">
             <div
@@ -558,13 +588,13 @@ export function TrialRunner({
               style={{ width: `${progress}%` }}
             />
           </div>
-          <div className="flex flex-col sm:flex-row items-center gap-3 justify-end">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 justify-end">
             {canUndo && (
               <button
                 onClick={undo}
-                className="text-amber-300 hover:text-amber-200 text-xs underline"
+                className="text-amber-300 hover:text-amber-200 text-xs underline py-2"
               >
-                {TEXTS.undoLabel}
+                {t.trial.undo}
               </button>
             )}
             <PrimaryButton
@@ -572,8 +602,8 @@ export function TrialRunner({
               onClick={continueAfterBreak}
             >
               {pauseCountdown > 0
-                ? `あと ${pauseCountdown} 秒…`
-                : TEXTS.continueLabel}
+                ? t.break.waitSec(pauseCountdown)
+                : t.break.continueButton}
             </PrimaryButton>
           </div>
         </Card>
@@ -586,45 +616,45 @@ export function TrialRunner({
       <Card>
         <div className="flex justify-between items-center mb-2">
           <div className="text-xs font-bold tracking-widest text-slate-500 uppercase">
-            {mode === "practice" ? "練習試行" : "本試行"}
+            {mode === "practice" ? t.trial.practiceLabel : t.trial.mainLabel}
           </div>
           <div className="text-xs font-mono text-slate-500">{totalLabel}</div>
         </div>
-        <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden mb-8">
+        <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden mb-6 sm:mb-8">
           <div
             className="h-full bg-emerald-500 transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
 
-        <div className="flex flex-col items-center justify-center min-h-[260px] py-4">
+        <div className="flex flex-col items-center justify-center min-h-[200px] sm:min-h-[260px] py-2 sm:py-4">
           <IntervalIndicator phase={trialPhase} feedback={lastFeedback} />
-          <div className="mt-8 text-sm text-slate-400 h-6 text-center">
-            {trialPhase === "awaitingResponse" && TEXTS.runText}
+          <div className="mt-6 sm:mt-8 text-sm text-slate-400 h-6 text-center px-2">
+            {trialPhase === "awaitingResponse" && t.trial.askHigher}
             {trialPhase === "feedback" && lastFeedback === "correct" && (
-              <span className="text-emerald-400 font-bold">○ 正解</span>
+              <span className="text-emerald-400 font-bold">{t.trial.correct}</span>
             )}
             {trialPhase === "feedback" && lastFeedback === "incorrect" && (
-              <span className="text-rose-400 font-bold">× 不正解</span>
+              <span className="text-rose-400 font-bold">{t.trial.incorrect}</span>
             )}
             {(trialPhase === "playingInterval1" ||
               trialPhase === "playingInterval2") && (
-              <span>音を再生中</span>
+              <span>{t.trial.playing}</span>
             )}
             {trialPhase === "isiGap" && <span>—</span>}
-            {trialPhase === "iti" && <span>次の試行を準備中…</span>}
+            {trialPhase === "iti" && <span>{t.trial.nextTrial}</span>}
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mt-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-4">
           <ResponseButton
-            label="音① が高かった"
+            label={t.trial.tone1Higher}
             keyHint="1"
             disabled={trialPhase !== "awaitingResponse"}
             onClick={() => respond(1)}
           />
           <ResponseButton
-            label="音② が高かった"
+            label={t.trial.tone2Higher}
             keyHint="2"
             disabled={trialPhase !== "awaitingResponse"}
             onClick={() => respond(2)}
@@ -638,9 +668,9 @@ export function TrialRunner({
                 type="button"
                 onClick={replay}
                 disabled={!canReplay}
-                className="text-xs font-medium text-slate-300 hover:text-emerald-300 disabled:text-slate-700 disabled:cursor-not-allowed underline"
+                className="text-xs font-medium text-slate-300 hover:text-emerald-300 disabled:text-slate-700 disabled:cursor-not-allowed underline py-2"
               >
-                {TEXTS.replayLabel}
+                🔁 {t.trial.replay}
                 {maxReplays > 1 && (
                   <span className="ml-1 text-slate-500 font-mono text-[10px]">
                     ({replayCount}/{maxReplays})
@@ -657,9 +687,9 @@ export function TrialRunner({
               <button
                 type="button"
                 onClick={undo}
-                className="text-xs font-medium text-amber-300 hover:text-amber-200 underline"
+                className="text-xs font-medium text-amber-300 hover:text-amber-200 underline py-2"
               >
-                {TEXTS.undoLabel}{" "}
+                {t.trial.undo}{" "}
                 <kbd className="ml-1 px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-[10px] font-mono text-slate-400">
                   U
                 </kbd>
@@ -682,13 +712,21 @@ function IntervalIndicator({
   const i1Active = phase === "playingInterval1";
   const i2Active = phase === "playingInterval2";
   return (
-    <div className="flex items-center gap-6">
+    <div className="flex items-center gap-3 sm:gap-6">
       <CircleDot label="①" active={i1Active} done={!i1Active && phase !== "idle"} />
-      <div className="text-slate-700 text-2xl">→</div>
-      <CircleDot label="②" active={i2Active} done={phase === "awaitingResponse" || phase === "feedback" || phase === "iti"} />
-      <div className="text-slate-700 text-2xl">→</div>
+      <div className="text-slate-700 text-xl sm:text-2xl">→</div>
+      <CircleDot
+        label="②"
+        active={i2Active}
+        done={
+          phase === "awaitingResponse" ||
+          phase === "feedback" ||
+          phase === "iti"
+        }
+      />
+      <div className="text-slate-700 text-xl sm:text-2xl">→</div>
       <div
-        className={`w-20 h-20 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all ${
+        className={`w-14 h-14 sm:w-20 sm:h-20 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all ${
           phase === "awaitingResponse"
             ? "border-amber-400 text-amber-300 bg-amber-500/10 animate-pulse"
             : phase === "feedback"
@@ -719,7 +757,7 @@ function CircleDot({
 }) {
   return (
     <div
-      className={`w-20 h-20 rounded-full border-2 flex items-center justify-center text-2xl font-bold transition-all ${
+      className={`w-14 h-14 sm:w-20 sm:h-20 rounded-full border-2 flex items-center justify-center text-xl sm:text-2xl font-bold transition-all ${
         active
           ? "border-emerald-400 text-emerald-300 bg-emerald-500/20 scale-110"
           : done
@@ -747,10 +785,10 @@ function ResponseButton({
     <button
       onClick={onClick}
       disabled={disabled}
-      className="py-5 rounded-2xl bg-slate-800 hover:bg-slate-700 disabled:bg-slate-900 disabled:text-slate-700 border border-slate-700 disabled:border-slate-800 text-white font-bold transition-all active:scale-[0.98] disabled:cursor-not-allowed"
+      className="py-5 sm:py-6 rounded-2xl bg-slate-800 hover:bg-slate-700 disabled:bg-slate-900 disabled:text-slate-700 border border-slate-700 disabled:border-slate-800 text-white font-bold transition-all active:scale-[0.98] disabled:cursor-not-allowed select-none"
     >
-      <div className="text-base">{label}</div>
-      <kbd className="inline-block mt-2 px-2 py-0.5 bg-slate-950/80 border border-slate-700 rounded text-[11px] font-mono text-slate-400">
+      <div className="text-sm sm:text-base">{label}</div>
+      <kbd className="hidden sm:inline-block mt-2 px-2 py-0.5 bg-slate-950/80 border border-slate-700 rounded text-[11px] font-mono text-slate-400">
         {keyHint}
       </kbd>
     </button>

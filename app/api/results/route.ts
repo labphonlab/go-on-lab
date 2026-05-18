@@ -1,11 +1,9 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { isValidDesignId } from "@/app/lib/design";
+import { resultsDirFor, ROOT_DIR } from "@/app/lib/design-store";
 
-const DATA_DIR =
-  process.env.EXPERIMENT_DATA_DIR ||
-  path.join(process.cwd(), "data", "results");
-
-const MAX_BODY_BYTES = 2_000_000;
+const MAX_BODY_BYTES = 4_000_000;
 const ID_PATTERN = /^P-[A-Z0-9-]{6,64}$/;
 
 export const dynamic = "force-dynamic";
@@ -49,6 +47,10 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
+  const experimentId =
+    typeof obj.experimentId === "string" && isValidDesignId(obj.experimentId)
+      ? obj.experimentId
+      : "default";
 
   const serialized = JSON.stringify(body);
   if (Buffer.byteLength(serialized, "utf8") > MAX_BODY_BYTES) {
@@ -58,8 +60,9 @@ export async function POST(request: Request) {
     );
   }
 
+  const targetDir = resultsDirFor(experimentId);
   try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
+    await fs.mkdir(targetDir, { recursive: true });
   } catch (e) {
     return Response.json(
       { ok: false, error: "Storage unavailable", detail: String(e) },
@@ -70,7 +73,7 @@ export async function POST(request: Request) {
   const safePid = pid.replace(/[^A-Z0-9-]/g, "_");
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
   const filename = `${safePid}__${stamp}.json`;
-  const filepath = path.join(DATA_DIR, filename);
+  const filepath = path.join(targetDir, filename);
 
   try {
     await fs.writeFile(filepath, serialized, { encoding: "utf8", flag: "wx" });
@@ -81,7 +84,12 @@ export async function POST(request: Request) {
     );
   }
 
-  return Response.json({ ok: true, filename });
+  return Response.json({
+    ok: true,
+    experimentId,
+    filename,
+    relativePath: path.relative(ROOT_DIR, filepath),
+  });
 }
 
 export async function GET() {

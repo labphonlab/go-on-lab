@@ -10,11 +10,19 @@ import {
   trialsToTsv,
   headphoneTrialsToCsv,
 } from "../lib/csv";
+import { useLocale } from "../contexts/LocaleProvider";
 
-export function DebriefPhase({ result }: { result: ExperimentResult }) {
-  const [submitting, setSubmitting] = useState<"idle" | "pending" | "ok" | "error">(
-    "idle",
-  );
+export function DebriefPhase({
+  result,
+  experimentId,
+}: {
+  result: ExperimentResult;
+  experimentId: string;
+}) {
+  const { t } = useLocale();
+  const [submitting, setSubmitting] = useState<
+    "idle" | "pending" | "ok" | "error"
+  >("idle");
   const [submitMessage, setSubmitMessage] = useState<string>("");
 
   useEffect(() => {
@@ -25,16 +33,14 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
         const resp = await fetch("/api/results", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(result),
+          body: JSON.stringify({ ...result, experimentId }),
         });
         if (cancelled) return;
         if (resp.ok) {
           const j = await resp.json().catch(() => ({}));
           setSubmitting("ok");
           setSubmitMessage(
-            typeof j.filename === "string"
-              ? `保存ファイル: ${j.filename}`
-              : "サーバ保存完了",
+            typeof j.filename === "string" ? `${j.filename}` : "",
           );
         } else {
           setSubmitting("error");
@@ -51,7 +57,7 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
     return () => {
       cancelled = true;
     };
-  }, [result]);
+  }, [result, experimentId]);
 
   const thresholdHz = result.finalThresholdHz;
   const thresholdCents = result.finalThresholdCents;
@@ -61,20 +67,20 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
       <Card>
         <div className="text-center">
           <div className="text-emerald-400 text-5xl mb-3">✓</div>
-          <h2 className="text-2xl font-bold mb-2 text-white">実験が完了しました</h2>
-          <p className="text-slate-400 text-sm">
-            ご協力ありがとうございました。
-          </p>
+          <h2 className="text-2xl font-bold mb-2 text-white">
+            {t.debrief.heading}
+          </h2>
+          <p className="text-slate-400 text-sm">{t.debrief.thanks}</p>
         </div>
       </Card>
 
       {thresholdHz !== null && (
         <Card>
           <div className="text-[10px] font-bold tracking-[0.3em] text-slate-500 uppercase mb-2">
-            Your Frequency Difference Limen (DLF)
+            {t.debrief.dlfLabel}
           </div>
-          <div className="flex items-baseline gap-3">
-            <div className="text-5xl font-black text-white">
+          <div className="flex flex-wrap items-baseline gap-3">
+            <div className="text-4xl sm:text-5xl font-black text-white">
               {thresholdHz.toFixed(2)}
               <span className="text-xl font-normal text-slate-400 ml-2">Hz</span>
             </div>
@@ -85,10 +91,7 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
             )}
           </div>
           <p className="text-xs text-slate-500 mt-3 leading-relaxed">
-            この値は、1000 Hz の純音について、あなたが
-            70.7% の正答率で「より高い音」を判別できる
-            最小の周波数差の推定値です（2-down/1-up 法による収束推定）。
-            一般成人の典型値は 1〜5 Hz 程度です。
+            {t.debrief.dlfHelp}
           </p>
         </Card>
       )}
@@ -96,7 +99,7 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
       {result.staircases.length > 0 && (
         <Card>
           <h3 className="text-sm font-bold text-emerald-400 mb-3">
-            階段法の収束
+            {t.debrief.staircaseHeading}
           </h3>
           <div className="space-y-3">
             {result.staircases.map((s) => (
@@ -106,10 +109,12 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
               >
                 <div className="flex justify-between items-center mb-2 text-xs text-slate-400 font-mono">
                   <span>Staircase #{s.staircaseId + 1}</span>
-                  <span>{s.numTrials} trials · {s.reversals.length} reversals</span>
+                  <span>
+                    {t.debrief.trialsLabel(s.numTrials, s.reversals.length)}
+                  </span>
                 </div>
                 <div className="text-sm">
-                  <span className="text-slate-500">Threshold: </span>
+                  <span className="text-slate-500">{t.debrief.threshold}: </span>
                   <span className="text-white font-bold">
                     {s.threshold != null ? s.threshold.toFixed(2) : "—"} Hz
                   </span>
@@ -126,29 +131,45 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
       )}
 
       <Card>
-        <h3 className="text-sm font-bold text-emerald-400 mb-3">データ</h3>
+        <h3 className="text-sm font-bold text-emerald-400 mb-3">
+          {t.debrief.dataHeading}
+        </h3>
         <p className="text-xs text-slate-400 mb-4 leading-relaxed">
-          参加者ID: <code className="text-slate-200 font-mono">{result.participantId}</code>
+          {t.debrief.participantIdLabel}:{" "}
+          <code className="text-slate-200 font-mono break-all">
+            {result.participantId}
+          </code>
           <br />
-          全データはCSV/JSON形式でダウンロードできます。
-          研究目的での再現性確保のため、必要に応じてダウンロードを保管してください。
+          {t.debrief.dataIntro}
         </p>
 
         <div className="mb-4 text-xs">
           {submitting === "pending" && (
-            <span className="text-slate-400">サーバへ送信中…</span>
+            <span className="text-slate-400">{t.debrief.uploading}</span>
           )}
           {submitting === "ok" && (
-            <span className="text-emerald-400">✓ サーバ保存完了 · {submitMessage}</span>
+            <span className="text-emerald-400">
+              {t.debrief.uploaded}
+              {submitMessage && (
+                <span className="ml-2 text-slate-500 font-mono break-all">
+                  {submitMessage}
+                </span>
+              )}
+            </span>
           )}
           {submitting === "error" && (
             <span className="text-amber-400">
-              ⚠ サーバ送信に失敗 ({submitMessage})。下のボタンからローカルへ保存してください。
+              {t.debrief.uploadError}
+              {submitMessage && (
+                <span className="ml-2 text-slate-500 font-mono break-all">
+                  ({submitMessage})
+                </span>
+              )}
             </span>
           )}
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <SecondaryButton
             onClick={() =>
               downloadFile(
@@ -158,7 +179,7 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
               )
             }
           >
-            本試行 CSV
+            {t.debrief.dlMainCsv}
           </SecondaryButton>
           <SecondaryButton
             onClick={() =>
@@ -169,7 +190,7 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
               )
             }
           >
-            本試行 TSV (Praat互換)
+            {t.debrief.dlMainTsv}
           </SecondaryButton>
           <SecondaryButton
             onClick={() =>
@@ -180,7 +201,7 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
               )
             }
           >
-            練習 CSV
+            {t.debrief.dlPracticeCsv}
           </SecondaryButton>
           {result.headphoneCheck && (
             <SecondaryButton
@@ -195,7 +216,7 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
                 )
               }
             >
-              音響チェック CSV
+              {t.debrief.dlHeadphoneCsv}
             </SecondaryButton>
           )}
           <PrimaryButton
@@ -207,15 +228,13 @@ export function DebriefPhase({ result }: { result: ExperimentResult }) {
               )
             }
           >
-            全体 JSON
+            {t.debrief.dlAllJson}
           </PrimaryButton>
         </div>
       </Card>
 
       <div className="text-center pt-4">
-        <p className="text-xs text-slate-500">
-          このタブを閉じて終了してください。
-        </p>
+        <p className="text-xs text-slate-500">{t.debrief.closeTab}</p>
       </div>
     </div>
   );

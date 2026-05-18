@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# experiment results
+# experiment results & designs (filesystem store)
 /data/results/*
 !/data/results/.gitkeep
+/data/experiments/*
+!/data/experiments/.gitkeep
+/data/.admin-secret

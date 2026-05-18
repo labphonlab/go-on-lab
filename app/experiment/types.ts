@@ -101,6 +101,8 @@ export interface StaircaseSummary {
 
 export interface ExperimentResult {
   participantId: string;
+  experimentId: string;
+  locale: string;
   startedAt: string;
   completedAt: string | null;
   durationSec: number | null;

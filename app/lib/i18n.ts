@@ -157,6 +157,13 @@ export interface Messages {
     playing: string;
     nextTrial: string;
   };
+  identification: {
+    askLabel: string;
+    practiceIntro: string;
+    mainIntro: string;
+    startPractice: string;
+    startMain: string;
+  };
   break: {
     heading: string;
     text: string;
@@ -318,6 +325,15 @@ export const MESSAGES: Record<Locale, Messages> = {
       playing: "音を再生中",
       nextTrial: "次の試行を準備中…",
     },
+    identification: {
+      askLabel: "どちらに聞こえましたか?",
+      practiceIntro:
+        "音節が再生されます。「ば」と「ぱ」のどちらに聞こえたかをタップしてください。練習では数試行のみ行います。",
+      mainIntro:
+        "音節が再生されます。「ば」と「ぱ」のどちらに聞こえたかをタップしてください。よく分からない場合も必ずどちらかを選んでください。",
+      startPractice: "練習を始める →",
+      startMain: "本試行を始める →",
+    },
     break: {
       heading: "小休憩",
       text: "少し休んでください。準備ができたら下のボタンで続行してください。",
@@ -478,6 +494,15 @@ export const MESSAGES: Record<Locale, Messages> = {
       playing: "Playing tone",
       nextTrial: "Preparing next trial…",
     },
+    identification: {
+      askLabel: "Which one did you hear?",
+      practiceIntro:
+        "A syllable will play. Tap which one you heard. Just a few practice trials first.",
+      mainIntro:
+        "A syllable will play. Tap which one you heard. Please guess even if you're unsure.",
+      startPractice: "Start practice →",
+      startMain: "Start main task →",
+    },
     break: {
       heading: "Short break",
       text: "Take a brief rest. Tap the button when you are ready to continue.",
@@ -637,6 +662,15 @@ export const MESSAGES: Record<Locale, Messages> = {
       playing: "음 재생 중",
       nextTrial: "다음 시행 준비 중…",
     },
+    identification: {
+      askLabel: "어느 쪽으로 들렸습니까?",
+      practiceIntro:
+        "음절이 재생됩니다. 「바」와 「파」 중 어느 쪽으로 들렸는지 탭하세요. 먼저 짧은 연습을 진행합니다.",
+      mainIntro:
+        "음절이 재생됩니다. 어느 쪽으로 들렸는지 탭하세요. 확실치 않더라도 반드시 한쪽을 선택하세요.",
+      startPractice: "연습 시작 →",
+      startMain: "본 시행 시작 →",
+    },
     break: {
       heading: "짧은 휴식",
       text: "잠시 쉬어 주세요. 준비되면 아래 버튼을 눌러 계속하세요.",
@@ -794,6 +828,15 @@ export const MESSAGES: Record<Locale, Messages> = {
       incorrect: "× 错误",
       playing: "正在播放",
       nextTrial: "准备下一试次…",
+    },
+    identification: {
+      askLabel: "听到的是哪个?",
+      practiceIntro:
+        "将播放一个音节。请点击你听到的那个。先做几次练习。",
+      mainIntro:
+        "将播放一个音节。请点击你听到的那个。不确定时也务必选择一个。",
+      startPractice: "开始练习 →",
+      startMain: "开始正式试次 →",
     },
     break: {
       heading: "短暂休息",

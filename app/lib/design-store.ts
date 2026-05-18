@@ -3,6 +3,7 @@ import {
   type ExperimentDesign,
   isValidDesignId,
   makeDefaultDesign,
+  makeVotDefaultDesign,
   sanitizeDesign,
 } from "./design";
 import { getBackend } from "./storage";
@@ -59,6 +60,15 @@ export async function ensureDefaultDesign(): Promise<ExperimentDesign> {
   d.title.ja = "サンプル実験 (default)";
   d.title.en = "Sample Experiment (default)";
   return b.designs.put("default", d);
+}
+
+export async function ensureVotDefaultDesign(): Promise<ExperimentDesign> {
+  const b = await getBackend();
+  const existing = await b.designs.get("vot-default");
+  if (existing) return existing;
+  const d = makeVotDefaultDesign("vot-default");
+  d.status = "active";
+  return b.designs.put("vot-default", d);
 }
 
 export async function listResultsFor(experimentId: string) {

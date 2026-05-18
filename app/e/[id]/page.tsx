@@ -1,9 +1,19 @@
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import type { Metadata } from "next";
-import { ensureDefaultDesign, getDesign } from "@/app/lib/design-store";
+import {
+  ensureDefaultDesign,
+  ensureVotDefaultDesign,
+  getDesign,
+} from "@/app/lib/design-store";
 import { detectLocale, pickLocalized, type Locale } from "@/app/lib/i18n";
 import ExperimentRunner from "@/app/experiment/ExperimentRunner";
+
+async function loadDesignWithBootstrap(id: string) {
+  if (id === "default") return ensureDefaultDesign();
+  if (id === "vot-default") return ensureVotDefaultDesign();
+  return getDesign(id);
+}
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -14,7 +24,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const design = id === "default" ? await ensureDefaultDesign() : await getDesign(id);
+  const design = await loadDesignWithBootstrap(id);
   if (!design) {
     return { title: "Experiment not found", robots: { index: false } };
   }
@@ -30,7 +40,7 @@ export async function generateMetadata({
 export default async function Page({ params, searchParams }: PageProps) {
   const { id } = await params;
   const sp = await searchParams;
-  const design = id === "default" ? await ensureDefaultDesign() : await getDesign(id);
+  const design = await loadDesignWithBootstrap(id);
   if (!design) {
     notFound();
   }

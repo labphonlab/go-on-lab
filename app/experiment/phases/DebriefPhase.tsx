@@ -82,7 +82,12 @@ export function DebriefPhase({
         </Card>
       )}
 
-      {result.staircases.length > 0 && (
+      {result.taskType === "identification" &&
+        result.identificationMainTrials.length > 0 && (
+          <IdentificationSummary result={result} />
+        )}
+
+      {result.taskType !== "identification" && result.staircases.length > 0 && (
         <Card>
           <h3 className="text-sm font-bold text-emerald-400 mb-3">
             {t.debrief.staircaseHeading}
@@ -236,5 +241,85 @@ export function DebriefPhase({
         <p className="text-xs text-slate-500">{t.debrief.closeTab}</p>
       </div>
     </div>
+  );
+}
+
+function IdentificationSummary({ result }: { result: ExperimentResult }) {
+  const trials = result.identificationMainTrials;
+  // group by stimulusId, compute P(each category)
+  const byStim = new Map<
+    string,
+    { value: number | null; label: string; total: number; counts: Map<string, number> }
+  >();
+  for (const t of trials) {
+    if (t.undone) continue;
+    let g = byStim.get(t.stimulusId);
+    if (!g) {
+      g = {
+        value: t.stimulusValue,
+        label: t.stimulusLabel,
+        total: 0,
+        counts: new Map<string, number>(),
+      };
+      byStim.set(t.stimulusId, g);
+    }
+    if (t.response) {
+      g.total += 1;
+      g.counts.set(t.response, (g.counts.get(t.response) ?? 0) + 1);
+    }
+  }
+  const rows = Array.from(byStim.entries()).sort((a, b) => {
+    const av = a[1].value;
+    const bv = b[1].value;
+    if (av != null && bv != null) return av - bv;
+    return a[0].localeCompare(b[0]);
+  });
+  const categoryIds = Array.from(
+    new Set(trials.map((t) => t.response).filter((x): x is string => !!x)),
+  ).sort();
+
+  return (
+    <Card>
+      <div className="text-[10px] font-bold tracking-[0.3em] text-slate-500 uppercase mb-3">
+        Identification Summary
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-xs text-left">
+          <thead>
+            <tr className="text-slate-500">
+              <th className="py-1 pr-3 font-medium">Stimulus</th>
+              <th className="py-1 pr-3 font-medium text-right">n</th>
+              {categoryIds.map((c) => (
+                <th key={c} className="py-1 pr-3 font-medium text-right">
+                  P({c})
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(([id, g]) => (
+              <tr
+                key={id}
+                className="border-t border-slate-800 text-slate-200 font-mono"
+              >
+                <td className="py-1.5 pr-3">{g.label}</td>
+                <td className="py-1.5 pr-3 text-right">{g.total}</td>
+                {categoryIds.map((c) => {
+                  const p = g.total > 0 ? (g.counts.get(c) ?? 0) / g.total : 0;
+                  return (
+                    <td key={c} className="py-1.5 pr-3 text-right">
+                      {(p * 100).toFixed(0)}%
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-[11px] text-slate-500 mt-3">
+        ※ 各刺激音についての応答比率。詳細データはCSVをダウンロードしてください。
+      </p>
+    </Card>
   );
 }

@@ -142,6 +142,46 @@ export class AudioEngine {
       setTimeout(resolve, Math.max(0, remaining * 1000)),
     );
   }
+
+  private bufferCache = new Map<string, Promise<AudioBuffer>>();
+
+  /**
+   * Fetch and decode a WAV/MP3 file, caching the result so repeated trials
+   * with the same stimulus don't re-decode.
+   */
+  loadBuffer(url: string): Promise<AudioBuffer> {
+    const cached = this.bufferCache.get(url);
+    if (cached) return cached;
+    const p = (async () => {
+      const resp = await fetch(url, { cache: "force-cache" });
+      if (!resp.ok) throw new Error(`Failed to load stimulus: ${url} (${resp.status})`);
+      const ab = await resp.arrayBuffer();
+      return await this.ctx.decodeAudioData(ab.slice(0));
+    })();
+    this.bufferCache.set(url, p);
+    p.catch(() => this.bufferCache.delete(url));
+    return p;
+  }
+
+  /** Pre-warm the cache so the first trial doesn't pay the decode cost. */
+  async preloadBuffers(urls: string[]): Promise<void> {
+    await Promise.all(urls.map((u) => this.loadBuffer(u)));
+  }
+
+  scheduleBuffer(
+    buffer: AudioBuffer,
+    startTime: number,
+    level: number,
+  ): { startTime: number; endTime: number } {
+    const src = this.ctx.createBufferSource();
+    src.buffer = buffer;
+    const gain = this.ctx.createGain();
+    gain.gain.value = level;
+    src.connect(gain);
+    gain.connect(this.masterGain);
+    src.start(startTime);
+    return { startTime, endTime: startTime + buffer.duration };
+  }
 }
 
 /**

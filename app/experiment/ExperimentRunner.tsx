@@ -8,6 +8,7 @@ import { AudioSetupPhase } from "./phases/AudioSetupPhase";
 import { HeadphoneCheckPhase } from "./phases/HeadphoneCheckPhase";
 import { InstructionsPhase } from "./phases/InstructionsPhase";
 import { TrialRunner } from "./phases/TrialRunner";
+import { IdentificationRunner } from "./phases/IdentificationRunner";
 import { DebriefPhase } from "./phases/DebriefPhase";
 import { LocaleProvider, useLocale } from "./contexts/LocaleProvider";
 
@@ -28,6 +29,7 @@ import type {
   DiscriminationTrial,
   ExperimentResult,
   HeadphoneTrial,
+  IdentificationTrial,
   Phase,
   StaircaseSummary,
 } from "./types";
@@ -119,6 +121,8 @@ function RunnerInner({ design }: { design: ExperimentDesign }) {
     [],
   );
   const [mainTrials, setMainTrials] = useState<DiscriminationTrial[]>([]);
+  const [identPractice, setIdentPractice] = useState<IdentificationTrial[]>([]);
+  const [identMain, setIdentMain] = useState<IdentificationTrial[]>([]);
   const [finalResult, setFinalResult] = useState<ExperimentResult | null>(null);
 
   useEffect(() => {
@@ -187,6 +191,63 @@ function RunnerInner({ design }: { design: ExperimentDesign }) {
     setMainTrials((prev) => prev.slice(0, -1));
   }, []);
 
+  const onIdentPractice = useCallback(
+    (tr: IdentificationTrial) => setIdentPractice((prev) => [...prev, tr]),
+    [],
+  );
+  const onUndoIdentPractice = useCallback(() => {
+    setIdentPractice((prev) => prev.slice(0, -1));
+  }, []);
+  const onIdentMain = useCallback(
+    (tr: IdentificationTrial) => setIdentMain((prev) => [...prev, tr]),
+    [],
+  );
+  const onUndoIdentMain = useCallback(() => {
+    setIdentMain((prev) => prev.slice(0, -1));
+  }, []);
+
+  const onIdentificationComplete = useCallback(() => {
+    const completedAt = new Date().toISOString();
+    const durationSec =
+      (new Date(completedAt).getTime() - new Date(startedAt).getTime()) / 1000;
+    const result: ExperimentResult = {
+      participantId,
+      experimentId: design.id,
+      locale,
+      startedAt,
+      completedAt,
+      durationSec,
+      consent,
+      demographics,
+      audioInfo,
+      headphoneCheck,
+      practiceTrials: [],
+      mainTrials: [],
+      identificationPracticeTrials: identPractice,
+      identificationMainTrials: identMain,
+      staircases: [],
+      finalThresholdHz: null,
+      finalThresholdCents: null,
+      taskType: design.taskType,
+      configVersion: EXPERIMENT_CONFIG.configVersion,
+      appVersion: EXPERIMENT_CONFIG.appVersion,
+    };
+    setFinalResult(result);
+    setPhase("debrief");
+  }, [
+    audioInfo,
+    consent,
+    demographics,
+    design.id,
+    design.taskType,
+    headphoneCheck,
+    identMain,
+    identPractice,
+    locale,
+    participantId,
+    startedAt,
+  ]);
+
   const onMainBlockComplete = useCallback(
     ({ finishedStaircases }: { finishedStaircases: StaircaseState[] }) => {
       const sc = staircaseConfigFrom(design);
@@ -242,9 +303,12 @@ function RunnerInner({ design }: { design: ExperimentDesign }) {
         headphoneCheck,
         practiceTrials,
         mainTrials,
+        identificationPracticeTrials: [],
+        identificationMainTrials: [],
         staircases: summaries,
         finalThresholdHz,
         finalThresholdCents,
+        taskType: design.taskType,
         configVersion: EXPERIMENT_CONFIG.configVersion,
         appVersion: EXPERIMENT_CONFIG.appVersion,
       };
@@ -302,7 +366,7 @@ function RunnerInner({ design }: { design: ExperimentDesign }) {
         />
       )}
 
-      {phase === "practice" && audioEngine && (
+      {phase === "practice" && audioEngine && design.taskType === "fdl-2afc" && (
         <TrialRunner
           engine={audioEngine}
           design={design}
@@ -320,19 +384,48 @@ function RunnerInner({ design }: { design: ExperimentDesign }) {
         />
       )}
 
+      {phase === "practice" && audioEngine && design.taskType === "identification" && (
+        <IdentificationRunner
+          engine={audioEngine}
+          design={design}
+          mode="practice"
+          blockIndex={0}
+          feedback={design.identification.practiceFeedback}
+          maxReplays={design.identification.maxReplaysPractice}
+          presentationsPerStimulus={
+            design.identification.numPracticePresentationsPerStimulus
+          }
+          onTrialComplete={onIdentPractice}
+          onUndoLastTrial={onUndoIdentPractice}
+          onBlockComplete={() => setPhase("rest")}
+          seed={session.seed}
+        />
+      )}
+
       {phase === "rest" && (
         <RestPhase
           design={design}
-          practiceTrials={practiceTrials}
+          practiceTrials={
+            design.taskType === "fdl-2afc"
+              ? practiceTrials
+              : identPractice.map(
+                  (tr): DiscriminationTrial =>
+                    ({
+                      ...(tr as unknown as DiscriminationTrial),
+                      correct: tr.correct ?? null,
+                    }) as DiscriminationTrial,
+                )
+          }
           onContinue={() => setPhase("main")}
           onRetryPractice={() => {
-            setPracticeTrials([]);
+            if (design.taskType === "fdl-2afc") setPracticeTrials([]);
+            else setIdentPractice([]);
             setPhase("practice");
           }}
         />
       )}
 
-      {phase === "main" && audioEngine && (
+      {phase === "main" && audioEngine && design.taskType === "fdl-2afc" && (
         <TrialRunner
           engine={audioEngine}
           design={design}
@@ -344,6 +437,24 @@ function RunnerInner({ design }: { design: ExperimentDesign }) {
           onTrialComplete={onMainTrial}
           onUndoLastTrial={onUndoMainTrial}
           onBlockComplete={onMainBlockComplete}
+          seed={(session.seed + 7919) >>> 0}
+        />
+      )}
+
+      {phase === "main" && audioEngine && design.taskType === "identification" && (
+        <IdentificationRunner
+          engine={audioEngine}
+          design={design}
+          mode="main"
+          blockIndex={1}
+          feedback={false}
+          maxReplays={design.identification.maxReplaysMain}
+          presentationsPerStimulus={
+            design.identification.numPresentationsPerStimulus
+          }
+          onTrialComplete={onIdentMain}
+          onUndoLastTrial={onUndoIdentMain}
+          onBlockComplete={() => onIdentificationComplete()}
           seed={(session.seed + 7919) >>> 0}
         />
       )}

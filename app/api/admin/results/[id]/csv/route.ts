@@ -12,6 +12,7 @@ interface Ctx {
 const TRIAL_COLUMNS = [
   "participantId",
   "experimentId",
+  "taskType",
   "locale",
   "sessionStartedAt",
   "sessionCompletedAt",
@@ -19,11 +20,16 @@ const TRIAL_COLUMNS = [
   "blockIndex",
   "staircaseId",
   "trialIndexInStaircase",
+  "trialIndexInBlock",
   "globalTrialIndex",
   "referenceFrequencyHz",
   "deltaHz",
   "comparisonFrequencyHz",
   "comparisonIntervalIs2",
+  "stimulusId",
+  "stimulusSrc",
+  "stimulusValue",
+  "stimulusLabel",
   "response",
   "correct",
   "rtMs",
@@ -38,13 +44,17 @@ const TRIAL_COLUMNS = [
   "rampDurationSec",
   "outputLevel",
   "stimulusOnsetAudioTime",
+  "stimulusEndAudioTime",
   "responseDeadlineAudioTime",
+  "preStimulusSilenceSec",
+  "postStimulusSilenceSec",
   "timestamp",
 ] as const;
 
 const SESSION_COLUMNS = [
   "participantId",
   "experimentId",
+  "taskType",
   "locale",
   "startedAt",
   "completedAt",
@@ -54,6 +64,8 @@ const SESSION_COLUMNS = [
   "numStaircases",
   "numMainTrials",
   "numPracticeTrials",
+  "numIdentMainTrials",
+  "numIdentPracticeTrials",
   "practiceAccuracy",
   "headphoneCheckPassed",
   "headphoneCheckCorrect",
@@ -88,7 +100,12 @@ interface AnyRecord {
 
 function trialRows(session: AnyRecord): string[] {
   const lines: string[] = [];
-  const blocks = ["practiceTrials", "mainTrials"];
+  const blocks = [
+    "practiceTrials",
+    "mainTrials",
+    "identificationPracticeTrials",
+    "identificationMainTrials",
+  ];
   for (const block of blocks) {
     const arr = session[block];
     if (!Array.isArray(arr)) continue;
@@ -97,6 +114,7 @@ function trialRows(session: AnyRecord): string[] {
       const row = TRIAL_COLUMNS.map((c) => {
         if (c === "participantId") return session.participantId;
         if (c === "experimentId") return session.experimentId;
+        if (c === "taskType") return session.taskType;
         if (c === "locale") return session.locale;
         if (c === "sessionStartedAt") return session.startedAt;
         if (c === "sessionCompletedAt") return session.completedAt;
@@ -120,6 +138,12 @@ function sessionRow(session: AnyRecord): string {
   const practice = Array.isArray(session.practiceTrials)
     ? session.practiceTrials
     : [];
+  const identMain = Array.isArray(session.identificationMainTrials)
+    ? session.identificationMainTrials
+    : [];
+  const identPractice = Array.isArray(session.identificationPracticeTrials)
+    ? session.identificationPracticeTrials
+    : [];
   const practiceCorrect = practice.filter(
     (p) => (p as AnyRecord).correct === true,
   ).length;
@@ -131,6 +155,8 @@ function sessionRow(session: AnyRecord): string {
         return session.participantId;
       case "experimentId":
         return session.experimentId;
+      case "taskType":
+        return session.taskType ?? "fdl-2afc";
       case "locale":
         return session.locale;
       case "startedAt":
@@ -149,6 +175,10 @@ function sessionRow(session: AnyRecord): string {
         return main.length;
       case "numPracticeTrials":
         return practice.length;
+      case "numIdentMainTrials":
+        return identMain.length;
+      case "numIdentPracticeTrials":
+        return identPractice.length;
       case "practiceAccuracy":
         return practiceAccuracy;
       case "headphoneCheckPassed":

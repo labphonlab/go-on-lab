@@ -53,6 +53,32 @@ export interface HeadphoneTrial {
   rtMs: number | null;
 }
 
+export interface IdentificationTrial {
+  block: "practice" | "main";
+  blockIndex: number;
+  trialIndexInBlock: number;
+  globalTrialIndex: number;
+
+  stimulusId: string;
+  stimulusSrc: string;
+  stimulusValue: number | null;
+  stimulusLabel: string;
+
+  stimulusOnsetAudioTime: number;
+  stimulusEndAudioTime: number;
+
+  response: string | null;
+  correct: boolean | null;
+  rtMs: number | null;
+  replayCount: number;
+  undone: boolean;
+
+  preStimulusSilenceSec: number;
+  postStimulusSilenceSec: number;
+  outputLevel: number;
+  timestamp: string;
+}
+
 export interface DiscriminationTrial {
   block: "practice" | "main";
   blockIndex: number;
@@ -116,9 +142,12 @@ export interface ExperimentResult {
   } | null;
   practiceTrials: DiscriminationTrial[];
   mainTrials: DiscriminationTrial[];
+  identificationPracticeTrials: IdentificationTrial[];
+  identificationMainTrials: IdentificationTrial[];
   staircases: StaircaseSummary[];
   finalThresholdHz: number | null;
   finalThresholdCents: number | null;
+  taskType: "fdl-2afc" | "identification";
   configVersion: string;
   appVersion: string;
 }

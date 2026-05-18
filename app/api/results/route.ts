@@ -1,10 +1,10 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import crypto from "node:crypto";
 import { isValidDesignId } from "@/app/lib/design";
-import { resultsDirFor, ROOT_DIR } from "@/app/lib/design-store";
+import { getBackend } from "@/app/lib/storage";
 
 const MAX_BODY_BYTES = 4_000_000;
 const ID_PATTERN = /^P-[A-Z0-9-]{6,64}$/;
+const IDEM_PATTERN = /^[A-Za-z0-9_-]{8,128}$/;
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -26,14 +26,22 @@ export async function POST(request: Request) {
     );
   }
 
+  const rawText = await request.text().catch(() => null);
+  if (rawText === null) {
+    return Response.json({ ok: false, error: "Read failed" }, { status: 400 });
+  }
+  if (Buffer.byteLength(rawText, "utf8") > MAX_BODY_BYTES) {
+    return Response.json(
+      { ok: false, error: "Payload too large" },
+      { status: 413 },
+    );
+  }
+
   let body: unknown;
   try {
-    body = await request.json();
+    body = JSON.parse(rawText);
   } catch {
-    return Response.json(
-      { ok: false, error: "Invalid JSON" },
-      { status: 400 },
-    );
+    return Response.json({ ok: false, error: "Invalid JSON" }, { status: 400 });
   }
 
   if (!body || typeof body !== "object") {
@@ -52,44 +60,43 @@ export async function POST(request: Request) {
       ? obj.experimentId
       : "default";
 
-  const serialized = JSON.stringify(body);
-  if (Buffer.byteLength(serialized, "utf8") > MAX_BODY_BYTES) {
-    return Response.json(
-      { ok: false, error: "Payload too large" },
-      { status: 413 },
-    );
-  }
+  const idempotencyHeader =
+    request.headers.get("idempotency-key") ||
+    (typeof obj.idempotencyKey === "string" ? obj.idempotencyKey : null);
+  const idempotencyKey =
+    idempotencyHeader && IDEM_PATTERN.test(idempotencyHeader)
+      ? idempotencyHeader
+      : null;
 
-  const targetDir = resultsDirFor(experimentId);
+  const sha256 = crypto.createHash("sha256").update(rawText).digest("hex");
+
   try {
-    await fs.mkdir(targetDir, { recursive: true });
+    const backend = await getBackend();
+    const result = await backend.results.put({
+      experimentId,
+      participantId: pid,
+      idempotencyKey,
+      payload: rawText,
+      sha256,
+    });
+    return Response.json({
+      ok: true,
+      experimentId,
+      filename: result.filename,
+      sha256: result.sha256,
+      receivedAt: result.receivedAt,
+      duplicated: result.duplicated,
+    });
   } catch (e) {
+    const msg = String((e as Error)?.message ?? e);
+    if (/EEXIST|already exists|ALREADY_EXISTS/i.test(msg)) {
+      return Response.json({ ok: false, error: "Duplicate" }, { status: 409 });
+    }
     return Response.json(
-      { ok: false, error: "Storage unavailable", detail: String(e) },
+      { ok: false, error: "Storage error", detail: msg },
       { status: 500 },
     );
   }
-
-  const safePid = pid.replace(/[^A-Z0-9-]/g, "_");
-  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const filename = `${safePid}__${stamp}.json`;
-  const filepath = path.join(targetDir, filename);
-
-  try {
-    await fs.writeFile(filepath, serialized, { encoding: "utf8", flag: "wx" });
-  } catch (e) {
-    return Response.json(
-      { ok: false, error: "Write failed", detail: String(e) },
-      { status: 500 },
-    );
-  }
-
-  return Response.json({
-    ok: true,
-    experimentId,
-    filename,
-    relativePath: path.relative(ROOT_DIR, filepath),
-  });
 }
 
 export async function GET() {

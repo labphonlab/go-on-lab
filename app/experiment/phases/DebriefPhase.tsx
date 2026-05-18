@@ -10,6 +10,11 @@ import {
   trialsToTsv,
   headphoneTrialsToCsv,
 } from "../lib/csv";
+import {
+  makeIdempotencyKey,
+  submitResultWithRetry,
+  type SubmitState,
+} from "../lib/submit";
 import { useLocale } from "../contexts/LocaleProvider";
 
 export function DebriefPhase({
@@ -20,43 +25,24 @@ export function DebriefPhase({
   experimentId: string;
 }) {
   const { t } = useLocale();
-  const [submitting, setSubmitting] = useState<
-    "idle" | "pending" | "ok" | "error"
-  >("idle");
-  const [submitMessage, setSubmitMessage] = useState<string>("");
+  const [state, setState] = useState<SubmitState>({
+    status: "pending",
+    attempt: 0,
+    message: "",
+  });
 
   useEffect(() => {
-    let cancelled = false;
-    async function submit() {
-      setSubmitting("pending");
-      try {
-        const resp = await fetch("/api/results", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...result, experimentId }),
-        });
-        if (cancelled) return;
-        if (resp.ok) {
-          const j = await resp.json().catch(() => ({}));
-          setSubmitting("ok");
-          setSubmitMessage(
-            typeof j.filename === "string" ? `${j.filename}` : "",
-          );
-        } else {
-          setSubmitting("error");
-          const j = await resp.json().catch(() => ({}));
-          setSubmitMessage(j.error || `HTTP ${resp.status}`);
-        }
-      } catch (e) {
-        if (cancelled) return;
-        setSubmitting("error");
-        setSubmitMessage((e as Error).message);
-      }
-    }
-    submit();
-    return () => {
-      cancelled = true;
-    };
+    const ac = new AbortController();
+    submitResultWithRetry(
+      { ...result, experimentId },
+      {
+        idempotencyKey: makeIdempotencyKey(result.participantId, result.startedAt),
+        onState: setState,
+        signal: ac.signal,
+        maxAttempts: 5,
+      },
+    );
+    return () => ac.abort();
   }, [result, experimentId]);
 
   const thresholdHz = result.finalThresholdHz;
@@ -144,25 +130,38 @@ export function DebriefPhase({
         </p>
 
         <div className="mb-4 text-xs">
-          {submitting === "pending" && (
-            <span className="text-slate-400">{t.debrief.uploading}</span>
-          )}
-          {submitting === "ok" && (
-            <span className="text-emerald-400">
-              {t.debrief.uploaded}
-              {submitMessage && (
-                <span className="ml-2 text-slate-500 font-mono break-all">
-                  {submitMessage}
+          {state.status === "pending" && (
+            <span className="text-slate-400">
+              {t.debrief.uploading}
+              {state.attempt > 1 && (
+                <span className="ml-2 text-slate-500 font-mono">
+                  ({state.message})
                 </span>
               )}
             </span>
           )}
-          {submitting === "error" && (
+          {state.status === "ok" && (
+            <div className="text-emerald-400">
+              <div>{t.debrief.uploaded}</div>
+              {state.sha256 && (
+                <div className="text-[10px] text-slate-500 font-mono break-all mt-1">
+                  SHA-256: {state.sha256}
+                </div>
+              )}
+              {state.filename && (
+                <div className="text-[10px] text-slate-500 font-mono break-all">
+                  {state.filename}
+                  {state.duplicated && " (duplicate ignored)"}
+                </div>
+              )}
+            </div>
+          )}
+          {state.status === "queued" && (
             <span className="text-amber-400">
               {t.debrief.uploadError}
-              {submitMessage && (
+              {state.message && (
                 <span className="ml-2 text-slate-500 font-mono break-all">
-                  ({submitMessage})
+                  ({state.message})
                 </span>
               )}
             </span>

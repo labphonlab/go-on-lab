@@ -1,10 +1,7 @@
 import "server-only";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import crypto from "node:crypto";
-import { ROOT_DIR } from "./design-store";
+import { getBackend } from "./storage";
 
-const SECRET_PATH = path.join(ROOT_DIR, ".admin-secret");
 const SESSION_TTL_SEC = 60 * 60 * 12;
 const COOKIE_NAME = "go_admin";
 
@@ -12,25 +9,9 @@ let cachedSecret: string | null = null;
 
 async function getSecret(): Promise<string> {
   if (cachedSecret) return cachedSecret;
-  if (process.env.ADMIN_SECRET && process.env.ADMIN_SECRET.length >= 32) {
-    cachedSecret = process.env.ADMIN_SECRET;
-    return cachedSecret;
-  }
-  try {
-    const s = await fs.readFile(SECRET_PATH, "utf8");
-    if (s.length >= 32) {
-      cachedSecret = s;
-      return cachedSecret;
-    }
-  } catch {
-    /* fall through */
-  }
-  const buf = crypto.randomBytes(48);
-  const fresh = buf.toString("hex");
-  await fs.mkdir(ROOT_DIR, { recursive: true });
-  await fs.writeFile(SECRET_PATH, fresh, { encoding: "utf8", mode: 0o600 });
-  cachedSecret = fresh;
-  return fresh;
+  const b = await getBackend();
+  cachedSecret = await b.secrets.getOrCreateAdminSecret();
+  return cachedSecret;
 }
 
 function timingSafeEqualStr(a: string, b: string): boolean {

@@ -76,6 +76,11 @@ export interface Messages {
     initialsHelp: string;
     declineLink: string;
     agreeButton: string;
+    progressChecks: (done: number, total: number) => string;
+    progressInitials: (ok: boolean) => string;
+    needCheckMore: (n: number) => string;
+    needInitials: string;
+    allReady: string;
   };
   demographics: {
     heading: string;
@@ -232,6 +237,11 @@ export const MESSAGES: Record<Locale, Messages> = {
       initialsHelp: "個人特定には使用されません。同意記録の一部として保存されます。",
       declineLink: "参加しない",
       agreeButton: "同意して参加する →",
+      progressChecks: (d, total) => `同意項目 ${d}/${total}`,
+      progressInitials: (ok) => (ok ? "イニシャル ✓" : "イニシャル 未入力"),
+      needCheckMore: (n) => `あと ${n} 項目チェックしてください`,
+      needInitials: "イニシャルを入力してください (2文字以上)",
+      allReady: "準備OK · ボタンを押してください",
     },
     demographics: {
       heading: "基本情報",
@@ -386,6 +396,12 @@ export const MESSAGES: Record<Locale, Messages> = {
       initialsHelp: "Used as part of the consent record only; not used to identify you.",
       declineLink: "I do not wish to participate",
       agreeButton: "I consent and want to begin →",
+      progressChecks: (d, total) => `Agreements ${d}/${total}`,
+      progressInitials: (ok) => (ok ? "Initials ✓" : "Initials missing"),
+      needCheckMore: (n) =>
+        `Please check ${n} more agreement${n === 1 ? "" : "s"}`,
+      needInitials: "Please enter your initials (2+ characters)",
+      allReady: "All set · tap the button to continue",
     },
     demographics: {
       heading: "Background Information",
@@ -540,6 +556,11 @@ export const MESSAGES: Record<Locale, Messages> = {
       initialsHelp: "개인 식별에 사용되지 않으며 동의 기록의 일부로만 저장됩니다.",
       declineLink: "참여하지 않음",
       agreeButton: "동의하고 시작 →",
+      progressChecks: (d, total) => `동의 항목 ${d}/${total}`,
+      progressInitials: (ok) => (ok ? "이니셜 ✓" : "이니셜 미입력"),
+      needCheckMore: (n) => `${n}개 항목을 더 체크하세요`,
+      needInitials: "이니셜을 입력하세요 (2자 이상)",
+      allReady: "준비 완료 · 버튼을 눌러 진행하세요",
     },
     demographics: {
       heading: "기본 정보",
@@ -693,6 +714,11 @@ export const MESSAGES: Record<Locale, Messages> = {
       initialsHelp: "不用于个人识别，仅作为同意记录的一部分保存。",
       declineLink: "不参与",
       agreeButton: "同意并开始 →",
+      progressChecks: (d, total) => `同意项 ${d}/${total}`,
+      progressInitials: (ok) => (ok ? "姓名缩写 ✓" : "姓名缩写 未填"),
+      needCheckMore: (n) => `还需勾选 ${n} 项`,
+      needInitials: "请填写姓名缩写（2 字以上）",
+      allReady: "准备就绪 · 点击按钮继续",
     },
     demographics: {
       heading: "基本信息",

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, PrimaryButton, FieldLabel } from "./Shell";
 import type { ConsentRecord } from "../types";
 import { useLocale } from "../contexts/LocaleProvider";
@@ -17,11 +17,16 @@ export function ConsentPhase({
   onDecline: () => void;
 }) {
   const { t, locale } = useLocale();
+  const [hydrated, setHydrated] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [adult, setAdult] = useState(false);
   const [hearing, setHearing] = useState(false);
   const [headphones, setHeadphones] = useState(false);
   const [initials, setInitials] = useState("");
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   const checks = [adult, hearing, headphones, agreed];
   const checkedCount = checks.filter(Boolean).length;
@@ -127,6 +132,7 @@ export function ConsentPhase({
               <input
                 type="checkbox"
                 checked={it.state}
+                disabled={!hydrated}
                 onChange={(e) => it.set(e.target.checked)}
                 className="mt-0.5 w-5 h-5 accent-emerald-500 flex-shrink-0"
               />
@@ -144,6 +150,7 @@ export function ConsentPhase({
           <input
             value={initials}
             onChange={(e) => setInitials(e.target.value.slice(0, 16))}
+            disabled={!hydrated}
             maxLength={16}
             placeholder="T.S."
             autoComplete="off"

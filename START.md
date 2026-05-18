@@ -27,9 +27,16 @@ npm run quickstart
 `quickstart` が以下を自動で行います:
 
 1. `.env.local` を作成し、`ADMIN_PASSWORD` を自動生成
-2. `next dev` を起動 (ホットリロード有効)
-3. `cloudflared tunnel --url http://localhost:3000` を起動
-4. 発行された `https://*.trycloudflare.com` URL とパスワードを画面に表示
+2. 本番ビルドを作成（初回 〜30秒、2回目以降は変更がなければスキップ）
+3. `next start` を本番モードで起動
+4. `cloudflared tunnel --url http://localhost:3000` を起動
+5. 発行された `https://*.trycloudflare.com` URL とパスワードを画面に表示
+
+> なぜ本番モードか — Next.js の開発モード (`next dev`) は WebSocket と DevTools セグメントを使うため、Cloudflare Quick Tunnel + iOS Safari の組み合わせでハイドレーション (JS反映) が安定しません。本番モードはバンドルが小さく副作用が少ないので、スマホで確実に動きます。
+>
+> コードを書き換えながら自分のスマホで検証したい場合は `QUICKSTART_DEV=1 npm run quickstart` で開発モードに切り替えられます（PCのブラウザ向け）。
+>
+> ビルドを強制的に作り直したいときは `QUICKSTART_REBUILD=1 npm run quickstart`。
 
 ```
   Go-on Lab is live on your phone

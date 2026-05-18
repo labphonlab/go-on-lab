@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 import { spawn, spawnSync } from "node:child_process";
-import { existsSync, readFileSync, appendFileSync } from "node:fs";
+import { existsSync, readFileSync, appendFileSync, statSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import os from "node:os";
+import path from "node:path";
 
 const ENV_FILE = ".env.local";
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 const URL_PATTERN = /(https:\/\/[a-z0-9-]+\.trycloudflare\.com)/;
+const DEV_MODE = process.env.QUICKSTART_DEV === "1";
+const BUILD_DIR = ".next";
 
 function log(msg) {
   process.stdout.write(`\x1b[2m[quickstart]\x1b[0m ${msg}\n`);
@@ -52,6 +55,31 @@ function installInstructions() {
   return "curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared && chmod +x cloudflared && sudo mv cloudflared /usr/local/bin/";
 }
 
+function buildIsFresh() {
+  const marker = path.join(BUILD_DIR, "BUILD_ID");
+  if (!existsSync(marker)) return false;
+  if (process.env.QUICKSTART_REBUILD === "1") return false;
+  try {
+    const buildTime = statSync(marker).mtimeMs;
+    const sentinels = ["package.json", "next.config.ts"];
+    for (const s of sentinels) {
+      if (existsSync(s) && statSync(s).mtimeMs > buildTime) return false;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function runSync(cmd, args, label) {
+  log(`${label}…`);
+  const r = spawnSync(cmd, args, { stdio: "inherit", shell: true });
+  if (r.status !== 0) {
+    console.error(`\n\x1b[31m${label} に失敗しました (exit ${r.status}).\x1b[0m`);
+    process.exit(r.status ?? 1);
+  }
+}
+
 function banner({ url, password, port }) {
   const ad = `${url}/admin`;
   const exp = `${url}/e/default`;
@@ -83,13 +111,29 @@ async function main() {
     process.exit(1);
   }
 
-  log(`Next.js を起動します (port ${PORT})…`);
-  const next = spawn("npm", ["run", "dev", "--", "--port", String(PORT)], {
+  let serverArgs;
+  let serverLabel;
+  if (DEV_MODE) {
+    serverArgs = ["run", "dev", "--", "--port", String(PORT)];
+    serverLabel = "Next.js を開発モードで起動します";
+  } else {
+    if (!buildIsFresh()) {
+      runSync("npm", ["run", "build"], "本番ビルドを作成");
+    } else {
+      log("既存の本番ビルドを再利用します。");
+    }
+    serverArgs = ["run", "start", "--", "--port", String(PORT)];
+    serverLabel = "Next.js を本番モードで起動します";
+  }
+
+  log(`${serverLabel} (port ${PORT})…`);
+  const next = spawn("npm", serverArgs, {
     stdio: ["inherit", "inherit", "inherit"],
     env: { ...process.env, ADMIN_PASSWORD: password },
     shell: true,
   });
 
+  let tunnel = null;
   const cleanup = () => {
     try {
       next.kill("SIGTERM");
@@ -104,10 +148,10 @@ async function main() {
   });
   process.on("SIGTERM", cleanup);
 
-  await new Promise((r) => setTimeout(r, 4000));
+  await new Promise((r) => setTimeout(r, DEV_MODE ? 4000 : 2500));
 
   log(`Cloudflare Quick Tunnel を起動します…`);
-  const tunnel = spawn(
+  tunnel = spawn(
     cf.cmd,
     [...cf.argv, "tunnel", "--url", `http://localhost:${PORT}`],
     { stdio: ["inherit", "pipe", "pipe"], shell: true },
@@ -121,10 +165,7 @@ async function main() {
       const m = text.match(URL_PATTERN);
       if (m) {
         urlAnnounced = true;
-        setTimeout(
-          () => banner({ url: m[1], password, port: PORT }),
-          400,
-        );
+        setTimeout(() => banner({ url: m[1], password, port: PORT }), 400);
       }
     }
   };

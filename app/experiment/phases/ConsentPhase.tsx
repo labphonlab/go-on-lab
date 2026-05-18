@@ -1,11 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import { Card, PrimaryButton, FieldLabel } from "./Shell";
 import type { ConsentRecord } from "../types";
 import { useLocale } from "../contexts/LocaleProvider";
 import { pickLocalized } from "@/app/lib/i18n";
 import type { ExperimentDesign } from "@/app/lib/design";
+
+const subscribeNoop = () => () => {};
+function useHydrated(): boolean {
+  return useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false,
+  );
+}
 
 export function ConsentPhase({
   design,
@@ -17,16 +26,12 @@ export function ConsentPhase({
   onDecline: () => void;
 }) {
   const { t, locale } = useLocale();
-  const [hydrated, setHydrated] = useState(false);
+  const hydrated = useHydrated();
   const [agreed, setAgreed] = useState(false);
   const [adult, setAdult] = useState(false);
   const [hearing, setHearing] = useState(false);
   const [headphones, setHeadphones] = useState(false);
   const [initials, setInitials] = useState("");
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
 
   const checks = [adult, hearing, headphones, agreed];
   const checkedCount = checks.filter(Boolean).length;

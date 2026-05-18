@@ -16,6 +16,7 @@ export interface ScheduledTone {
 export class AudioEngine {
   ctx: AudioContext;
   private masterGain: GainNode;
+  private silentMediaEl: HTMLAudioElement | null = null;
 
   constructor() {
     const Ctor =
@@ -37,9 +38,47 @@ export class AudioEngine {
     if (this.ctx.state !== "running") {
       await this.ctx.resume();
     }
+    this.attachSilentMediaEl();
+  }
+
+  /**
+   * On iOS Safari, WebAudio is routed through the "ringer" channel and is
+   * silenced when the device's physical mute switch is on. Attaching a tiny
+   * looping <audio> element and starting it inside the same user gesture
+   * that resumes the AudioContext forces iOS to treat subsequent audio as
+   * media playback (controlled by the media volume), so a participant who
+   * forgot to flip their mute switch still hears the stimuli.
+   */
+  private attachSilentMediaEl(): void {
+    if (typeof document === "undefined") return;
+    if (this.silentMediaEl) return;
+    try {
+      const el = document.createElement("audio");
+      el.setAttribute("playsinline", "");
+      el.setAttribute("webkit-playsinline", "");
+      el.loop = true;
+      el.muted = false;
+      el.volume = 0.001;
+      // 1 second of near-silence as a tiny WAV data URI (mono, 8 kHz).
+      el.src = SILENT_WAV;
+      const p = el.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+      this.silentMediaEl = el;
+    } catch {
+      /* not fatal */
+    }
   }
 
   async close(): Promise<void> {
+    try {
+      if (this.silentMediaEl) {
+        this.silentMediaEl.pause();
+        this.silentMediaEl.src = "";
+        this.silentMediaEl = null;
+      }
+    } catch {
+      /* ignore */
+    }
     try {
       await this.ctx.close();
     } catch {
@@ -104,3 +143,42 @@ export class AudioEngine {
     );
   }
 }
+
+/**
+ * 1 second of zeros at 8000 Hz mono, PCM 16-bit, base64-encoded.
+ * Embedded inline so iOS Safari doesn't need a network fetch for the
+ * silent-keepalive media element.
+ */
+const SILENT_WAV =
+  "data:audio/wav;base64," +
+  ((): string => {
+    const sampleRate = 8000;
+    const numSamples = sampleRate;
+    const byteRate = sampleRate * 2;
+    const dataSize = numSamples * 2;
+    const fileSize = 36 + dataSize;
+    const buf = new ArrayBuffer(44 + dataSize);
+    const v = new DataView(buf);
+    const writeStr = (off: number, s: string) => {
+      for (let i = 0; i < s.length; i++) v.setUint8(off + i, s.charCodeAt(i));
+    };
+    writeStr(0, "RIFF");
+    v.setUint32(4, fileSize, true);
+    writeStr(8, "WAVE");
+    writeStr(12, "fmt ");
+    v.setUint32(16, 16, true); // fmt chunk size
+    v.setUint16(20, 1, true); // PCM
+    v.setUint16(22, 1, true); // mono
+    v.setUint32(24, sampleRate, true);
+    v.setUint32(28, byteRate, true);
+    v.setUint16(32, 2, true); // block align
+    v.setUint16(34, 16, true); // bits per sample
+    writeStr(36, "data");
+    v.setUint32(40, dataSize, true);
+    // remaining bytes are already zero — pure silence
+    const bytes = new Uint8Array(buf);
+    let bin = "";
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    if (typeof btoa === "function") return btoa(bin);
+    return Buffer.from(bin, "binary").toString("base64");
+  })();

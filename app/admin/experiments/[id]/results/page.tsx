@@ -35,10 +35,22 @@ export default async function Page({ params }: PageProps) {
           {files.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
               <a
-                href={`/api/admin/results/${id}/export`}
+                href={`/api/admin/results/${id}/csv?view=sessions`}
                 className="inline-flex items-center px-3 py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold rounded-lg"
               >
-                全件 JSONL ダウンロード
+                CSV (1行 = 1参加者)
+              </a>
+              <a
+                href={`/api/admin/results/${id}/csv?view=trials`}
+                className="inline-flex items-center px-3 py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold rounded-lg"
+              >
+                CSV (1行 = 1試行)
+              </a>
+              <a
+                href={`/api/admin/results/${id}/export`}
+                className="inline-flex items-center px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-100 text-xs font-bold rounded-lg"
+              >
+                JSONL (生データ)
               </a>
             </div>
           )}

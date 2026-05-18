@@ -40,12 +40,15 @@ export function HeadphoneCheckPhase({
   const [playing, setPlaying] = useState(false);
   const [responses, setResponses] = useState<HeadphoneTrial[]>([]);
   const [played, setPlayed] = useState(false);
+  const [replays, setReplays] = useState(0);
   const playStartRef = useRef<number>(0);
 
   const playCurrent = useCallback(() => {
     if (playing) return;
     setPlayed(false);
     setPlaying(true);
+    // re-resume the AudioContext in case iOS suspended it
+    engine.resume().catch(() => {});
     const side = trials[idx];
     const channel = side === "center" ? "both" : side;
     const start = engine.currentTime + 0.05;
@@ -75,6 +78,12 @@ export function HeadphoneCheckPhase({
     trials,
   ]);
 
+  const replay = useCallback(() => {
+    if (playing) return;
+    setReplays((c) => c + 1);
+    playCurrent();
+  }, [playCurrent, playing]);
+
   useEffect(() => {
     if (idx >= trials.length) return;
     const tmr = setTimeout(playCurrent, 400);
@@ -101,6 +110,7 @@ export function HeadphoneCheckPhase({
         if (correctCount >= design.headphoneCheckPassThreshold) onComplete(next);
         else onFail(next);
       } else {
+        setReplays(0);
         setIdx(idx + 1);
       }
     },
@@ -167,6 +177,22 @@ export function HeadphoneCheckPhase({
               <div className="text-[10px] text-slate-500 mt-1 font-mono">{key}</div>
             </button>
           ))}
+        </div>
+
+        <div className="flex justify-center mt-4">
+          <button
+            type="button"
+            onClick={replay}
+            disabled={playing}
+            className="text-xs text-slate-400 hover:text-emerald-300 disabled:text-slate-700 disabled:cursor-not-allowed underline py-2"
+          >
+            🔁 {t.headphone.replay}
+            {replays > 0 && (
+              <span className="ml-1 text-slate-500 font-mono text-[10px]">
+                ({replays})
+              </span>
+            )}
+          </button>
         </div>
       </Card>
 

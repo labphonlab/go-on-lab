@@ -56,10 +56,11 @@ export class AudioEngine {
       const el = document.createElement("audio");
       el.setAttribute("playsinline", "");
       el.setAttribute("webkit-playsinline", "");
+      el.setAttribute("x-webkit-airplay", "deny");
+      el.preload = "auto";
       el.loop = true;
       el.muted = false;
       el.volume = 0.001;
-      // 1 second of near-silence as a tiny WAV data URI (mono, 8 kHz).
       el.src = SILENT_WAV;
       const p = el.play();
       if (p && typeof p.catch === "function") p.catch(() => {});
@@ -67,7 +68,37 @@ export class AudioEngine {
     } catch {
       /* not fatal */
     }
+
+    // iOS hardens this further if the AudioContext is routed through a
+    // MediaStream, which switches the page audio session to "playback"
+    // category. Fail gracefully on browsers without MediaStream support.
+    try {
+      const ctxWithMs = this.ctx as AudioContext & {
+        createMediaStreamDestination?: () => MediaStreamAudioDestinationNode;
+      };
+      if (
+        !this.silentMediaStreamEl &&
+        typeof ctxWithMs.createMediaStreamDestination === "function"
+      ) {
+        const dest = ctxWithMs.createMediaStreamDestination!();
+        this.masterGain.connect(dest);
+        const el = document.createElement("audio");
+        el.setAttribute("playsinline", "");
+        el.setAttribute("webkit-playsinline", "");
+        el.autoplay = true;
+        el.muted = false;
+        (el as HTMLAudioElement & { srcObject?: MediaStream }).srcObject =
+          dest.stream;
+        const p = el.play();
+        if (p && typeof p.catch === "function") p.catch(() => {});
+        this.silentMediaStreamEl = el;
+      }
+    } catch {
+      /* fall back to the plain silent <audio> */
+    }
   }
+
+  private silentMediaStreamEl: HTMLAudioElement | null = null;
 
   async close(): Promise<void> {
     try {
@@ -75,6 +106,15 @@ export class AudioEngine {
         this.silentMediaEl.pause();
         this.silentMediaEl.src = "";
         this.silentMediaEl = null;
+      }
+      if (this.silentMediaStreamEl) {
+        this.silentMediaStreamEl.pause();
+        (
+          this.silentMediaStreamEl as HTMLAudioElement & {
+            srcObject?: MediaStream | null;
+          }
+        ).srcObject = null;
+        this.silentMediaStreamEl = null;
       }
     } catch {
       /* ignore */
@@ -215,7 +255,15 @@ const SILENT_WAV =
     v.setUint16(34, 16, true); // bits per sample
     writeStr(36, "data");
     v.setUint32(40, dataSize, true);
-    // remaining bytes are already zero — pure silence
+    // A few non-zero PCM samples scattered through the buffer so the iOS
+    // audio system doesn't shortcut the playback as "silent file" and skip
+    // engaging the media session. Values are -3..+3 of int16 range, well
+    // below any audible threshold.
+    for (let i = 0; i < numSamples; i++) {
+      const offset = 44 + i * 2;
+      const sample = ((i * 7919) % 7) - 3; // deterministic tiny dither
+      v.setInt16(offset, sample, true);
+    }
     const bytes = new Uint8Array(buf);
     let bin = "";
     for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);

@@ -116,6 +116,14 @@ export interface Messages {
     justRight: string;
     adjusting: string;
     errorInit: string;
+    iosTitle: string;
+    iosWarning: string;
+    cannotHearLink: string;
+    troubleshootHeading: string;
+    troubleshootSilentSwitch: string;
+    troubleshootVolume: string;
+    troubleshootHeadphones: string;
+    troubleshootReplay: string;
   };
   headphone: {
     heading: string;
@@ -127,6 +135,7 @@ export interface Messages {
     both: string;
     right: string;
     cannotHear: string;
+    replay: string;
   };
   instructions: {
     headingPractice: string;
@@ -284,6 +293,18 @@ export const MESSAGES: Record<Locale, Messages> = {
       justRight: "ちょうど良い",
       adjusting: "調整中",
       errorInit: "音声システムを初期化できませんでした。ブラウザの音声権限を許可するか、別のブラウザをお試しください。",
+      iosTitle: "iPhone / iPad をお使いの方へ",
+      iosWarning:
+        "本体側面のサイレント (消音) スイッチが ON だと、実験中の音がまったく聞こえません。スイッチをオフ (オレンジが見えない側) にし、本体の音量も上げてください。",
+      cannotHearLink: "音が聞こえない場合",
+      troubleshootHeading: "音が聞こえないとき",
+      troubleshootSilentSwitch:
+        "iPhone / iPad の場合、本体側面のサイレントスイッチをオフにしてください (オレンジ色が見えない側)。",
+      troubleshootVolume: "本体の音量を中〜大程度まで上げてください。",
+      troubleshootHeadphones:
+        "ヘッドホン / イヤホンが正しく接続されているか、Bluetooth の場合は接続済みかをご確認ください。",
+      troubleshootReplay:
+        "上の「テスト音を再生」ボタンを何度でも押せます。音量を調整してから再度お試しください。",
     },
     headphone: {
       heading: "音響チェック",
@@ -295,6 +316,7 @@ export const MESSAGES: Record<Locale, Messages> = {
       both: "両耳",
       right: "右耳",
       cannotHear: "音が聞こえない / 中止する",
+      replay: "もう一度再生",
     },
     instructions: {
       headingPractice: "練習試行の説明",
@@ -453,6 +475,18 @@ export const MESSAGES: Record<Locale, Messages> = {
       justRight: "Just right",
       adjusting: "Adjusting",
       errorInit: "Could not initialise audio. Please allow audio permissions or try a different browser.",
+      iosTitle: "For iPhone / iPad users",
+      iosWarning:
+        "If the silent (mute) switch on the side of your device is ON, you will hear nothing during the experiment. Flip the switch off (no orange showing) and turn the device volume up.",
+      cannotHearLink: "I can’t hear anything",
+      troubleshootHeading: "If you can’t hear the test tone",
+      troubleshootSilentSwitch:
+        "On iPhone / iPad, flip the side mute switch off (no orange visible).",
+      troubleshootVolume: "Turn your device volume up to medium or higher.",
+      troubleshootHeadphones:
+        "Check that headphones / earphones are properly plugged in (or your Bluetooth headphones are paired).",
+      troubleshootReplay:
+        "Press “Play test tone” as many times as you need to adjust your volume.",
     },
     headphone: {
       heading: "Audio check",
@@ -464,6 +498,7 @@ export const MESSAGES: Record<Locale, Messages> = {
       both: "Both",
       right: "Right",
       cannotHear: "Can’t hear / cancel",
+      replay: "Play again",
     },
     instructions: {
       headingPractice: "Practice instructions",
@@ -621,6 +656,18 @@ export const MESSAGES: Record<Locale, Messages> = {
       justRight: "적당함",
       adjusting: "조정 중",
       errorInit: "오디오 시스템을 초기화할 수 없습니다. 브라우저 권한을 허용하거나 다른 브라우저를 사용해 주세요.",
+      iosTitle: "iPhone / iPad 사용자분께",
+      iosWarning:
+        "기기 측면의 무음(사일런트) 스위치가 켜져 있으면 실험 중 소리가 전혀 들리지 않습니다. 스위치를 꺼주시고(주황색이 보이지 않게) 기기 음량도 올려 주세요.",
+      cannotHearLink: "소리가 들리지 않으면",
+      troubleshootHeading: "테스트음이 들리지 않을 때",
+      troubleshootSilentSwitch:
+        "iPhone / iPad의 경우 측면 무음 스위치를 끄세요 (주황색이 보이지 않게).",
+      troubleshootVolume: "기기 음량을 중간 이상으로 올려 주세요.",
+      troubleshootHeadphones:
+        "헤드폰 / 이어폰이 제대로 연결되었는지, 블루투스라면 페어링되었는지 확인하세요.",
+      troubleshootReplay:
+        "「테스트음 재생」을 몇 번이라도 눌러 음량을 조정하실 수 있습니다.",
     },
     headphone: {
       heading: "오디오 점검",
@@ -632,6 +679,7 @@ export const MESSAGES: Record<Locale, Messages> = {
       both: "양쪽",
       right: "오른쪽",
       cannotHear: "들리지 않음 / 중단",
+      replay: "다시 재생",
     },
     instructions: {
       headingPractice: "연습 시행 안내",
@@ -788,6 +836,18 @@ export const MESSAGES: Record<Locale, Messages> = {
       justRight: "刚好",
       adjusting: "调整中",
       errorInit: "无法初始化音频。请允许浏览器音频权限或更换浏览器。",
+      iosTitle: "iPhone / iPad 用户请注意",
+      iosWarning:
+        "若机身侧面的静音开关处于开启状态，实验中将完全听不到声音。请把开关拨到关闭（橙色不可见），并把音量调高。",
+      cannotHearLink: "听不到声音?",
+      troubleshootHeading: "听不到测试音时",
+      troubleshootSilentSwitch:
+        "iPhone / iPad 请将机身侧面静音开关关闭（不可见橙色）。",
+      troubleshootVolume: "请将设备音量调至中等以上。",
+      troubleshootHeadphones:
+        "请检查耳机是否正确连接 (蓝牙耳机请确认已配对)。",
+      troubleshootReplay:
+        "可多次点击「播放测试音」以便调整音量。",
     },
     headphone: {
       heading: "音频检查",
@@ -799,6 +859,7 @@ export const MESSAGES: Record<Locale, Messages> = {
       both: "双耳",
       right: "右耳",
       cannotHear: "听不到 / 中止",
+      replay: "重新播放",
     },
     instructions: {
       headingPractice: "练习说明",

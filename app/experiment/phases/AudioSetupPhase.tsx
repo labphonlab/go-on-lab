@@ -7,6 +7,17 @@ import type { AudioInfo } from "../types";
 import { useLocale } from "../contexts/LocaleProvider";
 import type { ExperimentDesign } from "@/app/lib/design";
 
+function detectIOS(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent;
+  const isIPad =
+    /iPad/.test(ua) ||
+    (navigator.platform === "MacIntel" &&
+      (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints! >
+        1);
+  return /iPhone|iPod/.test(ua) || isIPad;
+}
+
 export function AudioSetupPhase({
   design,
   onReady,
@@ -16,9 +27,11 @@ export function AudioSetupPhase({
 }) {
   const { t } = useLocale();
   const [engine, setEngine] = useState<AudioEngine | null>(null);
-  const [tested, setTested] = useState(false);
+  const [playCount, setPlayCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [volumeOk, setVolumeOk] = useState<boolean | null>(null);
+  const [showTroubleshoot, setShowTroubleshoot] = useState(false);
+  const [isIOS] = useState<boolean>(() => detectIOS());
   const engineRef = useRef<AudioEngine | null>(null);
 
   useEffect(() => {
@@ -42,6 +55,13 @@ export function AudioSetupPhase({
 
   async function playTest() {
     if (!engine) return;
+    // Re-resume in case the AudioContext was suspended by iOS in the
+    // background between mounts.
+    try {
+      await engine.resume();
+    } catch {
+      /* ignore */
+    }
     const tStart = engine.currentTime + 0.05;
     engine.scheduleTone(
       {
@@ -52,7 +72,7 @@ export function AudioSetupPhase({
       },
       tStart,
     );
-    setTested(true);
+    setPlayCount((c) => c + 1);
   }
 
   function proceed() {
@@ -74,6 +94,24 @@ export function AudioSetupPhase({
 
   return (
     <div className="space-y-6">
+      {isIOS && (
+        <Card>
+          <div className="flex gap-3 items-start">
+            <div className="text-2xl shrink-0" aria-hidden>
+              📱
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-amber-300 mb-1">
+                {t.audio.iosTitle}
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                {t.audio.iosWarning}
+              </p>
+            </div>
+          </div>
+        </Card>
+      )}
+
       <Card>
         <h2 className="text-lg font-bold text-emerald-400 mb-3">
           {t.audio.heading}
@@ -90,12 +128,19 @@ export function AudioSetupPhase({
             <PrimaryButton onClick={activate}>{t.audio.startButton}</PrimaryButton>
           ) : (
             <>
-              <SecondaryButton onClick={playTest}>{t.audio.testButton}</SecondaryButton>
-              {tested && (
+              <SecondaryButton onClick={playTest}>
+                {playCount === 0
+                  ? t.audio.testButton
+                  : `🔁 ${t.audio.testButton} (${playCount})`}
+              </SecondaryButton>
+              {playCount > 0 && (
                 <div className="flex gap-3">
                   <button
                     type="button"
-                    onClick={() => setVolumeOk(true)}
+                    onClick={() => {
+                      setVolumeOk(true);
+                      setShowTroubleshoot(false);
+                    }}
                     className={`flex-1 px-4 py-3 rounded-lg border text-sm font-medium ${
                       volumeOk === true
                         ? "bg-emerald-600 border-emerald-500 text-white"
@@ -106,7 +151,10 @@ export function AudioSetupPhase({
                   </button>
                   <button
                     type="button"
-                    onClick={() => setVolumeOk(false)}
+                    onClick={() => {
+                      setVolumeOk(false);
+                      setShowTroubleshoot(true);
+                    }}
                     className={`flex-1 px-4 py-3 rounded-lg border text-sm font-medium ${
                       volumeOk === false
                         ? "bg-rose-600 border-rose-500 text-white"
@@ -117,9 +165,32 @@ export function AudioSetupPhase({
                   </button>
                 </div>
               )}
+              {playCount > 0 && !showTroubleshoot && (
+                <button
+                  type="button"
+                  onClick={() => setShowTroubleshoot(true)}
+                  className="text-xs text-slate-400 hover:text-slate-200 underline self-start"
+                >
+                  {t.audio.cannotHearLink}
+                </button>
+              )}
             </>
           )}
         </div>
+
+        {showTroubleshoot && (
+          <div className="mt-5 bg-slate-950/60 border border-amber-700/40 rounded-xl p-4 text-xs text-slate-300 leading-relaxed">
+            <div className="font-bold text-amber-300 mb-2">
+              {t.audio.troubleshootHeading}
+            </div>
+            <ol className="list-decimal list-inside space-y-1.5">
+              {isIOS && <li>{t.audio.troubleshootSilentSwitch}</li>}
+              <li>{t.audio.troubleshootVolume}</li>
+              <li>{t.audio.troubleshootHeadphones}</li>
+              <li>{t.audio.troubleshootReplay}</li>
+            </ol>
+          </div>
+        )}
 
         {error && <p className="mt-4 text-rose-400 text-sm">{error}</p>}
 
@@ -139,7 +210,7 @@ export function AudioSetupPhase({
 
       <div className="flex justify-end">
         <PrimaryButton
-          disabled={!engine || !tested || volumeOk !== true}
+          disabled={!engine || playCount === 0 || volumeOk !== true}
           onClick={proceed}
         >
           {t.common.next}

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>音声知覚 Identification タスク</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+    background: #f5f5f7;
+    color: #1d1d1f;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+  h1 {
+    font-size: 24px;
+    margin: 0 0 16px;
+    text-align: center;
+  }
+  h2 {
+    font-size: 20px;
+    margin: 24px 0 12px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+  }
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+  input[type="text"] {
+    width: 100%;
+    font-size: 18px;
+    padding: 14px 16px;
+    border: 2px solid #d2d2d7;
+    border-radius: 10px;
+    background: #fff;
+  }
+  input[type="text"]:focus {
+    outline: none;
+    border-color: #0071e3;
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: transform 0.05s, background 0.15s;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  button:active { transform: scale(0.97); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-primary {
+    background: #0071e3;
+    color: #fff;
+    font-size: 20px;
+    padding: 16px 24px;
+    width: 100%;
+  }
+  .btn-primary:hover:not(:disabled) { background: #0077ed; }
+
+  .btn-secondary {
+    background: #e8e8ed;
+    color: #1d1d1f;
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+  .btn-secondary:hover { background: #dcdce0; }
+
+  .trial-header {
+    text-align: center;
+    font-size: 18px;
+    color: #6e6e73;
+    margin-bottom: 8px;
+  }
+  .trial-counter {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+    margin: 16px 0 32px;
+  }
+  .response-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .btn-response {
+    background: #0071e3;
+    color: #fff;
+    font-size: 32px;
+    padding: 32px 16px;
+    min-height: 100px;
+  }
+  .btn-response:hover { background: #0077ed; }
+
+  .progress-bar {
+    height: 8px;
+    background: #e8e8ed;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #0071e3;
+    transition: width 0.2s;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  th, td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid #e8e8ed;
+  }
+  th {
+    background: #f5f5f7;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    max-height: 360px;
+    overflow-y: auto;
+    border: 1px solid #e8e8ed;
+    border-radius: 10px;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 280px;
+    margin-bottom: 8px;
+  }
+  .result-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .result-actions button { flex: 1 1 200px; }
+  .hidden { display: none !important; }
+  .note {
+    font-size: 14px;
+    color: #6e6e73;
+    margin-top: 8px;
+  }
+  @media (min-width: 600px) {
+    h1 { font-size: 28px; }
+    .response-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 設定画面 -->
+  <section id="screen-setup">
+    <h1>音声知覚 Identification タスク</h1>
+    <div class="card">
+      <label for="participantId">参加者ID</label>
+      <input type="text" id="participantId" placeholder="例: P01" autocomplete="off">
+      <p class="note">音声は実験者が外部で提示します。このアプリは反応のみを記録します。</p>
+      <div style="margin-top: 20px;">
+        <button class="btn-primary" id="startBtn">開始する</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 試行画面 -->
+  <section id="screen-trial" class="hidden">
+    <div class="card">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="trial-header">試行</div>
+      <div class="trial-counter"><span id="trialNum">1</span> / <span id="trialTotal">20</span></div>
+      <div class="response-grid" id="responseGrid"></div>
+    </div>
+  </section>
+
+  <!-- 結果画面 -->
+  <section id="screen-result" class="hidden">
+    <h1>結果</h1>
+
+    <div class="card">
+      <h2><span id="targetLabel">/r/</span> 応答率（continuumStep ごと）</h2>
+      <div class="chart-wrap"><canvas id="chartResponse"></canvas></div>
+    </div>
+
+    <div class="card">
+      <h2>平均反応時間（continuumStep ごと）</h2>
+      <div class="chart-wrap"><canvas id="chartRT"></canvas></div>
+    </div>
+
+    <div class="card">
+      <h2>詳細データ</h2>
+      <div class="table-wrap">
+        <table id="resultTable">
+          <thead>
+            <tr>
+              <th>Trial</th>
+              <th>StimulusID</th>
+              <th>Step</th>
+              <th>Label</th>
+              <th>Response</th>
+              <th>RT (ms)</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="result-actions">
+        <button class="btn-primary" id="downloadBtn">CSV をダウンロード</button>
+        <button class="btn-secondary" id="restartBtn">最初に戻る</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ============================================================
+   設定（編集可能）
+   ============================================================ */
+const responseOptions = ["/r/", "/l/"];
+const targetResponseForGraph = "/r/";
+const randomizeTrials = true;
+
+/* ============================================================
+   刺激リスト（編集可能）
+   ============================================================ */
+const stimuli = [
+  { id: "stim01", continuumStep: 1,  label: "step1"  },
+  { id: "stim02", continuumStep: 1,  label: "step1"  },
+  { id: "stim03", continuumStep: 2,  label: "step2"  },
+  { id: "stim04", continuumStep: 2,  label: "step2"  },
+  { id: "stim05", continuumStep: 3,  label: "step3"  },
+  { id: "stim06", continuumStep: 3,  label: "step3"  },
+  { id: "stim07", continuumStep: 4,  label: "step4"  },
+  { id: "stim08", continuumStep: 4,  label: "step4"  },
+  { id: "stim09", continuumStep: 5,  label: "step5"  },
+  { id: "stim10", continuumStep: 5,  label: "step5"  },
+  { id: "stim11", continuumStep: 6,  label: "step6"  },
+  { id: "stim12", continuumStep: 6,  label: "step6"  },
+  { id: "stim13", continuumStep: 7,  label: "step7"  },
+  { id: "stim14", continuumStep: 7,  label: "step7"  },
+  { id: "stim15", continuumStep: 8,  label: "step8"  },
+  { id: "stim16", continuumStep: 8,  label: "step8"  },
+  { id: "stim17", continuumStep: 9,  label: "step9"  },
+  { id: "stim18", continuumStep: 9,  label: "step9"  },
+  { id: "stim19", continuumStep: 10, label: "step10" },
+  { id: "stim20", continuumStep: 10, label: "step10" }
+];
+
+/* ============================================================
+   状態
+   ============================================================ */
+let participantId = "";
+let trialList = [];
+let currentTrialIndex = 0;
+let trialStartTime = 0;
+let results = [];
+let chartResponse = null;
+let chartRT = null;
+
+/* ============================================================
+   DOM
+   ============================================================ */
+const screenSetup  = document.getElementById("screen-setup");
+const screenTrial  = document.getElementById("screen-trial");
+const screenResult = document.getElementById("screen-result");
+const participantInput = document.getElementById("participantId");
+const startBtn     = document.getElementById("startBtn");
+const trialNumEl   = document.getElementById("trialNum");
+const trialTotalEl = document.getElementById("trialTotal");
+const progressFill = document.getElementById("progressFill");
+const responseGrid = document.getElementById("responseGrid");
+const downloadBtn  = document.getElementById("downloadBtn");
+const restartBtn   = document.getElementById("restartBtn");
+const tableBody    = document.querySelector("#resultTable tbody");
+const targetLabelEl = document.getElementById("targetLabel");
+
+targetLabelEl.textContent = targetResponseForGraph;
+
+/* ============================================================
+   ユーティリティ
+   ============================================================ */
+function shuffle(array) {
+  const a = array.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function showScreen(name) {
+  screenSetup.classList.add("hidden");
+  screenTrial.classList.add("hidden");
+  screenResult.classList.add("hidden");
+  if (name === "setup")  screenSetup.classList.remove("hidden");
+  if (name === "trial")  screenTrial.classList.remove("hidden");
+  if (name === "result") screenResult.classList.remove("hidden");
+}
+
+function formatTimestamp(d) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate())
+    + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+}
+
+function formatFilenameDate(d) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate())
+    + "_" + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
+}
+
+/* ============================================================
+   実験フロー
+   ============================================================ */
+function startExperiment() {
+  const id = participantInput.value.trim();
+  if (!id) {
+    alert("参加者IDを入力してください。");
+    participantInput.focus();
+    return;
+  }
+  participantId = id;
+  trialList = randomizeTrials ? shuffle(stimuli) : stimuli.slice();
+  currentTrialIndex = 0;
+  results = [];
+  trialTotalEl.textContent = trialList.length;
+  buildResponseButtons();
+  showScreen("trial");
+  showCurrentTrial();
+}
+
+function buildResponseButtons() {
+  responseGrid.innerHTML = "";
+  responseOptions.forEach((opt) => {
+    const btn = document.createElement("button");
+    btn.className = "btn-response";
+    btn.textContent = opt;
+    btn.addEventListener("click", () => recordResponse(opt));
+    responseGrid.appendChild(btn);
+  });
+}
+
+function showCurrentTrial() {
+  const n = currentTrialIndex + 1;
+  trialNumEl.textContent = n;
+  progressFill.style.width = ((n - 1) / trialList.length * 100) + "%";
+  trialStartTime = performance.now();
+}
+
+function recordResponse(response) {
+  const rt = Math.round(performance.now() - trialStartTime);
+  const stim = trialList[currentTrialIndex];
+  results.push({
+    participantId: participantId,
+    trialNumber: currentTrialIndex + 1,
+    stimulusId: stim.id,
+    continuumStep: stim.continuumStep,
+    label: stim.label,
+    response: response,
+    reactionTimeMs: rt,
+    timestamp: formatTimestamp(new Date())
+  });
+  currentTrialIndex++;
+  if (currentTrialIndex >= trialList.length) {
+    finishExperiment();
+  } else {
+    showCurrentTrial();
+  }
+}
+
+function finishExperiment() {
+  progressFill.style.width = "100%";
+  renderResultTable();
+  renderCharts();
+  showScreen("result");
+}
+
+/* ============================================================
+   結果表示
+   ============================================================ */
+function renderResultTable() {
+  tableBody.innerHTML = "";
+  results.forEach((r) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td>" + r.trialNumber + "</td>" +
+      "<td>" + r.stimulusId + "</td>" +
+      "<td>" + r.continuumStep + "</td>" +
+      "<td>" + r.label + "</td>" +
+      "<td>" + r.response + "</td>" +
+      "<td>" + r.reactionTimeMs + "</td>" +
+      "<td>" + r.timestamp + "</td>";
+    tableBody.appendChild(tr);
+  });
+}
+
+function aggregateByStep() {
+  const map = new Map();
+  results.forEach((r) => {
+    if (!map.has(r.continuumStep)) {
+      map.set(r.continuumStep, { count: 0, target: 0, rtSum: 0 });
+    }
+    const agg = map.get(r.continuumStep);
+    agg.count += 1;
+    agg.rtSum += r.reactionTimeMs;
+    if (r.response === targetResponseForGraph) agg.target += 1;
+  });
+  const steps = Array.from(map.keys()).sort((a, b) => a - b);
+  return steps.map((s) => {
+    const a = map.get(s);
+    return {
+      step: s,
+      targetRate: a.target / a.count,
+      meanRT: a.rtSum / a.count
+    };
+  });
+}
+
+function renderCharts() {
+  const data = aggregateByStep();
+  const labels = data.map((d) => "step " + d.step);
+  const rates  = data.map((d) => +(d.targetRate * 100).toFixed(1));
+  const rts    = data.map((d) => Math.round(d.meanRT));
+
+  if (chartResponse) chartResponse.destroy();
+  if (chartRT) chartRT.destroy();
+
+  const ctx1 = document.getElementById("chartResponse").getContext("2d");
+  chartResponse = new Chart(ctx1, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: targetResponseForGraph + " 応答率 (%)",
+        data: rates,
+        borderColor: "#0071e3",
+        backgroundColor: "rgba(0,113,227,0.15)",
+        tension: 0.2,
+        pointRadius: 5,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { min: 0, max: 100, title: { display: true, text: "応答率 (%)" } },
+        x: { title: { display: true, text: "continuumStep" } }
+      }
+    }
+  });
+
+  const ctx2 = document.getElementById("chartRT").getContext("2d");
+  chartRT = new Chart(ctx2, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "平均反応時間 (ms)",
+        data: rts,
+        backgroundColor: "#34c759"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { beginAtZero: true, title: { display: true, text: "RT (ms)" } },
+        x: { title: { display: true, text: "continuumStep" } }
+      }
+    }
+  });
+}
+
+/* ============================================================
+   CSV ダウンロード
+   ============================================================ */
+function csvEscape(value) {
+  const s = String(value);
+  if (/[",\r\n]/.test(s)) {
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  return s;
+}
+
+function downloadCsv() {
+  const headers = [
+    "participantId", "trialNumber", "stimulusId", "continuumStep",
+    "label", "response", "reactionTimeMs", "timestamp"
+  ];
+  const lines = [headers.join(",")];
+  results.forEach((r) => {
+    lines.push(headers.map((h) => csvEscape(r[h])).join(","));
+  });
+  const csv = lines.join("\r\n");
+  const bom = "﻿";
+  const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "identification_results_" + participantId + "_" + formatFilenameDate(new Date()) + ".csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* ============================================================
+   初期化
+   ============================================================ */
+startBtn.addEventListener("click", startExperiment);
+downloadBtn.addEventListener("click", downloadCsv);
+restartBtn.addEventListener("click", () => {
+  participantInput.value = "";
+  showScreen("setup");
+});
+participantInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") startExperiment();
+});
+</script>
+</body>
+</html>

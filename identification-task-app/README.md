@@ -185,13 +185,23 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
        pSheet = ss.insertSheet(PARTICIPANTS_SHEET);
        pSheet.appendRow([
          "submittedAt", "sessionId", "experimentName",
-         "name", "dateOfBirth", "nativeLanguage", "foreignLanguages",
+         "name", "dateOfBirth", "age",
+         "gender", "handedness",
+         "nativeLanguage",
+         "l2Language", "l2Aoa", "l2Proficiency",
+         "otherLanguages",
+         "placeOfBirth", "placeOfUpbringing", "dialect",
          "userAgent"
        ]);
      }
      pSheet.appendRow([
        submittedAt, sessionId, data.experimentName || "",
-       p.name || "", p.dateOfBirth || "", p.nativeLanguage || "", p.foreignLanguages || "",
+       p.name || "", p.dateOfBirth || "", p.age || "",
+       p.gender || "", p.handedness || "",
+       p.nativeLanguage || "",
+       p.l2Language || "", p.l2Aoa || "", p.l2Proficiency || "",
+       p.otherLanguages || "",
+       p.placeOfBirth || "", p.placeOfUpbringing || "", p.dialect || "",
        data.userAgent || ""
      ]);
 
@@ -308,8 +318,17 @@ const experimentName = "identification_rl";
 | `experimentName` | `index.html` で設定した実験名 |
 | `name` | 氏名 |
 | `dateOfBirth` | 生年月日 |
-| `nativeLanguage` | 母語 |
-| `foreignLanguages` | 学習した外国語 (任意入力) |
+| `age` | 年齢 (生年月日から自動計算) |
+| `gender` | 性別 (男性 / 女性 / その他 / 回答しない) |
+| `handedness` | 利き手 (右 / 左 / 両) |
+| `nativeLanguage` | 第一言語 (母語) |
+| `l2Language` | 主な第二言語 |
+| `l2Aoa` | 第二言語の学習開始年齢 (Age of Acquisition) |
+| `l2Proficiency` | 第二言語の習熟度 (初級 / 中級 / 上級 / ネイティブレベル) |
+| `otherLanguages` | その他の使用言語 (自由記述) |
+| `placeOfBirth` | 出生地 (都道府県) |
+| `placeOfUpbringing` | 主に育った地域 (都道府県) |
+| `dialect` | 使用する方言 |
 | `userAgent` | 参加者ブラウザの User-Agent |
 
 **`results` シート** (試行ごとに 1 行)

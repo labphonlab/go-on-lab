@@ -78,6 +78,75 @@
   .field { margin-top: 16px; }
   .field:first-child { margin-top: 0; }
   .required { color: #b00020; font-weight: 700; margin-left: 4px; }
+  .form-section-h {
+    font-size: 13px;
+    font-weight: 700;
+    color: #6e6e73;
+    letter-spacing: 0.5px;
+    margin: 28px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e8e8ed;
+  }
+  input[type="number"] {
+    width: 100%;
+    font-size: 16px;
+    padding: 14px 16px;
+    border: 2px solid #d2d2d7;
+    border-radius: 10px;
+    background: #fff;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type="number"]:focus { outline: none; border-color: #0071e3; }
+  select {
+    width: 100%;
+    font-size: 16px;
+    padding: 13px 40px 13px 16px;
+    border: 2px solid #d2d2d7;
+    border-radius: 10px;
+    background-color: #fff;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%236e6e73' d='M6 8L0 0h12z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+  }
+  select:focus { outline: none; border-color: #0071e3; }
+  .radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .radio-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: 2px solid #d2d2d7;
+    border-radius: 10px;
+    background: #fff;
+    font-weight: 500;
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 0;
+    flex: 1 1 auto;
+    min-width: 100px;
+    justify-content: center;
+  }
+  .radio-group input[type="radio"] {
+    margin: 0;
+    accent-color: #0071e3;
+    width: 18px;
+    height: 18px;
+  }
+  .radio-group label:has(input:checked) {
+    border-color: #0071e3;
+    background: #e8f0ff;
+    color: #0071e3;
+  }
   input[type="text"]:focus {
     outline: none;
     border-color: #0071e3;
@@ -274,7 +343,9 @@
   <section id="screen-setup">
     <h1>音声知覚タスク</h1>
     <div class="card">
-      <p class="note" style="margin-top:0;">ご協力ありがとうございます。まずいくつかの質問にお答えください。</p>
+      <p class="note" style="margin-top:0;">ご協力ありがとうございます。まずいくつかの質問にお答えください（<span class="required">*</span> は必須）。</p>
+
+      <h3 class="form-section-h">基本情報</h3>
 
       <div class="field">
         <label for="participantName">お名前（氏名）<span class="required">*</span></label>
@@ -287,13 +358,72 @@
       </div>
 
       <div class="field">
-        <label for="nativeLanguage">母語<span class="required">*</span></label>
+        <label>性別<span class="required">*</span></label>
+        <div class="radio-group" id="genderGroup">
+          <label><input type="radio" name="gender" value="男性"> 男性</label>
+          <label><input type="radio" name="gender" value="女性"> 女性</label>
+          <label><input type="radio" name="gender" value="その他"> その他</label>
+          <label><input type="radio" name="gender" value="回答しない"> 回答しない</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>利き手<span class="required">*</span></label>
+        <div class="radio-group" id="handednessGroup">
+          <label><input type="radio" name="handedness" value="右"> 右利き</label>
+          <label><input type="radio" name="handedness" value="左"> 左利き</label>
+          <label><input type="radio" name="handedness" value="両"> 両利き</label>
+        </div>
+      </div>
+
+      <h3 class="form-section-h">言語背景</h3>
+
+      <div class="field">
+        <label for="nativeLanguage">第一言語（母語）<span class="required">*</span></label>
         <input type="text" id="nativeLanguage" value="日本語" placeholder="例: 日本語">
       </div>
 
       <div class="field">
-        <label for="foreignLanguages">学習した外国語（任意）</label>
-        <textarea id="foreignLanguages" placeholder="例: 英語（中学から、10年）、フランス語（大学から、2年）"></textarea>
+        <label for="l2Language">主な第二言語（任意）</label>
+        <input type="text" id="l2Language" placeholder="例: 英語">
+      </div>
+
+      <div class="field">
+        <label for="l2Aoa">第二言語の学習開始年齢〔歳〕（任意）</label>
+        <input type="number" id="l2Aoa" min="0" max="100" inputmode="numeric" placeholder="例: 12">
+      </div>
+
+      <div class="field">
+        <label for="l2Proficiency">第二言語の習熟度（任意）</label>
+        <select id="l2Proficiency">
+          <option value="">選択してください</option>
+          <option value="初級">初級</option>
+          <option value="中級">中級</option>
+          <option value="上級">上級</option>
+          <option value="ネイティブレベル">ネイティブレベル</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="otherLanguages">その他の使用言語（任意）</label>
+        <textarea id="otherLanguages" placeholder="例: フランス語（大学から、2年）、韓国語（独学）"></textarea>
+      </div>
+
+      <h3 class="form-section-h">生育地・方言</h3>
+
+      <div class="field">
+        <label for="placeOfBirth">出生地・都道府県（任意）</label>
+        <input type="text" id="placeOfBirth" placeholder="例: 東京都">
+      </div>
+
+      <div class="field">
+        <label for="placeOfUpbringing">主に育った地域・都道府県（任意）</label>
+        <input type="text" id="placeOfUpbringing" placeholder="例: 大阪府">
+      </div>
+
+      <div class="field">
+        <label for="dialect">使用する方言（任意）</label>
+        <input type="text" id="dialect" placeholder="例: 関西弁、特になし">
       </div>
 
       <div class="checklist">
@@ -431,7 +561,7 @@ const stimuli = [
    状態
    ============================================================ */
 let sessionId = "";
-let participantInfo = { name: "", dateOfBirth: "", nativeLanguage: "", foreignLanguages: "" };
+let participantInfo = {};
 let trialList = [];
 let currentTrialIndex = 0;
 let trialFirstPlayTime = 0;
@@ -452,10 +582,16 @@ const screenLoading   = document.getElementById("screen-loading");
 const screenTrial     = document.getElementById("screen-trial");
 const screenUploading = document.getElementById("screen-uploading");
 const screenResult    = document.getElementById("screen-result");
-const nameInput        = document.getElementById("participantName");
-const dobInput         = document.getElementById("dateOfBirth");
-const nativeInput      = document.getElementById("nativeLanguage");
-const foreignInput     = document.getElementById("foreignLanguages");
+const nameInput            = document.getElementById("participantName");
+const dobInput             = document.getElementById("dateOfBirth");
+const nativeInput          = document.getElementById("nativeLanguage");
+const l2LangInput          = document.getElementById("l2Language");
+const l2AoaInput           = document.getElementById("l2Aoa");
+const l2ProfInput          = document.getElementById("l2Proficiency");
+const otherLangsInput      = document.getElementById("otherLanguages");
+const placeOfBirthInput    = document.getElementById("placeOfBirth");
+const placeOfUpbringingInput = document.getElementById("placeOfUpbringing");
+const dialectInput         = document.getElementById("dialect");
 const startBtn        = document.getElementById("startBtn");
 const testSoundBtn    = document.getElementById("testSoundBtn");
 const loadingFill     = document.getElementById("loadingFill");
@@ -623,23 +759,51 @@ function generateSessionId() {
   return "s_" + ts + "_" + rnd;
 }
 
+function getRadio(name) {
+  const checked = document.querySelector('input[name="' + name + '"]:checked');
+  return checked ? checked.value : "";
+}
+
+function computeAge(dob) {
+  if (!dob) return "";
+  const birth = new Date(dob);
+  if (isNaN(birth.getTime())) return "";
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age;
+}
+
 async function startExperiment() {
   clearError(setupError);
   const name = nameInput.value.trim();
   const dob = dobInput.value;
+  const gender = getRadio("gender");
+  const handedness = getRadio("handedness");
   const native = nativeInput.value.trim();
-  const foreign = foreignInput.value.trim();
 
-  if (!name) { showError(setupError, "お名前を入力してください。"); nameInput.focus(); return; }
-  if (!dob) { showError(setupError, "生年月日を入力してください。"); dobInput.focus(); return; }
-  if (!native) { showError(setupError, "母語を入力してください。"); nativeInput.focus(); return; }
+  if (!name)       { showError(setupError, "お名前を入力してください。"); nameInput.focus(); return; }
+  if (!dob)        { showError(setupError, "生年月日を入力してください。"); dobInput.focus(); return; }
+  if (!gender)     { showError(setupError, "性別を選択してください。"); return; }
+  if (!handedness) { showError(setupError, "利き手を選択してください。"); return; }
+  if (!native)     { showError(setupError, "母語を入力してください。"); nativeInput.focus(); return; }
 
   sessionId = generateSessionId();
   participantInfo = {
     name: name,
     dateOfBirth: dob,
+    age: computeAge(dob),
+    gender: gender,
+    handedness: handedness,
     nativeLanguage: native,
-    foreignLanguages: foreign
+    l2Language: l2LangInput.value.trim(),
+    l2Aoa: l2AoaInput.value.trim(),
+    l2Proficiency: l2ProfInput.value,
+    otherLanguages: otherLangsInput.value.trim(),
+    placeOfBirth: placeOfBirthInput.value.trim(),
+    placeOfUpbringing: placeOfUpbringingInput.value.trim(),
+    dialect: dialectInput.value.trim()
   };
 
   trialList = randomizeTrials ? shuffle(stimuli) : stimuli.slice();
@@ -941,7 +1105,16 @@ playBtn.addEventListener("click", playCurrentStimulus);
 restartBtn.addEventListener("click", () => {
   nameInput.value = "";
   dobInput.value = "";
-  foreignInput.value = "";
+  document.querySelectorAll('input[name="gender"], input[name="handedness"]')
+    .forEach((r) => { r.checked = false; });
+  l2LangInput.value = "";
+  l2AoaInput.value = "";
+  l2ProfInput.value = "";
+  otherLangsInput.value = "";
+  placeOfBirthInput.value = "";
+  placeOfUpbringingInput.value = "";
+  dialectInput.value = "";
+  // nativeInput はデフォルト「日本語」のまま残す
   results = [];
   releaseWakeLock();
   showScreen("setup");

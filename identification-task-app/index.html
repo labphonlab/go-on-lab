@@ -310,52 +310,54 @@
     </div>
   </section>
 
+  <!-- 送信中画面 -->
+  <section id="screen-uploading" class="hidden">
+    <div class="card">
+      <h2 style="text-align:center; margin-top:0;">結果を送信しています…</h2>
+      <div class="loading-msg">そのままお待ちください</div>
+      <p class="note">通信環境により数秒〜十数秒かかる場合があります。<strong>このタブを閉じないでください。</strong></p>
+    </div>
+  </section>
+
   <!-- 結果画面 -->
   <section id="screen-result" class="hidden">
-    <h1>結果</h1>
+    <h1>お疲れさまでした</h1>
+
+    <div class="card" id="uploadStatusCard">
+      <div id="uploadStatusOk" class="hidden">
+        <h2 style="color:#34a853; margin-top:0;">✓ 結果を保存しました</h2>
+        <p class="note">ご協力ありがとうございました。ブラウザを閉じていただいて構いません。</p>
+      </div>
+      <div id="uploadStatusFail" class="hidden">
+        <h2 style="color:#b00020; margin-top:0;">⚠ 結果の保存に失敗しました</h2>
+        <p>申し訳ありません。データのアップロードに失敗しました。<br>
+          <strong>このタブを閉じずに、研究者にご連絡ください。</strong></p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:12px;">
+          <button class="btn-primary" id="retryUploadBtn" style="flex:1 1 200px;">もう一度送信する</button>
+          <button class="btn-secondary" id="showCsvBtn" style="flex:1 1 200px;">CSV テキストを表示</button>
+        </div>
+        <textarea class="csv-fallback hidden" id="csvFallback" readonly placeholder="ここに CSV テキストが表示されます。長押しで全選択 → コピーして研究者にメールで送ってください。"></textarea>
+        <p class="note" id="uploadErrorDetail" style="margin-top:8px;"></p>
+      </div>
+    </div>
 
     <div class="card">
-      <h2>サマリー</h2>
+      <h2 style="margin-top:0;">あなたの結果</h2>
       <div class="summary-grid" id="summaryGrid"></div>
     </div>
 
     <div class="card">
-      <h2><span id="targetLabel">/r/</span> 応答率（continuumStep ごと）</h2>
+      <h2><span id="targetLabel">/r/</span> 応答率</h2>
       <div class="chart-wrap"><canvas id="chartResponse"></canvas></div>
     </div>
 
     <div class="card">
-      <h2>平均反応時間（continuumStep ごと）</h2>
+      <h2>平均反応時間</h2>
       <div class="chart-wrap"><canvas id="chartRT"></canvas></div>
     </div>
 
-    <div class="card">
-      <h2>詳細データ</h2>
-      <div class="table-wrap">
-        <table id="resultTable">
-          <thead>
-            <tr>
-              <th>Trial</th>
-              <th>StimulusID</th>
-              <th>File</th>
-              <th>Step</th>
-              <th>Label</th>
-              <th>Response</th>
-              <th>RT (ms)</th>
-              <th>Plays</th>
-              <th>Timestamp</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div class="result-actions">
-        <button class="btn-primary" id="downloadBtn">CSV をダウンロード</button>
-        <button class="btn-secondary" id="showCsvBtn">CSV テキストを表示</button>
-        <button class="btn-secondary" id="restartBtn">最初に戻る</button>
-      </div>
-      <textarea class="csv-fallback hidden" id="csvFallback" readonly placeholder="ここに CSV テキストが表示されます。長押しで全選択 → コピーしてメールや AirDrop で送信できます。"></textarea>
-      <p class="note">スマホでダウンロードがうまくいかない場合は「CSV テキストを表示」を押して、長押しで全選択 → コピー → メール/メモなどに貼り付けて送ってください。</p>
+    <div class="card" id="restartCard" style="display:none;">
+      <button class="btn-secondary" id="restartBtn" style="width:100%;">最初に戻る(研究者用)</button>
     </div>
   </section>
 
@@ -369,6 +371,12 @@ const responseOptions = ["/r/", "/l/"];
 const targetResponseForGraph = "/r/";
 const randomizeTrials = true;
 const allowReplay = true;
+
+// 反応データの送信先（Google Apps Script Web App の URL）
+// 設定方法は README の「サーバー（Google Sheets）への保存設定」を参照
+const dataServerUrl = "";
+// 実験条件名（複数の実験を同じシートで管理する場合に使う。任意）
+const experimentName = "identification_rl";
 
 /* ============================================================
    刺激リスト（編集可能）
@@ -415,17 +423,22 @@ let testAudioCtx = null;
 /* ============================================================
    DOM
    ============================================================ */
-const screenSetup   = document.getElementById("screen-setup");
-const screenLoading = document.getElementById("screen-loading");
-const screenTrial   = document.getElementById("screen-trial");
-const screenResult  = document.getElementById("screen-result");
+const screenSetup     = document.getElementById("screen-setup");
+const screenLoading   = document.getElementById("screen-loading");
+const screenTrial     = document.getElementById("screen-trial");
+const screenUploading = document.getElementById("screen-uploading");
+const screenResult    = document.getElementById("screen-result");
 const participantInput = document.getElementById("participantId");
-const startBtn      = document.getElementById("startBtn");
-const testSoundBtn  = document.getElementById("testSoundBtn");
-const loadingFill   = document.getElementById("loadingFill");
-const loadingMsg    = document.getElementById("loadingMsg");
-const showCsvBtn    = document.getElementById("showCsvBtn");
-const csvFallback   = document.getElementById("csvFallback");
+const startBtn        = document.getElementById("startBtn");
+const testSoundBtn    = document.getElementById("testSoundBtn");
+const loadingFill     = document.getElementById("loadingFill");
+const loadingMsg      = document.getElementById("loadingMsg");
+const showCsvBtn      = document.getElementById("showCsvBtn");
+const csvFallback     = document.getElementById("csvFallback");
+const retryUploadBtn  = document.getElementById("retryUploadBtn");
+const uploadStatusOk   = document.getElementById("uploadStatusOk");
+const uploadStatusFail = document.getElementById("uploadStatusFail");
+const uploadErrorDetail = document.getElementById("uploadErrorDetail");
 const trialNumEl   = document.getElementById("trialNum");
 const trialTotalEl = document.getElementById("trialTotal");
 const stimIdEl     = document.getElementById("stimIdDisplay");
@@ -433,9 +446,8 @@ const progressFill = document.getElementById("progressFill");
 const playBtn      = document.getElementById("playBtn");
 const playInfo     = document.getElementById("playInfo");
 const responseGrid = document.getElementById("responseGrid");
-const downloadBtn  = document.getElementById("downloadBtn");
 const restartBtn   = document.getElementById("restartBtn");
-const tableBody    = document.querySelector("#resultTable tbody");
+const restartCard  = document.getElementById("restartCard");
 const targetLabelEl = document.getElementById("targetLabel");
 const summaryGrid  = document.getElementById("summaryGrid");
 const setupError   = document.getElementById("setupError");
@@ -460,11 +472,13 @@ function showScreen(name) {
   screenSetup.classList.add("hidden");
   screenLoading.classList.add("hidden");
   screenTrial.classList.add("hidden");
+  screenUploading.classList.add("hidden");
   screenResult.classList.add("hidden");
-  if (name === "setup")   screenSetup.classList.remove("hidden");
-  if (name === "loading") screenLoading.classList.remove("hidden");
-  if (name === "trial")   screenTrial.classList.remove("hidden");
-  if (name === "result")  screenResult.classList.remove("hidden");
+  if (name === "setup")     screenSetup.classList.remove("hidden");
+  if (name === "loading")   screenLoading.classList.remove("hidden");
+  if (name === "trial")     screenTrial.classList.remove("hidden");
+  if (name === "uploading") screenUploading.classList.remove("hidden");
+  if (name === "result")    screenResult.classList.remove("hidden");
 }
 
 async function requestWakeLock() {
@@ -687,19 +701,81 @@ function recordResponse(response) {
   }
 }
 
-function finishExperiment() {
+async function finishExperiment() {
   progressFill.style.width = "100%";
   if (audio) {
     try { audio.pause(); audio.onended = null; audio.onerror = null; } catch (e) {}
     audio = null;
   }
   releaseWakeLock();
+  showScreen("uploading");
+
+  const uploadResult = await uploadResults();
+
   renderSummary();
-  renderResultTable();
   renderCharts();
+  uploadStatusOk.classList.add("hidden");
+  uploadStatusFail.classList.add("hidden");
   csvFallback.classList.add("hidden");
   csvFallback.value = "";
+  if (uploadResult.ok) {
+    uploadStatusOk.classList.remove("hidden");
+  } else {
+    uploadStatusFail.classList.remove("hidden");
+    uploadErrorDetail.textContent = "詳細: " + (uploadResult.error || "不明なエラー");
+  }
   showScreen("result");
+}
+
+async function uploadResults() {
+  if (!dataServerUrl) {
+    return { ok: false, error: "送信先 URL が設定されていません (dataServerUrl)" };
+  }
+  const payload = {
+    experimentName: experimentName,
+    participantId: participantId,
+    submittedAt: formatTimestamp(new Date()),
+    userAgent: navigator.userAgent,
+    results: results
+  };
+  try {
+    const res = await fetch(dataServerUrl, {
+      method: "POST",
+      // text/plain (= "simple" CORS request) にして preflight を避ける
+      // Google Apps Script は postData.contents を JSON として読める
+      body: JSON.stringify(payload),
+      redirect: "follow"
+    });
+    if (!res.ok) {
+      return { ok: false, error: "HTTP " + res.status };
+    }
+    const text = await res.text();
+    try {
+      const json = JSON.parse(text);
+      if (json && json.ok === false) {
+        return { ok: false, error: json.error || "サーバー側エラー" };
+      }
+    } catch (e) {
+      // JSON でなくても 200 が返れば成功とみなす
+    }
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: String(err && err.message ? err.message : err) };
+  }
+}
+
+async function retryUpload() {
+  retryUploadBtn.disabled = true;
+  retryUploadBtn.textContent = "送信中…";
+  const r = await uploadResults();
+  retryUploadBtn.disabled = false;
+  retryUploadBtn.textContent = "もう一度送信する";
+  if (r.ok) {
+    uploadStatusFail.classList.add("hidden");
+    uploadStatusOk.classList.remove("hidden");
+  } else {
+    uploadErrorDetail.textContent = "詳細: " + (r.error || "不明なエラー");
+  }
 }
 
 /* ============================================================
@@ -708,33 +784,10 @@ function finishExperiment() {
 function renderSummary() {
   const totalTrials = results.length;
   const targetCount = results.filter((r) => r.response === targetResponseForGraph).length;
-  const meanRT = results.reduce((s, r) => s + r.reactionTimeMs, 0) / totalTrials;
-  const meanPlays = results.reduce((s, r) => s + r.playCount, 0) / totalTrials;
   summaryGrid.innerHTML =
-    "<div><strong>参加者ID:</strong> " + participantId + "</div>" +
-    "<div><strong>試行数:</strong> " + totalTrials + "</div>" +
-    "<div><strong>" + targetResponseForGraph + " 応答率:</strong> " +
-      (targetCount / totalTrials * 100).toFixed(1) + " %</div>" +
-    "<div><strong>平均反応時間:</strong> " + Math.round(meanRT) + " ms</div>" +
-    "<div><strong>平均再生回数:</strong> " + meanPlays.toFixed(2) + " 回</div>";
-}
-
-function renderResultTable() {
-  tableBody.innerHTML = "";
-  results.forEach((r) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML =
-      "<td>" + r.trialNumber + "</td>" +
-      "<td>" + r.stimulusId + "</td>" +
-      "<td>" + r.file + "</td>" +
-      "<td>" + r.continuumStep + "</td>" +
-      "<td>" + r.label + "</td>" +
-      "<td>" + r.response + "</td>" +
-      "<td>" + r.reactionTimeMs + "</td>" +
-      "<td>" + r.playCount + "</td>" +
-      "<td>" + r.timestamp + "</td>";
-    tableBody.appendChild(tr);
-  });
+    "<div><strong>完了した試行:</strong> " + totalTrials + " 試行</div>" +
+    "<div><strong>" + targetResponseForGraph + " と答えた割合:</strong> " +
+      (targetCount / totalTrials * 100).toFixed(1) + " %</div>";
 }
 
 function aggregateByStep() {
@@ -843,20 +896,6 @@ function buildCsv() {
   return lines.join("\r\n");
 }
 
-function downloadCsv() {
-  const csv = buildCsv();
-  const bom = "﻿";
-  const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "identification_results_" + participantId + "_" + formatFilenameDate(new Date()) + ".csv";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
 function showCsvText() {
   csvFallback.value = buildCsv();
   csvFallback.classList.remove("hidden");
@@ -870,8 +909,8 @@ function showCsvText() {
 startBtn.addEventListener("click", startExperiment);
 testSoundBtn.addEventListener("click", playTestBeep);
 playBtn.addEventListener("click", playCurrentStimulus);
-downloadBtn.addEventListener("click", downloadCsv);
 showCsvBtn.addEventListener("click", showCsvText);
+retryUploadBtn.addEventListener("click", retryUpload);
 restartBtn.addEventListener("click", () => {
   participantInput.value = "";
   results = [];
@@ -880,6 +919,24 @@ restartBtn.addEventListener("click", () => {
 });
 participantInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") startExperiment();
+});
+
+// URL に ?admin=1 を付けるか、5回タップで「最初に戻る」ボタンを表示(研究者用)
+if (new URLSearchParams(location.search).get("admin") === "1") {
+  restartCard.style.display = "block";
+}
+let tapCount = 0;
+let tapTimer = null;
+document.addEventListener("click", (e) => {
+  if (screenResult.classList.contains("hidden")) return;
+  if (e.target.closest("button")) return;
+  tapCount++;
+  clearTimeout(tapTimer);
+  tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
+  if (tapCount >= 5) {
+    restartCard.style.display = "block";
+    tapCount = 0;
+  }
 });
 </script>
 </body>

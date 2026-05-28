@@ -1,16 +1,18 @@
 # 音声知覚 Identification タスク (Web アプリ)
 
-ローカルPC上のブラウザで動作する、音声知覚 identification 実験用のシンプルな
-Webアプリです。刺激音の提示・参加者の反応記録・集計・グラフ表示・CSV保存まで
-すべてブラウザ上で完結します。サーバー側処理・データベースは不要です。
+ブラウザで動作する、音声知覚 identification 実験用のシンプルな Web アプリです。
+刺激音の提示・参加者の反応記録・**Google Sheets への自動保存**・参加者向けの
+簡易結果表示まで、すべてブラウザ上で完結します。
 
 ## 概要
 
-- 1試行ごとに1つの音声刺激を提示する identification タスク
+- 1試行ごとに 1 つの音声刺激を提示する identification タスク
 - 参加者は提示された音を聞き、回答ボタン（初期設定では `/r/` と `/l/`）から選択
 - 反応時間は **初回再生ボタンを押した時点から回答までの時間** を記録
-- 終了後に結果表 + continuumStep ごとの応答率/反応時間グラフを表示
-- 結果は UTF-8 BOM 付き CSV としてダウンロード可能
+- 終了後、反応データを **Google Apps Script 経由で Google Sheets に自動送信**
+- 参加者には簡易サマリー + continuumStep ごとの応答率/反応時間グラフのみ表示
+  （詳細データ・CSV ダウンロードは表示しない）
+- 送信失敗時のみ、フォールバックとして CSV テキスト表示が出る
 
 ## フォルダ構成
 
@@ -76,8 +78,9 @@ http://localhost:8000
 3. 試行画面で「▶ 再生」を押して刺激を聞く
 4. 再生終了後に回答ボタン（`/r/` または `/l/`）を押す
 5. 自動的に次の試行へ進む
-6. 全 20 試行終了後、結果画面が表示される
-7. 「CSV をダウンロード」を押して結果を保存
+6. 全 20 試行終了後、データが自動でサーバー（Google Sheets）に送信される
+7. 参加者には「✓ 結果を保存しました」と簡易結果（応答率・グラフ）のみ表示される
+   詳細データや CSV は参加者には見せない
 
 ## 設定の変更方法
 
@@ -130,18 +133,91 @@ const responseOptions = ["A", "B", "わからない"];
 Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNumber` は
 実際の提示順、`stimulusId` はその試行で提示された刺激の ID。
 
-## CSV 出力
+## サーバー（Google Sheets）への保存設定
 
-ファイル名: `identification_results_<参加者ID>_<日時>.csv`
+実験の反応データは、参加者のブラウザから直接 Google スプレッドシートに送信されます。
+研究者は事前に以下の **2 ステップ** を行ってください（初回のみ、約 10 分）。
 
-文字コード: UTF-8 (BOM 付き) — Excel で開いても日本語が文字化けしにくい。
+### ステップ 1: Google Apps Script を作成
 
-保存される列:
+1. ブラウザで <https://sheets.new> を開き、新しいスプレッドシートを作る
+   （シート名は何でも OK。例: `identification_results`）
+2. メニュー **「拡張機能」→「Apps Script」** を開く
+3. 表示されたエディタの内容をすべて削除し、以下を貼り付ける:
+
+   ```javascript
+   const SHEET_NAME = "results";
+
+   function doPost(e) {
+     const lock = LockService.getScriptLock();
+     lock.waitLock(20000);
+     try {
+       const data = JSON.parse(e.postData.contents);
+       const ss = SpreadsheetApp.getActiveSpreadsheet();
+       let sheet = ss.getSheetByName(SHEET_NAME);
+       if (!sheet) {
+         sheet = ss.insertSheet(SHEET_NAME);
+         sheet.appendRow([
+           "submittedAt", "experimentName", "participantId",
+           "trialNumber", "stimulusId", "file",
+           "continuumStep", "label", "response",
+           "reactionTimeMs", "playCount", "timestamp", "userAgent"
+         ]);
+       }
+       const submittedAt = data.submittedAt || new Date().toISOString();
+       const rows = (data.results || []).map(r => [
+         submittedAt, data.experimentName || "", data.participantId || "",
+         r.trialNumber, r.stimulusId, r.file,
+         r.continuumStep, r.label, r.response,
+         r.reactionTimeMs, r.playCount, r.timestamp, data.userAgent || ""
+       ]);
+       if (rows.length > 0) {
+         sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, rows[0].length)
+              .setValues(rows);
+       }
+       return ContentService
+         .createTextOutput(JSON.stringify({ ok: true, n: rows.length }))
+         .setMimeType(ContentService.MimeType.JSON);
+     } catch (err) {
+       return ContentService
+         .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
+         .setMimeType(ContentService.MimeType.JSON);
+     } finally {
+       lock.releaseLock();
+     }
+   }
+   ```
+
+4. 「保存」（フロッピーアイコン）を押す
+5. 右上の **「デプロイ」→「新しいデプロイ」** を押す
+6. 「種類を選択」歯車 → **ウェブアプリ** を選択
+7. 以下のように設定:
+   - **次のユーザーとして実行**: 自分
+   - **アクセスできるユーザー**: **全員**（参加者の Google ログインを不要にするため）
+8. 「デプロイ」を押す
+9. 初回はアクセス許可ダイアログが出るので「許可」（Google アカウントの確認画面が出たら
+   「詳細」→「（プロジェクト名）に移動」を選んで進める）
+10. 表示された **ウェブアプリ URL**（`https://script.google.com/macros/s/.../exec`）をコピー
+
+### ステップ 2: index.html に URL を貼り付け
+
+`index.html` 冒頭の `dataServerUrl` に、コピーした URL を貼り付ける:
+
+```javascript
+const dataServerUrl = "https://script.google.com/macros/s/AKfycb.../exec";
+const experimentName = "identification_rl";
+```
+
+これで実験終了時に、自動でスプレッドシートの `results` シートに 1 行ずつ追加されます。
+
+### スプレッドシートに記録される列
 
 | 列名 | 内容 |
 | --- | --- |
+| `submittedAt` | アプリから送信された時刻 |
+| `experimentName` | `index.html` で設定した実験名 |
 | `participantId` | 参加者ID |
-| `trialNumber` | 提示順（1〜） |
+| `trialNumber` | 提示順 |
 | `stimulusId` | 刺激ID |
 | `file` | 音声ファイルのパス |
 | `continuumStep` | 連続体上のステップ |
@@ -149,7 +225,24 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
 | `response` | 参加者の回答 |
 | `reactionTimeMs` | 反応時間（ms、初回再生〜回答） |
 | `playCount` | その試行で再生した回数 |
-| `timestamp` | 回答時刻（ISO 風） |
+| `timestamp` | 回答時刻（参加者端末ローカル時刻） |
+| `userAgent` | 参加者ブラウザの User-Agent |
+
+### Apps Script のコードを更新した場合
+
+コード変更後は **「デプロイ」→「デプロイを管理」** で既存のデプロイを編集（鉛筆アイコン）
+し、バージョンを「新しいバージョン」にして再デプロイしてください。URL は変わりません。
+
+### 送信失敗時の挙動
+
+- 参加者の画面に「⚠ 結果の保存に失敗しました」と表示され、研究者に連絡するよう促されます
+- 参加者は「もう一度送信する」ボタンで再送信できます
+- 最終手段として「CSV テキストを表示」ボタンでデータをコピーしてメールで送ってもらうことも可能です
+
+### 研究者用の操作
+
+- 結果画面の何もないところを **5 回連続でタップ**、または URL に `?admin=1` を付けると、
+  「最初に戻る」ボタンが表示されます（同じ端末で次の参加者を実施する場合に使用）
 
 ## スマートフォンで実施する方法
 
@@ -207,8 +300,9 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
 > 3. 静かな環境で、URL をブラウザで開いてください: `https://...`
 > 4. 「音量チェック」ボタンでテスト音を再生し、聞きやすい音量に合わせてください
 > 5. 参加者ID を入力して開始してください
-> 6. 終了後、画面に表示されたボタンから CSV をダウンロードして送ってください
->    （ダウンロードがうまくいかない場合は「CSV テキストを表示」を押し、長押し → 全選択 → コピーしてメールで送ってください）
+> 6. 全 20 試行が終わると、結果は自動的にサーバーに送信されます。
+>    「✓ 結果を保存しました」と表示されたら終了です。ブラウザを閉じて構いません。
+> 7. 万一「⚠ 結果の保存に失敗しました」と表示された場合は、**ブラウザを閉じずに**研究者にご連絡ください
 
 ## 注意事項
 

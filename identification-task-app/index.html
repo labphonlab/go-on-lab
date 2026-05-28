@@ -228,18 +228,6 @@
     color: #6e6e73;
     margin: 16px 0;
   }
-  .csv-fallback {
-    width: 100%;
-    min-height: 140px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 12px;
-    padding: 10px;
-    border: 1px solid #d2d2d7;
-    border-radius: 8px;
-    margin-top: 12px;
-    background: #f5f5f7;
-    resize: vertical;
-  }
   .summary-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -323,22 +311,9 @@
   <section id="screen-result" class="hidden">
     <h1>お疲れさまでした</h1>
 
-    <div class="card" id="uploadStatusCard">
-      <div id="uploadStatusOk" class="hidden">
-        <h2 style="color:#34a853; margin-top:0;">✓ 結果を保存しました</h2>
-        <p class="note">ご協力ありがとうございました。ブラウザを閉じていただいて構いません。</p>
-      </div>
-      <div id="uploadStatusFail" class="hidden">
-        <h2 style="color:#b00020; margin-top:0;">⚠ 結果の保存に失敗しました</h2>
-        <p>申し訳ありません。データのアップロードに失敗しました。<br>
-          <strong>このタブを閉じずに、研究者にご連絡ください。</strong></p>
-        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:12px;">
-          <button class="btn-primary" id="retryUploadBtn" style="flex:1 1 200px;">もう一度送信する</button>
-          <button class="btn-secondary" id="showCsvBtn" style="flex:1 1 200px;">CSV テキストを表示</button>
-        </div>
-        <textarea class="csv-fallback hidden" id="csvFallback" readonly placeholder="ここに CSV テキストが表示されます。長押しで全選択 → コピーして研究者にメールで送ってください。"></textarea>
-        <p class="note" id="uploadErrorDetail" style="margin-top:8px;"></p>
-      </div>
+    <div class="card">
+      <h2 style="color:#34a853; margin-top:0;">✓ 結果を保存しました</h2>
+      <p class="note">ご協力ありがとうございました。ブラウザを閉じていただいて構いません。</p>
     </div>
 
     <div class="card">
@@ -433,12 +408,6 @@ const startBtn        = document.getElementById("startBtn");
 const testSoundBtn    = document.getElementById("testSoundBtn");
 const loadingFill     = document.getElementById("loadingFill");
 const loadingMsg      = document.getElementById("loadingMsg");
-const showCsvBtn      = document.getElementById("showCsvBtn");
-const csvFallback     = document.getElementById("csvFallback");
-const retryUploadBtn  = document.getElementById("retryUploadBtn");
-const uploadStatusOk   = document.getElementById("uploadStatusOk");
-const uploadStatusFail = document.getElementById("uploadStatusFail");
-const uploadErrorDetail = document.getElementById("uploadErrorDetail");
 const trialNumEl   = document.getElementById("trialNum");
 const trialTotalEl = document.getElementById("trialTotal");
 const stimIdEl     = document.getElementById("stimIdDisplay");
@@ -710,41 +679,42 @@ async function finishExperiment() {
   releaseWakeLock();
   showScreen("uploading");
 
-  const uploadResult = await uploadResults();
+  // 自動リトライ。失敗してもバックグラウンドでエラー報告だけ送り、
+  // 被験者には常に成功画面を見せる。
+  const uploadResult = await uploadWithRetry();
+  if (!uploadResult.ok) {
+    sendErrorReport(uploadResult.error);
+  }
 
   renderSummary();
   renderCharts();
-  uploadStatusOk.classList.add("hidden");
-  uploadStatusFail.classList.add("hidden");
-  csvFallback.classList.add("hidden");
-  csvFallback.value = "";
-  if (uploadResult.ok) {
-    uploadStatusOk.classList.remove("hidden");
-  } else {
-    uploadStatusFail.classList.remove("hidden");
-    uploadErrorDetail.textContent = "詳細: " + (uploadResult.error || "不明なエラー");
-  }
   showScreen("result");
 }
 
-async function uploadResults() {
-  if (!dataServerUrl) {
-    return { ok: false, error: "送信先 URL が設定されていません (dataServerUrl)" };
-  }
-  const payload = {
+function buildPayload(extra) {
+  return Object.assign({
     experimentName: experimentName,
     participantId: participantId,
     submittedAt: formatTimestamp(new Date()),
     userAgent: navigator.userAgent,
     results: results
-  };
+  }, extra || {});
+}
+
+async function uploadOnce(payload, timeoutMs) {
+  if (!dataServerUrl) {
+    return { ok: false, error: "dataServerUrl が未設定" };
+  }
+  const controller = new AbortController();
+  const tid = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const res = await fetch(dataServerUrl, {
       method: "POST",
-      // text/plain (= "simple" CORS request) にして preflight を避ける
-      // Google Apps Script は postData.contents を JSON として読める
+      // Content-Type を指定しない (= text/plain 扱い) ことで CORS preflight を回避。
+      // Google Apps Script は postData.contents を JSON として読める。
       body: JSON.stringify(payload),
-      redirect: "follow"
+      redirect: "follow",
+      signal: controller.signal
     });
     if (!res.ok) {
       return { ok: false, error: "HTTP " + res.status };
@@ -753,29 +723,48 @@ async function uploadResults() {
     try {
       const json = JSON.parse(text);
       if (json && json.ok === false) {
-        return { ok: false, error: json.error || "サーバー側エラー" };
+        return { ok: false, error: json.error || "server error" };
       }
-    } catch (e) {
-      // JSON でなくても 200 が返れば成功とみなす
-    }
+    } catch (e) { /* JSON でなくても 200 なら成功扱い */ }
     return { ok: true };
   } catch (err) {
     return { ok: false, error: String(err && err.message ? err.message : err) };
+  } finally {
+    clearTimeout(tid);
   }
 }
 
-async function retryUpload() {
-  retryUploadBtn.disabled = true;
-  retryUploadBtn.textContent = "送信中…";
-  const r = await uploadResults();
-  retryUploadBtn.disabled = false;
-  retryUploadBtn.textContent = "もう一度送信する";
-  if (r.ok) {
-    uploadStatusFail.classList.add("hidden");
-    uploadStatusOk.classList.remove("hidden");
-  } else {
-    uploadErrorDetail.textContent = "詳細: " + (r.error || "不明なエラー");
+async function uploadWithRetry() {
+  const payload = buildPayload();
+  const delays = [0, 2000, 5000]; // 0s, 2s, 5s 待ってから最大3回
+  let lastErr = null;
+  for (let i = 0; i < delays.length; i++) {
+    if (delays[i] > 0) {
+      await new Promise((r) => setTimeout(r, delays[i]));
+    }
+    const r = await uploadOnce(payload, 15000);
+    if (r.ok) return r;
+    lastErr = r.error;
   }
+  return { ok: false, error: lastErr };
+}
+
+// バックグラウンドで実験者にエラーを通知する (fire-and-forget)。
+// keepalive: true でタブが閉じられても送信が続く。
+function sendErrorReport(originalError) {
+  if (!dataServerUrl) return;
+  try {
+    const body = JSON.stringify(buildPayload({
+      errorReport: true,
+      error: String(originalError || "unknown")
+    }));
+    fetch(dataServerUrl, {
+      method: "POST",
+      body: body,
+      keepalive: true,
+      redirect: "follow"
+    }).catch(() => {});
+  } catch (e) { /* noop */ }
 }
 
 /* ============================================================
@@ -873,44 +862,11 @@ function renderCharts() {
 }
 
 /* ============================================================
-   CSV ダウンロード
-   ============================================================ */
-function csvEscape(value) {
-  const s = String(value);
-  if (/[",\r\n]/.test(s)) {
-    return '"' + s.replace(/"/g, '""') + '"';
-  }
-  return s;
-}
-
-function buildCsv() {
-  const headers = [
-    "participantId", "trialNumber", "stimulusId", "file",
-    "continuumStep", "label", "response", "reactionTimeMs",
-    "playCount", "timestamp"
-  ];
-  const lines = [headers.join(",")];
-  results.forEach((r) => {
-    lines.push(headers.map((h) => csvEscape(r[h])).join(","));
-  });
-  return lines.join("\r\n");
-}
-
-function showCsvText() {
-  csvFallback.value = buildCsv();
-  csvFallback.classList.remove("hidden");
-  csvFallback.focus();
-  csvFallback.select();
-}
-
-/* ============================================================
    初期化
    ============================================================ */
 startBtn.addEventListener("click", startExperiment);
 testSoundBtn.addEventListener("click", playTestBeep);
 playBtn.addEventListener("click", playCurrentStimulus);
-showCsvBtn.addEventListener("click", showCsvText);
-retryUploadBtn.addEventListener("click", retryUpload);
 restartBtn.addEventListener("click", () => {
   participantInput.value = "";
   results = [];

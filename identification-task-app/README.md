@@ -12,7 +12,7 @@
 - 終了後、反応データを **Google Apps Script 経由で Google Sheets に自動送信**
 - 参加者には簡易サマリー + continuumStep ごとの応答率/反応時間グラフのみ表示
   （詳細データ・CSV ダウンロードは表示しない）
-- 送信失敗時のみ、フォールバックとして CSV テキスト表示が出る
+- **送信失敗時も参加者には常に「成功」と表示**し、裏で実験者にメール通知する
 
 ## フォルダ構成
 
@@ -73,14 +73,16 @@ http://localhost:8000
 
 ## 使い方
 
-1. ブラウザでアプリを開く
+1. 参加者は配布された URL をブラウザで開く
 2. 参加者ID（例: `P01`）を入力して「開始する」を押す
 3. 試行画面で「▶ 再生」を押して刺激を聞く
 4. 再生終了後に回答ボタン（`/r/` または `/l/`）を押す
 5. 自動的に次の試行へ進む
 6. 全 20 試行終了後、データが自動でサーバー（Google Sheets）に送信される
-7. 参加者には「✓ 結果を保存しました」と簡易結果（応答率・グラフ）のみ表示される
-   詳細データや CSV は参加者には見せない
+7. 参加者には「✓ 結果を保存しました」と簡易サマリー・グラフのみ表示される
+   詳細データや CSV ダウンロードは参加者には見せない
+8. 送信に失敗した場合も参加者には常に成功と表示し、裏で実験者にメール通知する
+   （詳細は後述「送信失敗時の挙動」）
 
 ## 設定の変更方法
 
@@ -146,39 +148,24 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
 3. 表示されたエディタの内容をすべて削除し、以下を貼り付ける:
 
    ```javascript
+   // ========== 設定 ==========
    const SHEET_NAME = "results";
+   const ERROR_SHEET_NAME = "errors";
+   // エラー時に通知メールを受け取りたいアドレスを書く (空文字なら送らない)
+   const RESEARCHER_EMAIL = "";
+   // ==========================
 
    function doPost(e) {
      const lock = LockService.getScriptLock();
      lock.waitLock(20000);
      try {
        const data = JSON.parse(e.postData.contents);
-       const ss = SpreadsheetApp.getActiveSpreadsheet();
-       let sheet = ss.getSheetByName(SHEET_NAME);
-       if (!sheet) {
-         sheet = ss.insertSheet(SHEET_NAME);
-         sheet.appendRow([
-           "submittedAt", "experimentName", "participantId",
-           "trialNumber", "stimulusId", "file",
-           "continuumStep", "label", "response",
-           "reactionTimeMs", "playCount", "timestamp", "userAgent"
-         ]);
+       if (data.errorReport) {
+         return handleErrorReport(data);
        }
-       const submittedAt = data.submittedAt || new Date().toISOString();
-       const rows = (data.results || []).map(r => [
-         submittedAt, data.experimentName || "", data.participantId || "",
-         r.trialNumber, r.stimulusId, r.file,
-         r.continuumStep, r.label, r.response,
-         r.reactionTimeMs, r.playCount, r.timestamp, data.userAgent || ""
-       ]);
-       if (rows.length > 0) {
-         sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, rows[0].length)
-              .setValues(rows);
-       }
-       return ContentService
-         .createTextOutput(JSON.stringify({ ok: true, n: rows.length }))
-         .setMimeType(ContentService.MimeType.JSON);
+       return handleResults(data);
      } catch (err) {
+       try { notifyResearcher_("parse error", String(err), null); } catch (_) {}
        return ContentService
          .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
          .setMimeType(ContentService.MimeType.JSON);
@@ -186,7 +173,78 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
        lock.releaseLock();
      }
    }
+
+   function handleResults(data) {
+     const ss = SpreadsheetApp.getActiveSpreadsheet();
+     let sheet = ss.getSheetByName(SHEET_NAME);
+     if (!sheet) {
+       sheet = ss.insertSheet(SHEET_NAME);
+       sheet.appendRow([
+         "submittedAt", "experimentName", "participantId",
+         "trialNumber", "stimulusId", "file",
+         "continuumStep", "label", "response",
+         "reactionTimeMs", "playCount", "timestamp", "userAgent"
+       ]);
+     }
+     const submittedAt = data.submittedAt || new Date().toISOString();
+     const rows = (data.results || []).map(r => [
+       submittedAt, data.experimentName || "", data.participantId || "",
+       r.trialNumber, r.stimulusId, r.file,
+       r.continuumStep, r.label, r.response,
+       r.reactionTimeMs, r.playCount, r.timestamp, data.userAgent || ""
+     ]);
+     if (rows.length > 0) {
+       sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, rows[0].length)
+            .setValues(rows);
+     }
+     return ContentService
+       .createTextOutput(JSON.stringify({ ok: true, n: rows.length }))
+       .setMimeType(ContentService.MimeType.JSON);
+   }
+
+   function handleErrorReport(data) {
+     const ss = SpreadsheetApp.getActiveSpreadsheet();
+     let sheet = ss.getSheetByName(ERROR_SHEET_NAME);
+     if (!sheet) {
+       sheet = ss.insertSheet(ERROR_SHEET_NAME);
+       sheet.appendRow([
+         "submittedAt", "experimentName", "participantId",
+         "error", "userAgent", "resultsJSON"
+       ]);
+     }
+     sheet.appendRow([
+       data.submittedAt || new Date().toISOString(),
+       data.experimentName || "",
+       data.participantId || "",
+       data.error || "",
+       data.userAgent || "",
+       JSON.stringify(data.results || [])
+     ]);
+     notifyResearcher_(data.participantId, data.error, data);
+     return ContentService
+       .createTextOutput(JSON.stringify({ ok: true, errorReport: true }))
+       .setMimeType(ContentService.MimeType.JSON);
+   }
+
+   function notifyResearcher_(participantId, error, data) {
+     if (!RESEARCHER_EMAIL) return;
+     const subject = "[Identification Task] エラー報告: " + (participantId || "unknown");
+     const body =
+       "実験データの送信時にクライアント側でエラーが発生しました。\n\n" +
+       "参加者ID: " + (participantId || "(不明)") + "\n" +
+       "実験名: "  + (data && data.experimentName ? data.experimentName : "") + "\n" +
+       "送信時刻: " + (data && data.submittedAt ? data.submittedAt : "") + "\n" +
+       "エラー内容: " + (error || "") + "\n" +
+       "User-Agent: " + (data && data.userAgent ? data.userAgent : "") + "\n\n" +
+       "詳細データは『" + ERROR_SHEET_NAME + "』シートをご確認ください。";
+     MailApp.sendEmail(RESEARCHER_EMAIL, subject, body);
+   }
    ```
+
+   > 💡 **メール通知**: `RESEARCHER_EMAIL` に自分のメールアドレスを書いておくと、
+   > 被験者側で送信に失敗したときに自動でメール通知が届きます。
+   > 通知メールには参加者ID・エラー内容・全試行データ（JSON）が `errors` シートに
+   > 記録されるので、後から手動でリカバリ可能です。
 
 4. 「保存」（フロッピーアイコン）を押す
 5. 右上の **「デプロイ」→「新しいデプロイ」** を押す
@@ -233,11 +291,22 @@ const experimentName = "identification_rl";
 コード変更後は **「デプロイ」→「デプロイを管理」** で既存のデプロイを編集（鉛筆アイコン）
 し、バージョンを「新しいバージョン」にして再デプロイしてください。URL は変わりません。
 
-### 送信失敗時の挙動
+### 送信失敗時の挙動（被験者には完全に隠す）
 
-- 参加者の画面に「⚠ 結果の保存に失敗しました」と表示され、研究者に連絡するよう促されます
-- 参加者は「もう一度送信する」ボタンで再送信できます
-- 最終手段として「CSV テキストを表示」ボタンでデータをコピーしてメールで送ってもらうことも可能です
+被験者は常に「✓ 結果を保存しました」を見るだけで、失敗には気付きません。
+裏側では次の順で処理されます:
+
+1. **自動リトライ**: 送信失敗時、間隔 0 秒 → 2 秒 → 5 秒で最大 3 回まで自動再送信
+2. **エラー報告の自動送信**: 3 回とも失敗した場合、別フラグ (`errorReport: true`)
+   をつけて再度 POST します（`fetch` の `keepalive: true` でタブを閉じられても送信継続）
+3. **`errors` シートへの記録 + メール通知**: Apps Script 側で `errorReport` を受け取ると、
+   `errors` シートに全試行データ（JSON）を記録し、`RESEARCHER_EMAIL` が設定されていれば
+   実験者にメール通知します
+
+> ⚠️ ただし完全にネットワークが切れている場合や、`dataServerUrl` 自体が間違っている場合は
+> エラー報告すら届きません。実験開始前に一度自分の端末で動作確認をしてください。
+> また、定期的に `results` シートを見て期待した参加者ID がすべて記録されているか
+> 確認することをおすすめします。
 
 ### 研究者用の操作
 
@@ -300,9 +369,8 @@ const experimentName = "identification_rl";
 > 3. 静かな環境で、URL をブラウザで開いてください: `https://...`
 > 4. 「音量チェック」ボタンでテスト音を再生し、聞きやすい音量に合わせてください
 > 5. 参加者ID を入力して開始してください
-> 6. 全 20 試行が終わると、結果は自動的にサーバーに送信されます。
->    「✓ 結果を保存しました」と表示されたら終了です。ブラウザを閉じて構いません。
-> 7. 万一「⚠ 結果の保存に失敗しました」と表示された場合は、**ブラウザを閉じずに**研究者にご連絡ください
+> 6. 全 20 試行が終わると、「✓ 結果を保存しました」と表示されます。
+>    お疲れさまでした。ブラウザを閉じていただいて構いません。
 
 ## 注意事項
 

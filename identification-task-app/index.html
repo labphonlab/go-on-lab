@@ -147,6 +147,68 @@
     background: #e8f0ff;
     color: #0071e3;
   }
+  .checkbox-field {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    background: #f5f5f7;
+    border-radius: 10px;
+    margin-top: 16px;
+    cursor: pointer;
+  }
+  .checkbox-field input[type="checkbox"] {
+    margin-top: 2px;
+    width: 22px;
+    height: 22px;
+    accent-color: #0071e3;
+    flex: 0 0 auto;
+  }
+  .checkbox-field span { font-size: 15px; line-height: 1.5; }
+  .consent-text {
+    background: #f5f5f7;
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    max-height: 360px;
+    overflow-y: auto;
+    margin-top: 12px;
+  }
+  .consent-text h3 { font-size: 15px; margin: 12px 0 4px; }
+  .consent-text h3:first-child { margin-top: 0; }
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .badge-practice { background: #ff9500; color: #fff; }
+  .badge-main { background: #0071e3; color: #fff; }
+  .fixation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    font-size: 56px;
+    color: #1d1d1f;
+    font-weight: 300;
+  }
+  .iti {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    color: #6e6e73;
+  }
+  .break-counter {
+    text-align: center;
+    font-size: 18px;
+    color: #6e6e73;
+    margin: 16px 0;
+  }
   input[type="text"]:focus {
     outline: none;
     border-color: #0071e3;
@@ -339,8 +401,49 @@
 <body>
 <div class="container">
 
+  <!-- 同意・概要画面 -->
+  <section id="screen-consent">
+    <h1>音声知覚タスク</h1>
+    <div class="card">
+      <h2 style="margin-top:0;">実験の概要</h2>
+      <p>本実験では、英単語の発音を聞いて、それが「<strong>pie</strong>」か「<strong>buy</strong>」のどちらに聞こえるかを答えていただきます。</p>
+      <ul style="font-size:15px; line-height:1.7;">
+        <li>所要時間: 約 7〜10 分</li>
+        <li>試行数: 練習 6 試行 + 本試行 66 試行（途中 1 回の休憩あり）</li>
+        <li>必要なもの: イヤホンまたはヘッドホン</li>
+      </ul>
+
+      <h2>参加にあたっての説明（インフォームドコンセント）</h2>
+      <div class="consent-text">
+        <h3>1. 研究の目的</h3>
+        <p>本研究は、英語の母音知覚における音韻カテゴリの境界を調べることを目的としています。</p>
+
+        <h3>2. 実験内容</h3>
+        <p>連続的に変化する音声刺激を聞いて、聞こえた単語を選択していただきます。回答に正解・不正解はありません。聞こえたままにお答えください。</p>
+
+        <h3>3. 収集する情報</h3>
+        <p>氏名、生年月日、性別、利き手、言語背景（母語・第二言語・生育地・方言など）、各試行の回答と反応時間を収集します。氏名は連絡用にのみ使用し、研究発表や論文では匿名化されたデータのみを用います。</p>
+
+        <h3>4. プライバシーと撤回権</h3>
+        <p>収集したデータは厳重に管理し、研究目的以外には使用しません。実験中いつでも中断していただいて構いません（その時点までのデータは破棄します）。</p>
+
+        <h3>5. 連絡先</h3>
+        <p>本研究に関するご質問は研究実施者までお問い合わせください。</p>
+      </div>
+
+      <label class="checkbox-field">
+        <input type="checkbox" id="consentCheckbox">
+        <span>上記の説明を理解し、研究への参加に同意します。</span>
+      </label>
+
+      <div style="margin-top: 20px;">
+        <button class="btn-primary" id="toSetupBtn" disabled>次へ進む</button>
+      </div>
+    </div>
+  </section>
+
   <!-- 設定画面 -->
-  <section id="screen-setup">
+  <section id="screen-setup" class="hidden">
     <h1>音声知覚タスク</h1>
     <div class="card">
       <p class="note" style="margin-top:0;">ご協力ありがとうございます。まずいくつかの質問にお答えください（<span class="required">*</span> は必須）。</p>
@@ -441,9 +544,68 @@
       <p class="note">「開始する」を押すと実験が始まります。各試行で「再生」を押して音声を聞き、聞こえた単語（<strong>pie</strong> または <strong>buy</strong>）を選んでください。</p>
 
       <div style="margin-top: 20px;">
-        <button class="btn-primary" id="startBtn">開始する</button>
+        <button class="btn-primary" id="startBtn">次へ進む</button>
       </div>
       <div class="error" id="setupError"></div>
+    </div>
+  </section>
+
+  <!-- 教示画面 -->
+  <section id="screen-instructions" class="hidden">
+    <h1>実験の進め方</h1>
+    <div class="card">
+      <p>これから実際の課題を始めます。落ち着いてお読みください。</p>
+      <ol style="line-height:1.8; padding-left:1.5em;">
+        <li>各試行で、画面に「<strong>+</strong>」が表示されてから音声が 1 回再生されます。</li>
+        <li>音声を聞いたら、聞こえた単語に対応するボタン（<strong>pie</strong> または <strong>buy</strong>）を<strong>できるだけ素早く正確に</strong>押してください。</li>
+        <li>判断に迷う音もありますが、聞こえたままの直感で答えてください。<strong>正解・不正解はありません</strong>。</li>
+        <li>本試行に入る前に <strong>6 試行の練習</strong> を行います。</li>
+        <li>本試行は <strong>66 試行</strong>あり、途中で 1 回休憩があります。</li>
+        <li>実験中は<strong>別のタブやアプリに切り替えない</strong>でください（注意の逸れを記録しています）。</li>
+      </ol>
+      <p class="note">準備ができたら「練習を始める」を押してください。押した後、音声ファイルの読み込みが始まります（10〜30 秒）。</p>
+      <div style="margin-top: 20px;">
+        <button class="btn-primary" id="toPracticeBtn">練習を始める</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 練習開始画面 -->
+  <section id="screen-practice-intro" class="hidden">
+    <div class="card">
+      <span class="badge badge-practice">練習</span>
+      <h2 style="margin-top:0;">練習試行を始めます</h2>
+      <p>これから <strong>6 試行</strong> の練習を行います。本試行と同じ要領で答えてください。</p>
+      <p class="note">「+」が表示されたら、続いて流れる音声を聞いて、聞こえた単語を選んでください。</p>
+      <div style="margin-top: 20px;">
+        <button class="btn-primary" id="startPracticeBtn">始める</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 練習終了画面 -->
+  <section id="screen-practice-done" class="hidden">
+    <div class="card">
+      <h2 style="margin-top:0; color:#34a853;">✓ 練習が終わりました</h2>
+      <p>これから <strong>本試行（66 試行）</strong>を始めます。途中で 1 回の休憩があります。</p>
+      <p class="note">操作の仕方は練習と同じです。聞こえたままの直感で素早く答えてください。</p>
+      <div style="margin-top: 20px;">
+        <button class="btn-primary" id="startMainBtn">本試行を始める</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 休憩画面 -->
+  <section id="screen-break" class="hidden">
+    <div class="card">
+      <h2 style="margin-top:0;">休憩</h2>
+      <p>ここで一息ついてください。準備ができたら再開してください。</p>
+      <div class="break-counter">
+        <strong id="breakProgress">33</strong> / 66 試行 完了
+      </div>
+      <div style="margin-top: 20px;">
+        <button class="btn-primary" id="resumeBtn">続きを始める</button>
+      </div>
     </div>
   </section>
 
@@ -460,13 +622,16 @@
   <!-- 試行画面 -->
   <section id="screen-trial" class="hidden">
     <div class="card">
+      <span class="badge" id="trialBadge"></span>
       <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-      <div class="trial-header">試行</div>
-      <div class="trial-counter"><span id="trialNum">1</span> / <span id="trialTotal">20</span></div>
-      <div class="stim-id" id="stimIdDisplay">stim --</div>
+      <div class="trial-header" id="trialHeader">試行</div>
+      <div class="trial-counter"><span id="trialNum">1</span> / <span id="trialTotal">66</span></div>
 
-      <button class="btn-play" id="playBtn">▶ 再生</button>
-      <div class="play-info" id="playInfo">再生してください</div>
+      <div class="fixation hidden" id="fixationDisplay">+</div>
+      <div class="iti hidden" id="itiDisplay">・・・</div>
+
+      <button class="btn-play hidden" id="playBtn">▶ 再生</button>
+      <div class="play-info" id="playInfo">画面の表示に従ってください</div>
 
       <div class="response-grid" id="responseGrid"></div>
       <div class="error" id="trialError"></div>
@@ -520,40 +685,34 @@
 const responseOptions = ["pie", "buy"];
 const targetResponseForGraph = "buy";
 const randomizeTrials = true;
-const allowReplay = true;
+const allowReplay = false;                 // 本格実験では再再生は不可が標準
+
+const repetitionsPerStimulus = 6;          // 各刺激の主試行での提示回数
+const numPracticeTrials = 6;               // 練習試行数 (端点刺激で実施)
+const breakAfterNTrials = 33;              // この試行数経過で休憩を入れる
+const counterbalanceResponseOrder = true;  // 回答ボタンの左右をランダム化
+const fixationDurationMs = 500;            // 注視点の表示時間
+const interTrialIntervalMs = 500;          // 回答後の空白時間 (ITI)
 
 // 反応データの送信先（Google Apps Script Web App の URL）
-// 設定方法は README の「サーバー（Google Sheets）への保存設定」を参照
 const dataServerUrl = "https://script.google.com/macros/s/AKfycbymD6t3TiqaPsBTm5RPVSV1fvuqg7BgD_yU3fYUg4cQzgfaUhCxxxbIb_lKRM2ICg1v/exec";
-// 実験条件名（複数の実験を同じシートで管理する場合に使う。任意）
 const experimentName = "identification_pie_buy";
 
 /* ============================================================
    刺激リスト（編集可能）
    ============================================================ */
-// 11 音源 (stim01.wav 〜 stim11.wav) を各 2 回ずつ提示 = 計 22 試行
+// 11 ステップの連続体。本実験では各刺激を repetitionsPerStimulus 回ずつ提示する。
 const stimuli = [
   { id: "stim01", file: "stimuli/stim01.wav", continuumStep: 1,  label: "step1"  },
-  { id: "stim01", file: "stimuli/stim01.wav", continuumStep: 1,  label: "step1"  },
-  { id: "stim02", file: "stimuli/stim02.wav", continuumStep: 2,  label: "step2"  },
   { id: "stim02", file: "stimuli/stim02.wav", continuumStep: 2,  label: "step2"  },
   { id: "stim03", file: "stimuli/stim03.wav", continuumStep: 3,  label: "step3"  },
-  { id: "stim03", file: "stimuli/stim03.wav", continuumStep: 3,  label: "step3"  },
-  { id: "stim04", file: "stimuli/stim04.wav", continuumStep: 4,  label: "step4"  },
   { id: "stim04", file: "stimuli/stim04.wav", continuumStep: 4,  label: "step4"  },
   { id: "stim05", file: "stimuli/stim05.wav", continuumStep: 5,  label: "step5"  },
-  { id: "stim05", file: "stimuli/stim05.wav", continuumStep: 5,  label: "step5"  },
-  { id: "stim06", file: "stimuli/stim06.wav", continuumStep: 6,  label: "step6"  },
   { id: "stim06", file: "stimuli/stim06.wav", continuumStep: 6,  label: "step6"  },
   { id: "stim07", file: "stimuli/stim07.wav", continuumStep: 7,  label: "step7"  },
-  { id: "stim07", file: "stimuli/stim07.wav", continuumStep: 7,  label: "step7"  },
-  { id: "stim08", file: "stimuli/stim08.wav", continuumStep: 8,  label: "step8"  },
   { id: "stim08", file: "stimuli/stim08.wav", continuumStep: 8,  label: "step8"  },
   { id: "stim09", file: "stimuli/stim09.wav", continuumStep: 9,  label: "step9"  },
-  { id: "stim09", file: "stimuli/stim09.wav", continuumStep: 9,  label: "step9"  },
   { id: "stim10", file: "stimuli/stim10.wav", continuumStep: 10, label: "step10" },
-  { id: "stim10", file: "stimuli/stim10.wav", continuumStep: 10, label: "step10" },
-  { id: "stim11", file: "stimuli/stim11.wav", continuumStep: 11, label: "step11" },
   { id: "stim11", file: "stimuli/stim11.wav", continuumStep: 11, label: "step11" }
 ];
 
@@ -562,7 +721,10 @@ const stimuli = [
    ============================================================ */
 let sessionId = "";
 let participantInfo = {};
+let practiceList = [];
+let mainList = [];
 let trialList = [];
+let isPractice = false;
 let currentTrialIndex = 0;
 let trialFirstPlayTime = 0;
 let playCount = 0;
@@ -573,15 +735,36 @@ let chartResponse = null;
 let chartRT = null;
 let wakeLock = null;
 let testAudioCtx = null;
+let displayResponseOptions = [];
+let responseButtonOrder = "";
+let focusBlurCount = 0;
+let focusBlurEvents = [];
 
 /* ============================================================
    DOM
    ============================================================ */
-const screenSetup     = document.getElementById("screen-setup");
-const screenLoading   = document.getElementById("screen-loading");
-const screenTrial     = document.getElementById("screen-trial");
-const screenUploading = document.getElementById("screen-uploading");
-const screenResult    = document.getElementById("screen-result");
+const screenConsent       = document.getElementById("screen-consent");
+const screenSetup         = document.getElementById("screen-setup");
+const screenInstructions  = document.getElementById("screen-instructions");
+const screenLoading       = document.getElementById("screen-loading");
+const screenPracticeIntro = document.getElementById("screen-practice-intro");
+const screenTrial         = document.getElementById("screen-trial");
+const screenPracticeDone  = document.getElementById("screen-practice-done");
+const screenBreak         = document.getElementById("screen-break");
+const screenUploading     = document.getElementById("screen-uploading");
+const screenResult        = document.getElementById("screen-result");
+
+const consentCheckbox = document.getElementById("consentCheckbox");
+const toSetupBtn      = document.getElementById("toSetupBtn");
+const toPracticeBtn   = document.getElementById("toPracticeBtn");
+const startPracticeBtn= document.getElementById("startPracticeBtn");
+const startMainBtn    = document.getElementById("startMainBtn");
+const resumeBtn       = document.getElementById("resumeBtn");
+const breakProgress   = document.getElementById("breakProgress");
+const trialBadge      = document.getElementById("trialBadge");
+const trialHeader     = document.getElementById("trialHeader");
+const fixationDisplay = document.getElementById("fixationDisplay");
+const itiDisplay      = document.getElementById("itiDisplay");
 const nameInput            = document.getElementById("participantName");
 const dobInput             = document.getElementById("dateOfBirth");
 const nativeInput          = document.getElementById("nativeLanguage");
@@ -598,7 +781,6 @@ const loadingFill     = document.getElementById("loadingFill");
 const loadingMsg      = document.getElementById("loadingMsg");
 const trialNumEl   = document.getElementById("trialNum");
 const trialTotalEl = document.getElementById("trialTotal");
-const stimIdEl     = document.getElementById("stimIdDisplay");
 const progressFill = document.getElementById("progressFill");
 const playBtn      = document.getElementById("playBtn");
 const playInfo     = document.getElementById("playInfo");
@@ -611,7 +793,6 @@ const setupError   = document.getElementById("setupError");
 const trialError   = document.getElementById("trialError");
 
 targetLabelEl.textContent = targetResponseForGraph;
-trialTotalEl.textContent = stimuli.length;
 
 /* ============================================================
    ユーティリティ
@@ -625,17 +806,45 @@ function shuffle(array) {
   return a;
 }
 
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+function buildMainTrialList() {
+  let all = [];
+  for (let i = 0; i < repetitionsPerStimulus; i++) {
+    all = all.concat(stimuli);
+  }
+  return randomizeTrials ? shuffle(all) : all;
+}
+
+function buildPracticeTrialList() {
+  // 端点 (step 1 と最大ステップ) を使った練習
+  const minStep = Math.min.apply(null, stimuli.map((s) => s.continuumStep));
+  const maxStep = Math.max.apply(null, stimuli.map((s) => s.continuumStep));
+  const endpoints = stimuli.filter((s) => s.continuumStep === minStep || s.continuumStep === maxStep);
+  const out = [];
+  for (let i = 0; i < numPracticeTrials; i++) {
+    out.push(endpoints[i % endpoints.length]);
+  }
+  return shuffle(out);
+}
+
 function showScreen(name) {
-  screenSetup.classList.add("hidden");
-  screenLoading.classList.add("hidden");
-  screenTrial.classList.add("hidden");
-  screenUploading.classList.add("hidden");
-  screenResult.classList.add("hidden");
-  if (name === "setup")     screenSetup.classList.remove("hidden");
-  if (name === "loading")   screenLoading.classList.remove("hidden");
-  if (name === "trial")     screenTrial.classList.remove("hidden");
-  if (name === "uploading") screenUploading.classList.remove("hidden");
-  if (name === "result")    screenResult.classList.remove("hidden");
+  const map = {
+    "consent":        screenConsent,
+    "setup":          screenSetup,
+    "instructions":   screenInstructions,
+    "loading":        screenLoading,
+    "practice-intro": screenPracticeIntro,
+    "trial":          screenTrial,
+    "practice-done":  screenPracticeDone,
+    "break":          screenBreak,
+    "uploading":      screenUploading,
+    "result":         screenResult
+  };
+  Object.values(map).forEach((el) => el.classList.add("hidden"));
+  if (map[name]) map[name].classList.remove("hidden");
 }
 
 async function requestWakeLock() {
@@ -743,7 +952,7 @@ function setResponseButtonsEnabled(enabled) {
    ============================================================ */
 function buildResponseButtons() {
   responseGrid.innerHTML = "";
-  responseOptions.forEach((opt) => {
+  displayResponseOptions.forEach((opt) => {
     const btn = document.createElement("button");
     btn.className = "btn-response";
     btn.textContent = opt;
@@ -775,7 +984,7 @@ function computeAge(dob) {
   return age;
 }
 
-async function startExperiment() {
+function validateSetup() {
   clearError(setupError);
   const name = nameInput.value.trim();
   const dob = dobInput.value;
@@ -783,14 +992,13 @@ async function startExperiment() {
   const handedness = getRadio("handedness");
   const native = nativeInput.value.trim();
 
-  if (!name)       { showError(setupError, "お名前を入力してください。"); nameInput.focus(); return; }
-  if (!dob)        { showError(setupError, "生年月日を入力してください。"); dobInput.focus(); return; }
-  if (!gender)     { showError(setupError, "性別を選択してください。"); return; }
-  if (!handedness) { showError(setupError, "利き手を選択してください。"); return; }
-  if (!native)     { showError(setupError, "母語を入力してください。"); nativeInput.focus(); return; }
+  if (!name)       { showError(setupError, "お名前を入力してください。"); nameInput.focus(); return null; }
+  if (!dob)        { showError(setupError, "生年月日を入力してください。"); dobInput.focus(); return null; }
+  if (!gender)     { showError(setupError, "性別を選択してください。"); return null; }
+  if (!handedness) { showError(setupError, "利き手を選択してください。"); return null; }
+  if (!native)     { showError(setupError, "母語を入力してください。"); nativeInput.focus(); return null; }
 
-  sessionId = generateSessionId();
-  participantInfo = {
+  return {
     name: name,
     dateOfBirth: dob,
     age: computeAge(dob),
@@ -805,103 +1013,176 @@ async function startExperiment() {
     placeOfUpbringing: placeOfUpbringingInput.value.trim(),
     dialect: dialectInput.value.trim()
   };
-
-  trialList = randomizeTrials ? shuffle(stimuli) : stimuli.slice();
-  currentTrialIndex = 0;
-  results = [];
-  buildResponseButtons();
-
-  showScreen("loading");
-  await preloadAllAudio(trialList);
-  await requestWakeLock();
-
-  showScreen("trial");
-  loadCurrentTrial();
 }
 
-function loadCurrentTrial() {
+function setupToInstructions() {
+  const info = validateSetup();
+  if (!info) return;
+  sessionId = generateSessionId();
+  participantInfo = info;
+  showScreen("instructions");
+}
+
+async function instructionsToPractice() {
+  practiceList = buildPracticeTrialList();
+  mainList = buildMainTrialList();
+
+  if (counterbalanceResponseOrder && Math.random() < 0.5) {
+    displayResponseOptions = responseOptions.slice().reverse();
+  } else {
+    displayResponseOptions = responseOptions.slice();
+  }
+  responseButtonOrder = displayResponseOptions.join("|");
+
+  results = [];
+  focusBlurCount = 0;
+  focusBlurEvents = [];
+
+  showScreen("loading");
+  await preloadAllAudio(mainList.concat(practiceList));
+  await requestWakeLock();
+
+  startBlock(true);
+}
+
+function startBlock(practice) {
+  isPractice = practice;
+  trialList = practice ? practiceList : mainList;
+  currentTrialIndex = 0;
+  trialTotalEl.textContent = trialList.length;
+  trialBadge.textContent = practice ? "練習" : "本試行";
+  trialBadge.className = "badge " + (practice ? "badge-practice" : "badge-main");
+  trialHeader.textContent = practice ? "練習試行" : "試行";
+  buildResponseButtons();
+  if (practice) {
+    showScreen("practice-intro");
+  } else {
+    showScreen("trial");
+    runTrial();
+  }
+}
+
+async function runTrial() {
   clearError(trialError);
   const n = currentTrialIndex + 1;
   const stim = trialList[currentTrialIndex];
 
   trialNumEl.textContent = n;
-  stimIdEl.textContent = stim.id;
   progressFill.style.width = ((n - 1) / trialList.length * 100) + "%";
 
   playCount = 0;
   trialFirstPlayTime = 0;
   setResponseButtonsEnabled(false);
+  playBtn.classList.add("hidden");
+  itiDisplay.classList.add("hidden");
+  playInfo.textContent = "";
 
-  playBtn.disabled = false;
-  playBtn.textContent = "▶ 再生";
-  playInfo.textContent = "再生してください";
+  // 注視点 (fixation)
+  fixationDisplay.classList.remove("hidden");
+  await sleep(fixationDurationMs);
+  fixationDisplay.classList.add("hidden");
 
+  // 音声準備
   if (audio) {
     try { audio.pause(); audio.onended = null; audio.onerror = null; } catch (e) {}
   }
   audio = audioMap.get(stim.file) || new Audio(stim.file);
   audio.preload = "auto";
   audio.onerror = () => {
-    showError(trialError,
-      "音声ファイルを読み込めませんでした: " + stim.file +
-      "\nファイルが存在するか、ローカルサーバー経由で開いているかをご確認ください。");
-    playBtn.disabled = true;
+    showError(trialError, "音声を読み込めませんでした: " + stim.file);
+    playBtn.classList.remove("hidden");
+    playBtn.disabled = false;
+    playInfo.textContent = "「再生」を押してください";
   };
   audio.onended = () => {
-    playBtn.textContent = allowReplay ? "▶ もう一度再生" : "▶ 再生済み";
-    playBtn.disabled = !allowReplay;
     setResponseButtonsEnabled(true);
-    playInfo.textContent = "聞こえたカテゴリを選んでください";
+    playInfo.textContent = "聞こえた単語を選んでください";
   };
-}
 
-function playCurrentStimulus() {
-  if (!audio) return;
-  clearError(trialError);
-  if (playCount === 0) {
-    trialFirstPlayTime = performance.now();
-  }
-  playCount += 1;
-  playBtn.disabled = true;
+  // 自動再生を試みる; iOS で blocked された場合は再生ボタンを表示
+  trialFirstPlayTime = performance.now();
+  playCount = 1;
   playInfo.textContent = "再生中…";
   try {
-    audio.currentTime = 0;
+    if (audio.currentTime !== 0) audio.currentTime = 0;
   } catch (e) {}
   const p = audio.play();
   if (p && typeof p.catch === "function") {
-    p.catch((err) => {
-      showError(trialError,
-        "音声を再生できませんでした。" +
-        "\n・iPhone の方は本体側面の消音スイッチが OFF になっているかご確認ください。" +
-        "\n・イヤホン/ヘッドホンが正しく接続されているかご確認ください。" +
-        "\n・もう一度「再生」を押してお試しください。");
+    p.catch(() => {
+      // ジェスチャー必要: 再生ボタンを出して待つ
+      playBtn.classList.remove("hidden");
+      playBtn.disabled = false;
+      playInfo.textContent = "「再生」を押してください";
+      playCount = 0;
+      trialFirstPlayTime = 0;
+    });
+  }
+}
+
+function manualPlay() {
+  if (!audio) return;
+  clearError(trialError);
+  if (playCount === 0) trialFirstPlayTime = performance.now();
+  playCount += 1;
+  playBtn.disabled = true;
+  playInfo.textContent = "再生中…";
+  try { audio.currentTime = 0; } catch (e) {}
+  const p = audio.play();
+  if (p && typeof p.catch === "function") {
+    p.catch(() => {
+      showError(trialError, "音声を再生できませんでした。もう一度「再生」を押してみてください。");
       playBtn.disabled = false;
       playInfo.textContent = "再生に失敗しました";
     });
   }
 }
 
-function recordResponse(response) {
+async function recordResponse(response) {
   const rt = Math.round(performance.now() - trialFirstPlayTime);
   const stim = trialList[currentTrialIndex];
-  results.push({
-    sessionId: sessionId,
-    trialNumber: currentTrialIndex + 1,
-    stimulusId: stim.id,
-    file: stim.file,
-    continuumStep: stim.continuumStep,
-    label: stim.label,
-    response: response,
-    reactionTimeMs: rt,
-    playCount: playCount,
-    timestamp: formatTimestamp(new Date())
-  });
-  currentTrialIndex++;
-  if (currentTrialIndex >= trialList.length) {
-    finishExperiment();
-  } else {
-    loadCurrentTrial();
+  setResponseButtonsEnabled(false);
+  playBtn.classList.add("hidden");
+
+  if (!isPractice) {
+    results.push({
+      sessionId: sessionId,
+      trialNumber: currentTrialIndex + 1,
+      stimulusId: stim.id,
+      file: stim.file,
+      continuumStep: stim.continuumStep,
+      label: stim.label,
+      response: response,
+      reactionTimeMs: rt,
+      playCount: playCount,
+      timestamp: formatTimestamp(new Date())
+    });
   }
+
+  // ITI: 短いブランク
+  playInfo.textContent = "";
+  itiDisplay.classList.remove("hidden");
+  await sleep(interTrialIntervalMs);
+  itiDisplay.classList.add("hidden");
+
+  currentTrialIndex++;
+
+  if (currentTrialIndex >= trialList.length) {
+    if (isPractice) {
+      showScreen("practice-done");
+    } else {
+      finishExperiment();
+    }
+    return;
+  }
+
+  // 主試行の中間で休憩
+  if (!isPractice && currentTrialIndex === breakAfterNTrials) {
+    breakProgress.textContent = currentTrialIndex;
+    showScreen("break");
+    return;
+  }
+
+  runTrial();
 }
 
 async function finishExperiment() {
@@ -930,6 +1211,9 @@ function buildPayload(extra) {
     experimentName: experimentName,
     sessionId: sessionId,
     participant: participantInfo,
+    responseButtonOrder: responseButtonOrder,
+    focusBlurCount: focusBlurCount,
+    focusBlurEvents: focusBlurEvents,
     submittedAt: formatTimestamp(new Date()),
     userAgent: navigator.userAgent,
     results: results
@@ -1099,9 +1383,23 @@ function renderCharts() {
 /* ============================================================
    初期化
    ============================================================ */
-startBtn.addEventListener("click", startExperiment);
+consentCheckbox.addEventListener("change", () => {
+  toSetupBtn.disabled = !consentCheckbox.checked;
+});
+toSetupBtn.addEventListener("click", () => { showScreen("setup"); });
+startBtn.addEventListener("click", setupToInstructions);
+toPracticeBtn.addEventListener("click", instructionsToPractice);
+startPracticeBtn.addEventListener("click", () => {
+  showScreen("trial");
+  runTrial();
+});
+startMainBtn.addEventListener("click", () => { startBlock(false); });
+resumeBtn.addEventListener("click", () => {
+  showScreen("trial");
+  runTrial();
+});
 testSoundBtn.addEventListener("click", playTestBeep);
-playBtn.addEventListener("click", playCurrentStimulus);
+playBtn.addEventListener("click", manualPlay);
 restartBtn.addEventListener("click", () => {
   nameInput.value = "";
   dobInput.value = "";
@@ -1114,11 +1412,29 @@ restartBtn.addEventListener("click", () => {
   placeOfBirthInput.value = "";
   placeOfUpbringingInput.value = "";
   dialectInput.value = "";
+  consentCheckbox.checked = false;
+  toSetupBtn.disabled = true;
   // nativeInput はデフォルト「日本語」のまま残す
   results = [];
   releaseWakeLock();
-  showScreen("setup");
+  showScreen("consent");
 });
+
+// 注意逸脱の追跡 (タブ切替・別アプリ起動などをカウント)
+window.addEventListener("blur", () => {
+  if (screenTrial.classList.contains("hidden") &&
+      screenBreak.classList.contains("hidden")) return;
+  focusBlurCount++;
+  focusBlurEvents.push({ type: "blur", t: formatTimestamp(new Date()) });
+});
+window.addEventListener("focus", () => {
+  if (screenTrial.classList.contains("hidden") &&
+      screenBreak.classList.contains("hidden")) return;
+  focusBlurEvents.push({ type: "focus", t: formatTimestamp(new Date()) });
+});
+
+// 初期画面
+showScreen("consent");
 
 // URL に ?admin=1 を付けるか、5回タップで「最初に戻る」ボタンを表示(研究者用)
 if (new URLSearchParams(location.search).get("admin") === "1") {

@@ -179,7 +179,7 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
      const sessionId = data.sessionId || "";
      const p = data.participant || {};
 
-     // 1. participants シート (セッションごとに 1 行、被験者情報)
+     // 1. participants シート (セッションごとに 1 行、被験者情報 + 実験メタ)
      let pSheet = ss.getSheetByName(PARTICIPANTS_SHEET);
      if (!pSheet) {
        pSheet = ss.insertSheet(PARTICIPANTS_SHEET);
@@ -191,6 +191,7 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
          "l2Language", "l2Aoa", "l2Proficiency",
          "otherLanguages",
          "placeOfBirth", "placeOfUpbringing", "dialect",
+         "responseButtonOrder", "focusBlurCount", "focusBlurEvents",
          "userAgent"
        ]);
      }
@@ -202,6 +203,9 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
        p.l2Language || "", p.l2Aoa || "", p.l2Proficiency || "",
        p.otherLanguages || "",
        p.placeOfBirth || "", p.placeOfUpbringing || "", p.dialect || "",
+       data.responseButtonOrder || "",
+       data.focusBlurCount || 0,
+       JSON.stringify(data.focusBlurEvents || []),
        data.userAgent || ""
      ]);
 
@@ -329,6 +333,9 @@ const experimentName = "identification_rl";
 | `placeOfBirth` | 出生地 (都道府県) |
 | `placeOfUpbringing` | 主に育った地域 (都道府県) |
 | `dialect` | 使用する方言 |
+| `responseButtonOrder` | 回答ボタンの左右配置（カウンターバランス記録） |
+| `focusBlurCount` | 実験中にウィンドウからフォーカスが外れた回数 |
+| `focusBlurEvents` | 各 blur/focus イベントのタイムスタンプ JSON |
 | `userAgent` | 参加者ブラウザの User-Agent |
 
 **`results` シート** (試行ごとに 1 行)

@@ -149,8 +149,9 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
 
    ```javascript
    // ========== 設定 ==========
-   const SHEET_NAME = "results";
-   const ERROR_SHEET_NAME = "errors";
+   const RESULTS_SHEET = "results";
+   const PARTICIPANTS_SHEET = "participants";
+   const ERROR_SHEET = "errors";
    // エラー時に通知メールを受け取りたいアドレスを書く (空文字なら送らない)
    const RESEARCHER_EMAIL = "";
    // ==========================
@@ -166,9 +167,7 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
        return handleResults(data);
      } catch (err) {
        try { notifyResearcher_("parse error", String(err), null); } catch (_) {}
-       return ContentService
-         .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
-         .setMimeType(ContentService.MimeType.JSON);
+       return jsonOut_({ ok: false, error: String(err) });
      } finally {
        lock.releaseLock();
      }
@@ -176,68 +175,96 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
 
    function handleResults(data) {
      const ss = SpreadsheetApp.getActiveSpreadsheet();
-     let sheet = ss.getSheetByName(SHEET_NAME);
-     if (!sheet) {
-       sheet = ss.insertSheet(SHEET_NAME);
-       sheet.appendRow([
-         "submittedAt", "experimentName", "participantId",
-         "trialNumber", "stimulusId", "file",
-         "continuumStep", "label", "response",
-         "reactionTimeMs", "playCount", "timestamp", "userAgent"
+     const submittedAt = data.submittedAt || new Date().toISOString();
+     const sessionId = data.sessionId || "";
+     const p = data.participant || {};
+
+     // 1. participants シート (セッションごとに 1 行、被験者情報)
+     let pSheet = ss.getSheetByName(PARTICIPANTS_SHEET);
+     if (!pSheet) {
+       pSheet = ss.insertSheet(PARTICIPANTS_SHEET);
+       pSheet.appendRow([
+         "submittedAt", "sessionId", "experimentName",
+         "name", "dateOfBirth", "nativeLanguage", "foreignLanguages",
+         "userAgent"
        ]);
      }
-     const submittedAt = data.submittedAt || new Date().toISOString();
+     pSheet.appendRow([
+       submittedAt, sessionId, data.experimentName || "",
+       p.name || "", p.dateOfBirth || "", p.nativeLanguage || "", p.foreignLanguages || "",
+       data.userAgent || ""
+     ]);
+
+     // 2. results シート (試行ごとに 1 行)。sessionId で participants と結合可
+     let rSheet = ss.getSheetByName(RESULTS_SHEET);
+     if (!rSheet) {
+       rSheet = ss.insertSheet(RESULTS_SHEET);
+       rSheet.appendRow([
+         "submittedAt", "sessionId", "experimentName",
+         "trialNumber", "stimulusId", "file",
+         "continuumStep", "label", "response",
+         "reactionTimeMs", "playCount", "timestamp"
+       ]);
+     }
      const rows = (data.results || []).map(r => [
-       submittedAt, data.experimentName || "", data.participantId || "",
+       submittedAt, sessionId, data.experimentName || "",
        r.trialNumber, r.stimulusId, r.file,
        r.continuumStep, r.label, r.response,
-       r.reactionTimeMs, r.playCount, r.timestamp, data.userAgent || ""
+       r.reactionTimeMs, r.playCount, r.timestamp
      ]);
      if (rows.length > 0) {
-       sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, rows[0].length)
-            .setValues(rows);
+       rSheet.getRange(rSheet.getLastRow() + 1, 1, rows.length, rows[0].length)
+             .setValues(rows);
      }
-     return ContentService
-       .createTextOutput(JSON.stringify({ ok: true, n: rows.length }))
-       .setMimeType(ContentService.MimeType.JSON);
+     return jsonOut_({ ok: true, n: rows.length });
    }
 
    function handleErrorReport(data) {
      const ss = SpreadsheetApp.getActiveSpreadsheet();
-     let sheet = ss.getSheetByName(ERROR_SHEET_NAME);
+     let sheet = ss.getSheetByName(ERROR_SHEET);
      if (!sheet) {
-       sheet = ss.insertSheet(ERROR_SHEET_NAME);
+       sheet = ss.insertSheet(ERROR_SHEET);
        sheet.appendRow([
-         "submittedAt", "experimentName", "participantId",
-         "error", "userAgent", "resultsJSON"
+         "submittedAt", "sessionId", "experimentName",
+         "participantName", "error", "userAgent", "payloadJSON"
        ]);
      }
+     const p = data.participant || {};
      sheet.appendRow([
        data.submittedAt || new Date().toISOString(),
+       data.sessionId || "",
        data.experimentName || "",
-       data.participantId || "",
+       p.name || "",
        data.error || "",
        data.userAgent || "",
-       JSON.stringify(data.results || [])
+       JSON.stringify(data)
      ]);
-     notifyResearcher_(data.participantId, data.error, data);
-     return ContentService
-       .createTextOutput(JSON.stringify({ ok: true, errorReport: true }))
-       .setMimeType(ContentService.MimeType.JSON);
+     notifyResearcher_(p.name || data.sessionId, data.error, data);
+     return jsonOut_({ ok: true, errorReport: true });
    }
 
-   function notifyResearcher_(participantId, error, data) {
+   function notifyResearcher_(who, error, data) {
      if (!RESEARCHER_EMAIL) return;
-     const subject = "[Identification Task] エラー報告: " + (participantId || "unknown");
+     const subject = "[Identification Task] エラー報告: " + (who || "unknown");
+     const p = (data && data.participant) || {};
      const body =
        "実験データの送信時にクライアント側でエラーが発生しました。\n\n" +
-       "参加者ID: " + (participantId || "(不明)") + "\n" +
-       "実験名: "  + (data && data.experimentName ? data.experimentName : "") + "\n" +
-       "送信時刻: " + (data && data.submittedAt ? data.submittedAt : "") + "\n" +
+       "セッションID: " + (data && data.sessionId ? data.sessionId : "") + "\n" +
+       "氏名: "       + (p.name || "(不明)") + "\n" +
+       "生年月日: "   + (p.dateOfBirth || "") + "\n" +
+       "母語: "       + (p.nativeLanguage || "") + "\n" +
+       "実験名: "     + (data && data.experimentName ? data.experimentName : "") + "\n" +
+       "送信時刻: "   + (data && data.submittedAt ? data.submittedAt : "") + "\n" +
        "エラー内容: " + (error || "") + "\n" +
        "User-Agent: " + (data && data.userAgent ? data.userAgent : "") + "\n\n" +
-       "詳細データは『" + ERROR_SHEET_NAME + "』シートをご確認ください。";
+       "詳細データは『" + ERROR_SHEET + "』シートをご確認ください。";
      MailApp.sendEmail(RESEARCHER_EMAIL, subject, body);
+   }
+
+   function jsonOut_(obj) {
+     return ContentService
+       .createTextOutput(JSON.stringify(obj))
+       .setMimeType(ContentService.MimeType.JSON);
    }
    ```
 
@@ -270,21 +297,37 @@ const experimentName = "identification_rl";
 
 ### スプレッドシートに記録される列
 
+データは 2 つのシートに分かれて記録されます。`sessionId` で結合できます。
+
+**`participants` シート** (セッションごとに 1 行)
+
 | 列名 | 内容 |
 | --- | --- |
 | `submittedAt` | アプリから送信された時刻 |
+| `sessionId` | セッションID (自動生成。`participants` と `results` を結合するキー) |
 | `experimentName` | `index.html` で設定した実験名 |
-| `participantId` | 参加者ID |
+| `name` | 氏名 |
+| `dateOfBirth` | 生年月日 |
+| `nativeLanguage` | 母語 |
+| `foreignLanguages` | 学習した外国語 (任意入力) |
+| `userAgent` | 参加者ブラウザの User-Agent |
+
+**`results` シート** (試行ごとに 1 行)
+
+| 列名 | 内容 |
+| --- | --- |
+| `submittedAt` | アプリから送信された時刻 |
+| `sessionId` | セッションID (`participants` と結合するキー) |
+| `experimentName` | 実験名 |
 | `trialNumber` | 提示順 |
 | `stimulusId` | 刺激ID |
 | `file` | 音声ファイルのパス |
 | `continuumStep` | 連続体上のステップ |
 | `label` | ラベル |
-| `response` | 参加者の回答 |
-| `reactionTimeMs` | 反応時間（ms、初回再生〜回答） |
+| `response` | 参加者の回答 (`pie` または `buy`) |
+| `reactionTimeMs` | 反応時間 (ms、初回再生〜回答) |
 | `playCount` | その試行で再生した回数 |
-| `timestamp` | 回答時刻（参加者端末ローカル時刻） |
-| `userAgent` | 参加者ブラウザの User-Agent |
+| `timestamp` | 回答時刻 (参加者端末ローカル時刻) |
 
 ### Apps Script のコードを更新した場合
 

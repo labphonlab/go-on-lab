@@ -53,6 +53,31 @@
     background: #fff;
     -webkit-appearance: none;
   }
+  input[type="date"] {
+    width: 100%;
+    font-size: 16px;
+    padding: 13px 16px;
+    border: 2px solid #d2d2d7;
+    border-radius: 10px;
+    background: #fff;
+    font-family: inherit;
+  }
+  textarea {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 14px;
+    border: 2px solid #d2d2d7;
+    border-radius: 10px;
+    background: #fff;
+    font-family: inherit;
+    min-height: 80px;
+    resize: vertical;
+    -webkit-appearance: none;
+  }
+  textarea:focus, input[type="date"]:focus { outline: none; border-color: #0071e3; }
+  .field { margin-top: 16px; }
+  .field:first-child { margin-top: 0; }
+  .required { color: #b00020; font-weight: 700; margin-left: 4px; }
   input[type="text"]:focus {
     outline: none;
     border-color: #0071e3;
@@ -247,11 +272,29 @@
 
   <!-- 設定画面 -->
   <section id="screen-setup">
-    <h1>音声知覚 Identification タスク</h1>
+    <h1>音声知覚タスク</h1>
     <div class="card">
-      <label for="participantId">参加者ID</label>
-      <input type="text" id="participantId" placeholder="例: P01" autocomplete="off" inputmode="text">
-      <p class="note">「開始する」を押すと実験が始まります。各試行で「再生」ボタンを押して音声を聞き、聞こえたカテゴリを選んでください。</p>
+      <p class="note" style="margin-top:0;">ご協力ありがとうございます。まずいくつかの質問にお答えください。</p>
+
+      <div class="field">
+        <label for="participantName">お名前（氏名）<span class="required">*</span></label>
+        <input type="text" id="participantName" placeholder="例: 山田太郎" autocomplete="name">
+      </div>
+
+      <div class="field">
+        <label for="dateOfBirth">生年月日<span class="required">*</span></label>
+        <input type="date" id="dateOfBirth" autocomplete="bday">
+      </div>
+
+      <div class="field">
+        <label for="nativeLanguage">母語<span class="required">*</span></label>
+        <input type="text" id="nativeLanguage" value="日本語" placeholder="例: 日本語">
+      </div>
+
+      <div class="field">
+        <label for="foreignLanguages">学習した外国語（任意）</label>
+        <textarea id="foreignLanguages" placeholder="例: 英語（中学から、10年）、フランス語（大学から、2年）"></textarea>
+      </div>
 
       <div class="checklist">
         <strong>始める前のチェック（スマホの場合）</strong>
@@ -264,6 +307,8 @@
         </ul>
         <button class="btn-test" id="testSoundBtn">音量チェック（テスト音を再生）</button>
       </div>
+
+      <p class="note">「開始する」を押すと実験が始まります。各試行で「再生」を押して音声を聞き、聞こえた単語（<strong>pie</strong> または <strong>buy</strong>）を選んでください。</p>
 
       <div style="margin-top: 20px;">
         <button class="btn-primary" id="startBtn">開始する</button>
@@ -342,8 +387,8 @@
 /* ============================================================
    設定（編集可能）
    ============================================================ */
-const responseOptions = ["/r/", "/l/"];
-const targetResponseForGraph = "/r/";
+const responseOptions = ["pie", "buy"];
+const targetResponseForGraph = "buy";
 const randomizeTrials = true;
 const allowReplay = true;
 
@@ -351,7 +396,7 @@ const allowReplay = true;
 // 設定方法は README の「サーバー（Google Sheets）への保存設定」を参照
 const dataServerUrl = "https://script.google.com/macros/s/AKfycbymD6t3TiqaPsBTm5RPVSV1fvuqg7BgD_yU3fYUg4cQzgfaUhCxxxbIb_lKRM2ICg1v/exec";
 // 実験条件名（複数の実験を同じシートで管理する場合に使う。任意）
-const experimentName = "identification_rl";
+const experimentName = "identification_pie_buy";
 
 /* ============================================================
    刺激リスト（編集可能）
@@ -385,7 +430,8 @@ const stimuli = [
 /* ============================================================
    状態
    ============================================================ */
-let participantId = "";
+let sessionId = "";
+let participantInfo = { name: "", dateOfBirth: "", nativeLanguage: "", foreignLanguages: "" };
 let trialList = [];
 let currentTrialIndex = 0;
 let trialFirstPlayTime = 0;
@@ -406,7 +452,10 @@ const screenLoading   = document.getElementById("screen-loading");
 const screenTrial     = document.getElementById("screen-trial");
 const screenUploading = document.getElementById("screen-uploading");
 const screenResult    = document.getElementById("screen-result");
-const participantInput = document.getElementById("participantId");
+const nameInput        = document.getElementById("participantName");
+const dobInput         = document.getElementById("dateOfBirth");
+const nativeInput      = document.getElementById("nativeLanguage");
+const foreignInput     = document.getElementById("foreignLanguages");
 const startBtn        = document.getElementById("startBtn");
 const testSoundBtn    = document.getElementById("testSoundBtn");
 const loadingFill     = document.getElementById("loadingFill");
@@ -568,15 +617,31 @@ function buildResponseButtons() {
   });
 }
 
+function generateSessionId() {
+  const ts = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
+  const rnd = Math.random().toString(36).slice(2, 8);
+  return "s_" + ts + "_" + rnd;
+}
+
 async function startExperiment() {
   clearError(setupError);
-  const id = participantInput.value.trim();
-  if (!id) {
-    showError(setupError, "参加者IDを入力してください。");
-    participantInput.focus();
-    return;
-  }
-  participantId = id;
+  const name = nameInput.value.trim();
+  const dob = dobInput.value;
+  const native = nativeInput.value.trim();
+  const foreign = foreignInput.value.trim();
+
+  if (!name) { showError(setupError, "お名前を入力してください。"); nameInput.focus(); return; }
+  if (!dob) { showError(setupError, "生年月日を入力してください。"); dobInput.focus(); return; }
+  if (!native) { showError(setupError, "母語を入力してください。"); nativeInput.focus(); return; }
+
+  sessionId = generateSessionId();
+  participantInfo = {
+    name: name,
+    dateOfBirth: dob,
+    nativeLanguage: native,
+    foreignLanguages: foreign
+  };
+
   trialList = randomizeTrials ? shuffle(stimuli) : stimuli.slice();
   currentTrialIndex = 0;
   results = [];
@@ -656,7 +721,7 @@ function recordResponse(response) {
   const rt = Math.round(performance.now() - trialFirstPlayTime);
   const stim = trialList[currentTrialIndex];
   results.push({
-    participantId: participantId,
+    sessionId: sessionId,
     trialNumber: currentTrialIndex + 1,
     stimulusId: stim.id,
     file: stim.file,
@@ -699,7 +764,8 @@ async function finishExperiment() {
 function buildPayload(extra) {
   return Object.assign({
     experimentName: experimentName,
-    participantId: participantId,
+    sessionId: sessionId,
+    participant: participantInfo,
     submittedAt: formatTimestamp(new Date()),
     userAgent: navigator.userAgent,
     results: results
@@ -873,13 +939,12 @@ startBtn.addEventListener("click", startExperiment);
 testSoundBtn.addEventListener("click", playTestBeep);
 playBtn.addEventListener("click", playCurrentStimulus);
 restartBtn.addEventListener("click", () => {
-  participantInput.value = "";
+  nameInput.value = "";
+  dobInput.value = "";
+  foreignInput.value = "";
   results = [];
   releaseWakeLock();
   showScreen("setup");
-});
-participantInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") startExperiment();
 });
 
 // URL に ?admin=1 を付けるか、5回タップで「最初に戻る」ボタンを表示(研究者用)

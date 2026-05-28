@@ -349,34 +349,37 @@ const allowReplay = true;
 
 // 反応データの送信先（Google Apps Script Web App の URL）
 // 設定方法は README の「サーバー（Google Sheets）への保存設定」を参照
-const dataServerUrl = "";
+const dataServerUrl = "https://script.google.com/macros/s/AKfycbymD6t3TiqaPsBTm5RPVSV1fvuqg7BgD_yU3fYUg4cQzgfaUhCxxxbIb_lKRM2ICg1v/exec";
 // 実験条件名（複数の実験を同じシートで管理する場合に使う。任意）
 const experimentName = "identification_rl";
 
 /* ============================================================
    刺激リスト（編集可能）
    ============================================================ */
+// 11 音源 (stim01.wav 〜 stim11.wav) を各 2 回ずつ提示 = 計 22 試行
 const stimuli = [
   { id: "stim01", file: "stimuli/stim01.wav", continuumStep: 1,  label: "step1"  },
-  { id: "stim02", file: "stimuli/stim02.wav", continuumStep: 1,  label: "step1"  },
-  { id: "stim03", file: "stimuli/stim03.wav", continuumStep: 2,  label: "step2"  },
-  { id: "stim04", file: "stimuli/stim04.wav", continuumStep: 2,  label: "step2"  },
-  { id: "stim05", file: "stimuli/stim05.wav", continuumStep: 3,  label: "step3"  },
-  { id: "stim06", file: "stimuli/stim06.wav", continuumStep: 3,  label: "step3"  },
-  { id: "stim07", file: "stimuli/stim07.wav", continuumStep: 4,  label: "step4"  },
-  { id: "stim08", file: "stimuli/stim08.wav", continuumStep: 4,  label: "step4"  },
-  { id: "stim09", file: "stimuli/stim09.wav", continuumStep: 5,  label: "step5"  },
-  { id: "stim10", file: "stimuli/stim10.wav", continuumStep: 5,  label: "step5"  },
-  { id: "stim11", file: "stimuli/stim11.wav", continuumStep: 6,  label: "step6"  },
-  { id: "stim12", file: "stimuli/stim12.wav", continuumStep: 6,  label: "step6"  },
-  { id: "stim13", file: "stimuli/stim13.wav", continuumStep: 7,  label: "step7"  },
-  { id: "stim14", file: "stimuli/stim14.wav", continuumStep: 7,  label: "step7"  },
-  { id: "stim15", file: "stimuli/stim15.wav", continuumStep: 8,  label: "step8"  },
-  { id: "stim16", file: "stimuli/stim16.wav", continuumStep: 8,  label: "step8"  },
-  { id: "stim17", file: "stimuli/stim17.wav", continuumStep: 9,  label: "step9"  },
-  { id: "stim18", file: "stimuli/stim18.wav", continuumStep: 9,  label: "step9"  },
-  { id: "stim19", file: "stimuli/stim19.wav", continuumStep: 10, label: "step10" },
-  { id: "stim20", file: "stimuli/stim20.wav", continuumStep: 10, label: "step10" }
+  { id: "stim01", file: "stimuli/stim01.wav", continuumStep: 1,  label: "step1"  },
+  { id: "stim02", file: "stimuli/stim02.wav", continuumStep: 2,  label: "step2"  },
+  { id: "stim02", file: "stimuli/stim02.wav", continuumStep: 2,  label: "step2"  },
+  { id: "stim03", file: "stimuli/stim03.wav", continuumStep: 3,  label: "step3"  },
+  { id: "stim03", file: "stimuli/stim03.wav", continuumStep: 3,  label: "step3"  },
+  { id: "stim04", file: "stimuli/stim04.wav", continuumStep: 4,  label: "step4"  },
+  { id: "stim04", file: "stimuli/stim04.wav", continuumStep: 4,  label: "step4"  },
+  { id: "stim05", file: "stimuli/stim05.wav", continuumStep: 5,  label: "step5"  },
+  { id: "stim05", file: "stimuli/stim05.wav", continuumStep: 5,  label: "step5"  },
+  { id: "stim06", file: "stimuli/stim06.wav", continuumStep: 6,  label: "step6"  },
+  { id: "stim06", file: "stimuli/stim06.wav", continuumStep: 6,  label: "step6"  },
+  { id: "stim07", file: "stimuli/stim07.wav", continuumStep: 7,  label: "step7"  },
+  { id: "stim07", file: "stimuli/stim07.wav", continuumStep: 7,  label: "step7"  },
+  { id: "stim08", file: "stimuli/stim08.wav", continuumStep: 8,  label: "step8"  },
+  { id: "stim08", file: "stimuli/stim08.wav", continuumStep: 8,  label: "step8"  },
+  { id: "stim09", file: "stimuli/stim09.wav", continuumStep: 9,  label: "step9"  },
+  { id: "stim09", file: "stimuli/stim09.wav", continuumStep: 9,  label: "step9"  },
+  { id: "stim10", file: "stimuli/stim10.wav", continuumStep: 10, label: "step10" },
+  { id: "stim10", file: "stimuli/stim10.wav", continuumStep: 10, label: "step10" },
+  { id: "stim11", file: "stimuli/stim11.wav", continuumStep: 11, label: "step11" },
+  { id: "stim11", file: "stimuli/stim11.wav", continuumStep: 11, label: "step11" }
 ];
 
 /* ============================================================
@@ -492,8 +495,10 @@ function playTestBeep() {
 }
 
 function preloadAllAudio(list) {
+  // 同じファイルを複数試行で使う場合に備え、ファイルパス単位でロード
   audioMap = new Map();
-  const total = list.length;
+  const uniqueFiles = Array.from(new Set(list.map((s) => s.file)));
+  const total = uniqueFiles.length;
   let done = 0;
   loadingFill.style.width = "0%";
   loadingMsg.textContent = "0 / " + total;
@@ -504,11 +509,11 @@ function preloadAllAudio(list) {
     loadingMsg.textContent = done + " / " + total;
   };
 
-  const tasks = list.map((stim) => new Promise((resolve) => {
+  const tasks = uniqueFiles.map((file) => new Promise((resolve) => {
     const a = new Audio();
     a.preload = "auto";
-    a.src = stim.file;
-    audioMap.set(stim.id, a);
+    a.src = file;
+    audioMap.set(file, a);
     let settled = false;
     const finish = () => { if (settled) return; settled = true; updateProgress(); resolve(); };
     a.addEventListener("canplaythrough", finish, { once: true });
@@ -605,7 +610,7 @@ function loadCurrentTrial() {
   if (audio) {
     try { audio.pause(); audio.onended = null; audio.onerror = null; } catch (e) {}
   }
-  audio = audioMap.get(stim.id) || new Audio(stim.file);
+  audio = audioMap.get(stim.file) || new Audio(stim.file);
   audio.preload = "auto";
   audio.onerror = () => {
     showError(trialError,

@@ -2,7 +2,9 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>音声知覚 Identification タスク</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -44,11 +46,12 @@
   }
   input[type="text"] {
     width: 100%;
-    font-size: 18px;
+    font-size: 16px;
     padding: 14px 16px;
     border: 2px solid #d2d2d7;
     border-radius: 10px;
     background: #fff;
+    -webkit-appearance: none;
   }
   input[type="text"]:focus {
     outline: none;
@@ -198,6 +201,45 @@
     font-size: 14px;
     display: none;
   }
+  .checklist {
+    background: #fff8e6;
+    border: 1px solid #f0d97a;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .checklist strong { display: block; margin-bottom: 6px; font-size: 15px; }
+  .checklist ul { margin: 6px 0 0 18px; padding: 0; }
+  .checklist li { margin: 4px 0; }
+  .btn-test {
+    background: #ff9500;
+    color: #fff;
+    font-size: 16px;
+    padding: 14px 20px;
+    width: 100%;
+    margin-top: 12px;
+  }
+  .btn-test:hover:not(:disabled) { background: #f08900; }
+  .loading-msg {
+    text-align: center;
+    font-size: 16px;
+    color: #6e6e73;
+    margin: 16px 0;
+  }
+  .csv-fallback {
+    width: 100%;
+    min-height: 140px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    padding: 10px;
+    border: 1px solid #d2d2d7;
+    border-radius: 8px;
+    margin-top: 12px;
+    background: #f5f5f7;
+    resize: vertical;
+  }
   .summary-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -220,12 +262,35 @@
     <h1>音声知覚 Identification タスク</h1>
     <div class="card">
       <label for="participantId">参加者ID</label>
-      <input type="text" id="participantId" placeholder="例: P01" autocomplete="off">
+      <input type="text" id="participantId" placeholder="例: P01" autocomplete="off" inputmode="text">
       <p class="note">「開始する」を押すと実験が始まります。各試行で「再生」ボタンを押して音声を聞き、聞こえたカテゴリを選んでください。</p>
+
+      <div class="checklist">
+        <strong>始める前のチェック（スマホの場合）</strong>
+        <ul>
+          <li>イヤホン・ヘッドホンを接続してください（普段使っているもので OK）</li>
+          <li><strong>iPhone をお使いの方</strong>: 本体側面の「消音スイッチ」が ON（オレンジ）だと音が出ません。OFF にしてください</li>
+          <li>音量を聞きやすい大きさに合わせてください</li>
+          <li>静かな環境で実施してください</li>
+          <li>実験中に画面が暗くならないよう、自動ロックを長めに設定することをおすすめします</li>
+        </ul>
+        <button class="btn-test" id="testSoundBtn">音量チェック（テスト音を再生）</button>
+      </div>
+
       <div style="margin-top: 20px;">
         <button class="btn-primary" id="startBtn">開始する</button>
       </div>
       <div class="error" id="setupError"></div>
+    </div>
+  </section>
+
+  <!-- 読み込み画面 -->
+  <section id="screen-loading" class="hidden">
+    <div class="card">
+      <h2 style="text-align:center; margin-top:0;">音声を準備しています…</h2>
+      <div class="progress-bar"><div class="progress-fill" id="loadingFill"></div></div>
+      <div class="loading-msg" id="loadingMsg">0 / 0</div>
+      <p class="note">通信環境によっては少し時間がかかります。このまま少々お待ちください。</p>
     </div>
   </section>
 
@@ -286,8 +351,11 @@
       </div>
       <div class="result-actions">
         <button class="btn-primary" id="downloadBtn">CSV をダウンロード</button>
+        <button class="btn-secondary" id="showCsvBtn">CSV テキストを表示</button>
         <button class="btn-secondary" id="restartBtn">最初に戻る</button>
       </div>
+      <textarea class="csv-fallback hidden" id="csvFallback" readonly placeholder="ここに CSV テキストが表示されます。長押しで全選択 → コピーしてメールや AirDrop で送信できます。"></textarea>
+      <p class="note">スマホでダウンロードがうまくいかない場合は「CSV テキストを表示」を押して、長押しで全選択 → コピー → メール/メモなどに貼り付けて送ってください。</p>
     </div>
   </section>
 
@@ -338,17 +406,26 @@ let trialFirstPlayTime = 0;
 let playCount = 0;
 let results = [];
 let audio = null;
+let audioMap = new Map();
 let chartResponse = null;
 let chartRT = null;
+let wakeLock = null;
+let testAudioCtx = null;
 
 /* ============================================================
    DOM
    ============================================================ */
-const screenSetup  = document.getElementById("screen-setup");
-const screenTrial  = document.getElementById("screen-trial");
-const screenResult = document.getElementById("screen-result");
+const screenSetup   = document.getElementById("screen-setup");
+const screenLoading = document.getElementById("screen-loading");
+const screenTrial   = document.getElementById("screen-trial");
+const screenResult  = document.getElementById("screen-result");
 const participantInput = document.getElementById("participantId");
-const startBtn     = document.getElementById("startBtn");
+const startBtn      = document.getElementById("startBtn");
+const testSoundBtn  = document.getElementById("testSoundBtn");
+const loadingFill   = document.getElementById("loadingFill");
+const loadingMsg    = document.getElementById("loadingMsg");
+const showCsvBtn    = document.getElementById("showCsvBtn");
+const csvFallback   = document.getElementById("csvFallback");
 const trialNumEl   = document.getElementById("trialNum");
 const trialTotalEl = document.getElementById("trialTotal");
 const stimIdEl     = document.getElementById("stimIdDisplay");
@@ -381,11 +458,84 @@ function shuffle(array) {
 
 function showScreen(name) {
   screenSetup.classList.add("hidden");
+  screenLoading.classList.add("hidden");
   screenTrial.classList.add("hidden");
   screenResult.classList.add("hidden");
-  if (name === "setup")  screenSetup.classList.remove("hidden");
-  if (name === "trial")  screenTrial.classList.remove("hidden");
-  if (name === "result") screenResult.classList.remove("hidden");
+  if (name === "setup")   screenSetup.classList.remove("hidden");
+  if (name === "loading") screenLoading.classList.remove("hidden");
+  if (name === "trial")   screenTrial.classList.remove("hidden");
+  if (name === "result")  screenResult.classList.remove("hidden");
+}
+
+async function requestWakeLock() {
+  if (!("wakeLock" in navigator)) return;
+  try {
+    wakeLock = await navigator.wakeLock.request("screen");
+    wakeLock.addEventListener("release", () => { wakeLock = null; });
+  } catch (e) { /* HTTPS でない場合などは無視 */ }
+}
+
+function releaseWakeLock() {
+  if (wakeLock) {
+    try { wakeLock.release(); } catch (e) {}
+    wakeLock = null;
+  }
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && !screenTrial.classList.contains("hidden")) {
+    requestWakeLock();
+  }
+});
+
+function playTestBeep() {
+  try {
+    if (!testAudioCtx) {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      testAudioCtx = new Ctx();
+    }
+    if (testAudioCtx.state === "suspended") testAudioCtx.resume();
+    const osc = testAudioCtx.createOscillator();
+    const gain = testAudioCtx.createGain();
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.0001, testAudioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.25, testAudioCtx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, testAudioCtx.currentTime + 0.6);
+    osc.connect(gain).connect(testAudioCtx.destination);
+    osc.start();
+    osc.stop(testAudioCtx.currentTime + 0.65);
+  } catch (e) { /* noop */ }
+}
+
+function preloadAllAudio(list) {
+  audioMap = new Map();
+  const total = list.length;
+  let done = 0;
+  loadingFill.style.width = "0%";
+  loadingMsg.textContent = "0 / " + total;
+
+  const updateProgress = () => {
+    done += 1;
+    loadingFill.style.width = (done / total * 100) + "%";
+    loadingMsg.textContent = done + " / " + total;
+  };
+
+  const tasks = list.map((stim) => new Promise((resolve) => {
+    const a = new Audio();
+    a.preload = "auto";
+    a.src = stim.file;
+    audioMap.set(stim.id, a);
+    let settled = false;
+    const finish = () => { if (settled) return; settled = true; updateProgress(); resolve(); };
+    a.addEventListener("canplaythrough", finish, { once: true });
+    a.addEventListener("loadeddata", finish, { once: true });
+    a.addEventListener("error", finish, { once: true });
+    setTimeout(finish, 8000);
+    try { a.load(); } catch (e) {}
+  }));
+
+  return Promise.all(tasks);
 }
 
 function showError(el, message) {
@@ -430,7 +580,7 @@ function buildResponseButtons() {
   });
 }
 
-function startExperiment() {
+async function startExperiment() {
   clearError(setupError);
   const id = participantInput.value.trim();
   if (!id) {
@@ -443,6 +593,11 @@ function startExperiment() {
   currentTrialIndex = 0;
   results = [];
   buildResponseButtons();
+
+  showScreen("loading");
+  await preloadAllAudio(trialList);
+  await requestWakeLock();
+
   showScreen("trial");
   loadCurrentTrial();
 }
@@ -465,23 +620,22 @@ function loadCurrentTrial() {
   playInfo.textContent = "再生してください";
 
   if (audio) {
-    try { audio.pause(); } catch (e) {}
-    audio = null;
+    try { audio.pause(); audio.onended = null; audio.onerror = null; } catch (e) {}
   }
-  audio = new Audio(stim.file);
+  audio = audioMap.get(stim.id) || new Audio(stim.file);
   audio.preload = "auto";
-  audio.addEventListener("error", () => {
+  audio.onerror = () => {
     showError(trialError,
       "音声ファイルを読み込めませんでした: " + stim.file +
       "\nファイルが存在するか、ローカルサーバー経由で開いているかをご確認ください。");
     playBtn.disabled = true;
-  });
-  audio.addEventListener("ended", () => {
+  };
+  audio.onended = () => {
     playBtn.textContent = allowReplay ? "▶ もう一度再生" : "▶ 再生済み";
     playBtn.disabled = !allowReplay;
     setResponseButtonsEnabled(true);
     playInfo.textContent = "聞こえたカテゴリを選んでください";
-  });
+  };
 }
 
 function playCurrentStimulus() {
@@ -500,8 +654,10 @@ function playCurrentStimulus() {
   if (p && typeof p.catch === "function") {
     p.catch((err) => {
       showError(trialError,
-        "音声を再生できませんでした。ブラウザの自動再生制限、または file:// 直開きによる制限の可能性があります。" +
-        "\n推奨: python -m http.server などのローカルサーバー経由で開いてください。");
+        "音声を再生できませんでした。" +
+        "\n・iPhone の方は本体側面の消音スイッチが OFF になっているかご確認ください。" +
+        "\n・イヤホン/ヘッドホンが正しく接続されているかご確認ください。" +
+        "\n・もう一度「再生」を押してお試しください。");
       playBtn.disabled = false;
       playInfo.textContent = "再生に失敗しました";
     });
@@ -534,12 +690,15 @@ function recordResponse(response) {
 function finishExperiment() {
   progressFill.style.width = "100%";
   if (audio) {
-    try { audio.pause(); } catch (e) {}
+    try { audio.pause(); audio.onended = null; audio.onerror = null; } catch (e) {}
     audio = null;
   }
+  releaseWakeLock();
   renderSummary();
   renderResultTable();
   renderCharts();
+  csvFallback.classList.add("hidden");
+  csvFallback.value = "";
   showScreen("result");
 }
 
@@ -671,7 +830,7 @@ function csvEscape(value) {
   return s;
 }
 
-function downloadCsv() {
+function buildCsv() {
   const headers = [
     "participantId", "trialNumber", "stimulusId", "file",
     "continuumStep", "label", "response", "reactionTimeMs",
@@ -681,7 +840,11 @@ function downloadCsv() {
   results.forEach((r) => {
     lines.push(headers.map((h) => csvEscape(r[h])).join(","));
   });
-  const csv = lines.join("\r\n");
+  return lines.join("\r\n");
+}
+
+function downloadCsv() {
+  const csv = buildCsv();
   const bom = "﻿";
   const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -694,15 +857,25 @@ function downloadCsv() {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+function showCsvText() {
+  csvFallback.value = buildCsv();
+  csvFallback.classList.remove("hidden");
+  csvFallback.focus();
+  csvFallback.select();
+}
+
 /* ============================================================
    初期化
    ============================================================ */
 startBtn.addEventListener("click", startExperiment);
+testSoundBtn.addEventListener("click", playTestBeep);
 playBtn.addEventListener("click", playCurrentStimulus);
 downloadBtn.addEventListener("click", downloadCsv);
+showCsvBtn.addEventListener("click", showCsvText);
 restartBtn.addEventListener("click", () => {
   participantInput.value = "";
   results = [];
+  releaseWakeLock();
   showScreen("setup");
 });
 participantInput.addEventListener("keydown", (e) => {

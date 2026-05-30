@@ -209,6 +209,114 @@
     color: #6e6e73;
     margin: 16px 0;
   }
+  /* === Config Panel === */
+  .config-banner {
+    background: #ff9500;
+    color: #fff;
+    padding: 8px 12px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .config-section {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 2px solid #e8e8ed;
+  }
+  .config-section:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+  .config-section h2 { margin: 0 0 12px; font-size: 18px; }
+  .config-row { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 12px; }
+  @media (min-width: 700px) { .config-row.two { grid-template-columns: 1fr 1fr; gap: 16px; } }
+  .config-row label { font-size: 14px; color: #6e6e73; font-weight: 500; margin-bottom: 4px; }
+  .config-row input, .config-row select, .config-row textarea { font-size: 14px; padding: 10px 12px; }
+  .stim-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  .stim-table th, .stim-table td {
+    padding: 4px;
+    border-bottom: 1px solid #e8e8ed;
+    text-align: left;
+  }
+  .stim-table input {
+    width: 100%;
+    font-size: 13px;
+    padding: 6px 8px;
+    border: 1px solid #d2d2d7;
+    border-radius: 6px;
+    background: #fff;
+  }
+  .stim-table .col-step { width: 70px; }
+  .stim-table .col-action { width: 50px; text-align: center; }
+  .stim-row-del {
+    background: none;
+    color: #b00020;
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #ffd0d0;
+  }
+  .stim-row-del:hover { background: #ffe9e9; }
+  .config-actions {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;
+  }
+  .config-actions button { flex: 1 1 140px; }
+  .config-status {
+    text-align: center;
+    font-size: 13px;
+    color: #6e6e73;
+    margin-top: 8px;
+    min-height: 1.2em;
+  }
+  .paradigm-help {
+    background: #eef6ff;
+    border-left: 4px solid #0071e3;
+    padding: 10px 14px;
+    font-size: 13px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+  /* Rating scale (1-N) */
+  .rating-scale {
+    display: flex;
+    gap: 6px;
+    justify-content: space-between;
+    margin-top: 12px;
+  }
+  .rating-scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #6e6e73;
+    margin-top: 6px;
+  }
+  .rating-btn {
+    flex: 1;
+    background: #fff;
+    color: #1d1d1f;
+    border: 2px solid #d2d2d7;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 16px 0;
+    min-height: 60px;
+  }
+  .rating-btn:hover:not(:disabled) { border-color: #0071e3; background: #f0f7ff; }
+  .rating-btn:disabled { opacity: 0.4; }
+  .ax-pair-display {
+    text-align: center;
+    margin: 16px 0;
+    font-size: 36px;
+    color: #6e6e73;
+    font-weight: 700;
+    min-height: 60px;
+  }
+  .ax-pair-display.playing-1 .seg1 { color: #0071e3; }
+  .ax-pair-display.playing-2 .seg2 { color: #0071e3; }
+  .ax-pair-display.playing-3 .seg3 { color: #0071e3; }
   input[type="text"]:focus {
     outline: none;
     border-color: #0071e3;
@@ -401,9 +509,177 @@
 <body>
 <div class="container">
 
+  <!-- 設定パネル画面 (実験者用、?config=1 でアクセス) -->
+  <section id="screen-config" class="hidden">
+    <div class="config-banner">⚙ 実験者用 設定パネル（被験者には表示されません）</div>
+    <h1 style="margin-top:16px;">実験仕様の編集</h1>
+
+    <div class="card">
+      <div class="config-section">
+        <h2>パラダイム</h2>
+        <div class="paradigm-help" id="paradigmHelp"></div>
+        <div class="config-row two">
+          <div>
+            <label>パラダイム種別</label>
+            <select id="cfgParadigm">
+              <option value="identification">Identification（1刺激→N肉点）</option>
+              <option value="ax">AX discrimination（2刺激→same/different）</option>
+              <option value="axb">AXB discrimination（3刺激→AかB）</option>
+              <option value="rating">Rating（1刺激→N段階評価）</option>
+            </select>
+          </div>
+          <div>
+            <label>実験名（experimentName）</label>
+            <input type="text" id="cfgExperimentName">
+          </div>
+        </div>
+        <div class="config-row">
+          <div>
+            <label>データ送信先 URL（Apps Script Web App）</label>
+            <input type="text" id="cfgDataServerUrl">
+          </div>
+        </div>
+      </div>
+
+      <div class="config-section" id="cfgResponseSection">
+        <h2>回答カテゴリ</h2>
+        <div class="config-row" data-paradigm="identification">
+          <div>
+            <label>回答ボタン（カンマ区切り）</label>
+            <input type="text" id="cfgResponseOptions" placeholder="pie, buy">
+          </div>
+          <div>
+            <label>グラフの対象応答</label>
+            <input type="text" id="cfgTargetResponse" placeholder="buy">
+          </div>
+        </div>
+        <div class="config-row two" data-paradigm="ax">
+          <div>
+            <label>「同じ」ボタンのラベル</label>
+            <input type="text" id="cfgAxSame" placeholder="同じ">
+          </div>
+          <div>
+            <label>「違う」ボタンのラベル</label>
+            <input type="text" id="cfgAxDiff" placeholder="違う">
+          </div>
+        </div>
+        <div class="config-row two" data-paradigm="axb">
+          <div>
+            <label>「A」ボタンのラベル</label>
+            <input type="text" id="cfgAxbA" placeholder="A に似ている">
+          </div>
+          <div>
+            <label>「B」ボタンのラベル</label>
+            <input type="text" id="cfgAxbB" placeholder="B に似ている">
+          </div>
+        </div>
+        <div class="config-row two" data-paradigm="rating">
+          <div>
+            <label>評価の最小値</label>
+            <input type="number" id="cfgRatingMin" value="1">
+          </div>
+          <div>
+            <label>評価の最大値</label>
+            <input type="number" id="cfgRatingMax" value="7">
+          </div>
+          <div>
+            <label>最小値のラベル</label>
+            <input type="text" id="cfgRatingMinLabel" placeholder="例: 全く pie">
+          </div>
+          <div>
+            <label>最大値のラベル</label>
+            <input type="text" id="cfgRatingMaxLabel" placeholder="例: 完全に buy">
+          </div>
+        </div>
+      </div>
+
+      <div class="config-section">
+        <h2>試行構造</h2>
+        <div class="config-row two">
+          <div>
+            <label>各刺激の主試行での提示回数</label>
+            <input type="number" id="cfgReps" min="1" max="50">
+          </div>
+          <div>
+            <label>練習試行数</label>
+            <input type="number" id="cfgPractice" min="0" max="50">
+          </div>
+          <div>
+            <label>休憩を入れる試行数（0で休憩なし）</label>
+            <input type="number" id="cfgBreak" min="0" max="500">
+          </div>
+          <div>
+            <label>注視点（+）の表示時間 ms</label>
+            <input type="number" id="cfgFixation" min="0" max="5000" step="100">
+          </div>
+          <div>
+            <label>試行間間隔 ITI ms</label>
+            <input type="number" id="cfgIti" min="0" max="5000" step="100">
+          </div>
+          <div data-paradigm="ax,axb">
+            <label>刺激間間隔 ISI ms（AX/AXB のみ）</label>
+            <input type="number" id="cfgIsi" min="0" max="5000" step="100">
+          </div>
+        </div>
+        <label class="checkbox-field">
+          <input type="checkbox" id="cfgRandomize">
+          <span>主試行の提示順をランダム化する</span>
+        </label>
+        <label class="checkbox-field" data-paradigm="identification,ax,axb">
+          <input type="checkbox" id="cfgCounterbalance">
+          <span>回答ボタンの左右配置をセッションごとにランダム化する</span>
+        </label>
+        <label class="checkbox-field">
+          <input type="checkbox" id="cfgAllowReplay">
+          <span>同じ試行内での再再生を許可する</span>
+        </label>
+      </div>
+
+      <div class="config-section">
+        <h2>刺激リスト</h2>
+        <div class="paradigm-help" id="stimuliHelp"></div>
+        <div style="overflow-x: auto;">
+          <table class="stim-table" id="cfgStimTable">
+            <thead id="cfgStimHead"></thead>
+            <tbody id="cfgStimBody"></tbody>
+          </table>
+        </div>
+        <button class="btn-secondary" id="cfgAddStimBtn" style="margin-top: 8px;">+ 刺激を追加</button>
+      </div>
+
+      <div class="config-section">
+        <h2>文言</h2>
+        <div class="config-row">
+          <div>
+            <label>同意画面のタイトル</label>
+            <input type="text" id="cfgConsentTitle">
+          </div>
+          <div>
+            <label>同意画面の本文（HTML 可、空でデフォルト）</label>
+            <textarea id="cfgConsentBody" style="min-height: 120px;"></textarea>
+          </div>
+          <div>
+            <label>教示画面の本文（HTML 可、空でデフォルト）</label>
+            <textarea id="cfgInstructionsBody" style="min-height: 120px;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="config-actions">
+        <button class="btn-primary" id="cfgSaveBtn">保存して実験を開始</button>
+        <button class="btn-secondary" id="cfgExportBtn">JSON 書き出し</button>
+        <button class="btn-secondary" id="cfgImportBtn">JSON 読み込み</button>
+        <input type="file" id="cfgImportFile" accept="application/json" style="display:none">
+        <button class="btn-secondary" id="cfgCopyUrlBtn">共有 URL をコピー</button>
+        <button class="btn-secondary" id="cfgResetBtn">デフォルトに戻す</button>
+      </div>
+      <div class="config-status" id="cfgStatus"></div>
+    </div>
+  </section>
+
   <!-- 同意・概要画面 -->
-  <section id="screen-consent">
-    <h1>音声知覚タスク</h1>
+  <section id="screen-consent" class="hidden">
+    <h1 id="consentTitle">音声知覚タスク</h1>
     <div class="card">
       <h2 style="margin-top:0;">実験の概要</h2>
       <p>本実験では、英単語の発音を聞いて、それが「<strong>pie</strong>」か「<strong>buy</strong>」のどちらに聞こえるかを答えていただきます。</p>
@@ -630,10 +906,24 @@
       <div class="fixation hidden" id="fixationDisplay">+</div>
       <div class="iti hidden" id="itiDisplay">・・・</div>
 
+      <!-- AX / AXB 専用: どの刺激が再生中かを示す -->
+      <div class="ax-pair-display hidden" id="axPairDisplay"></div>
+
       <button class="btn-play hidden" id="playBtn">▶ 再生</button>
       <div class="play-info" id="playInfo">画面の表示に従ってください</div>
 
+      <!-- Identification / AX / AXB の回答ボタン -->
       <div class="response-grid" id="responseGrid"></div>
+
+      <!-- Rating の評価スケール -->
+      <div class="hidden" id="ratingArea">
+        <div class="rating-scale" id="ratingScale"></div>
+        <div class="rating-scale-labels">
+          <span id="ratingMinLabel"></span>
+          <span id="ratingMaxLabel"></span>
+        </div>
+      </div>
+
       <div class="error" id="trialError"></div>
     </div>
   </section>
@@ -680,41 +970,95 @@
 
 <script>
 /* ============================================================
-   設定（編集可能）
+   設定（DEFAULT_CONFIG）
+   ----
+   実際の実験設定は CONFIG に入る。URL に ?config=1 を付けると
+   実験者用の設定パネルが開き、ここで全項目を編集できる。
+   設定は localStorage に自動保存・JSON でエクスポート/インポート可能。
    ============================================================ */
-const responseOptions = ["pie", "buy"];
-const targetResponseForGraph = "buy";
-const randomizeTrials = true;
-const allowReplay = false;                 // 本格実験では再再生は不可が標準
+const DEFAULT_CONFIG = {
+  paradigm: "identification",           // "identification" | "ax" | "axb" | "rating"
+  experimentName: "identification_pie_buy",
+  dataServerUrl: "https://script.google.com/macros/s/AKfycbymD6t3TiqaPsBTm5RPVSV1fvuqg7BgD_yU3fYUg4cQzgfaUhCxxxbIb_lKRM2ICg1v/exec",
 
-const repetitionsPerStimulus = 6;          // 各刺激の主試行での提示回数
-const numPracticeTrials = 6;               // 練習試行数 (端点刺激で実施)
-const breakAfterNTrials = 33;              // この試行数経過で休憩を入れる
-const counterbalanceResponseOrder = true;  // 回答ボタンの左右をランダム化
-const fixationDurationMs = 500;            // 注視点の表示時間
-const interTrialIntervalMs = 500;          // 回答後の空白時間 (ITI)
+  // 回答 (paradigm 別)
+  responseOptions: ["pie", "buy"],      // identification 用
+  targetResponseForGraph: "buy",        // identification のグラフ対象
+  axLabels: { same: "同じ", different: "違う" },
+  axbLabels: { A: "A に似ている", B: "B に似ている" },
+  ratingScale: { min: 1, max: 7, minLabel: "とても pie", maxLabel: "とても buy" },
 
-// 反応データの送信先（Google Apps Script Web App の URL）
-const dataServerUrl = "https://script.google.com/macros/s/AKfycbymD6t3TiqaPsBTm5RPVSV1fvuqg7BgD_yU3fYUg4cQzgfaUhCxxxbIb_lKRM2ICg1v/exec";
-const experimentName = "identification_pie_buy";
+  // 試行構造
+  repetitionsPerStimulus: 6,
+  numPracticeTrials: 6,
+  breakAfterNTrials: 33,
+  fixationDurationMs: 500,
+  interTrialIntervalMs: 500,
+  isiMs: 500,                            // AX / AXB の刺激間間隔
+  randomizeTrials: true,
+  counterbalanceResponseOrder: true,
+  allowReplay: false,
+
+  // 刺激リスト (paradigm 別)
+  stimuli: [
+    { id: "stim01", file: "stimuli/stim01.wav", continuumStep: 1,  label: "step1"  },
+    { id: "stim02", file: "stimuli/stim02.wav", continuumStep: 2,  label: "step2"  },
+    { id: "stim03", file: "stimuli/stim03.wav", continuumStep: 3,  label: "step3"  },
+    { id: "stim04", file: "stimuli/stim04.wav", continuumStep: 4,  label: "step4"  },
+    { id: "stim05", file: "stimuli/stim05.wav", continuumStep: 5,  label: "step5"  },
+    { id: "stim06", file: "stimuli/stim06.wav", continuumStep: 6,  label: "step6"  },
+    { id: "stim07", file: "stimuli/stim07.wav", continuumStep: 7,  label: "step7"  },
+    { id: "stim08", file: "stimuli/stim08.wav", continuumStep: 8,  label: "step8"  },
+    { id: "stim09", file: "stimuli/stim09.wav", continuumStep: 9,  label: "step9"  },
+    { id: "stim10", file: "stimuli/stim10.wav", continuumStep: 10, label: "step10" },
+    { id: "stim11", file: "stimuli/stim11.wav", continuumStep: 11, label: "step11" }
+  ],
+
+  // 文言 (空文字なら paradigm 別のデフォルトを使う)
+  consentTitle: "音声知覚タスク",
+  consentBody: "",      // 空ならビルトイン
+  instructionsBody: ""  // 空ならビルトイン
+};
+
+let CONFIG = loadConfigFromStorage() || JSON.parse(JSON.stringify(DEFAULT_CONFIG));
 
 /* ============================================================
-   刺激リスト（編集可能）
+   設定の永続化 (localStorage / JSON / URL ハッシュ)
    ============================================================ */
-// 11 ステップの連続体。本実験では各刺激を repetitionsPerStimulus 回ずつ提示する。
-const stimuli = [
-  { id: "stim01", file: "stimuli/stim01.wav", continuumStep: 1,  label: "step1"  },
-  { id: "stim02", file: "stimuli/stim02.wav", continuumStep: 2,  label: "step2"  },
-  { id: "stim03", file: "stimuli/stim03.wav", continuumStep: 3,  label: "step3"  },
-  { id: "stim04", file: "stimuli/stim04.wav", continuumStep: 4,  label: "step4"  },
-  { id: "stim05", file: "stimuli/stim05.wav", continuumStep: 5,  label: "step5"  },
-  { id: "stim06", file: "stimuli/stim06.wav", continuumStep: 6,  label: "step6"  },
-  { id: "stim07", file: "stimuli/stim07.wav", continuumStep: 7,  label: "step7"  },
-  { id: "stim08", file: "stimuli/stim08.wav", continuumStep: 8,  label: "step8"  },
-  { id: "stim09", file: "stimuli/stim09.wav", continuumStep: 9,  label: "step9"  },
-  { id: "stim10", file: "stimuli/stim10.wav", continuumStep: 10, label: "step10" },
-  { id: "stim11", file: "stimuli/stim11.wav", continuumStep: 11, label: "step11" }
-];
+const CONFIG_STORAGE_KEY = "ident_app_config_v1";
+
+function loadConfigFromStorage() {
+  try {
+    // URL ハッシュ #config=<base64> が最優先
+    const m = location.hash.match(/#config=([^&]+)/);
+    if (m) {
+      const json = decodeURIComponent(escape(atob(m[1])));
+      const cfg = JSON.parse(json);
+      return mergeWithDefault(cfg);
+    }
+    const raw = localStorage.getItem(CONFIG_STORAGE_KEY);
+    if (!raw) return null;
+    return mergeWithDefault(JSON.parse(raw));
+  } catch (e) { return null; }
+}
+
+function saveConfigToStorage(cfg) {
+  try { localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(cfg)); } catch (e) {}
+}
+
+function mergeWithDefault(partial) {
+  const out = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  Object.keys(partial || {}).forEach((k) => {
+    if (k in out) out[k] = partial[k];
+  });
+  return out;
+}
+
+function exportConfigUrl() {
+  const json = JSON.stringify(CONFIG);
+  const b64 = btoa(unescape(encodeURIComponent(json)));
+  return location.origin + location.pathname + "#config=" + encodeURIComponent(b64);
+}
 
 /* ============================================================
    状態
@@ -792,7 +1136,7 @@ const summaryGrid  = document.getElementById("summaryGrid");
 const setupError   = document.getElementById("setupError");
 const trialError   = document.getElementById("trialError");
 
-targetLabelEl.textContent = targetResponseForGraph;
+targetLabelEl.textContent = CONFIG.targetResponseForGraph;
 
 /* ============================================================
    ユーティリティ
@@ -812,19 +1156,22 @@ function sleep(ms) {
 
 function buildMainTrialList() {
   let all = [];
-  for (let i = 0; i < repetitionsPerStimulus; i++) {
-    all = all.concat(stimuli);
+  for (let i = 0; i < CONFIG.repetitionsPerStimulus; i++) {
+    all = all.concat(CONFIG.stimuli);
   }
-  return randomizeTrials ? shuffle(all) : all;
+  return CONFIG.randomizeTrials ? shuffle(all) : all;
 }
 
 function buildPracticeTrialList() {
-  // 端点 (step 1 と最大ステップ) を使った練習
-  const minStep = Math.min.apply(null, stimuli.map((s) => s.continuumStep));
-  const maxStep = Math.max.apply(null, stimuli.map((s) => s.continuumStep));
-  const endpoints = stimuli.filter((s) => s.continuumStep === minStep || s.continuumStep === maxStep);
+  if (CONFIG.numPracticeTrials <= 0) return [];
+  const steps = CONFIG.stimuli.map((s) => Number(s.continuumStep)).filter((n) => !isNaN(n));
+  if (steps.length === 0) return CONFIG.stimuli.slice(0, CONFIG.numPracticeTrials);
+  const minStep = Math.min.apply(null, steps);
+  const maxStep = Math.max.apply(null, steps);
+  const endpoints = CONFIG.stimuli.filter((s) => Number(s.continuumStep) === minStep || Number(s.continuumStep) === maxStep);
+  if (endpoints.length === 0) return CONFIG.stimuli.slice(0, CONFIG.numPracticeTrials);
   const out = [];
-  for (let i = 0; i < numPracticeTrials; i++) {
+  for (let i = 0; i < CONFIG.numPracticeTrials; i++) {
     out.push(endpoints[i % endpoints.length]);
   }
   return shuffle(out);
@@ -888,10 +1235,16 @@ function playTestBeep() {
   } catch (e) { /* noop */ }
 }
 
+function stimulusFiles(stim) {
+  return [stim.file, stim.fileA, stim.fileX, stim.fileB].filter(Boolean);
+}
+
 function preloadAllAudio(list) {
   // 同じファイルを複数試行で使う場合に備え、ファイルパス単位でロード
   audioMap = new Map();
-  const uniqueFiles = Array.from(new Set(list.map((s) => s.file)));
+  const fileSet = new Set();
+  list.forEach((s) => stimulusFiles(s).forEach((f) => fileSet.add(f)));
+  const uniqueFiles = Array.from(fileSet);
   const total = uniqueFiles.length;
   let done = 0;
   loadingFill.style.width = "0%";
@@ -942,16 +1295,27 @@ function formatFilenameDate(d) {
     + "_" + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
 }
 
-function setResponseButtonsEnabled(enabled) {
-  const btns = responseGrid.querySelectorAll("button");
-  btns.forEach((b) => { b.disabled = !enabled; });
-}
-
 /* ============================================================
    実験フロー
    ============================================================ */
+function paradigmResponseOptions() {
+  if (CONFIG.paradigm === "identification") return CONFIG.responseOptions.slice();
+  if (CONFIG.paradigm === "ax")             return [CONFIG.axLabels.same, CONFIG.axLabels.different];
+  if (CONFIG.paradigm === "axb")            return [CONFIG.axbLabels.A, CONFIG.axbLabels.B];
+  return [];
+}
+
 function buildResponseButtons() {
   responseGrid.innerHTML = "";
+  document.getElementById("ratingArea").classList.add("hidden");
+
+  if (CONFIG.paradigm === "rating") {
+    responseGrid.classList.add("hidden");
+    buildRatingScale();
+    return;
+  }
+
+  responseGrid.classList.remove("hidden");
   displayResponseOptions.forEach((opt) => {
     const btn = document.createElement("button");
     btn.className = "btn-response";
@@ -960,6 +1324,30 @@ function buildResponseButtons() {
     btn.addEventListener("click", () => recordResponse(opt));
     responseGrid.appendChild(btn);
   });
+}
+
+function buildRatingScale() {
+  const ra = document.getElementById("ratingArea");
+  const scale = document.getElementById("ratingScale");
+  scale.innerHTML = "";
+  const min = CONFIG.ratingScale.min;
+  const max = CONFIG.ratingScale.max;
+  for (let i = min; i <= max; i++) {
+    const btn = document.createElement("button");
+    btn.className = "rating-btn";
+    btn.textContent = i;
+    btn.disabled = true;
+    btn.addEventListener("click", () => recordResponse(i));
+    scale.appendChild(btn);
+  }
+  document.getElementById("ratingMinLabel").textContent = CONFIG.ratingScale.minLabel || min;
+  document.getElementById("ratingMaxLabel").textContent = CONFIG.ratingScale.maxLabel || max;
+  ra.classList.remove("hidden");
+}
+
+function setResponseButtonsEnabled(enabled) {
+  responseGrid.querySelectorAll("button").forEach((b) => { b.disabled = !enabled; });
+  document.querySelectorAll("#ratingScale button").forEach((b) => { b.disabled = !enabled; });
 }
 
 function generateSessionId() {
@@ -1027,12 +1415,15 @@ async function instructionsToPractice() {
   practiceList = buildPracticeTrialList();
   mainList = buildMainTrialList();
 
-  if (counterbalanceResponseOrder && Math.random() < 0.5) {
-    displayResponseOptions = responseOptions.slice().reverse();
-  } else {
-    displayResponseOptions = responseOptions.slice();
+  // セッション開始時に左右配置を一度決定（練習・本試行で一貫させる）
+  let opts = paradigmResponseOptions();
+  if (CONFIG.paradigm !== "rating" && CONFIG.counterbalanceResponseOrder && Math.random() < 0.5) {
+    opts = opts.slice().reverse();
   }
-  responseButtonOrder = displayResponseOptions.join("|");
+  displayResponseOptions = opts;
+  responseButtonOrder = CONFIG.paradigm === "rating"
+    ? "rating:" + CONFIG.ratingScale.min + "-" + CONFIG.ratingScale.max
+    : opts.join("|");
 
   results = [];
   focusBlurCount = 0;
@@ -1062,6 +1453,21 @@ function startBlock(practice) {
   }
 }
 
+// 1 ファイルを Promise で再生
+function playFile(file) {
+  return new Promise((resolve, reject) => {
+    const a = audioMap.get(file) || new Audio(file);
+    a.onended = () => { a.onended = null; a.onerror = null; resolve(); };
+    a.onerror = () => { a.onended = null; a.onerror = null; reject(new Error("audio load error: " + file)); };
+    try { a.currentTime = 0; } catch (e) {}
+    audio = a;
+    const p = a.play();
+    if (p && typeof p.catch === "function") {
+      p.catch(reject);
+    }
+  });
+}
+
 async function runTrial() {
   clearError(trialError);
   const n = currentTrialIndex + 1;
@@ -1075,66 +1481,113 @@ async function runTrial() {
   setResponseButtonsEnabled(false);
   playBtn.classList.add("hidden");
   itiDisplay.classList.add("hidden");
+  axPairDisplay.classList.add("hidden");
   playInfo.textContent = "";
 
   // 注視点 (fixation)
   fixationDisplay.classList.remove("hidden");
-  await sleep(fixationDurationMs);
+  await sleep(CONFIG.fixationDurationMs);
   fixationDisplay.classList.add("hidden");
 
-  // 音声準備
-  if (audio) {
-    try { audio.pause(); audio.onended = null; audio.onerror = null; } catch (e) {}
-  }
-  audio = audioMap.get(stim.file) || new Audio(stim.file);
-  audio.preload = "auto";
-  audio.onerror = () => {
-    showError(trialError, "音声を読み込めませんでした: " + stim.file);
-    playBtn.classList.remove("hidden");
-    playBtn.disabled = false;
-    playInfo.textContent = "「再生」を押してください";
-  };
-  audio.onended = () => {
-    setResponseButtonsEnabled(true);
-    playInfo.textContent = "聞こえた単語を選んでください";
-  };
-
-  // 自動再生を試みる; iOS で blocked された場合は再生ボタンを表示
-  trialFirstPlayTime = performance.now();
-  playCount = 1;
-  playInfo.textContent = "再生中…";
   try {
-    if (audio.currentTime !== 0) audio.currentTime = 0;
-  } catch (e) {}
-  const p = audio.play();
-  if (p && typeof p.catch === "function") {
-    p.catch(() => {
-      // ジェスチャー必要: 再生ボタンを出して待つ
+    if (CONFIG.paradigm === "identification" || CONFIG.paradigm === "rating") {
+      await runSingleStimulusTrial(stim);
+    } else if (CONFIG.paradigm === "ax") {
+      await runAXTrial(stim);
+    } else if (CONFIG.paradigm === "axb") {
+      await runAXBTrial(stim);
+    }
+  } catch (err) {
+    // 自動再生が拒否された場合は手動再生に降格
+    if (String(err).indexOf("NotAllowed") >= 0 || String(err).indexOf("audio load") < 0) {
       playBtn.classList.remove("hidden");
       playBtn.disabled = false;
       playInfo.textContent = "「再生」を押してください";
-      playCount = 0;
-      trialFirstPlayTime = 0;
-    });
+      currentManualStim = stim;
+    } else {
+      showError(trialError, "音声を読み込めませんでした");
+    }
   }
 }
 
+async function runSingleStimulusTrial(stim) {
+  playInfo.textContent = "再生中…";
+  playCount = 1;
+  await playFile(stim.file);
+  trialFirstPlayTime = performance.now();
+  setResponseButtonsEnabled(true);
+  playInfo.textContent = CONFIG.paradigm === "rating"
+    ? "聞こえた音を評価してください"
+    : "聞こえた音を選んでください";
+}
+
+async function runAXTrial(stim) {
+  axPairDisplay.classList.remove("hidden");
+  axPairDisplay.innerHTML = '<span class="seg1">A</span> &nbsp; <span class="seg2">X</span>';
+  playInfo.textContent = "再生中…";
+  playCount = 1;
+
+  axPairDisplay.classList.add("playing-1");
+  await playFile(stim.fileA);
+  axPairDisplay.classList.remove("playing-1");
+
+  await sleep(CONFIG.isiMs);
+
+  axPairDisplay.classList.add("playing-2");
+  await playFile(stim.fileX);
+  axPairDisplay.classList.remove("playing-2");
+
+  trialFirstPlayTime = performance.now();
+  setResponseButtonsEnabled(true);
+  playInfo.textContent = "A と X は同じですか、違いますか？";
+}
+
+async function runAXBTrial(stim) {
+  axPairDisplay.classList.remove("hidden");
+  axPairDisplay.innerHTML = '<span class="seg1">A</span> &nbsp; <span class="seg2">X</span> &nbsp; <span class="seg3">B</span>';
+  playInfo.textContent = "再生中…";
+  playCount = 1;
+
+  axPairDisplay.classList.add("playing-1");
+  await playFile(stim.fileA);
+  axPairDisplay.classList.remove("playing-1");
+
+  await sleep(CONFIG.isiMs);
+
+  axPairDisplay.classList.add("playing-2");
+  await playFile(stim.fileX);
+  axPairDisplay.classList.remove("playing-2");
+
+  await sleep(CONFIG.isiMs);
+
+  axPairDisplay.classList.add("playing-3");
+  await playFile(stim.fileB);
+  axPairDisplay.classList.remove("playing-3");
+
+  trialFirstPlayTime = performance.now();
+  setResponseButtonsEnabled(true);
+  playInfo.textContent = "X は A と B のどちらに似ていますか？";
+}
+
+let currentManualStim = null;
 function manualPlay() {
-  if (!audio) return;
+  // 自動再生失敗時のフォールバック (Identification/Rating のみ)
+  if (!currentManualStim) return;
   clearError(trialError);
-  if (playCount === 0) trialFirstPlayTime = performance.now();
-  playCount += 1;
   playBtn.disabled = true;
   playInfo.textContent = "再生中…";
-  try { audio.currentTime = 0; } catch (e) {}
-  const p = audio.play();
-  if (p && typeof p.catch === "function") {
-    p.catch(() => {
-      showError(trialError, "音声を再生できませんでした。もう一度「再生」を押してみてください。");
-      playBtn.disabled = false;
-      playInfo.textContent = "再生に失敗しました";
-    });
-  }
+  playFile(currentManualStim.file).then(() => {
+    trialFirstPlayTime = performance.now();
+    playBtn.classList.add("hidden");
+    setResponseButtonsEnabled(true);
+    playInfo.textContent = CONFIG.paradigm === "rating"
+      ? "聞こえた音を評価してください"
+      : "聞こえた音を選んでください";
+    currentManualStim = null;
+  }).catch(() => {
+    showError(trialError, "音声を再生できませんでした。もう一度押してください。");
+    playBtn.disabled = false;
+  });
 }
 
 async function recordResponse(response) {
@@ -1142,26 +1595,48 @@ async function recordResponse(response) {
   const stim = trialList[currentTrialIndex];
   setResponseButtonsEnabled(false);
   playBtn.classList.add("hidden");
+  axPairDisplay.classList.add("hidden");
 
   if (!isPractice) {
-    results.push({
+    // パラダイム別に記録項目が異なる
+    const row = {
       sessionId: sessionId,
       trialNumber: currentTrialIndex + 1,
+      paradigm: CONFIG.paradigm,
       stimulusId: stim.id,
-      file: stim.file,
       continuumStep: stim.continuumStep,
       label: stim.label,
-      response: response,
       reactionTimeMs: rt,
       playCount: playCount,
       timestamp: formatTimestamp(new Date())
-    });
+    };
+    if (CONFIG.paradigm === "identification") {
+      row.file = stim.file;
+      row.response = response;
+    } else if (CONFIG.paradigm === "rating") {
+      row.file = stim.file;
+      row.rating = response;
+    } else if (CONFIG.paradigm === "ax") {
+      row.fileA = stim.fileA;
+      row.fileX = stim.fileX;
+      row.correctAnswer = stim.correctAnswer || "";
+      row.response = response;
+      row.isCorrect = stim.correctAnswer ? (response === correctLabelFor(stim) ? 1 : 0) : "";
+    } else if (CONFIG.paradigm === "axb") {
+      row.fileA = stim.fileA;
+      row.fileX = stim.fileX;
+      row.fileB = stim.fileB;
+      row.correctAnswer = stim.correctAnswer || "";
+      row.response = response;
+      row.isCorrect = stim.correctAnswer ? (response === correctLabelFor(stim) ? 1 : 0) : "";
+    }
+    results.push(row);
   }
 
   // ITI: 短いブランク
   playInfo.textContent = "";
   itiDisplay.classList.remove("hidden");
-  await sleep(interTrialIntervalMs);
+  await sleep(CONFIG.interTrialIntervalMs);
   itiDisplay.classList.add("hidden");
 
   currentTrialIndex++;
@@ -1176,13 +1651,27 @@ async function recordResponse(response) {
   }
 
   // 主試行の中間で休憩
-  if (!isPractice && currentTrialIndex === breakAfterNTrials) {
+  if (!isPractice && CONFIG.breakAfterNTrials > 0 && currentTrialIndex === CONFIG.breakAfterNTrials) {
     breakProgress.textContent = currentTrialIndex;
+    document.querySelector("#screen-break .break-counter").innerHTML =
+      "<strong>" + currentTrialIndex + "</strong> / " + trialList.length + " 試行 完了";
     showScreen("break");
     return;
   }
 
   runTrial();
+}
+
+function correctLabelFor(stim) {
+  // stim.correctAnswer ("same"/"different" or "A"/"B") を実際の表示ラベルに対応付ける
+  if (CONFIG.paradigm === "ax") {
+    if (stim.correctAnswer === "same") return CONFIG.axLabels.same;
+    if (stim.correctAnswer === "different") return CONFIG.axLabels.different;
+  } else if (CONFIG.paradigm === "axb") {
+    if (stim.correctAnswer === "A") return CONFIG.axbLabels.A;
+    if (stim.correctAnswer === "B") return CONFIG.axbLabels.B;
+  }
+  return "";
 }
 
 async function finishExperiment() {
@@ -1208,7 +1697,7 @@ async function finishExperiment() {
 
 function buildPayload(extra) {
   return Object.assign({
-    experimentName: experimentName,
+    experimentName: CONFIG.experimentName,
     sessionId: sessionId,
     participant: participantInfo,
     responseButtonOrder: responseButtonOrder,
@@ -1221,13 +1710,13 @@ function buildPayload(extra) {
 }
 
 async function uploadOnce(payload, timeoutMs) {
-  if (!dataServerUrl) {
-    return { ok: false, error: "dataServerUrl が未設定" };
+  if (!CONFIG.dataServerUrl) {
+    return { ok: false, error: "CONFIG.dataServerUrl が未設定" };
   }
   const controller = new AbortController();
   const tid = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(dataServerUrl, {
+    const res = await fetch(CONFIG.dataServerUrl, {
       method: "POST",
       // Content-Type を指定しない (= text/plain 扱い) ことで CORS preflight を回避。
       // Google Apps Script は postData.contents を JSON として読める。
@@ -1271,13 +1760,13 @@ async function uploadWithRetry() {
 // バックグラウンドで実験者にエラーを通知する (fire-and-forget)。
 // keepalive: true でタブが閉じられても送信が続く。
 function sendErrorReport(originalError) {
-  if (!dataServerUrl) return;
+  if (!CONFIG.dataServerUrl) return;
   try {
     const body = JSON.stringify(buildPayload({
       errorReport: true,
       error: String(originalError || "unknown")
     }));
-    fetch(dataServerUrl, {
+    fetch(CONFIG.dataServerUrl, {
       method: "POST",
       body: body,
       keepalive: true,
@@ -1290,24 +1779,44 @@ function sendErrorReport(originalError) {
    結果表示
    ============================================================ */
 function renderSummary() {
-  const totalTrials = results.length;
-  const targetCount = results.filter((r) => r.response === targetResponseForGraph).length;
-  summaryGrid.innerHTML =
-    "<div><strong>完了した試行:</strong> " + totalTrials + " 試行</div>" +
-    "<div><strong>" + targetResponseForGraph + " と答えた割合:</strong> " +
-      (targetCount / totalTrials * 100).toFixed(1) + " %</div>";
+  const n = results.length;
+  let html = "<div><strong>完了した試行:</strong> " + n + " 試行</div>";
+
+  if (CONFIG.paradigm === "identification") {
+    const c = results.filter((r) => r.response === CONFIG.targetResponseForGraph).length;
+    html += "<div><strong>" + CONFIG.targetResponseForGraph + " と答えた割合:</strong> " +
+            (c / n * 100).toFixed(1) + " %</div>";
+  } else if (CONFIG.paradigm === "rating") {
+    const mean = results.reduce((s, r) => s + Number(r.rating), 0) / n;
+    html += "<div><strong>平均評価:</strong> " + mean.toFixed(2) + "</div>";
+  } else if (CONFIG.paradigm === "ax" || CONFIG.paradigm === "axb") {
+    const correct = results.filter((r) => r.isCorrect === 1).length;
+    const withAnswer = results.filter((r) => r.isCorrect === 0 || r.isCorrect === 1).length;
+    if (withAnswer > 0) {
+      html += "<div><strong>正答率:</strong> " + (correct / withAnswer * 100).toFixed(1) + " %</div>";
+    }
+  }
+  summaryGrid.innerHTML = html;
 }
 
 function aggregateByStep() {
   const map = new Map();
   results.forEach((r) => {
-    if (!map.has(r.continuumStep)) {
-      map.set(r.continuumStep, { count: 0, target: 0, rtSum: 0 });
+    const step = Number(r.continuumStep);
+    if (isNaN(step)) return;
+    if (!map.has(step)) {
+      map.set(step, { count: 0, target: 0, rtSum: 0, ratingSum: 0, correctSum: 0 });
     }
-    const agg = map.get(r.continuumStep);
+    const agg = map.get(step);
     agg.count += 1;
     agg.rtSum += r.reactionTimeMs;
-    if (r.response === targetResponseForGraph) agg.target += 1;
+    if (CONFIG.paradigm === "identification") {
+      if (r.response === CONFIG.targetResponseForGraph) agg.target += 1;
+    } else if (CONFIG.paradigm === "rating") {
+      agg.ratingSum += Number(r.rating);
+    } else if (CONFIG.paradigm === "ax" || CONFIG.paradigm === "axb") {
+      if (r.isCorrect === 1) agg.correctSum += 1;
+    }
   });
   const steps = Array.from(map.keys()).sort((a, b) => a - b);
   return steps.map((s) => {
@@ -1315,6 +1824,8 @@ function aggregateByStep() {
     return {
       step: s,
       targetRate: a.target / a.count,
+      meanRating: a.ratingSum / a.count,
+      accuracy: a.correctSum / a.count,
       meanRT: a.rtSum / a.count
     };
   });
@@ -1323,11 +1834,28 @@ function aggregateByStep() {
 function renderCharts() {
   const data = aggregateByStep();
   const labels = data.map((d) => d.step);
-  const rates  = data.map((d) => +d.targetRate.toFixed(3));
   const rts    = data.map((d) => Math.round(d.meanRT));
 
   if (chartResponse) chartResponse.destroy();
   if (chartRT) chartRT.destroy();
+
+  let primaryData = [];
+  let primaryLabel = "";
+  let yMin = 0, yMax = 1;
+  if (CONFIG.paradigm === "identification") {
+    primaryData = data.map((d) => +d.targetRate.toFixed(3));
+    primaryLabel = CONFIG.targetResponseForGraph + " 応答率";
+  } else if (CONFIG.paradigm === "rating") {
+    primaryData = data.map((d) => +d.meanRating.toFixed(2));
+    primaryLabel = "平均評価";
+    yMin = CONFIG.ratingScale.min;
+    yMax = CONFIG.ratingScale.max;
+  } else if (CONFIG.paradigm === "ax" || CONFIG.paradigm === "axb") {
+    primaryData = data.map((d) => +d.accuracy.toFixed(3));
+    primaryLabel = "正答率";
+  }
+
+  document.getElementById("targetLabel").textContent = primaryLabel;
 
   const ctx1 = document.getElementById("chartResponse").getContext("2d");
   chartResponse = new Chart(ctx1, {
@@ -1335,8 +1863,8 @@ function renderCharts() {
     data: {
       labels: labels,
       datasets: [{
-        label: targetResponseForGraph + " 応答率",
-        data: rates,
+        label: primaryLabel,
+        data: primaryData,
         borderColor: "#0071e3",
         backgroundColor: "rgba(0,113,227,0.15)",
         tension: 0.2,
@@ -1348,7 +1876,7 @@ function renderCharts() {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        y: { min: 0, max: 1, title: { display: true, text: "応答率" } },
+        y: { min: yMin, max: yMax, title: { display: true, text: primaryLabel } },
         x: { title: { display: true, text: "continuumStep" } }
       }
     }
@@ -1381,10 +1909,267 @@ function renderCharts() {
 }
 
 /* ============================================================
+   設定パネル
+   ============================================================ */
+const PARADIGM_INFO = {
+  identification: {
+    label: "Identification",
+    help: "1 試行に 1 つの刺激を提示し、被験者は N 個の回答カテゴリから 1 つを選ぶ。連続体上の音素境界・カテゴリ知覚の調査に用いる。",
+    stimSchema: ["id", "file", "continuumStep", "label"],
+    stimHelp: "刺激ごとに 1 行。file はアプリからの相対パス。continuumStep は連続体上の位置（整数推奨）。"
+  },
+  ax: {
+    label: "AX discrimination",
+    help: "2 つの刺激 A と X を連続提示し、「同じ」か「違う」かを判定させる。弁別能・境界の鋭さを調べる。",
+    stimSchema: ["id", "fileA", "fileX", "correctAnswer", "continuumStep", "label"],
+    stimHelp: "ペアごとに 1 行。correctAnswer は 'same' または 'different'。continuumStep はステップ間距離など分析用の値。"
+  },
+  axb: {
+    label: "AXB discrimination",
+    help: "3 つの刺激 A, X, B を連続提示し、X が A と B のどちらに似ているかを判定させる。3-stimulus 弁別タスク。",
+    stimSchema: ["id", "fileA", "fileX", "fileB", "correctAnswer", "continuumStep", "label"],
+    stimHelp: "トリプレットごとに 1 行。correctAnswer は 'A' または 'B'。"
+  },
+  rating: {
+    label: "Rating",
+    help: "1 試行に 1 つの刺激を提示し、N 段階のスケール（リッカートなど）で評価させる。カテゴリー典型性・自然さなどの評価に用いる。",
+    stimSchema: ["id", "file", "continuumStep", "label"],
+    stimHelp: "刺激ごとに 1 行。Identification と同じスキーマ。"
+  }
+};
+
+function openConfigPanel() {
+  hydrateConfigForm();
+  showScreen("config");
+}
+
+function hydrateConfigForm() {
+  document.getElementById("cfgParadigm").value = CONFIG.paradigm;
+  document.getElementById("cfgExperimentName").value = CONFIG.experimentName;
+  document.getElementById("cfgDataServerUrl").value = CONFIG.dataServerUrl;
+  document.getElementById("cfgResponseOptions").value = CONFIG.responseOptions.join(", ");
+  document.getElementById("cfgTargetResponse").value = CONFIG.targetResponseForGraph;
+  document.getElementById("cfgAxSame").value = CONFIG.axLabels.same;
+  document.getElementById("cfgAxDiff").value = CONFIG.axLabels.different;
+  document.getElementById("cfgAxbA").value = CONFIG.axbLabels.A;
+  document.getElementById("cfgAxbB").value = CONFIG.axbLabels.B;
+  document.getElementById("cfgRatingMin").value = CONFIG.ratingScale.min;
+  document.getElementById("cfgRatingMax").value = CONFIG.ratingScale.max;
+  document.getElementById("cfgRatingMinLabel").value = CONFIG.ratingScale.minLabel;
+  document.getElementById("cfgRatingMaxLabel").value = CONFIG.ratingScale.maxLabel;
+  document.getElementById("cfgReps").value = CONFIG.repetitionsPerStimulus;
+  document.getElementById("cfgPractice").value = CONFIG.numPracticeTrials;
+  document.getElementById("cfgBreak").value = CONFIG.breakAfterNTrials;
+  document.getElementById("cfgFixation").value = CONFIG.fixationDurationMs;
+  document.getElementById("cfgIti").value = CONFIG.interTrialIntervalMs;
+  document.getElementById("cfgIsi").value = CONFIG.isiMs;
+  document.getElementById("cfgRandomize").checked = CONFIG.randomizeTrials;
+  document.getElementById("cfgCounterbalance").checked = CONFIG.counterbalanceResponseOrder;
+  document.getElementById("cfgAllowReplay").checked = CONFIG.allowReplay;
+  document.getElementById("cfgConsentTitle").value = CONFIG.consentTitle;
+  document.getElementById("cfgConsentBody").value = CONFIG.consentBody;
+  document.getElementById("cfgInstructionsBody").value = CONFIG.instructionsBody;
+
+  refreshParadigmDependentFields();
+  renderStimTable();
+}
+
+function refreshParadigmDependentFields() {
+  const p = document.getElementById("cfgParadigm").value;
+  document.getElementById("paradigmHelp").textContent = PARADIGM_INFO[p].help;
+  document.getElementById("stimuliHelp").textContent = PARADIGM_INFO[p].stimHelp;
+  document.querySelectorAll("[data-paradigm]").forEach((el) => {
+    const list = el.dataset.paradigm.split(",");
+    el.style.display = list.includes(p) ? "" : "none";
+  });
+}
+
+function renderStimTable() {
+  const p = document.getElementById("cfgParadigm").value;
+  const schema = PARADIGM_INFO[p].stimSchema;
+  const head = document.getElementById("cfgStimHead");
+  const body = document.getElementById("cfgStimBody");
+  head.innerHTML = "<tr>" + schema.map((c) => "<th>" + c + "</th>").join("") + "<th class='col-action'></th></tr>";
+
+  // 新パラダイムでスキーマが変わった場合、空行で表示
+  const currentStim = CONFIG.stimuli.length > 0 ? CONFIG.stimuli : [];
+  body.innerHTML = "";
+  currentStim.forEach((stim, idx) => addStimRow(stim, idx));
+  if (currentStim.length === 0) addStimRow({}, 0);
+}
+
+function addStimRow(stim, idx) {
+  const p = document.getElementById("cfgParadigm").value;
+  const schema = PARADIGM_INFO[p].stimSchema;
+  const tr = document.createElement("tr");
+  schema.forEach((col) => {
+    const td = document.createElement("td");
+    const inp = document.createElement("input");
+    inp.type = (col === "continuumStep") ? "number" : "text";
+    if (col === "continuumStep") td.className = "col-step";
+    inp.value = stim[col] != null ? stim[col] : "";
+    inp.dataset.col = col;
+    td.appendChild(inp);
+    tr.appendChild(td);
+  });
+  const tdA = document.createElement("td");
+  tdA.className = "col-action";
+  const del = document.createElement("button");
+  del.className = "stim-row-del";
+  del.textContent = "×";
+  del.title = "削除";
+  del.onclick = () => { tr.remove(); };
+  tdA.appendChild(del);
+  tr.appendChild(tdA);
+  document.getElementById("cfgStimBody").appendChild(tr);
+}
+
+function collectConfigFromForm() {
+  const p = document.getElementById("cfgParadigm").value;
+  const schema = PARADIGM_INFO[p].stimSchema;
+  const stimuli = [];
+  document.querySelectorAll("#cfgStimBody tr").forEach((tr) => {
+    const obj = {};
+    let hasAny = false;
+    tr.querySelectorAll("input[data-col]").forEach((inp) => {
+      const v = inp.value.trim();
+      if (v !== "") hasAny = true;
+      if (inp.dataset.col === "continuumStep") {
+        obj[inp.dataset.col] = v === "" ? "" : Number(v);
+      } else {
+        obj[inp.dataset.col] = v;
+      }
+    });
+    if (hasAny) stimuli.push(obj);
+  });
+
+  const responseOptions = document.getElementById("cfgResponseOptions").value
+    .split(",").map((s) => s.trim()).filter(Boolean);
+
+  return {
+    paradigm: p,
+    experimentName: document.getElementById("cfgExperimentName").value.trim(),
+    dataServerUrl: document.getElementById("cfgDataServerUrl").value.trim(),
+    responseOptions: responseOptions.length > 0 ? responseOptions : DEFAULT_CONFIG.responseOptions,
+    targetResponseForGraph: document.getElementById("cfgTargetResponse").value.trim(),
+    axLabels: {
+      same: document.getElementById("cfgAxSame").value.trim() || "同じ",
+      different: document.getElementById("cfgAxDiff").value.trim() || "違う"
+    },
+    axbLabels: {
+      A: document.getElementById("cfgAxbA").value.trim() || "A に似ている",
+      B: document.getElementById("cfgAxbB").value.trim() || "B に似ている"
+    },
+    ratingScale: {
+      min: Number(document.getElementById("cfgRatingMin").value) || 1,
+      max: Number(document.getElementById("cfgRatingMax").value) || 7,
+      minLabel: document.getElementById("cfgRatingMinLabel").value.trim(),
+      maxLabel: document.getElementById("cfgRatingMaxLabel").value.trim()
+    },
+    repetitionsPerStimulus: Number(document.getElementById("cfgReps").value) || 1,
+    numPracticeTrials: Number(document.getElementById("cfgPractice").value) || 0,
+    breakAfterNTrials: Number(document.getElementById("cfgBreak").value) || 0,
+    fixationDurationMs: Number(document.getElementById("cfgFixation").value) || 0,
+    interTrialIntervalMs: Number(document.getElementById("cfgIti").value) || 0,
+    isiMs: Number(document.getElementById("cfgIsi").value) || 0,
+    randomizeTrials: document.getElementById("cfgRandomize").checked,
+    counterbalanceResponseOrder: document.getElementById("cfgCounterbalance").checked,
+    allowReplay: document.getElementById("cfgAllowReplay").checked,
+    stimuli: stimuli,
+    consentTitle: document.getElementById("cfgConsentTitle").value.trim(),
+    consentBody: document.getElementById("cfgConsentBody").value,
+    instructionsBody: document.getElementById("cfgInstructionsBody").value
+  };
+}
+
+function setConfigStatus(msg, isError) {
+  const el = document.getElementById("cfgStatus");
+  el.textContent = msg;
+  el.style.color = isError ? "#b00020" : "#34a853";
+  if (msg) setTimeout(() => { if (el.textContent === msg) el.textContent = ""; }, 4000);
+}
+
+function applyConfigToUI() {
+  // 同意画面のタイトルと本文を反映
+  if (CONFIG.consentTitle) {
+    const t = document.getElementById("consentTitle");
+    if (t) t.textContent = CONFIG.consentTitle;
+  }
+}
+
+/* ============================================================
    初期化
    ============================================================ */
 consentCheckbox.addEventListener("change", () => {
   toSetupBtn.disabled = !consentCheckbox.checked;
+});
+
+// === 設定パネルのイベント ===
+document.getElementById("cfgParadigm").addEventListener("change", () => {
+  // パラダイム切替時、CONFIG.stimuli を一時保存しつつスキーマを切り替える
+  CONFIG.stimuli = collectConfigFromForm().stimuli;
+  refreshParadigmDependentFields();
+  renderStimTable();
+});
+document.getElementById("cfgAddStimBtn").addEventListener("click", () => {
+  addStimRow({}, document.querySelectorAll("#cfgStimBody tr").length);
+});
+document.getElementById("cfgSaveBtn").addEventListener("click", () => {
+  CONFIG = collectConfigFromForm();
+  saveConfigToStorage(CONFIG);
+  applyConfigToUI();
+  setConfigStatus("保存しました。実験を開始します…");
+  setTimeout(() => {
+    location.href = location.pathname;  // ?config=1 を外して開きなおす
+  }, 600);
+});
+document.getElementById("cfgExportBtn").addEventListener("click", () => {
+  const cfg = collectConfigFromForm();
+  const blob = new Blob([JSON.stringify(cfg, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "experiment_config_" + (cfg.experimentName || "untitled") + ".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  setConfigStatus("JSON を書き出しました");
+});
+document.getElementById("cfgImportBtn").addEventListener("click", () => {
+  document.getElementById("cfgImportFile").click();
+});
+document.getElementById("cfgImportFile").addEventListener("change", (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const obj = JSON.parse(reader.result);
+      CONFIG = mergeWithDefault(obj);
+      hydrateConfigForm();
+      setConfigStatus("読み込みました");
+    } catch (err) {
+      setConfigStatus("JSON の解析に失敗しました: " + err.message, true);
+    }
+  };
+  reader.readAsText(f);
+});
+document.getElementById("cfgCopyUrlBtn").addEventListener("click", async () => {
+  CONFIG = collectConfigFromForm();
+  const url = exportConfigUrl();
+  try {
+    await navigator.clipboard.writeText(url);
+    setConfigStatus("共有 URL をクリップボードにコピーしました");
+  } catch (e) {
+    prompt("このURLをコピーしてください", url);
+  }
+});
+document.getElementById("cfgResetBtn").addEventListener("click", () => {
+  if (!confirm("すべての設定をデフォルトに戻しますか？")) return;
+  CONFIG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  hydrateConfigForm();
+  setConfigStatus("デフォルトに戻しました");
 });
 toSetupBtn.addEventListener("click", () => { showScreen("setup"); });
 startBtn.addEventListener("click", setupToInstructions);
@@ -1433,8 +2218,14 @@ window.addEventListener("focus", () => {
   focusBlurEvents.push({ type: "focus", t: formatTimestamp(new Date()) });
 });
 
-// 初期画面
-showScreen("consent");
+// 初期画面: ?config=1 で設定パネル、それ以外で被験者向け同意画面
+const _params = new URLSearchParams(location.search);
+if (_params.get("config") === "1") {
+  openConfigPanel();
+} else {
+  applyConfigToUI();
+  showScreen("consent");
+}
 
 // URL に ?admin=1 を付けるか、5回タップで「最初に戻る」ボタンを表示(研究者用)
 if (new URLSearchParams(location.search).get("admin") === "1") {

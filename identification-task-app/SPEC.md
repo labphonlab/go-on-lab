@@ -408,7 +408,74 @@ iOS Safari など、自動再生が初回でブロックされる環境では「
 
 ---
 
-## 15. 履歴・バージョン
+## 15. 設定パネル（v7 で追加）
+
+実験者は URL に `?config=1` を付けてアクセスすることで、コードを編集せずに
+すべての実験設定を UI 上で変更できる。
+
+### パネルでできること
+- パラダイム選択（Identification / AX / AXB / Rating）
+- 実験名・送信先 URL の編集
+- 回答カテゴリ・ラベルの編集（paradigm 別）
+- 試行構造パラメータ（reps, practice, break, fixation, ITI, ISI）の編集
+- 刺激リストの表形式編集（行追加・削除・編集）
+- 同意・教示文言の差し替え（HTML 可）
+- 設定の **localStorage 自動保存**
+- 設定の **JSON エクスポート / インポート**
+- 設定を埋め込んだ **共有 URL の生成**（`#config=<base64>`）
+
+### 設定の優先順位
+1. URL ハッシュ `#config=<base64>` （最優先、共有時に使う）
+2. localStorage に保存された設定
+3. `DEFAULT_CONFIG`（コード冒頭）
+
+### 派生実験の作り方（v7 以降）
+1. `?config=1` で設定パネルを開く
+2. パラダイム・刺激リスト・文言などを編集
+3. 「JSON 書き出し」で設定ファイルを保存（バックアップ）
+4. 「保存して実験を開始」で被験者向けフローへ
+5. 他の研究者に渡すときは「共有 URL をコピー」
+
+## 16. パラダイム別の仕様
+
+### 16-1. Identification（既存）
+- 1 試行 = 1 刺激 → N-AFC 回答
+- 刺激スキーマ: `{ id, file, continuumStep, label }`
+- 記録: response, reactionTimeMs
+- グラフ: continuumStep × targetResponseForGraph 応答率
+
+### 16-2. AX discrimination（v7 で追加）
+- 1 試行 = 刺激 A → ISI → 刺激 X → 「same」or「different」
+- 刺激スキーマ: `{ id, fileA, fileX, correctAnswer, continuumStep, label }`
+  - `correctAnswer`: `"same"` または `"different"`
+- 試行構造: fixation → fileA → isiMs → fileX → response
+- 記録: response, isCorrect, reactionTimeMs
+- グラフ: continuumStep × 正答率
+
+### 16-3. AXB discrimination（v7 で追加）
+- 1 試行 = A → ISI → X → ISI → B → 「A に似ている」or「B に似ている」
+- 刺激スキーマ: `{ id, fileA, fileX, fileB, correctAnswer, continuumStep, label }`
+  - `correctAnswer`: `"A"` または `"B"`
+- 記録: response, isCorrect, reactionTimeMs
+- グラフ: continuumStep × 正答率
+
+### 16-4. Rating（v7 で追加）
+- 1 試行 = 1 刺激 → N 段階のスケールで評価
+- 刺激スキーマ: `{ id, file, continuumStep, label }` (Identification と同じ)
+- スケールは `CONFIG.ratingScale.min` 〜 `max`（初期値 1〜7）
+- 記録: rating（整数）, reactionTimeMs
+- グラフ: continuumStep × 平均評価
+
+### サーバー側スプレッドシート
+パラダイムごとに別シートに記録される：
+- `results_identification`
+- `results_ax`
+- `results_axb`
+- `results_rating`
+
+`participants` シートは全パラダイム共通で 1 つ。
+
+## 17. 履歴・バージョン
 
 | バージョン | 主な変更 |
 |---|---|
@@ -417,4 +484,5 @@ iOS Safari など、自動再生が初回でブロックされる環境では「
 | v3 | スマホ対応、Wake Lock、iOS 対策 |
 | v4 | 失敗時の被験者非表示化、研究者へのメール通知 |
 | v5 | デモグラ調査票拡張（性別・利き手・L2・生育地） |
-| **v6（現行）** | **練習試行、注視点、ITI、回答ボタン counterbalancing、休憩、注意逸脱トラッキングを追加し、本格的実験プロトコル化** |
+| v6 | 練習試行、注視点、ITI、回答ボタン counterbalancing、休憩、注意逸脱トラッキング |
+| **v7（現行）** | **設定パネル（?config=1）、4 パラダイム対応（Identification / AX / AXB / Rating）、JSON エクスポート・インポート、共有 URL** |

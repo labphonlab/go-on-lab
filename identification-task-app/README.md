@@ -209,28 +209,35 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
        data.userAgent || ""
      ]);
 
-     // 2. results シート (試行ごとに 1 行)。sessionId で participants と結合可
-     let rSheet = ss.getSheetByName(RESULTS_SHEET);
+     // 2. results シート (パラダイム別)。sessionId で participants と結合可
+     const paradigm = (data.results && data.results[0] && data.results[0].paradigm) || "identification";
+     const sheetName = "results_" + paradigm;
+     const headers = headersForParadigm_(paradigm);
+
+     let rSheet = ss.getSheetByName(sheetName);
      if (!rSheet) {
-       rSheet = ss.insertSheet(RESULTS_SHEET);
-       rSheet.appendRow([
-         "submittedAt", "sessionId", "experimentName",
-         "trialNumber", "stimulusId", "file",
-         "continuumStep", "label", "response",
-         "reactionTimeMs", "playCount", "timestamp"
-       ]);
+       rSheet = ss.insertSheet(sheetName);
+       rSheet.appendRow(["submittedAt", "sessionId", "experimentName"].concat(headers));
      }
-     const rows = (data.results || []).map(r => [
-       submittedAt, sessionId, data.experimentName || "",
-       r.trialNumber, r.stimulusId, r.file,
-       r.continuumStep, r.label, r.response,
-       r.reactionTimeMs, r.playCount, r.timestamp
-     ]);
+     const rows = (data.results || []).map(r => {
+       const base = [submittedAt, sessionId, data.experimentName || ""];
+       return base.concat(headers.map((h) => r[h] != null ? r[h] : ""));
+     });
      if (rows.length > 0) {
        rSheet.getRange(rSheet.getLastRow() + 1, 1, rows.length, rows[0].length)
              .setValues(rows);
      }
-     return jsonOut_({ ok: true, n: rows.length });
+     return jsonOut_({ ok: true, n: rows.length, sheet: sheetName });
+   }
+
+   function headersForParadigm_(p) {
+     const common = ["trialNumber", "paradigm", "stimulusId", "continuumStep", "label",
+                     "reactionTimeMs", "playCount", "timestamp"];
+     if (p === "identification") return common.concat(["file", "response"]);
+     if (p === "rating")         return common.concat(["file", "rating"]);
+     if (p === "ax")             return common.concat(["fileA", "fileX", "correctAnswer", "response", "isCorrect"]);
+     if (p === "axb")            return common.concat(["fileA", "fileX", "fileB", "correctAnswer", "response", "isCorrect"]);
+     return common.concat(["file", "response"]);
    }
 
    function handleErrorReport(data) {

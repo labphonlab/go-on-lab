@@ -1,0 +1,4 @@
+# 日本語プロンプトセット。text_license CC0-1.0 = パブリックドメイン/自作で再販可。
+{"prompt_id": "ja-0001", "language": "ja", "text": "むかし むかし ある ところ に おじいさん と おばあさん が いました", "text_license": "CC0-1.0", "domain": "narrative"}
+{"prompt_id": "ja-0002", "language": "ja", "text": "きょう は てんき が とても よい ので さんぽ に でかけます", "text_license": "CC0-1.0", "domain": "conversational"}
+{"prompt_id": "ja-0003", "language": "ja", "text": "つぎ の ぶんしょう を しずか な へや で ろくおん して ください", "text_license": "CC0-1.0", "domain": "instruction"}

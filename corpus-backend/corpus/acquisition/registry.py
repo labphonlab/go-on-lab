@@ -75,9 +75,18 @@ class AcquisitionRegistry:
 
         Returns the AcquiredItem, or ``None`` if it was a duplicate.
         """
+        local_path = source.fetch(item, self.audio_dir)
+        return self.register_path(local_path, item, item_id=item.item_id)
+
+    def register_path(self, local_path: str, item: SourceItem,
+                      item_id: Optional[str] = None) -> Optional[AcquiredItem]:
+        """Hash a fetched file, dedup it, and append it to the manifest.
+
+        Shared by single-file acquisition and multi-track sources (each track is
+        registered separately with its own ``item_id``).
+        """
         import datetime as _dt
 
-        local_path = source.fetch(item, self.audio_dir)
         digest = _sha256(local_path)
         if digest in self._hashes:
             # Identical content already acquired; drop the redundant download.
@@ -89,8 +98,9 @@ class AcquisitionRegistry:
             return None
 
         acquired = AcquiredItem(
-            item_id=item.item_id, source=item.source, local_path=local_path,
-            language=item.language, license=item.license.value, sha256=digest,
+            item_id=item_id or item.item_id, source=item.source,
+            local_path=local_path, language=item.language,
+            license=item.license.value, sha256=digest,
             bytes=os.path.getsize(local_path), title=item.title,
             attribution=item.attribution, transcript=item.transcript,
             audio_url=item.audio_url,
@@ -101,6 +111,22 @@ class AcquisitionRegistry:
         with open(self.manifest_path, "a", encoding="utf-8") as fh:
             fh.write(json.dumps(acquired.to_dict(), ensure_ascii=False) + "\n")
         return acquired
+
+    def acquire_tracks(self, source, item: SourceItem) -> list[AcquiredItem]:
+        """Acquire every track of a multi-track source item (e.g. a LibriVox book).
+
+        Uses ``source.fetch_tracks`` if available, else falls back to ``fetch``.
+        """
+        fetch_tracks = getattr(source, "fetch_tracks", None)
+        if fetch_tracks is None:
+            got = self.acquire(source, item)
+            return [got] if got else []
+        out: list[AcquiredItem] = []
+        for i, path in enumerate(fetch_tracks(item, self.audio_dir)):
+            got = self.register_path(path, item, item_id=f"{item.item_id}#{i:03d}")
+            if got is not None:
+                out.append(got)
+        return out
 
     def acquire_from(self, source: Source, limit: Optional[int] = None,
                      **query) -> list[AcquiredItem]:

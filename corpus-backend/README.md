@@ -49,6 +49,10 @@ python -m corpus.cli annotate --audio long_recording.wav --out ./ann_out
 python -m corpus.cli acquire --dir ./my_audio --store ./store --language ja
 python -m corpus.cli acquire-demo --out /tmp/acq_demo
 
+# LibriVox: acquire public-domain audiobooks (needs outbound network + ffmpeg).
+# Multi-track books are transcoded to 16 kHz mono WAV and dedup'd by content hash.
+python -m corpus.cli librivox --language english --limit 3 --store ./lv_store
+
 # Inspect a prompt set.
 python -m corpus.cli prompts --file examples/prompts_ja.jsonl
 

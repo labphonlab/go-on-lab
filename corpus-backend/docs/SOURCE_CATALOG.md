@@ -58,6 +58,11 @@ The registry records license + provenance + a content hash (dedup) into an
 acquisition manifest, after which the annotation pipeline labels the audio.
 
 - `adapters/local_dir.py` — ingest a local folder (fully offline, the test path).
-- `adapters/librivox.py` — public-domain audiobooks (lazy network).
+- `adapters/librivox.py` — **wired**: public-domain audiobooks. Catalog via the
+  LibriVox JSON API; `fetch_tracks` downloads the per-book zip, extracts the MP3
+  tracks and transcodes them to 16 kHz mono WAV via ffmpeg. The HTTP layer is an
+  injectable `Opener`, so the adapter is fully tested offline (`tests/test_librivox.py`).
+  Run it with `python -m corpus.cli librivox` where outbound network + ffmpeg
+  are available; it degrades with a clear message where egress is blocked.
 - `adapters/voxpopuli.py` — CC0 European Parliament unlabeled (lazy network).
 - `adapters/diet_jp.py` — Japanese Diet audio + verbatim record (lazy network).

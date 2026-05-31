@@ -184,6 +184,44 @@ def cmd_acquire_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_librivox(args: argparse.Namespace) -> int:
+    """Acquire public-domain audiobooks from LibriVox (requires network + ffmpeg).
+
+    LibriVox books are multi-track MP3; each track is transcoded to 16 kHz mono
+    WAV and registered separately with provenance + content-hash dedup.
+    """
+    from .acquisition.registry import AcquisitionRegistry
+    from .acquisition.adapters.librivox import LibriVoxSource
+
+    from urllib.error import URLError, HTTPError
+
+    src = LibriVoxSource(language=args.language, transcode=not args.no_transcode)
+    reg = AcquisitionRegistry(args.store)
+    try:
+        catalog = list(src.catalog(limit=args.limit))
+    except (URLError, HTTPError) as exc:
+        print(f"could not reach the LibriVox API: {type(exc).__name__}: {exc}\n"
+              f"This environment may block outbound network "
+              f"(see the network policy). Run where egress to librivox.org is "
+              f"allowed.", file=sys.stderr)
+        return 1
+
+    total = 0
+    for item in catalog:
+        print(f"book {item.item_id}: {item.title}  ({item.duration_s}s)")
+        try:
+            tracks = reg.acquire_tracks(src, item)
+        except Exception as exc:  # network/ffmpeg/zip errors surfaced honestly
+            print(f"  ! failed: {type(exc).__name__}: {exc}", file=sys.stderr)
+            continue
+        total += len(tracks)
+        for t in tracks:
+            print(f"  + {t.item_id}  {t.bytes} bytes  sha256={t.sha256[:12]}…")
+    print(f"\nacquired {total} track(s) into {args.store}/")
+    print("license summary:", json.dumps(reg.license_summary(), ensure_ascii=False))
+    return 0 if total else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="corpus", description="Go-on Lab corpus backend")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -231,6 +269,15 @@ def build_parser() -> argparse.ArgumentParser:
                           help="acquire (with dedup) then annotate, end to end")
     paqd.add_argument("--out", default="./_acquire_demo")
     paqd.set_defaults(func=cmd_acquire_demo)
+
+    plv = sub.add_parser("librivox",
+                         help="acquire public-domain audiobooks (network + ffmpeg)")
+    plv.add_argument("--language", default="english")
+    plv.add_argument("--store", default="./_librivox_store")
+    plv.add_argument("--limit", type=int, default=5)
+    plv.add_argument("--no-transcode", action="store_true",
+                     help="keep original MP3 instead of converting to WAV")
+    plv.set_defaults(func=cmd_librivox)
     return p
 
 

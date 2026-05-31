@@ -131,6 +131,59 @@ def cmd_annotate_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_acquire(args: argparse.Namespace) -> int:
+    """Acquire audio from a local directory into an acquisition store."""
+    from .acquisition.registry import AcquisitionRegistry
+    from .acquisition.adapters.local_dir import LocalDirectorySource
+
+    reg = AcquisitionRegistry(args.store)
+    src = LocalDirectorySource(args.dir, language=args.language,
+                               license=License(args.license))
+    acquired = reg.acquire_from(src, limit=args.limit)
+    print(f"acquired {len(acquired)} new item(s) into {args.store}/")
+    for a in acquired:
+        print(f"  {a.item_id}  {a.language}  {a.license}  "
+              f"sha256={a.sha256[:12]}…  {a.bytes} bytes")
+    print("license summary:", json.dumps(reg.license_summary(), ensure_ascii=False))
+    return 0
+
+
+def cmd_acquire_demo(args: argparse.Namespace) -> int:
+    """Synthesise a folder of audio, acquire it (with dedup), then annotate."""
+    from .audio.synth import write_segmented_wav
+    from .acquisition.registry import AcquisitionRegistry
+    from .acquisition.adapters.local_dir import LocalDirectorySource
+    from .annotation.orchestrator import AnnotationPipeline
+    from .annotation import manifest as ann_manifest
+
+    raw = os.path.join(args.out, "raw")
+    os.makedirs(raw, exist_ok=True)
+    # Two distinct recordings plus an exact duplicate to exercise dedup.
+    write_segmented_wav(os.path.join(raw, "talk_a.wav"),
+                        regions=[(1.0, 1.2), (1.5, 0.9)], gap_s=0.5)
+    write_segmented_wav(os.path.join(raw, "talk_b.wav"),
+                        regions=[(0.8, 1.5), (1.2, 1.0), (1.0, 0.8)], gap_s=0.5)
+    import shutil as _sh
+    _sh.copy2(os.path.join(raw, "talk_a.wav"), os.path.join(raw, "talk_a_copy.wav"))
+
+    reg = AcquisitionRegistry(os.path.join(args.out, "store"))
+    src = LocalDirectorySource(raw, language="ja", license=License.CC0_1_0)
+    acquired = reg.acquire_from(src)
+    print(f"acquired {len(acquired)} item(s) (duplicate skipped by content hash)")
+
+    pipe = AnnotationPipeline()
+    all_segments = []
+    for a in acquired:
+        all_segments.extend(pipe.annotate_file(a.local_path, source_id=a.item_id,
+                                               declared_language=a.language))
+    out_dir = os.path.join(args.out, "corpus")
+    summary = ann_manifest.export(all_segments, out_dir)
+    print("annotation summary:", json.dumps(summary, ensure_ascii=False))
+    print(f"acquisition manifest: {reg.manifest_path}")
+    print(f"corpus segments + card: {out_dir}/")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="corpus", description="Go-on Lab corpus backend")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -165,6 +218,19 @@ def build_parser() -> argparse.ArgumentParser:
                          help="synthesise multi-region audio and annotate it")
     pad.add_argument("--out", default="./_annotate_demo")
     pad.set_defaults(func=cmd_annotate_demo)
+
+    paq = sub.add_parser("acquire", help="acquire audio from a local directory")
+    paq.add_argument("--dir", required=True)
+    paq.add_argument("--store", default="./_acquire_store")
+    paq.add_argument("--language", default="und")
+    paq.add_argument("--license", default="CC0-1.0")
+    paq.add_argument("--limit", type=int, default=None)
+    paq.set_defaults(func=cmd_acquire)
+
+    paqd = sub.add_parser("acquire-demo",
+                          help="acquire (with dedup) then annotate, end to end")
+    paqd.add_argument("--out", default="./_acquire_demo")
+    paqd.set_defaults(func=cmd_acquire_demo)
     return p
 
 

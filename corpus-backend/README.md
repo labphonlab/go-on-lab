@@ -44,6 +44,11 @@ cat /tmp/goon_demo/DATASET_CARD.md
 python -m corpus.cli annotate-demo --out /tmp/ann_demo
 python -m corpus.cli annotate --audio long_recording.wav --out ./ann_out
 
+# Acquisition: ingest easy-to-obtain, under-labeled audio (provenance + dedup),
+# then run the full acquire -> annotate flow end to end.
+python -m corpus.cli acquire --dir ./my_audio --store ./store --language ja
+python -m corpus.cli acquire-demo --out /tmp/acq_demo
+
 # Inspect a prompt set.
 python -m corpus.cli prompts --file examples/prompts_ja.jsonl
 
@@ -65,6 +70,9 @@ corpus/
   audio/wav.py         zero-dep PCM-WAV reader
   audio/quality.py     acoustic QC metrics + gates
   audio/synth.py       WAV signal generator (demo/tests)
+  acquisition/         acquire under-labeled audio: Source interface, registry
+                       (provenance + content-hash dedup + manifest), adapters
+                       (local_dir offline; librivox/voxpopuli/diet_jp lazy net)
   prompts/store.py     license-aware prompt sets (JSONL)
   verification/        "read correctly?" — base + heuristic + ASR (pluggable)
   alignment/           forced alignment — base + proportional baseline
@@ -72,8 +80,9 @@ corpus/
   annotation/          auto segment+label: VAD/diarize/ASR baselines + plugins,
                        confidence gating, WER measurement, manifest
   storage/manifest.py  manifest, CSV, dataset card, commercial export
-  cli.py               prompts / run / demo / annotate / annotate-demo
-docs/                  ARCHITECTURE, LICENSING, QUALITY_STANDARDS, ANNOTATION_PIPELINE
+  cli.py               prompts / run / demo / annotate / acquire (+ demos)
+docs/                  ARCHITECTURE, LICENSING, QUALITY_STANDARDS,
+                       ANNOTATION_PIPELINE, AUTO_ANNOTATION, SOURCE_CATALOG
 examples/              prompt sets (en, ja)
 tests/                 pytest + stdlib fallback runner
 ```

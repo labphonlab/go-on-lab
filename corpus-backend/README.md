@@ -9,6 +9,17 @@ rationale for the acquisition method, [`docs/LICENSING.md`](docs/LICENSING.md)
 for the consent/sellability model, and
 [`docs/QUALITY_STANDARDS.md`](docs/QUALITY_STANDARDS.md) for the acceptance gates.
 
+## Two pipelines
+
+1. **Read-speech** (`corpus/pipeline/`) — prompted, consented recordings where
+   the prompt *is* the ground-truth transcript. Best for sellable corpora.
+2. **Annotation / pseudo-labeling** (`corpus/annotation/`) — turn *raw,
+   long, multi-speaker* audio into a corpus with **automatic segmentation and
+   labeling** (VAD → diarization → ASR → forced alignment), gated by confidence
+   and a measured error rate. See
+   [`docs/ANNOTATION_PIPELINE.md`](docs/ANNOTATION_PIPELINE.md). Best for
+   research use over existing audio.
+
 ## Design highlights
 
 - **Zero-dependency core.** Models, audio QC, prompt store, pipeline and export
@@ -28,6 +39,10 @@ cd corpus-backend
 # End-to-end demo: synthesise clips, run the pipeline, export a manifest.
 python -m corpus.cli demo --out /tmp/goon_demo
 cat /tmp/goon_demo/DATASET_CARD.md
+
+# Annotation pipeline: auto segment + label raw audio (pseudo-labeling).
+python -m corpus.cli annotate-demo --out /tmp/ann_demo
+python -m corpus.cli annotate --audio long_recording.wav --out ./ann_out
 
 # Inspect a prompt set.
 python -m corpus.cli prompts --file examples/prompts_ja.jsonl
@@ -53,10 +68,12 @@ corpus/
   prompts/store.py     license-aware prompt sets (JSONL)
   verification/        "read correctly?" — base + heuristic + ASR (pluggable)
   alignment/           forced alignment — base + proportional baseline
-  pipeline/            stage orchestration + acceptance gating
+  pipeline/            read-speech orchestration + acceptance gating
+  annotation/          auto segment+label: VAD/diarize/ASR baselines + plugins,
+                       confidence gating, WER measurement, manifest
   storage/manifest.py  manifest, CSV, dataset card, commercial export
-  cli.py               prompts / run / demo
-docs/                  ARCHITECTURE, LICENSING, QUALITY_STANDARDS
+  cli.py               prompts / run / demo / annotate / annotate-demo
+docs/                  ARCHITECTURE, LICENSING, QUALITY_STANDARDS, ANNOTATION_PIPELINE
 examples/              prompt sets (en, ja)
 tests/                 pytest + stdlib fallback runner
 ```

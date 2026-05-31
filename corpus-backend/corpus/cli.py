@@ -88,6 +88,49 @@ def cmd_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_annotate(args: argparse.Namespace) -> int:
+    """Run the automatic segmentation + labeling pipeline on a recording."""
+    from .annotation.orchestrator import AnnotationPipeline
+    from .annotation import manifest as ann_manifest
+
+    pipe = AnnotationPipeline()
+    segments = pipe.annotate_file(
+        args.audio, source_id=args.source_id, declared_language=args.language)
+
+    for s in segments:
+        txt = (s.transcript.text if s.transcript and s.transcript.text
+               else "<no-transcript>")
+        print(f"{s.segment_id}  [{s.start_s:6.2f}-{s.end_s:6.2f}]  "
+              f"{s.speaker:11s}  {s.state.value:8s}  snr={s.scores.get('snr_db')}  {txt}")
+
+    summary = ann_manifest.summarise(segments)
+    print("\nsummary:", json.dumps(summary, ensure_ascii=False))
+    if args.out:
+        ann_manifest.export(segments, args.out)
+        print(f"segments + dataset card written to {args.out}/", file=sys.stderr)
+    return 0
+
+
+def cmd_annotate_demo(args: argparse.Namespace) -> int:
+    """Synthesise a multi-region recording and run the annotation pipeline."""
+    from .audio.synth import write_segmented_wav
+    from .annotation.orchestrator import AnnotationPipeline
+    from .annotation import manifest as ann_manifest
+
+    os.makedirs(args.out, exist_ok=True)
+    path = os.path.join(args.out, "source.wav")
+    write_segmented_wav(path, regions=[(1.0, 1.2), (1.5, 0.9), (0.8, 1.5)],
+                        gap_s=0.5)
+    segments = AnnotationPipeline().annotate_file(path, source_id="demo-source")
+    for s in segments:
+        print(f"{s.segment_id}  [{s.start_s:6.2f}-{s.end_s:6.2f}]  "
+              f"{s.speaker:11s}  {s.state.value:8s}  snr={s.scores.get('snr_db')}")
+    summary = ann_manifest.export(segments, args.out)
+    print("\nsummary:", json.dumps(summary, ensure_ascii=False))
+    print(f"segments + dataset card written to {args.out}/")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="corpus", description="Go-on Lab corpus backend")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -109,6 +152,19 @@ def build_parser() -> argparse.ArgumentParser:
     pd = sub.add_parser("demo", help="synthesise clips and run the full pipeline")
     pd.add_argument("--out", default="./_demo_out")
     pd.set_defaults(func=cmd_demo)
+
+    pa = sub.add_parser("annotate",
+                        help="auto segment+label a recording (pseudo-labeling)")
+    pa.add_argument("--audio", required=True)
+    pa.add_argument("--source-id", default=None)
+    pa.add_argument("--language", default=None)
+    pa.add_argument("--out", default=None)
+    pa.set_defaults(func=cmd_annotate)
+
+    pad = sub.add_parser("annotate-demo",
+                         help="synthesise multi-region audio and annotate it")
+    pad.add_argument("--out", default="./_annotate_demo")
+    pad.set_defaults(func=cmd_annotate_demo)
     return p
 
 

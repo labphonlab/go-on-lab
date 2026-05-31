@@ -14,7 +14,8 @@ HERE = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..")))
 sys.path.insert(0, HERE)
 
-MODULES = ["test_audio_quality", "test_pipeline", "test_manifest"]
+MODULES = ["test_audio_quality", "test_pipeline", "test_manifest",
+           "test_annotation"]
 
 
 def main() -> int:

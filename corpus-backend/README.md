@@ -57,6 +57,10 @@ python -m corpus.cli librivox --language english --limit 3 --store ./lv_store
 # WhisperX+MFA path is identical — see docs/M3_ML_INTEGRATION.md).
 python -m corpus.cli whisperx-demo
 
+# Japanese Diet: list meetings with speaker-labeled verbatim text (needs network).
+# Audio is supplied out-of-band and aligned against this transcript.
+python -m corpus.cli diet --limit 5 --query nameOfMeeting=予算委員会 --out ./diet_out
+
 # Inspect a prompt set.
 python -m corpus.cli prompts --file examples/prompts_ja.jsonl
 

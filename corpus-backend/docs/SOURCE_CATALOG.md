@@ -65,4 +65,16 @@ acquisition manifest, after which the annotation pipeline labels the audio.
   Run it with `python -m corpus.cli librivox` where outbound network + ffmpeg
   are available; it degrades with a clear message where egress is blocked.
 - `adapters/voxpopuli.py` — CC0 European Parliament unlabeled (lazy network).
-- `adapters/diet_jp.py` — Japanese Diet audio + verbatim record (lazy network).
+- `adapters/diet_jp.py` — **wired (text side)**: the kokkai record API
+  (kokkai.ndl.go.jp) is implemented with pagination, per-speech parsing, speaker
+  extraction and editorial-mark cleaning, producing a **speaker-labeled
+  transcript** (potential diarization ground truth). Injectable `Opener`, fully
+  tested offline (`tests/test_diet_jp.py`). Run with `python -m corpus.cli diet`.
+
+  **Audio reality:** the record API is text-only, and Diet audio/video lives in
+  the 衆議院/参議院 中継 systems with **no official API keyed by the record's
+  issueID**. There is no reliable programmatic record→audio link, so `fetch`
+  raises with an actionable message: supply the audio out-of-band (e.g. via
+  `LocalDirectorySource`) and align it against this transcript — that alignment
+  is the value this corpus adds. Confirm the exact terms of use before
+  redistribution.

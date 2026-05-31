@@ -260,6 +260,54 @@ def cmd_whisperx_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_diet(args: argparse.Namespace) -> int:
+    """List Diet meetings with speaker-labeled verbatim text (needs network).
+
+    The kokkai record API is text-only; audio must be supplied out-of-band and
+    aligned against this transcript. The per-speech speaker labels are the
+    valuable, under-exploited signal (diarization ground truth).
+    """
+    from urllib.error import URLError, HTTPError
+    from .acquisition.adapters.diet_jp import DietJapanSource
+
+    src = DietJapanSource()
+    query = {}
+    for kv in args.query or []:
+        if "=" in kv:
+            k, v = kv.split("=", 1)
+            query[k] = v
+    try:
+        items = list(src.catalog(limit=args.limit, **query))
+    except (URLError, HTTPError) as exc:
+        print(f"could not reach the kokkai API: {type(exc).__name__}: {exc}\n"
+              f"This environment may block outbound network (see the network "
+              f"policy). Run where egress to kokkai.ndl.go.jp is allowed.",
+              file=sys.stderr)
+        return 1
+
+    out_records = []
+    for it in items:
+        speakers = it.extra.get("speakers", [])
+        n_sp = len(it.extra.get("speeches", []))
+        print(f"{it.item_id}  {it.title}  speakers={len(speakers)} speeches={n_sp}")
+        out_records.append(it)
+    if args.out and out_records:
+        import json as _json
+        os.makedirs(args.out, exist_ok=True)
+        path = os.path.join(args.out, "diet_meetings.jsonl")
+        with open(path, "w", encoding="utf-8") as fh:
+            for it in out_records:
+                fh.write(_json.dumps({
+                    "item_id": it.item_id, "title": it.title,
+                    "language": it.language, "license": it.license.value,
+                    "attribution": it.attribution,
+                    "speakers": it.extra.get("speakers"),
+                    "speeches": it.extra.get("speeches"),
+                }, ensure_ascii=False) + "\n")
+        print(f"\nwrote {len(out_records)} meeting(s) to {path}", file=sys.stderr)
+    return 0 if items else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="corpus", description="Go-on Lab corpus backend")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -321,6 +369,14 @@ def build_parser() -> argparse.ArgumentParser:
                          help="demo the WhisperX result -> gated Segment mapping")
     pwx.add_argument("--out", default=None)
     pwx.set_defaults(func=cmd_whisperx_demo)
+
+    pdt = sub.add_parser("diet",
+                         help="list Diet meetings with speaker-labeled text (network)")
+    pdt.add_argument("--limit", type=int, default=5)
+    pdt.add_argument("--query", action="append",
+                     help="kokkai API param as key=value (e.g. nameOfMeeting=予算委員会)")
+    pdt.add_argument("--out", default=None)
+    pdt.set_defaults(func=cmd_diet)
     return p
 
 

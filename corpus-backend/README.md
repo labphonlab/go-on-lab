@@ -53,6 +53,10 @@ python -m corpus.cli acquire-demo --out /tmp/acq_demo
 # Multi-track books are transcoded to 16 kHz mono WAV and dedup'd by content hash.
 python -m corpus.cli librivox --language english --limit 3 --store ./lv_store
 
+# WhisperX -> gated Segment mapping (offline demo via a canned result; the real
+# WhisperX+MFA path is identical — see docs/M3_ML_INTEGRATION.md).
+python -m corpus.cli whisperx-demo
+
 # Inspect a prompt set.
 python -m corpus.cli prompts --file examples/prompts_ja.jsonl
 
@@ -79,7 +83,10 @@ corpus/
                        (local_dir offline; librivox/voxpopuli/diet_jp lazy net)
   prompts/store.py     license-aware prompt sets (JSONL)
   verification/        "read correctly?" — base + heuristic + ASR (pluggable)
-  alignment/           forced alignment — base + proportional baseline
+  alignment/           forced alignment — base + proportional baseline;
+                       textgrid.py (Praat reader) + mfa.py (phone alignment)
+  annotation/whisperx_pipeline.py  WhisperX result -> gated Segments (M3)
+  annotation/mfa_prep.py           write wav+txt utterance pairs for MFA (M3)
   pipeline/            read-speech orchestration + acceptance gating
   annotation/          auto segment+label: VAD/diarize/ASR baselines + plugins,
                        confidence gating, WER measurement, manifest

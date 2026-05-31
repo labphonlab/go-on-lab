@@ -222,6 +222,44 @@ def cmd_librivox(args: argparse.Namespace) -> int:
     return 0 if total else 1
 
 
+def cmd_whisperx_demo(args: argparse.Namespace) -> int:
+    """Show the WhisperX result -> gated Segment mapping (offline, no ML).
+
+    Uses a canned WhisperX-shaped result so the M3 mapping + gating + decision
+    logic is demonstrable without GPUs/network; the real path is identical via
+    corpus.annotation.whisperx_pipeline.WhisperXPipeline(...).process(audio).
+    """
+    from .annotation.whisperx_pipeline import segments_from_whisperx
+    from .annotation.orchestrator import AnnotationPolicy
+    from .annotation import manifest as ann_manifest
+
+    canned = {
+        "language": "en",
+        "segments": [
+            {"start": 0.0, "end": 2.1, "text": "the meeting will begin shortly",
+             "speaker": "SPEAKER_00",
+             "words": [{"word": "the", "start": 0.0, "end": 0.2, "score": 0.97,
+                        "speaker": "SPEAKER_00"},
+                       {"word": "meeting", "start": 0.2, "end": 0.7, "score": 0.95,
+                        "speaker": "SPEAKER_00"}]},
+            {"start": 2.5, "end": 5.0, "text": "uh maybe later perhaps",
+             "speaker": "SPEAKER_01",
+             "words": [{"word": "uh", "start": 2.5, "end": 2.7, "score": 0.35},
+                       {"word": "maybe", "start": 2.8, "end": 3.2, "score": 0.41}]},
+        ],
+    }
+    segs = segments_from_whisperx(canned, source_id="meeting-001",
+                                  policy=AnnotationPolicy(min_snr_db=-999))
+    for s in segs:
+        print(f"{s.segment_id}  [{s.start_s:5.2f}-{s.end_s:5.2f}]  {s.speaker:11s}  "
+              f"{s.state.value:8s}  conf={s.transcript.confidence}  "
+              f"\"{s.transcript.text}\"")
+    if args.out:
+        ann_manifest.export(segs, args.out)
+        print(f"\nsegments + card written to {args.out}/", file=sys.stderr)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="corpus", description="Go-on Lab corpus backend")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -278,6 +316,11 @@ def build_parser() -> argparse.ArgumentParser:
     plv.add_argument("--no-transcode", action="store_true",
                      help="keep original MP3 instead of converting to WAV")
     plv.set_defaults(func=cmd_librivox)
+
+    pwx = sub.add_parser("whisperx-demo",
+                         help="demo the WhisperX result -> gated Segment mapping")
+    pwx.add_argument("--out", default=None)
+    pwx.set_defaults(func=cmd_whisperx_demo)
     return p
 
 

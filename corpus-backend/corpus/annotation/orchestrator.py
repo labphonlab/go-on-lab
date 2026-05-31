@@ -59,6 +59,44 @@ class AnnotationPolicy:
     require_transcript: bool = True  # accept needs a real transcript
 
 
+def gate_segment(seg: Segment, tr: Transcript, policy: AnnotationPolicy,
+                 declared_language: str | None = None) -> None:
+    """Append the standard quality gates to ``seg`` (shared by all pipelines).
+
+    Kept as a free function so the WhisperX whole-file path and the staged
+    baseline path apply identical gating and decisions.
+    """
+    p = policy
+
+    seg.gates.append(GateResult(
+        "duration_s", p.min_duration_s <= seg.duration_s <= p.max_duration_s,
+        value=round(seg.duration_s, 3),
+        threshold=f"{p.min_duration_s}..{p.max_duration_s}", severity="hard"))
+
+    snr = seg.scores.get("snr_db", 0.0)
+    seg.gates.append(GateResult(
+        "snr_db", snr >= p.min_snr_db, value=snr,
+        threshold=f">= {p.min_snr_db}", severity="soft"))
+
+    # Transcript presence: no real label -> review, never silent accept.
+    has_text = bool(tr.text) and not tr.is_heuristic
+    if p.require_transcript:
+        seg.gates.append(GateResult(
+            "transcript_present", has_text, severity="soft",
+            detail="no ASR transcript (baseline)" if not has_text else ""))
+
+    if tr.confidence is not None:
+        seg.gates.append(GateResult(
+            "asr_confidence", tr.confidence >= p.min_asr_confidence,
+            value=round(tr.confidence, 4),
+            threshold=f">= {p.min_asr_confidence}", severity="soft"))
+
+    if declared_language and tr.language and tr.language != declared_language:
+        seg.gates.append(GateResult(
+            "language_match", False, severity="soft",
+            detail=f"detected {tr.language} != declared {declared_language}"))
+
+
 class AnnotationPipeline:
     def __init__(
         self,
@@ -101,32 +139,4 @@ class AnnotationPipeline:
 
     def _gate(self, seg: Segment, tr: Transcript,
               declared_language: str | None) -> None:
-        p = self.policy
-
-        seg.gates.append(GateResult(
-            "duration_s", p.min_duration_s <= seg.duration_s <= p.max_duration_s,
-            value=round(seg.duration_s, 3),
-            threshold=f"{p.min_duration_s}..{p.max_duration_s}", severity="hard"))
-
-        snr = seg.scores.get("snr_db", 0.0)
-        seg.gates.append(GateResult(
-            "snr_db", snr >= p.min_snr_db, value=snr,
-            threshold=f">= {p.min_snr_db}", severity="soft"))
-
-        # Transcript presence: no real label -> review, never silent accept.
-        has_text = bool(tr.text) and not tr.is_heuristic
-        if p.require_transcript:
-            seg.gates.append(GateResult(
-                "transcript_present", has_text, severity="soft",
-                detail="no ASR transcript (baseline)" if not has_text else ""))
-
-        if tr.confidence is not None:
-            seg.gates.append(GateResult(
-                "asr_confidence", tr.confidence >= p.min_asr_confidence,
-                value=round(tr.confidence, 4),
-                threshold=f">= {p.min_asr_confidence}", severity="soft"))
-
-        if declared_language and tr.language and tr.language != declared_language:
-            seg.gates.append(GateResult(
-                "language_match", False, severity="soft",
-                detail=f"detected {tr.language} != declared {declared_language}"))
+        gate_segment(seg, tr, self.policy, declared_language)

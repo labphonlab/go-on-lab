@@ -15,7 +15,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..")))
 sys.path.insert(0, HERE)
 
 MODULES = ["test_audio_quality", "test_pipeline", "test_manifest",
-           "test_annotation", "test_acquisition", "test_librivox"]
+           "test_annotation", "test_acquisition", "test_librivox",
+           "test_whisperx_mapping", "test_mfa"]
 
 
 def main() -> int:

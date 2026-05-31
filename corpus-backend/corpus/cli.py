@@ -308,6 +308,40 @@ def cmd_diet(args: argparse.Namespace) -> int:
     return 0 if items else 1
 
 
+def cmd_export_demo(args: argparse.Namespace) -> int:
+    """Build a small annotated corpus and export it to Praat / ELAN / HF."""
+    from .annotation.whisperx_pipeline import segments_from_whisperx
+    from .annotation.orchestrator import AnnotationPolicy
+    from . import export as exporters
+
+    canned = {
+        "language": "en",
+        "segments": [
+            {"start": 0.0, "end": 2.1, "text": "the meeting will begin shortly",
+             "speaker": "SPEAKER_00",
+             "words": [{"word": "the", "start": 0.0, "end": 0.3, "score": 0.97},
+                       {"word": "meeting", "start": 0.3, "end": 0.9, "score": 0.96},
+                       {"word": "will", "start": 0.9, "end": 1.2, "score": 0.94},
+                       {"word": "begin", "start": 1.2, "end": 1.7, "score": 0.95},
+                       {"word": "shortly", "start": 1.7, "end": 2.1, "score": 0.93}]},
+            {"start": 2.5, "end": 4.4, "text": "thank you everyone",
+             "speaker": "SPEAKER_01",
+             "words": [{"word": "thank", "start": 2.5, "end": 2.9, "score": 0.96},
+                       {"word": "you", "start": 2.9, "end": 3.2, "score": 0.95},
+                       {"word": "everyone", "start": 3.2, "end": 4.4, "score": 0.91}]},
+        ],
+    }
+    segs = segments_from_whisperx(canned, source_id="meeting-001",
+                                  policy=AnnotationPolicy(min_snr_db=-999))
+    counts = exporters.export_all(segs, args.out,
+                                  media_dir=os.path.join(args.out, "media"))
+    print("exported:", json.dumps(counts, ensure_ascii=False))
+    print(f"  Praat TextGrids: {args.out}/praat/")
+    print(f"  ELAN EAF:        {args.out}/elan/")
+    print(f"  HF datasets:     {args.out}/hf/  (load_dataset('audiofolder', ...))")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="corpus", description="Go-on Lab corpus backend")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -377,6 +411,11 @@ def build_parser() -> argparse.ArgumentParser:
                      help="kokkai API param as key=value (e.g. nameOfMeeting=予算委員会)")
     pdt.add_argument("--out", default=None)
     pdt.set_defaults(func=cmd_diet)
+
+    pex = sub.add_parser("export-demo",
+                         help="export a sample corpus to Praat/ELAN/HF formats")
+    pex.add_argument("--out", default="./_export_demo")
+    pex.set_defaults(func=cmd_export_demo)
     return p
 
 

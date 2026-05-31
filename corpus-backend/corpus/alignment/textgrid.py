@@ -95,7 +95,8 @@ class TextGrid:
                 continue
             m = re.match(r'text\s*=\s*"(.*)"\s*$', line)
             if m:
-                pending["text"] = m.group(1)
+                # Praat escapes a literal quote as "" inside the string.
+                pending["text"] = m.group(1).replace('""', '"')
                 if "xmin" in pending and "xmax" in pending:
                     cur.append(Interval(pending["xmin"], pending["xmax"],
                                         pending["text"]))

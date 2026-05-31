@@ -61,6 +61,10 @@ python -m corpus.cli whisperx-demo
 # Audio is supplied out-of-band and aligned against this transcript.
 python -m corpus.cli diet --limit 5 --query nameOfMeeting=予算委員会 --out ./diet_out
 
+# Export a corpus to established research tools (Praat TextGrid, ELAN EAF,
+# Hugging Face datasets audiofolder). All pure stdlib — no extra deps.
+python -m corpus.cli export-demo --out /tmp/exp
+
 # Inspect a prompt set.
 python -m corpus.cli prompts --file examples/prompts_ja.jsonl
 
@@ -91,11 +95,14 @@ corpus/
                        textgrid.py (Praat reader) + mfa.py (phone alignment)
   annotation/whisperx_pipeline.py  WhisperX result -> gated Segments (M3)
   annotation/mfa_prep.py           write wav+txt utterance pairs for MFA (M3)
+  export/              corpus exporters: praat (TextGrid), elan (EAF),
+                       hf_datasets (audiofolder) + export_all — pure stdlib
   pipeline/            read-speech orchestration + acceptance gating
   annotation/          auto segment+label: VAD/diarize/ASR baselines + plugins,
                        confidence gating, WER measurement, manifest
   storage/manifest.py  manifest, CSV, dataset card, commercial export
-  cli.py               prompts / run / demo / annotate / acquire (+ demos)
+  cli.py               prompts / run / annotate / acquire / librivox / diet /
+                       export-demo (+ other demos)
 docs/                  ARCHITECTURE, LICENSING, QUALITY_STANDARDS,
                        ANNOTATION_PIPELINE, AUTO_ANNOTATION, SOURCE_CATALOG
 examples/              prompt sets (en, ja)

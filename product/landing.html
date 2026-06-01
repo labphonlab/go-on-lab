@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perception Lab — 音声知覚実験プラットフォーム</title>
+<meta name="description" content="心理測定関数の取得を、コードを書かずに。スマホでも動く音声知覚研究のためのオールインワン Web アプリ。VOT 識別、母音境界、AX/AXB 弁別、Rating に対応。">
+<style>
+  :root {
+    --primary: #0071e3;
+    --primary-dark: #0058b4;
+    --accent: #34c759;
+    --text: #1d1d1f;
+    --muted: #6e6e73;
+    --bg: #fff;
+    --bg-soft: #f5f5f7;
+    --border: #d2d2d7;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+    color: var(--text); background: var(--bg);
+    line-height: 1.65;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  /* Hero */
+  .hero {
+    background: linear-gradient(180deg, #f0f7ff 0%, #fff 100%);
+    padding: 80px 0 60px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 48px);
+    line-height: 1.2;
+    margin: 0 0 16px;
+    font-weight: 800;
+  }
+  .hero .lead {
+    font-size: clamp(16px, 2.5vw, 20px);
+    color: var(--muted);
+    max-width: 720px;
+    margin: 0 auto 32px;
+  }
+  .hero-cta {
+    display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+  }
+  .btn {
+    display: inline-block;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: transform 0.05s, background 0.15s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-outline {
+    background: #fff; color: var(--text);
+    border: 2px solid var(--border);
+  }
+  .btn-outline:hover { background: var(--bg-soft); }
+  /* Sections */
+  section { padding: 64px 0; }
+  section.alt { background: var(--bg-soft); }
+  h2 { font-size: clamp(24px, 4vw, 36px); text-align: center; margin: 0 0 12px; }
+  .section-lead {
+    text-align: center; color: var(--muted);
+    max-width: 720px; margin: 0 auto 40px;
+    font-size: 16px;
+  }
+  /* Features grid */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .feature {
+    background: var(--bg);
+    padding: 28px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .feature h3 { margin: 0 0 8px; font-size: 18px; }
+  .feature p { margin: 0; color: var(--muted); font-size: 14px; }
+  .feature .emoji { font-size: 32px; margin-bottom: 8px; }
+  /* Paradigms */
+  .paradigm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .paradigm-card {
+    background: var(--bg);
+    padding: 24px;
+    border-radius: 16px;
+    border: 2px solid var(--border);
+  }
+  .paradigm-card h3 { margin: 0 0 8px; color: var(--primary); }
+  .paradigm-card p { margin: 0; color: var(--muted); font-size: 14px; }
+  /* Pricing */
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .plan {
+    background: var(--bg);
+    padding: 32px;
+    border-radius: 20px;
+    border: 2px solid var(--border);
+  }
+  .plan.featured {
+    border-color: var(--primary);
+    box-shadow: 0 8px 32px rgba(0,113,227,0.15);
+    position: relative;
+  }
+  .plan.featured::before {
+    content: "おすすめ";
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: var(--primary);
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .plan h3 { margin: 0 0 6px; font-size: 22px; }
+  .plan .price {
+    font-size: 36px;
+    font-weight: 800;
+    margin: 8px 0 4px;
+  }
+  .plan .price small { font-size: 14px; color: var(--muted); font-weight: 500; }
+  .plan .target { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+  .plan ul { list-style: none; padding: 0; margin: 16px 0; }
+  .plan li {
+    padding: 6px 0;
+    padding-left: 26px;
+    position: relative;
+    font-size: 14px;
+  }
+  .plan li::before {
+    content: "✓";
+    position: absolute;
+    left: 0; top: 6px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .plan .btn { width: 100%; text-align: center; }
+  /* FAQ */
+  details {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 0;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  details summary {
+    padding: 16px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::after {
+    content: " +";
+    float: right;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  details[open] summary::after { content: " −"; }
+  details .answer {
+    padding: 0 20px 20px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  /* Footer */
+  footer {
+    padding: 40px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--muted); }
+  /* Demo embed */
+  .demo-links {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; margin-top: 24px;
+  }
+  .demo-link {
+    background: var(--bg);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.15s;
+  }
+  .demo-link:hover { border-color: var(--primary); }
+  .demo-link strong { display: block; margin-bottom: 4px; }
+  .demo-link small { color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="container">
+    <h1>音声知覚実験を、コードを書かずに。</h1>
+    <p class="lead">
+      VOT 知覚、母音境界、AX/AXB 弁別、Rating ―
+      スマホでも動く本格的な心理音響実験プラットフォーム。
+      Google Sheets と連携、月額費用ゼロで自分の研究室データを安全管理。
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#pricing">プランを見る</a>
+      <a class="btn btn-outline" href="#demo">ライブデモを試す</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>こんな研究者・臨床家のために</h2>
+    <p class="section-lead">
+      自分の刺激と研究デザインを、コードを編集することなく Web 実験に展開できます。
+    </p>
+    <div class="features">
+      <div class="feature">
+        <div class="emoji">🎓</div>
+        <h3>音声学・言語学・心理学の研究者</h3>
+        <p>VOT 知覚、母音境界、L2 音素知覚の個人差・群差を効率的に計測。</p>
+      </div>
+      <div class="feature">
+        <div class="emoji">🏥</div>
+        <h3>言語聴覚士・臨床音声学</h3>
+        <p>患者の音韻識別能力・弁別能の評価、治療前後の比較データ収集。</p>
+      </div>
+      <div class="feature">
+        <div class="emoji">📚</div>
+        <h3>音声学を教える教員</h3>
+        <p>クラス全体のデモで「カテゴリ知覚」「VOT」を可視化、学生実験のプラットフォームに。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <h2>4 つのパラダイムに対応</h2>
+    <p class="section-lead">設定パネルでパラダイムを切り替えるだけ。コード変更は不要です。</p>
+    <div class="paradigm-grid">
+      <div class="paradigm-card">
+        <h3>Identification</h3>
+        <p>1 刺激 → N 個のカテゴリから選択。VOT、母音境界、音素同定など。</p>
+      </div>
+      <div class="paradigm-card">
+        <h3>AX Discrimination</h3>
+        <p>2 刺激（A → X）を聞いて「同じ」か「違う」を判定。弁別能・境界の鋭さの調査。</p>
+      </div>
+      <div class="paradigm-card">
+        <h3>AXB Discrimination</h3>
+        <p>3 刺激（A → X → B）を聞いて X が A と B のどちらに似ているかを判定。</p>
+      </div>
+      <div class="paradigm-card">
+        <h3>Rating</h3>
+        <p>1 刺激を聞いて、リッカートスケール（1–7 など）で評価。自然さ・典型性の評定。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>主要機能</h2>
+    <div class="features">
+      <div class="feature">
+        <div class="emoji">⚙️</div>
+        <h3>GUI 設定パネル</h3>
+        <p>パラダイム、刺激、回答ラベル、試行構造、文言を画面で編集。エンジニア不要。</p>
+      </div>
+      <div class="feature">
+        <div class="emoji">📱</div>
+        <h3>スマホ完全対応</h3>
+        <p>iOS / Android で動作。Wake Lock で画面ロック防止、自動再生フォールバック付き。</p>
+      </div>
+      <div class="feature">
+        <div class="emoji">📊</div>
+        <h3>自動データ収集</h3>
+        <p>Google Sheets に自動保存。リトライ・エラーメール通知・全試行データの裏側ロギング。</p>
+      </div>
+      <div class="feature">
+        <div class="emoji">🧠</div>
+        <h3>本格プロトコル</h3>
+        <p>同意 → デモグラフィック → 練習 → 本試行（休憩あり） → 結果表示まで完備。</p>
+      </div>
+      <div class="feature">
+        <div class="emoji">🔒</div>
+        <h3>個人情報は自分で管理</h3>
+        <p>データは購入者の Google アカウント内に保存。labphonlab は一切アクセスしません。</p>
+      </div>
+      <div class="feature">
+        <div class="emoji">🔁</div>
+        <h3>共有設定（URL ハッシュ）</h3>
+        <p>実験設定を URL に埋め込んで共同研究者と共有可能。JSON 書き出しも対応。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="demo">
+  <div class="container">
+    <h2>ライブデモ</h2>
+    <p class="section-lead">購入前にどれでも実際に動かして試せます。</p>
+    <div class="demo-links">
+      <a class="demo-link" href="https://labphonlab.github.io/go-on-lab/vot-demo/" target="_blank">
+        <strong>VOT 知覚デモ（学生向け簡易版）</strong>
+        <small>44 試行・約 5 分で完了。VOT 0–50 ms 連続体。</small>
+      </a>
+      <a class="demo-link" href="https://labphonlab.github.io/go-on-lab/identification-task-app/" target="_blank">
+        <strong>本格実験版（被験者画面）</strong>
+        <small>同意 → デモグラフィック → 練習 → 本試行 → 結果のフルフロー。</small>
+      </a>
+      <a class="demo-link" href="https://labphonlab.github.io/go-on-lab/identification-task-app/?config=1" target="_blank">
+        <strong>設定パネル（実験者画面）</strong>
+        <small>パラダイム・刺激・文言を GUI で編集。</small>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <h2>料金プラン</h2>
+    <p class="section-lead">買い切り、月額費用なし。一度購入すれば永続的に使用可能。</p>
+    <div class="pricing">
+      <div class="plan">
+        <h3>Standard</h3>
+        <div class="price">¥14,800 <small>買切</small></div>
+        <div class="target">個人研究者・SLP 個人</div>
+        <ul>
+          <li>4 パラダイム対応の本格実験アプリ</li>
+          <li>GUI 設定パネル</li>
+          <li>Apps Script 連携テンプレート</li>
+          <li>日本語セットアップガイド</li>
+          <li>プライバシーポリシー雛形</li>
+          <li>メール QA サポート 30 日</li>
+          <li>更新版への永続アクセス</li>
+        </ul>
+        <a class="btn btn-outline" href="[Standard 購入リンク]">購入する</a>
+      </div>
+      <div class="plan featured">
+        <h3>Pro</h3>
+        <div class="price">¥49,800 <small>買切</small></div>
+        <div class="target">研究室・クリニック・複数人運用</div>
+        <ul>
+          <li>Standard のすべての機能</li>
+          <li>機関内の共同利用ライセンス</li>
+          <li><strong>IRB 申請書テンプレート</strong>（日本語）</li>
+          <li><strong>Zoom 設定支援 60 分</strong>（1 回）</li>
+          <li>メール QA サポート 6 ヶ月（優先対応）</li>
+          <li>更新版への永続アクセス</li>
+        </ul>
+        <a class="btn btn-primary" href="[Pro 購入リンク]">購入する</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <h2>よくある質問</h2>
+    <details>
+      <summary>プログラミングは必要ですか？</summary>
+      <div class="answer">不要です。設定パネルで全項目を変更できます。エンジニアでない研究者でも 30 分で実験設定が完了します。</div>
+    </details>
+    <details>
+      <summary>自分の刺激音を使えますか？</summary>
+      <div class="answer">はい。wav / mp3 / m4a / ogg など主要な音声形式が使えます。フォルダに置いて設定パネルでファイル名を指定するだけです。</div>
+    </details>
+    <details>
+      <summary>データはどこに保存されますか？</summary>
+      <div class="answer">購入者ご自身の Google アカウント内のスプレッドシートです。labphonlab は被験者データに一切アクセスできません。</div>
+    </details>
+    <details>
+      <summary>倫理審査は通りますか？</summary>
+      <div class="answer">Pro プランには IRB 申請書テンプレートを同梱しています。Standard プランにも被験者向けプライバシーポリシー雛形が含まれます。最終的な承認は購入者の所属機関の判断によります。</div>
+    </details>
+    <details>
+      <summary>SaaS 版はありますか？</summary>
+      <div class="answer">現時点では買切のみです。需要があれば SaaS 版も検討予定です。</div>
+    </details>
+    <details>
+      <summary>返金は？</summary>
+      <div class="answer">デジタル商品の性質上、返金は原則承れません。販売前に必ずライブデモで動作確認をお願いします。</div>
+    </details>
+    <details>
+      <summary>更新版は無料で受け取れますか？</summary>
+      <div class="answer">はい。一度購入された方は今後のアップデートにも無料でアクセスできます。</div>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Perception Lab — 音声知覚実験プラットフォーム</p>
+    <p>
+      <a href="LICENSE.md">ライセンス</a> ·
+      <a href="PRIVACY_POLICY_TEMPLATE.md">プライバシー（雛形）</a> ·
+      <a href="mailto:[your-email]">お問い合わせ</a>
+    </p>
+    <p>© 2026 labphonlab</p>
+  </div>
+</footer>
+
+</body>
+</html>

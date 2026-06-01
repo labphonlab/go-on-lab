@@ -59,48 +59,103 @@ https://.../vot-demo/?teacher=1
 
 ## デプロイ手順
 
-### 1. Apps Script に `doGet` を追加（教員モードで必要）
+### 1. デモ専用の Apps Script を用意する
 
-既存の Apps Script（identification-task-app と共用）に **以下の `doGet` 関数を追加** してください:
+**識別タスク本体（identification-task-app）とは別の Apps Script を作成することを強く推奨します**。
+理由:
+- 教員モードの `doGet` は URL を知っている人が誰でもデータを読めるため、本格実験の個人情報（氏名・生年月日など）と混在させない方が安全
+- クラス全員が同時にアクセスしたとき Apps Script のクォータを消費しても、本格実験に影響しない
+- スキーマがシンプル（`vot_results` 1 シートだけ）
+
+#### セットアップ手順
+
+1. `https://sheets.new` で新しいスプレッドシートを作成（例: `phonetics_demo_data`）
+2. 「拡張機能」→「Apps Script」
+3. エディタの中身を全削除し、以下を貼り付け:
 
 ```javascript
+const RESULTS_SHEET = "vot_results";
+
+function doPost(e) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const data = JSON.parse(e.postData.contents);
+    return handleResults_(data);
+  } catch (err) {
+    return jsonOut_({ ok: false, error: String(err) });
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function doGet(e) {
   const params = e.parameter || {};
   if (params.action === "aggregate") {
     return aggregateForExperiment_(params.experimentName);
   }
-  return jsonOut_({ ok: true, info: "Use POST to submit data." });
+  return jsonOut_({ ok: true, info: "Demo data endpoint." });
+}
+
+function handleResults_(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(RESULTS_SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(RESULTS_SHEET);
+    sheet.appendRow([
+      "submittedAt", "sessionId", "experimentName", "nickname",
+      "trialNumber", "stimulusId", "file",
+      "continuumStep", "label", "response",
+      "reactionTimeMs", "playCount", "timestamp", "userAgent"
+    ]);
+  }
+  const submittedAt = data.submittedAt || new Date().toISOString();
+  const sid = data.sessionId || "";
+  const p = data.participant || {};
+  const rows = (data.results || []).map(r => [
+    submittedAt, sid, data.experimentName || "", p.name || "",
+    r.trialNumber, r.stimulusId, r.file,
+    r.continuumStep, r.label, r.response,
+    r.reactionTimeMs, r.playCount, r.timestamp, data.userAgent || ""
+  ]);
+  if (rows.length > 0) {
+    sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, rows[0].length).setValues(rows);
+  }
+  return jsonOut_({ ok: true, n: rows.length });
 }
 
 function aggregateForExperiment_(experimentName) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = ss.getSheetByName("results_identification");
-  if (!sheet) return jsonOut_({ ok: false, error: "results_identification sheet not found" });
-
+  const sheet = ss.getSheetByName(RESULTS_SHEET);
+  if (!sheet) return jsonOut_({ ok: true, results: [] });
   const data = sheet.getDataRange().getValues();
   if (data.length < 2) return jsonOut_({ ok: true, results: [] });
-
   const headers = data[0];
-  const results = [];
+  const out = [];
   for (let i = 1; i < data.length; i++) {
     const row = {};
     headers.forEach((h, j) => { row[h] = data[i][j]; });
-    if (!experimentName || row.experimentName === experimentName) {
-      results.push(row);
-    }
+    if (!experimentName || row.experimentName === experimentName) out.push(row);
   }
-  return jsonOut_({ ok: true, count: results.length, results: results });
+  return jsonOut_({ ok: true, count: out.length, results: out });
+}
+
+function jsonOut_(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 ```
 
-> 既存の `doPost`, `handleResults`, `handleErrorReport`, `notifyResearcher_`, `jsonOut_` はそのまま残してください。
-
-保存 → 「デプロイを管理」→ 鉛筆 → バージョン「新バージョン」→ デプロイ。
+4. 保存 → 「デプロイ」→「新しいデプロイ」→ 種類「ウェブアプリ」
+5. 設定: 実行=自分 / アクセス=**全員**
+6. デプロイ → 初回は権限承認
+7. ウェブアプリ URL をコピー
 
 ### 2. データ送信先 URL の設定
 
-`vot-demo/index.html` の `CONFIG.dataServerUrl` が、identification-task-app と同じ
-Apps Script Web App URL を指していることを確認してください（既定値は設定済み）。
+コピーした URL を `vot-demo/index.html` の `CONFIG.dataServerUrl` に貼り付け
+（リポジトリには現在の URL が設定済み）。
 
 ### 3. 配布
 

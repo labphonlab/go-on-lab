@@ -71,6 +71,11 @@ python -m corpus.cli review-sheet --segments segments.jsonl --out review.csv --s
 python -m corpus.cli measure --segments segments.jsonl --sheet review.csv --card CARD.md
 python -m corpus.cli eval-demo --out /tmp/evald     # end-to-end demo
 
+# Alignment boundary accuracy (when, not what): mean/median error + % within
+# 10/20/50 ms vs a reference alignment. See docs/BOUNDARY_EVAL.md.
+python -m corpus.cli boundary --ref gold.TextGrid --hyp mfa.TextGrid --tier phones
+python -m corpus.cli boundary-demo
+
 # Inspect a prompt set.
 python -m corpus.cli prompts --file examples/prompts_ja.jsonl
 
@@ -98,7 +103,8 @@ corpus/
   prompts/store.py     license-aware prompt sets (JSONL)
   verification/        "read correctly?" — base + heuristic + ASR (pluggable)
   alignment/           forced alignment — base + proportional baseline;
-                       textgrid.py (Praat reader) + mfa.py (phone alignment)
+                       textgrid.py (Praat reader) + mfa.py (phone alignment) +
+                       boundary_eval.py (alignment accuracy: error + tolerance)
   annotation/whisperx_pipeline.py  WhisperX result -> gated Segments (M3)
   annotation/mfa_prep.py           write wav+txt utterance pairs for MFA (M3)
   annotation/evaluation.py         WER/CER + bootstrap CI + stratified sampling

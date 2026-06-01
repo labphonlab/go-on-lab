@@ -452,6 +452,31 @@ def cmd_eval_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_boundary(args: argparse.Namespace) -> int:
+    """Compare a hypothesis alignment TextGrid to a reference; report boundary error."""
+    from .alignment.boundary_eval import boundary_errors_from_textgrids
+    res = boundary_errors_from_textgrids(args.ref, args.hyp, tier=args.tier)
+    print(json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def cmd_boundary_demo(args: argparse.Namespace) -> int:
+    """Demo boundary-error metrics on a synthetic ref/hyp phone alignment."""
+    from .alignment.textgrid import Interval
+    from .alignment.boundary_eval import boundary_errors
+
+    ref = [Interval(0.00, 0.18, "DH"), Interval(0.18, 0.32, "AH"),
+           Interval(0.32, 0.55, "K"), Interval(0.55, 0.80, "AE"),
+           Interval(0.80, 1.05, "T")]
+    # Hypothesis: small jitter on most boundaries, one larger slip on K.
+    hyp = [Interval(0.00, 0.19, "DH"), Interval(0.19, 0.33, "AH"),
+           Interval(0.33, 0.61, "K"), Interval(0.61, 0.81, "AE"),
+           Interval(0.81, 1.05, "T")]
+    res = boundary_errors(ref, hyp)
+    print(json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="corpus", description="Go-on Lab corpus backend")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -549,6 +574,17 @@ def build_parser() -> argparse.ArgumentParser:
                          help="demo the sample->verify->measure WER/CER loop")
     ped.add_argument("--out", default="./_eval_demo")
     ped.set_defaults(func=cmd_eval_demo)
+
+    pb = sub.add_parser("boundary",
+                        help="boundary error of a hypothesis alignment vs reference")
+    pb.add_argument("--ref", required=True, help="reference TextGrid")
+    pb.add_argument("--hyp", required=True, help="hypothesis TextGrid")
+    pb.add_argument("--tier", default="phones")
+    pb.set_defaults(func=cmd_boundary)
+
+    pbd = sub.add_parser("boundary-demo",
+                         help="demo boundary-error metrics on synthetic alignments")
+    pbd.set_defaults(func=cmd_boundary_demo)
     return p
 
 

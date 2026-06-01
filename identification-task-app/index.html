@@ -681,6 +681,7 @@
   <section id="screen-consent" class="hidden">
     <h1 id="consentTitle">音声知覚タスク</h1>
     <div class="card">
+      <div id="consentBody">
       <h2 style="margin-top:0;">実験の概要</h2>
       <p>本実験では、英単語の発音を聞いて、それが「<strong>pie</strong>」か「<strong>buy</strong>」のどちらに聞こえるかを答えていただきます。</p>
       <ul style="font-size:15px; line-height:1.7;">
@@ -705,6 +706,7 @@
 
         <h3>5. 連絡先</h3>
         <p>本研究に関するご質問は研究実施者までお問い合わせください。</p>
+      </div>
       </div>
 
       <label class="checkbox-field">
@@ -830,15 +832,7 @@
   <section id="screen-instructions" class="hidden">
     <h1>実験の進め方</h1>
     <div class="card">
-      <p>これから実際の課題を始めます。落ち着いてお読みください。</p>
-      <ol style="line-height:1.8; padding-left:1.5em;">
-        <li>各試行で、画面に「<strong>+</strong>」が表示されてから音声が 1 回再生されます。</li>
-        <li>音声を聞いたら、聞こえた単語に対応するボタン（<strong>pie</strong> または <strong>buy</strong>）を<strong>できるだけ素早く正確に</strong>押してください。</li>
-        <li>判断に迷う音もありますが、聞こえたままの直感で答えてください。<strong>正解・不正解はありません</strong>。</li>
-        <li>本試行に入る前に <strong>6 試行の練習</strong> を行います。</li>
-        <li>本試行は <strong>66 試行</strong>あり、途中で 1 回休憩があります。</li>
-        <li>実験中は<strong>別のタブやアプリに切り替えない</strong>でください（注意の逸れを記録しています）。</li>
-      </ol>
+      <div id="instructionsBody"></div>
       <p class="note">準備ができたら「練習を始める」を押してください。押した後、音声ファイルの読み込みが始まります（10〜30 秒）。</p>
       <div style="margin-top: 20px;">
         <button class="btn-primary" id="toPracticeBtn">練習を始める</button>
@@ -1412,6 +1406,13 @@ function setupToInstructions() {
 }
 
 async function instructionsToPractice() {
+  if (!CONFIG.stimuli || CONFIG.stimuli.length === 0) {
+    alert("刺激リストが空です。\n実験者は ?config=1 でパネルを開き、刺激を追加してください。");
+    return;
+  }
+  if (!CONFIG.dataServerUrl) {
+    if (!confirm("データ送信先 URL が未設定です。データは保存されませんが、続行しますか？")) return;
+  }
   practiceList = buildPracticeTrialList();
   mainList = buildMainTrialList();
 
@@ -1437,6 +1438,15 @@ async function instructionsToPractice() {
 }
 
 function startBlock(practice) {
+  // 練習が 0 試行に設定されている場合はスキップして本試行へ
+  if (practice && (!practiceList || practiceList.length === 0)) {
+    startBlock(false);
+    return;
+  }
+  if (!practice && (!mainList || mainList.length === 0)) {
+    alert("本試行リストが空です。設定を確認してください。");
+    return;
+  }
   isPractice = practice;
   trialList = practice ? practiceList : mainList;
   currentTrialIndex = 0;
@@ -2089,12 +2099,103 @@ function setConfigStatus(msg, isError) {
   if (msg) setTimeout(() => { if (el.textContent === msg) el.textContent = ""; }, 4000);
 }
 
+function defaultConsentBody() {
+  const p = CONFIG.paradigm;
+  const totalMain = CONFIG.stimuli.length * CONFIG.repetitionsPerStimulus;
+  const totalTrials = CONFIG.numPracticeTrials + totalMain;
+  const mins = Math.max(1, Math.round(totalTrials * 6 / 60));
+  let task = "";
+  if (p === "identification") {
+    const opts = CONFIG.responseOptions.map((o) => "「<strong>" + o + "</strong>」").join("か");
+    task = "本実験では、音声を聞いて、それが " + opts + " のどちらに聞こえるかを答えていただきます。";
+  } else if (p === "ax") {
+    task = "本実験では、続けて流れる 2 つの音声 A と X を聞いて、それらが「同じ」か「違う」かを答えていただきます。";
+  } else if (p === "axb") {
+    task = "本実験では、続けて流れる 3 つの音声 A・X・B を聞いて、X が A と B のどちらに似ているかを答えていただきます。";
+  } else if (p === "rating") {
+    const r = CONFIG.ratingScale;
+    task = "本実験では、音声を聞いて、" + r.min + "〜" + r.max + " の段階で評価していただきます。";
+  }
+  return (
+    '<h2 style="margin-top:0;">実験の概要</h2>' +
+    '<p>' + task + '</p>' +
+    '<ul style="font-size:15px; line-height:1.7;">' +
+      '<li>所要時間: 約 ' + mins + ' 分</li>' +
+      '<li>試行数: 練習 ' + CONFIG.numPracticeTrials + ' 試行 + 本試行 ' + totalMain + ' 試行' +
+        (CONFIG.breakAfterNTrials > 0 ? '（途中 1 回の休憩あり）' : '') + '</li>' +
+      '<li>必要なもの: イヤホンまたはヘッドホン</li>' +
+    '</ul>' +
+    '<h2>参加にあたっての説明（インフォームドコンセント）</h2>' +
+    '<div class="consent-text">' +
+      '<h3>1. 研究の目的</h3>' +
+      '<p>本研究は、音声知覚における音韻カテゴリの境界・弁別能力を調べることを目的としています。</p>' +
+      '<h3>2. 実験内容</h3>' +
+      '<p>音声刺激を聞いて、選択肢の中から回答していただきます。回答に正解・不正解はありません（弁別タスクを除く）。聞こえたままにお答えください。</p>' +
+      '<h3>3. 収集する情報</h3>' +
+      '<p>氏名、生年月日、性別、利き手、言語背景（母語・第二言語・生育地・方言など）、各試行の回答と反応時間を収集します。氏名は連絡用にのみ使用し、研究発表や論文では匿名化されたデータのみを用います。</p>' +
+      '<h3>4. プライバシーと撤回権</h3>' +
+      '<p>収集したデータは厳重に管理し、研究目的以外には使用しません。実験中いつでも中断していただいて構いません（その時点までのデータは破棄します）。</p>' +
+      '<h3>5. 連絡先</h3>' +
+      '<p>本研究に関するご質問は研究実施者までお問い合わせください。</p>' +
+    '</div>'
+  );
+}
+
+function defaultInstructionsBody() {
+  const p = CONFIG.paradigm;
+  const totalMain = CONFIG.stimuli.length * CONFIG.repetitionsPerStimulus;
+  const breakNote = CONFIG.breakAfterNTrials > 0
+    ? '<li>本試行は <strong>' + totalMain + ' 試行</strong>あり、途中で 1 回休憩があります。</li>'
+    : '<li>本試行は <strong>' + totalMain + ' 試行</strong>です。</li>';
+  const practiceNote = CONFIG.numPracticeTrials > 0
+    ? '<li>本試行に入る前に <strong>' + CONFIG.numPracticeTrials + ' 試行の練習</strong> を行います。</li>'
+    : '';
+  let taskStep = "";
+  if (p === "identification") {
+    const opts = CONFIG.responseOptions.map((o) => "<strong>" + o + "</strong>").join(" / ");
+    taskStep =
+      '<li>各試行で、画面に「<strong>+</strong>」が表示されてから音声が 1 回再生されます。</li>' +
+      '<li>音声を聞いたら、聞こえた音に対応するボタン（' + opts + '）を<strong>できるだけ素早く正確に</strong>押してください。</li>' +
+      '<li>判断に迷う音もありますが、聞こえたままの直感で答えてください。<strong>正解・不正解はありません</strong>。</li>';
+  } else if (p === "ax") {
+    taskStep =
+      '<li>各試行で、画面に「<strong>+</strong>」が表示されてから 2 つの音声 A と X が連続して再生されます。</li>' +
+      '<li>2 つの音声が「<strong>同じ</strong>」か「<strong>違う</strong>」かを判定し、<strong>できるだけ素早く正確に</strong>ボタンを押してください。</li>';
+  } else if (p === "axb") {
+    taskStep =
+      '<li>各試行で、画面に「<strong>+</strong>」が表示されてから 3 つの音声 A・X・B が連続して再生されます。</li>' +
+      '<li>真ん中の X が A と B の<strong>どちらに似ているか</strong>を判定し、<strong>できるだけ素早く正確に</strong>ボタンを押してください。</li>';
+  } else if (p === "rating") {
+    const r = CONFIG.ratingScale;
+    taskStep =
+      '<li>各試行で、画面に「<strong>+</strong>」が表示されてから音声が 1 回再生されます。</li>' +
+      '<li>音声を聞いたら、<strong>' + r.min + '〜' + r.max + ' のスケール</strong>で評価してください。<strong>' + (r.minLabel || r.min) + '</strong>〜<strong>' + (r.maxLabel || r.max) + '</strong>の間で直感的に選びます。</li>';
+  }
+  return (
+    '<p>これから実際の課題を始めます。落ち着いてお読みください。</p>' +
+    '<ol style="line-height:1.8; padding-left:1.5em;">' +
+      taskStep +
+      practiceNote +
+      breakNote +
+      '<li>実験中は<strong>別のタブやアプリに切り替えない</strong>でください（注意の逸れを記録しています）。</li>' +
+    '</ol>'
+  );
+}
+
 function applyConfigToUI() {
-  // 同意画面のタイトルと本文を反映
+  // タイトル
   if (CONFIG.consentTitle) {
     const t = document.getElementById("consentTitle");
     if (t) t.textContent = CONFIG.consentTitle;
   }
+  // 同意本文（CONFIG.consentBody が空ならパラダイム別デフォルト）
+  const cBody = document.getElementById("consentBody");
+  if (cBody) cBody.innerHTML = CONFIG.consentBody && CONFIG.consentBody.trim()
+    ? CONFIG.consentBody : defaultConsentBody();
+  // 教示本文
+  const iBody = document.getElementById("instructionsBody");
+  if (iBody) iBody.innerHTML = CONFIG.instructionsBody && CONFIG.instructionsBody.trim()
+    ? CONFIG.instructionsBody : defaultInstructionsBody();
 }
 
 /* ============================================================

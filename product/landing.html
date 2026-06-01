@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Perception Lab — 音声知覚実験プラットフォーム</title>
-<meta name="description" content="心理測定関数の取得を、コードを書かずに。スマホでも動く音声知覚研究のためのオールインワン Web アプリ。VOT 識別、母音境界、AX/AXB 弁別、Rating に対応。">
+<title>Perception Lab — 音声知覚研究の刺激音 + 実験プラットフォーム</title>
+<meta name="description" content="刺激音セット、カスタム刺激音作成、スマホ対応の実験プラットフォーム。音声知覚研究の「実装」を全部まとめて。">
 <style>
   :root {
     --primary: #0071e3;
     --primary-dark: #0058b4;
     --accent: #34c759;
+    --orange: #ff9500;
+    --purple: #af52de;
     --text: #1d1d1f;
     --muted: #6e6e73;
     --bg: #fff;
@@ -23,7 +25,8 @@
     color: var(--text); background: var(--bg);
     line-height: 1.65;
   }
-  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
   /* Hero */
   .hero {
     background: linear-gradient(180deg, #f0f7ff 0%, #fff 100%);
@@ -39,7 +42,7 @@
   .hero .lead {
     font-size: clamp(16px, 2.5vw, 20px);
     color: var(--muted);
-    max-width: 720px;
+    max-width: 760px;
     margin: 0 auto 32px;
   }
   .hero-cta {
@@ -64,30 +67,84 @@
     border: 2px solid var(--border);
   }
   .btn-outline:hover { background: var(--bg-soft); }
+
+  /* Process diagram */
+  .process {
+    background: var(--bg-soft);
+    padding: 48px 0;
+    text-align: center;
+  }
+  .process-row {
+    display: flex; gap: 12px; justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  .process-step {
+    background: #fff;
+    padding: 14px 20px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .process-step.ours {
+    border-color: var(--primary);
+    color: var(--text);
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(0,113,227,0.12);
+  }
+
   /* Sections */
   section { padding: 64px 0; }
   section.alt { background: var(--bg-soft); }
   h2 { font-size: clamp(24px, 4vw, 36px); text-align: center; margin: 0 0 12px; }
   .section-lead {
     text-align: center; color: var(--muted);
-    max-width: 720px; margin: 0 auto 40px;
+    max-width: 760px; margin: 0 auto 40px;
     font-size: 16px;
   }
-  /* Features grid */
-  .features {
+
+  /* Pillar cards */
+  .pillars {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 24px;
+    margin-top: 32px;
   }
-  .feature {
-    background: var(--bg);
-    padding: 28px;
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  .pillar {
+    background: #fff;
+    border-radius: 20px;
+    padding: 32px;
+    border: 2px solid var(--border);
+    display: flex; flex-direction: column;
   }
-  .feature h3 { margin: 0 0 8px; font-size: 18px; }
-  .feature p { margin: 0; color: var(--muted); font-size: 14px; }
-  .feature .emoji { font-size: 32px; margin-bottom: 8px; }
+  .pillar-badge {
+    display: inline-block;
+    font-size: 12px; font-weight: 700;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+    align-self: flex-start;
+  }
+  .pillar.p1 .pillar-badge { background: var(--accent); }
+  .pillar.p2 .pillar-badge { background: var(--orange); }
+  .pillar.p3 .pillar-badge { background: var(--primary); }
+  .pillar h3 {
+    margin: 0 0 8px;
+    font-size: 22px;
+  }
+  .pillar .price {
+    font-size: 18px;
+    color: var(--muted);
+    margin: 0 0 16px;
+  }
+  .pillar .price strong { color: var(--text); font-weight: 700; font-size: 22px; }
+  .pillar p { color: var(--muted); font-size: 15px; }
+  .pillar ul { padding-left: 18px; margin: 12px 0; color: var(--muted); font-size: 14px; }
+  .pillar ul li { margin: 4px 0; }
+  .pillar .btn { margin-top: auto; text-align: center; }
+
   /* Paradigms */
   .paradigm-grid {
     display: grid;
@@ -102,60 +159,53 @@
   }
   .paradigm-card h3 { margin: 0 0 8px; color: var(--primary); }
   .paradigm-card p { margin: 0; color: var(--muted); font-size: 14px; }
-  /* Pricing */
-  .pricing {
+
+  /* Stimulus catalog */
+  .catalog {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-    max-width: 720px;
-    margin: 0 auto;
+    gap: 16px;
+    margin-top: 24px;
   }
-  .plan {
-    background: var(--bg);
-    padding: 32px;
-    border-radius: 20px;
+  .catalog-item {
+    background: #fff;
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .catalog-item .catalog-name { font-weight: 600; font-size: 14px; }
+  .catalog-item .catalog-meta { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .catalog-item .catalog-price { font-weight: 700; color: var(--primary); white-space: nowrap; }
+  .badge-soon {
+    background: var(--orange); color: #fff;
+    font-size: 10px; padding: 2px 6px; border-radius: 4px;
+    margin-left: 6px;
+  }
+
+  /* Bundle table */
+  .bundle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .bundle {
+    background: #fff;
+    padding: 28px;
+    border-radius: 16px;
     border: 2px solid var(--border);
   }
-  .plan.featured {
+  .bundle.featured {
     border-color: var(--primary);
-    box-shadow: 0 8px 32px rgba(0,113,227,0.15);
-    position: relative;
+    background: #f0f7ff;
   }
-  .plan.featured::before {
-    content: "おすすめ";
-    position: absolute;
-    top: -12px;
-    right: 20px;
-    background: var(--primary);
-    color: #fff;
-    padding: 4px 14px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 700;
-  }
-  .plan h3 { margin: 0 0 6px; font-size: 22px; }
-  .plan .price {
-    font-size: 36px;
-    font-weight: 800;
-    margin: 8px 0 4px;
-  }
-  .plan .price small { font-size: 14px; color: var(--muted); font-weight: 500; }
-  .plan .target { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
-  .plan ul { list-style: none; padding: 0; margin: 16px 0; }
-  .plan li {
-    padding: 6px 0;
-    padding-left: 26px;
-    position: relative;
-    font-size: 14px;
-  }
-  .plan li::before {
-    content: "✓";
-    position: absolute;
-    left: 0; top: 6px;
-    color: var(--accent);
-    font-weight: 700;
-  }
-  .plan .btn { width: 100%; text-align: center; }
+  .bundle h3 { margin: 0 0 4px; font-size: 18px; }
+  .bundle .saving { color: var(--accent); font-size: 13px; font-weight: 700; }
+  .bundle .price-old { color: var(--muted); text-decoration: line-through; font-size: 13px; }
+  .bundle .price-new { font-size: 24px; font-weight: 800; margin: 4px 0; }
+  .bundle ul { padding-left: 18px; font-size: 13px; color: var(--muted); }
+
   /* FAQ */
   details {
     background: var(--bg);
@@ -183,16 +233,8 @@
     color: var(--muted);
     font-size: 15px;
   }
-  /* Footer */
-  footer {
-    padding: 40px 0;
-    text-align: center;
-    color: var(--muted);
-    font-size: 13px;
-    border-top: 1px solid var(--border);
-  }
-  footer a { color: var(--muted); }
-  /* Demo embed */
+
+  /* Demo */
   .demo-links {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 16px; margin-top: 24px;
@@ -209,46 +251,224 @@
   .demo-link:hover { border-color: var(--primary); }
   .demo-link strong { display: block; margin-bottom: 4px; }
   .demo-link small { color: var(--muted); font-size: 13px; }
+
+  /* Footer */
+  footer {
+    padding: 40px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--muted); }
 </style>
 </head>
 <body>
 
 <section class="hero">
   <div class="container">
-    <h1>音声知覚実験を、コードを書かずに。</h1>
+    <h1>音声知覚研究の「実装」を、まるごと。</h1>
     <p class="lead">
-      VOT 知覚、母音境界、AX/AXB 弁別、Rating ―
-      スマホでも動く本格的な心理音響実験プラットフォーム。
-      Google Sheets と連携、月額費用ゼロで自分の研究室データを安全管理。
+      実験デザインと分析はあなたの研究の核。<br>
+      その間にある<strong>刺激音作成・実験実施・データ収集</strong>を、私たちが担当します。
     </p>
     <div class="hero-cta">
-      <a class="btn btn-primary" href="#pricing">プランを見る</a>
+      <a class="btn btn-primary" href="#pillars">3 つのプロダクトを見る</a>
       <a class="btn btn-outline" href="#demo">ライブデモを試す</a>
     </div>
   </div>
 </section>
 
-<section>
+<section class="process">
   <div class="container">
-    <h2>こんな研究者・臨床家のために</h2>
-    <p class="section-lead">
-      自分の刺激と研究デザインを、コードを編集することなく Web 実験に展開できます。
+    <h2 style="font-size: 18px; margin-bottom: 8px;">研究プロセスの責任範囲</h2>
+    <div class="process-row">
+      <div class="process-step">実験デザイン<br><small>← あなた</small></div>
+      <div class="process-step ours">刺激音作成<br><small>← Perception Lab</small></div>
+      <div class="process-step ours">実験実施<br><small>← Perception Lab</small></div>
+      <div class="process-step ours">データ収集<br><small>← Perception Lab</small></div>
+      <div class="process-step">データ分析<br><small>← あなた</small></div>
+    </div>
+  </div>
+</section>
+
+<section id="pillars">
+  <div class="container">
+    <h2>3 つのプロダクト</h2>
+    <p class="section-lead">単品でも、組み合わせても。研究のフェーズに合わせて選べます。</p>
+    <div class="pillars">
+
+      <div class="pillar p1">
+        <span class="pillar-badge">Pillar 1</span>
+        <h3>刺激音セット</h3>
+        <p class="price">単品 <strong>¥4,800〜¥6,800</strong></p>
+        <p>VOT 連続体、母音連続体など、すぐに使える刺激音を WAV + 音響パラメータ表 + Technical Note のセットで提供。</p>
+        <ul>
+          <li>3 サンプリングレート（44.1 / 22.05 / 16 kHz）</li>
+          <li>Perception Lab 即時インポート用 JSON 付属</li>
+          <li>論文に書ける引用情報付き</li>
+          <li>5-Set Bundle ¥19,800 / Premium ¥39,800</li>
+        </ul>
+        <a class="btn btn-outline" href="#stimulus-catalog">カタログを見る</a>
+      </div>
+
+      <div class="pillar p2">
+        <span class="pillar-badge">Pillar 2</span>
+        <h3>カスタム刺激音作成</h3>
+        <p class="price">受託 <strong>¥40,000〜</strong></p>
+        <p>研究デザインに合わせた特注の刺激音セットを制作。複数次元、多話者、特殊合成にも対応します。</p>
+        <ul>
+          <li>無料 Zoom 相談（30 分）から</li>
+          <li>仕様書 + 見積書を文書で提示</li>
+          <li>修正 2 回まで無償</li>
+          <li>30 日間の調整サポート</li>
+        </ul>
+        <a class="btn btn-outline" href="mailto:[your-email]?subject=カスタム刺激音相談">相談する</a>
+      </div>
+
+      <div class="pillar p3">
+        <span class="pillar-badge">Pillar 3</span>
+        <h3>実験プラットフォーム</h3>
+        <p class="price">買切 <strong>¥14,800 / ¥49,800</strong></p>
+        <p>スマホでも動く 4 パラダイム対応 Web 実験アプリ。データは Google Sheets に自動保存、月額費用ゼロ。</p>
+        <ul>
+          <li>Identification / AX / AXB / Rating</li>
+          <li>GUI 設定パネル、コード編集不要</li>
+          <li>iOS / Android 完全対応</li>
+          <li>個人 ¥14,800 / 機関 ¥49,800</li>
+        </ul>
+        <a class="btn btn-outline" href="#platform">詳細を見る</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="stimulus-catalog">
+  <div class="container">
+    <h2>刺激音セット カタログ</h2>
+    <p class="section-lead">提供中・開発中の刺激音セット。「開発中」は次回リリース時に通知します。</p>
+
+    <h3 style="margin-top: 32px; font-size: 16px; color: var(--muted);">日本語破裂音 VOT</h3>
+    <div class="catalog">
+      <div class="catalog-item">
+        <div>
+          <div class="catalog-name">/k/ - /g/ VOT 連続体 <span class="badge-soon">開発中</span></div>
+          <div class="catalog-meta">11 ステップ・完全合成・/a/ 母音</div>
+        </div>
+        <div class="catalog-price">¥4,800</div>
+      </div>
+      <div class="catalog-item">
+        <div>
+          <div class="catalog-name">/t/ - /d/ VOT 連続体 <span class="badge-soon">開発中</span></div>
+          <div class="catalog-meta">11 ステップ・完全合成・/a/ 母音</div>
+        </div>
+        <div class="catalog-price">¥4,800</div>
+      </div>
+      <div class="catalog-item">
+        <div>
+          <div class="catalog-name">/p/ - /b/ VOT 連続体 <span class="badge-soon">開発中</span></div>
+          <div class="catalog-meta">11 ステップ・完全合成・/a/ 母音</div>
+        </div>
+        <div class="catalog-price">¥4,800</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 32px; font-size: 16px; color: var(--muted);">英語破裂音 VOT</h3>
+    <div class="catalog">
+      <div class="catalog-item">
+        <div>
+          <div class="catalog-name">/p/ - /b/ VOT 連続体 <span class="badge-soon">開発中</span></div>
+          <div class="catalog-meta">11 ステップ・完全合成・/ɑ/ 母音</div>
+        </div>
+        <div class="catalog-price">¥4,800</div>
+      </div>
+      <div class="catalog-item">
+        <div>
+          <div class="catalog-name">/t/ - /d/ VOT 連続体 <span class="badge-soon">開発中</span></div>
+          <div class="catalog-meta">11 ステップ・完全合成・/ɑ/ 母音</div>
+        </div>
+        <div class="catalog-price">¥4,800</div>
+      </div>
+      <div class="catalog-item">
+        <div>
+          <div class="catalog-name">/k/ - /g/ VOT 連続体 <span class="badge-soon">開発中</span></div>
+          <div class="catalog-meta">11 ステップ・完全合成・/ɑ/ 母音</div>
+        </div>
+        <div class="catalog-price">¥4,800</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 32px; font-size: 16px; color: var(--muted);">L2 学習者向け</h3>
+    <div class="catalog">
+      <div class="catalog-item">
+        <div>
+          <div class="catalog-name">英語 /r/ - /l/ 連続体 <span class="badge-soon">開発中</span></div>
+          <div class="catalog-meta">11 ステップ・F3 遷移操作</div>
+        </div>
+        <div class="catalog-price">¥6,800</div>
+      </div>
+    </div>
+
+    <p style="text-align: center; margin-top: 32px; font-size: 13px; color: var(--muted);">
+      ※ 必要な連続体がカタログにない場合、<a href="mailto:[your-email]">カスタム刺激音作成</a>でご相談ください。
     </p>
-    <div class="features">
-      <div class="feature">
-        <div class="emoji">🎓</div>
-        <h3>音声学・言語学・心理学の研究者</h3>
-        <p>VOT 知覚、母音境界、L2 音素知覚の個人差・群差を効率的に計測。</p>
+  </div>
+</section>
+
+<section id="platform">
+  <div class="container">
+    <h2>実験プラットフォーム</h2>
+    <p class="section-lead">研究者・SLP・教員のために設計された、本格的 Web 実験アプリ。</p>
+
+    <h3 style="text-align: center; margin-top: 32px;">対応する 4 パラダイム</h3>
+    <div class="paradigm-grid" style="margin-top: 16px;">
+      <div class="paradigm-card">
+        <h3>Identification</h3>
+        <p>1 刺激 → N カテゴリ選択。VOT 同定、母音境界。</p>
       </div>
-      <div class="feature">
-        <div class="emoji">🏥</div>
-        <h3>言語聴覚士・臨床音声学</h3>
-        <p>患者の音韻識別能力・弁別能の評価、治療前後の比較データ収集。</p>
+      <div class="paradigm-card">
+        <h3>AX Discrimination</h3>
+        <p>A → X の 2 刺激で同/異判定。弁別能評価。</p>
       </div>
-      <div class="feature">
-        <div class="emoji">📚</div>
-        <h3>音声学を教える教員</h3>
-        <p>クラス全体のデモで「カテゴリ知覚」「VOT」を可視化、学生実験のプラットフォームに。</p>
+      <div class="paradigm-card">
+        <h3>AXB Discrimination</h3>
+        <p>A → X → B で X の所属判定。3 刺激での音韻対立。</p>
+      </div>
+      <div class="paradigm-card">
+        <h3>Rating</h3>
+        <p>1 刺激 → リッカートスケール評定。自然さ・典型性。</p>
+      </div>
+    </div>
+
+    <div class="bundle-grid" style="margin-top: 40px;">
+      <div class="bundle">
+        <h3>Standard</h3>
+        <div class="price-new">¥14,800</div>
+        <p style="font-size: 13px; color: var(--muted);">買切 / 個人ライセンス</p>
+        <ul>
+          <li>4 パラダイム対応</li>
+          <li>GUI 設定パネル</li>
+          <li>スマホ完全対応</li>
+          <li>Google Sheets 自動連携</li>
+          <li>セットアップガイド</li>
+          <li>プライバシーポリシー雛形</li>
+          <li>メール QA 30 日</li>
+        </ul>
+        <a class="btn btn-outline" href="[Standard 購入リンク]" style="display: block; text-align: center;">購入する</a>
+      </div>
+      <div class="bundle featured">
+        <h3>Pro <span style="background: var(--primary); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 999px; margin-left: 6px;">機関向け</span></h3>
+        <div class="price-new">¥49,800</div>
+        <p style="font-size: 13px; color: var(--muted);">買切 / 機関ライセンス（共同利用可）</p>
+        <ul>
+          <li>Standard のすべて</li>
+          <li>機関内の構成員で共同利用可</li>
+          <li><strong>IRB 申請書テンプレート</strong></li>
+          <li><strong>Zoom 設定支援 60 分</strong></li>
+          <li>メール QA 6 ヶ月（優先）</li>
+        </ul>
+        <a class="btn btn-primary" href="[Pro 購入リンク]" style="display: block; text-align: center;">購入する</a>
       </div>
     </div>
   </div>
@@ -256,122 +476,65 @@
 
 <section class="alt">
   <div class="container">
-    <h2>4 つのパラダイムに対応</h2>
-    <p class="section-lead">設定パネルでパラダイムを切り替えるだけ。コード変更は不要です。</p>
-    <div class="paradigm-grid">
-      <div class="paradigm-card">
-        <h3>Identification</h3>
-        <p>1 刺激 → N 個のカテゴリから選択。VOT、母音境界、音素同定など。</p>
+    <h2>お得なバンドル</h2>
+    <p class="section-lead">「今日から実験スタート」できる組み合わせ。単品購入より最大 ¥9,800 お得。</p>
+    <div class="bundle-grid">
+      <div class="bundle">
+        <h3>研究スタートキット</h3>
+        <p class="saving">¥4,800 お得</p>
+        <div class="price-new">¥24,800</div>
+        <p style="font-size: 13px;"><span class="price-old">¥29,600</span></p>
+        <ul>
+          <li>既製刺激音 1 セット</li>
+          <li>プラットフォーム Standard</li>
+        </ul>
+        <a class="btn btn-outline" href="[研究キット購入リンク]" style="display: block; text-align: center;">購入する</a>
       </div>
-      <div class="paradigm-card">
-        <h3>AX Discrimination</h3>
-        <p>2 刺激（A → X）を聞いて「同じ」か「違う」を判定。弁別能・境界の鋭さの調査。</p>
+      <div class="bundle">
+        <h3>臨床スタートキット</h3>
+        <p class="saving">¥4,800 お得</p>
+        <div class="price-new">¥34,800</div>
+        <p style="font-size: 13px;"><span class="price-old">¥39,600</span></p>
+        <ul>
+          <li>Sibilant 刺激セット</li>
+          <li>プラットフォーム Standard</li>
+          <li>SLP 向け設定例</li>
+        </ul>
+        <a class="btn btn-outline" href="[臨床キット購入リンク]" style="display: block; text-align: center;">購入する</a>
       </div>
-      <div class="paradigm-card">
-        <h3>AXB Discrimination</h3>
-        <p>3 刺激（A → X → B）を聞いて X が A と B のどちらに似ているかを判定。</p>
-      </div>
-      <div class="paradigm-card">
-        <h3>Rating</h3>
-        <p>1 刺激を聞いて、リッカートスケール（1–7 など）で評価。自然さ・典型性の評定。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="container">
-    <h2>主要機能</h2>
-    <div class="features">
-      <div class="feature">
-        <div class="emoji">⚙️</div>
-        <h3>GUI 設定パネル</h3>
-        <p>パラダイム、刺激、回答ラベル、試行構造、文言を画面で編集。エンジニア不要。</p>
-      </div>
-      <div class="feature">
-        <div class="emoji">📱</div>
-        <h3>スマホ完全対応</h3>
-        <p>iOS / Android で動作。Wake Lock で画面ロック防止、自動再生フォールバック付き。</p>
-      </div>
-      <div class="feature">
-        <div class="emoji">📊</div>
-        <h3>自動データ収集</h3>
-        <p>Google Sheets に自動保存。リトライ・エラーメール通知・全試行データの裏側ロギング。</p>
-      </div>
-      <div class="feature">
-        <div class="emoji">🧠</div>
-        <h3>本格プロトコル</h3>
-        <p>同意 → デモグラフィック → 練習 → 本試行（休憩あり） → 結果表示まで完備。</p>
-      </div>
-      <div class="feature">
-        <div class="emoji">🔒</div>
-        <h3>個人情報は自分で管理</h3>
-        <p>データは購入者の Google アカウント内に保存。labphonlab は一切アクセスしません。</p>
-      </div>
-      <div class="feature">
-        <div class="emoji">🔁</div>
-        <h3>共有設定（URL ハッシュ）</h3>
-        <p>実験設定を URL に埋め込んで共同研究者と共有可能。JSON 書き出しも対応。</p>
+      <div class="bundle featured">
+        <h3>ラボキット</h3>
+        <p class="saving">¥9,800 お得</p>
+        <div class="price-new">¥69,800</div>
+        <p style="font-size: 13px;"><span class="price-old">¥79,600</span></p>
+        <ul>
+          <li>5-Set Bundle（任意 5 セット）</li>
+          <li>プラットフォーム Pro</li>
+          <li>IRB テンプレート + Zoom 支援</li>
+        </ul>
+        <a class="btn btn-primary" href="[ラボキット購入リンク]" style="display: block; text-align: center;">購入する</a>
       </div>
     </div>
   </div>
 </section>
 
-<section class="alt" id="demo">
+<section id="demo">
   <div class="container">
     <h2>ライブデモ</h2>
     <p class="section-lead">購入前にどれでも実際に動かして試せます。</p>
     <div class="demo-links">
       <a class="demo-link" href="https://labphonlab.github.io/go-on-lab/vot-demo/" target="_blank">
-        <strong>VOT 知覚デモ（学生向け簡易版）</strong>
-        <small>44 試行・約 5 分で完了。VOT 0–50 ms 連続体。</small>
+        <strong>VOT 知覚デモ（簡易版）</strong>
+        <small>44 試行・約 5 分で完了</small>
       </a>
       <a class="demo-link" href="https://labphonlab.github.io/go-on-lab/identification-task-app/" target="_blank">
         <strong>本格実験版（被験者画面）</strong>
-        <small>同意 → デモグラフィック → 練習 → 本試行 → 結果のフルフロー。</small>
+        <small>フルフロー体験</small>
       </a>
       <a class="demo-link" href="https://labphonlab.github.io/go-on-lab/identification-task-app/?config=1" target="_blank">
         <strong>設定パネル（実験者画面）</strong>
-        <small>パラダイム・刺激・文言を GUI で編集。</small>
+        <small>パラダイム・刺激を GUI で編集</small>
       </a>
-    </div>
-  </div>
-</section>
-
-<section id="pricing">
-  <div class="container">
-    <h2>料金プラン</h2>
-    <p class="section-lead">買い切り、月額費用なし。一度購入すれば永続的に使用可能。</p>
-    <div class="pricing">
-      <div class="plan">
-        <h3>Standard</h3>
-        <div class="price">¥14,800 <small>買切</small></div>
-        <div class="target">個人研究者・SLP 個人</div>
-        <ul>
-          <li>4 パラダイム対応の本格実験アプリ</li>
-          <li>GUI 設定パネル</li>
-          <li>Apps Script 連携テンプレート</li>
-          <li>日本語セットアップガイド</li>
-          <li>プライバシーポリシー雛形</li>
-          <li>メール QA サポート 30 日</li>
-          <li>更新版への永続アクセス</li>
-        </ul>
-        <a class="btn btn-outline" href="[Standard 購入リンク]">購入する</a>
-      </div>
-      <div class="plan featured">
-        <h3>Pro</h3>
-        <div class="price">¥49,800 <small>買切</small></div>
-        <div class="target">研究室・クリニック・複数人運用</div>
-        <ul>
-          <li>Standard のすべての機能</li>
-          <li>機関内の共同利用ライセンス</li>
-          <li><strong>IRB 申請書テンプレート</strong>（日本語）</li>
-          <li><strong>Zoom 設定支援 60 分</strong>（1 回）</li>
-          <li>メール QA サポート 6 ヶ月（優先対応）</li>
-          <li>更新版への永続アクセス</li>
-        </ul>
-        <a class="btn btn-primary" href="[Pro 購入リンク]">購入する</a>
-      </div>
     </div>
   </div>
 </section>
@@ -379,40 +542,52 @@
 <section class="alt">
   <div class="container">
     <h2>よくある質問</h2>
+
     <details>
-      <summary>プログラミングは必要ですか？</summary>
-      <div class="answer">不要です。設定パネルで全項目を変更できます。エンジニアでない研究者でも 30 分で実験設定が完了します。</div>
+      <summary>刺激音セットは論文の Methods 節に書けますか？</summary>
+      <div class="answer">はい。各セットの Technical Note に推奨書誌情報を記載しており、APA / 日本語学会形式の引用例を提供します。商用研究・受託研究での利用も含まれます（再配布は不可）。</div>
     </details>
+
     <details>
-      <summary>自分の刺激音を使えますか？</summary>
-      <div class="answer">はい。wav / mp3 / m4a / ogg など主要な音声形式が使えます。フォルダに置いて設定パネルでファイル名を指定するだけです。</div>
+      <summary>カスタム刺激音はどんな話者の声でも作れますか？</summary>
+      <div class="answer">商用利用同意のある録音、または完全合成（Klatt synthesizer 等）に限ります。既存の著作権付き音源（市販 CD、IPA Handbook の音源等）からの派生作成はお引き受けできません。提供素材がある場合、依頼者は商用利用権を保証していただきます。</div>
     </details>
+
+    <details>
+      <summary>プラットフォームと刺激音は別々に買えますか？</summary>
+      <div class="answer">はい。プラットフォームだけ・刺激音だけのご購入も可能です。組み合わせる場合はバンドル価格がお得です。</div>
+    </details>
+
     <details>
       <summary>データはどこに保存されますか？</summary>
-      <div class="answer">購入者ご自身の Google アカウント内のスプレッドシートです。labphonlab は被験者データに一切アクセスできません。</div>
+      <div class="answer">購入者ご自身の Google アカウント内のスプレッドシートです。Perception Lab は被験者データに一切アクセスできません。</div>
     </details>
+
+    <details>
+      <summary>カスタム刺激音作成の納期は？</summary>
+      <div class="answer">小規模（連続体 1 種）で約 2 週間、中規模で 1 ヶ月が目安です。副業として運営しているため、月 1 件のキャパシティ制限があります。順番待ちになる場合があります。</div>
+    </details>
+
     <details>
       <summary>倫理審査は通りますか？</summary>
-      <div class="answer">Pro プランには IRB 申請書テンプレートを同梱しています。Standard プランにも被験者向けプライバシーポリシー雛形が含まれます。最終的な承認は購入者の所属機関の判断によります。</div>
+      <div class="answer">Pro プランには日本語 IRB 申請書テンプレートを同梱しています。Standard でも被験者向けプライバシーポリシー雛形が付属します。最終的な承認は購入者の所属機関の判断によります。</div>
     </details>
-    <details>
-      <summary>SaaS 版はありますか？</summary>
-      <div class="answer">現時点では買切のみです。需要があれば SaaS 版も検討予定です。</div>
-    </details>
-    <details>
-      <summary>返金は？</summary>
-      <div class="answer">デジタル商品の性質上、返金は原則承れません。販売前に必ずライブデモで動作確認をお願いします。</div>
-    </details>
+
     <details>
       <summary>更新版は無料で受け取れますか？</summary>
-      <div class="answer">はい。一度購入された方は今後のアップデートにも無料でアクセスできます。</div>
+      <div class="answer">はい。プラットフォーム・刺激音セットともに、購入後の更新版は無料でアクセスできます。</div>
+    </details>
+
+    <details>
+      <summary>返金は？</summary>
+      <div class="answer">デジタル商品のため原則承れません。プラットフォームは販売前にライブデモで動作確認をお願いします。カスタム刺激音は試作版納品段階で 2 回まで無償修正対応します。</div>
     </details>
   </div>
 </section>
 
 <footer>
   <div class="container">
-    <p>Perception Lab — 音声知覚実験プラットフォーム</p>
+    <p>Perception Lab — 音声知覚研究のための刺激音・実験プラットフォーム</p>
     <p>
       <a href="LICENSE.md">ライセンス</a> ·
       <a href="PRIVACY_POLICY_TEMPLATE.md">プライバシー（雛形）</a> ·

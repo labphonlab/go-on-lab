@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VOT 知覚デモ（音声学）</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+    background: #f5f5f7; color: #1d1d1f;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 24px 16px; }
+  h1 { font-size: 24px; margin: 0 0 16px; text-align: center; }
+  h2 { font-size: 20px; margin: 24px 0 12px; }
+  .card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 20px; }
+  label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 16px; }
+  input[type="text"] {
+    width: 100%; font-size: 16px; padding: 14px 16px;
+    border: 2px solid #d2d2d7; border-radius: 10px; background: #fff;
+    -webkit-appearance: none;
+  }
+  input[type="text"]:focus { outline: none; border-color: #0071e3; }
+  button { font-family: inherit; cursor: pointer; border: none; border-radius: 12px; font-weight: 600; transition: transform 0.05s, background 0.15s, opacity 0.15s; -webkit-user-select: none; user-select: none; }
+  button:active:not(:disabled) { transform: scale(0.97); }
+  button:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-primary { background: #0071e3; color: #fff; font-size: 20px; padding: 16px 24px; width: 100%; }
+  .btn-primary:hover:not(:disabled) { background: #0077ed; }
+  .btn-secondary { background: #e8e8ed; color: #1d1d1f; font-size: 16px; padding: 12px 20px; }
+  .btn-secondary:hover:not(:disabled) { background: #dcdce0; }
+  .btn-response { background: #0071e3; color: #fff; font-size: 36px; padding: 36px 16px; min-height: 110px; }
+  .btn-response:hover:not(:disabled) { background: #0077ed; }
+  .response-grid { display: grid; gap: 16px; margin-top: 16px; }
+  @media (min-width: 600px) { .response-grid { grid-template-columns: 1fr 1fr; } }
+  .trial-counter { text-align: center; font-size: 28px; font-weight: 700; margin: 8px 0; }
+  .play-info { text-align: center; font-size: 14px; color: #6e6e73; margin: 12px 0; min-height: 1.2em; }
+  .progress-bar { height: 8px; background: #e8e8ed; border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
+  .progress-fill { height: 100%; background: #0071e3; transition: width 0.2s; }
+  .fixation { display: flex; align-items: center; justify-content: center; height: 100px; font-size: 56px; color: #1d1d1f; }
+  .iti { display: flex; align-items: center; justify-content: center; height: 100px; color: #6e6e73; }
+  .chart-wrap { position: relative; height: 320px; }
+  .note { font-size: 14px; color: #6e6e73; line-height: 1.6; }
+  .hidden { display: none !important; }
+  .badge {
+    display: inline-block; padding: 4px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 700; background: #ff9500; color: #fff; margin-bottom: 8px;
+  }
+  .badge-teacher { background: #34c759; }
+  .explain {
+    background: #eef6ff; border-left: 4px solid #0071e3;
+    padding: 14px 18px; font-size: 14px; line-height: 1.8;
+    border-radius: 4px; margin-top: 12px;
+  }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 12px; }
+  .stat-cell { background: #f5f5f7; padding: 12px; border-radius: 10px; text-align: center; }
+  .stat-num { font-size: 24px; font-weight: 700; color: #0071e3; }
+  .stat-label { font-size: 12px; color: #6e6e73; margin-top: 4px; }
+  .error { background: #ffe9e9; color: #b00020; padding: 12px 14px; border-radius: 10px; margin-top: 12px; font-size: 14px; display: none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- イントロ画面 -->
+  <section id="screen-intro">
+    <h1>VOT 知覚デモ</h1>
+    <div class="card">
+      <span class="badge">音声学デモ実験</span>
+      <h2 style="margin-top:0;">これから何をするか</h2>
+      <p>英語の <strong>/pa/</strong> と <strong>/ba/</strong> の連続体（VOT = Voice Onset Time を段階的に変化させた音）を聞き、聞こえた音を選んでもらいます。</p>
+      <p>所要時間: 約 <strong>4〜5 分</strong>（44 試行）<br>必要なもの: <strong>イヤホンまたはヘッドホン</strong></p>
+
+      <div class="explain">
+        <strong>VOT とは？</strong><br>
+        破裂音（/p/, /b/, /t/, /d/, /k/, /g/）の閉鎖開放から声帯振動が始まるまでの時間（ms）です。
+        英語では VOT が短いと「ba」、長いと「pa」に聞こえます。
+        本デモでは VOT を 0 ms から 50 ms まで段階的に変化させた 11 段階の音を提示し、
+        あなたの <em>カテゴリ境界（perceptual boundary）</em>を可視化します。
+      </div>
+
+      <div style="margin-top: 24px;">
+        <label for="participantLabel">ニックネーム・ID（任意・後で自分の結果を識別するため）</label>
+        <input type="text" id="participantLabel" placeholder="例: 田中、a01、anonymous など" maxlength="32">
+        <p class="note" style="margin-top:8px;">※ 個人を特定できる情報は集めません。記入は任意です。</p>
+      </div>
+
+      <p class="note" style="margin-top:16px;">
+        <strong>iPhone の方</strong>: 本体側面の消音スイッチが OFF になっているかご確認ください。
+      </p>
+
+      <div style="margin-top: 20px;">
+        <button class="btn-primary" id="startBtn">開始する</button>
+      </div>
+      <div class="error" id="introError"></div>
+    </div>
+  </section>
+
+  <!-- 読み込み画面 -->
+  <section id="screen-loading" class="hidden">
+    <div class="card">
+      <h2 style="text-align:center; margin-top:0;">音声を準備しています…</h2>
+      <div class="progress-bar"><div class="progress-fill" id="loadingFill"></div></div>
+      <div style="text-align:center; color:#6e6e73;" id="loadingMsg">0 / 11</div>
+    </div>
+  </section>
+
+  <!-- 試行画面 -->
+  <section id="screen-trial" class="hidden">
+    <div class="card">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="trial-counter"><span id="trialNum">1</span> / <span id="trialTotal">44</span></div>
+      <div class="fixation hidden" id="fixationDisplay">+</div>
+      <div class="iti hidden" id="itiDisplay">・・・</div>
+      <div class="play-info" id="playInfo">画面の表示に従ってください</div>
+      <button class="btn-primary hidden" id="playBtn" style="background:#34c759;">▶ 再生</button>
+      <div class="response-grid" id="responseGrid"></div>
+    </div>
+  </section>
+
+  <!-- 結果画面（学生個人用） -->
+  <section id="screen-result" class="hidden">
+    <h1>あなたの結果</h1>
+    <div class="card">
+      <h2 style="margin-top:0; color:#34a853;">✓ 完了しました</h2>
+      <p>ご協力ありがとうございました。</p>
+      <div class="stat-grid" id="personalStats"></div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0;">あなたの心理測定関数</h2>
+      <div class="chart-wrap"><canvas id="chartPersonal"></canvas></div>
+      <div class="explain" style="margin-top:16px;">
+        <strong>グラフの見方:</strong><br>
+        横軸は VOT (ms)、縦軸は「pa」と答えた割合です。<br>
+        曲線が <em>S 字状（シグモイド）</em>になり、ある VOT で急に「ba」→「pa」へ切り替わるのが
+        典型的なカテゴリ知覚の証拠です。50% の地点がカテゴリ境界（perceptual boundary）です。
+      </div>
+    </div>
+  </section>
+
+  <!-- 教員モード -->
+  <section id="screen-teacher" class="hidden">
+    <h1>クラス全体の結果（教員用）</h1>
+    <div class="card">
+      <span class="badge badge-teacher">教員用</span>
+      <h2 style="margin-top:0;">集計結果</h2>
+      <div id="teacherStats" class="stat-grid"></div>
+      <div style="margin-top:16px;">
+        <button class="btn-secondary" id="teacherRefreshBtn">最新データを取得</button>
+      </div>
+      <div class="error" id="teacherError"></div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0;">クラス全体の心理測定関数</h2>
+      <div class="chart-wrap"><canvas id="chartClass"></canvas></div>
+      <div class="explain" style="margin-top:16px;">
+        青線が <strong>クラス平均</strong>、薄いグレーの細線は<strong>各個人</strong>の応答率です。
+        50% 切片の VOT がカテゴリ境界。個人差（境界位置のばらつき）が見えるはずです。
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0;">参加者ごとの境界（50%）の分布</h2>
+      <div class="chart-wrap"><canvas id="chartBoundary"></canvas></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ============================================================
+   設定
+   ============================================================ */
+const CONFIG = {
+  experimentName: "vot_demo_pa_ba",
+  // ↓ デモ専用の Apps Script Web App URL（本格実験とは別デプロイ）
+  dataServerUrl: "https://script.google.com/macros/s/AKfycbxkKNN6Tz1TZU_uUaqtYrLNkfaIJpK_mKyEQi9bURyHSok9YxseViS5jZArdqTDw1T7/exec",
+  responseOptions: ["pa", "ba"],
+  targetResponseForGraph: "pa",
+  repetitionsPerStimulus: 4,         // 11 × 4 = 44 試行（約 4〜5 分）
+  randomizeTrials: true,
+  fixationDurationMs: 400,
+  interTrialIntervalMs: 400,
+  // VOT 連続体: 0〜50 ms を 5 ms 刻みで（既存の stim01〜stim11.wav を流用）
+  stimuli: [
+    { id: "vot00", file: "stimuli/stim01.wav", continuumStep: 0,  label: "0 ms"  },
+    { id: "vot05", file: "stimuli/stim02.wav", continuumStep: 5,  label: "5 ms"  },
+    { id: "vot10", file: "stimuli/stim03.wav", continuumStep: 10, label: "10 ms" },
+    { id: "vot15", file: "stimuli/stim04.wav", continuumStep: 15, label: "15 ms" },
+    { id: "vot20", file: "stimuli/stim05.wav", continuumStep: 20, label: "20 ms" },
+    { id: "vot25", file: "stimuli/stim06.wav", continuumStep: 25, label: "25 ms" },
+    { id: "vot30", file: "stimuli/stim07.wav", continuumStep: 30, label: "30 ms" },
+    { id: "vot35", file: "stimuli/stim08.wav", continuumStep: 35, label: "35 ms" },
+    { id: "vot40", file: "stimuli/stim09.wav", continuumStep: 40, label: "40 ms" },
+    { id: "vot45", file: "stimuli/stim10.wav", continuumStep: 45, label: "45 ms" },
+    { id: "vot50", file: "stimuli/stim11.wav", continuumStep: 50, label: "50 ms" }
+  ]
+};
+
+/* ============================================================
+   状態
+   ============================================================ */
+let participantLabel = "";
+let sessionId = "";
+let trialList = [];
+let currentTrialIndex = 0;
+let results = [];
+let audioMap = new Map();
+let audio = null;
+let trialFirstPlayTime = 0;
+let displayResponseOptions = [];
+let chartPersonal = null;
+let chartClass = null;
+let chartBoundary = null;
+let currentManualStim = null;
+
+/* ============================================================
+   DOM
+   ============================================================ */
+const screenIntro    = document.getElementById("screen-intro");
+const screenLoading  = document.getElementById("screen-loading");
+const screenTrial    = document.getElementById("screen-trial");
+const screenResult   = document.getElementById("screen-result");
+const screenTeacher  = document.getElementById("screen-teacher");
+const startBtn       = document.getElementById("startBtn");
+const participantInput = document.getElementById("participantLabel");
+const loadingFill    = document.getElementById("loadingFill");
+const loadingMsg     = document.getElementById("loadingMsg");
+const trialNumEl     = document.getElementById("trialNum");
+const trialTotalEl   = document.getElementById("trialTotal");
+const progressFill   = document.getElementById("progressFill");
+const fixationDisplay= document.getElementById("fixationDisplay");
+const itiDisplay     = document.getElementById("itiDisplay");
+const playInfo       = document.getElementById("playInfo");
+const playBtn        = document.getElementById("playBtn");
+const responseGrid   = document.getElementById("responseGrid");
+const introError     = document.getElementById("introError");
+
+/* ============================================================
+   ユーティリティ
+   ============================================================ */
+function showScreen(name) {
+  [screenIntro, screenLoading, screenTrial, screenResult, screenTeacher]
+    .forEach((el) => el.classList.add("hidden"));
+  const map = {
+    intro: screenIntro, loading: screenLoading, trial: screenTrial,
+    result: screenResult, teacher: screenTeacher
+  };
+  if (map[name]) map[name].classList.remove("hidden");
+}
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+function formatTimestamp(d) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate())
+    + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+}
+function generateSessionId() {
+  const ts = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
+  return "vot_" + ts + "_" + Math.random().toString(36).slice(2, 8);
+}
+function showError(el, msg) { el.textContent = msg; el.style.display = "block"; }
+function clearError(el) { el.textContent = ""; el.style.display = "none"; }
+
+/* ============================================================
+   音声プリロード
+   ============================================================ */
+function preloadAllAudio() {
+  audioMap = new Map();
+  const files = CONFIG.stimuli.map((s) => s.file);
+  const total = files.length;
+  let done = 0;
+  loadingFill.style.width = "0%";
+  loadingMsg.textContent = "0 / " + total;
+
+  return Promise.all(files.map((file) => new Promise((resolve) => {
+    const a = new Audio();
+    a.preload = "auto";
+    a.src = file;
+    audioMap.set(file, a);
+    let settled = false;
+    const finish = () => {
+      if (settled) return; settled = true;
+      done++;
+      loadingFill.style.width = (done / total * 100) + "%";
+      loadingMsg.textContent = done + " / " + total;
+      resolve();
+    };
+    a.addEventListener("canplaythrough", finish, { once: true });
+    a.addEventListener("loadeddata", finish, { once: true });
+    a.addEventListener("error", finish, { once: true });
+    setTimeout(finish, 8000);
+    try { a.load(); } catch (e) {}
+  })));
+}
+
+function playFile(file) {
+  return new Promise((resolve, reject) => {
+    const a = audioMap.get(file) || new Audio(file);
+    a.onended = () => { a.onended = null; a.onerror = null; resolve(); };
+    a.onerror = () => { a.onended = null; a.onerror = null; reject(new Error("load error")); };
+    try { a.currentTime = 0; } catch (e) {}
+    audio = a;
+    const p = a.play();
+    if (p && typeof p.catch === "function") p.catch(reject);
+  });
+}
+
+/* ============================================================
+   試行フロー
+   ============================================================ */
+async function startExperiment() {
+  clearError(introError);
+  participantLabel = participantInput.value.trim();
+  sessionId = generateSessionId();
+
+  // 試行リスト構築
+  let all = [];
+  for (let i = 0; i < CONFIG.repetitionsPerStimulus; i++) all = all.concat(CONFIG.stimuli);
+  trialList = CONFIG.randomizeTrials ? shuffle(all) : all;
+  currentTrialIndex = 0;
+  results = [];
+  trialTotalEl.textContent = trialList.length;
+
+  // ボタン構築（左右ランダム化）
+  displayResponseOptions = Math.random() < 0.5
+    ? CONFIG.responseOptions.slice()
+    : CONFIG.responseOptions.slice().reverse();
+  buildResponseButtons();
+
+  showScreen("loading");
+  await preloadAllAudio();
+  showScreen("trial");
+  runTrial();
+}
+
+function buildResponseButtons() {
+  responseGrid.innerHTML = "";
+  displayResponseOptions.forEach((opt) => {
+    const btn = document.createElement("button");
+    btn.className = "btn-response";
+    btn.textContent = "/" + opt + "/";
+    btn.disabled = true;
+    btn.addEventListener("click", () => recordResponse(opt));
+    responseGrid.appendChild(btn);
+  });
+}
+
+function setResponseButtonsEnabled(enabled) {
+  responseGrid.querySelectorAll("button").forEach((b) => { b.disabled = !enabled; });
+}
+
+async function runTrial() {
+  const n = currentTrialIndex + 1;
+  const stim = trialList[currentTrialIndex];
+  trialNumEl.textContent = n;
+  progressFill.style.width = ((n - 1) / trialList.length * 100) + "%";
+
+  setResponseButtonsEnabled(false);
+  playBtn.classList.add("hidden");
+  itiDisplay.classList.add("hidden");
+  playInfo.textContent = "";
+
+  fixationDisplay.classList.remove("hidden");
+  await sleep(CONFIG.fixationDurationMs);
+  fixationDisplay.classList.add("hidden");
+
+  try {
+    playInfo.textContent = "再生中…";
+    await playFile(stim.file);
+    trialFirstPlayTime = performance.now();
+    setResponseButtonsEnabled(true);
+    playInfo.textContent = "聞こえた音を選んでください";
+  } catch (e) {
+    // iOS で自動再生が拒否された場合
+    playBtn.classList.remove("hidden");
+    playBtn.disabled = false;
+    playInfo.textContent = "「再生」を押してください";
+    currentManualStim = stim;
+  }
+}
+
+playBtn.addEventListener("click", async () => {
+  if (!currentManualStim) return;
+  playBtn.disabled = true;
+  playInfo.textContent = "再生中…";
+  try {
+    await playFile(currentManualStim.file);
+    trialFirstPlayTime = performance.now();
+    playBtn.classList.add("hidden");
+    setResponseButtonsEnabled(true);
+    playInfo.textContent = "聞こえた音を選んでください";
+    currentManualStim = null;
+  } catch (e) {
+    playBtn.disabled = false;
+    playInfo.textContent = "再生に失敗しました";
+  }
+});
+
+async function recordResponse(response) {
+  const rt = Math.round(performance.now() - trialFirstPlayTime);
+  const stim = trialList[currentTrialIndex];
+  setResponseButtonsEnabled(false);
+
+  results.push({
+    sessionId: sessionId,
+    trialNumber: currentTrialIndex + 1,
+    paradigm: "identification",
+    stimulusId: stim.id,
+    file: stim.file,
+    continuumStep: stim.continuumStep,
+    label: stim.label,
+    response: response,
+    reactionTimeMs: rt,
+    playCount: 1,
+    timestamp: formatTimestamp(new Date())
+  });
+
+  playInfo.textContent = "";
+  itiDisplay.classList.remove("hidden");
+  await sleep(CONFIG.interTrialIntervalMs);
+  itiDisplay.classList.add("hidden");
+
+  currentTrialIndex++;
+  if (currentTrialIndex >= trialList.length) {
+    finishExperiment();
+  } else {
+    runTrial();
+  }
+}
+
+async function finishExperiment() {
+  progressFill.style.width = "100%";
+  // 結果を裏で送信
+  uploadResults();
+  // すぐに個人結果画面へ
+  renderPersonalResult();
+  showScreen("result");
+}
+
+/* ============================================================
+   サーバー送信（VOT 専用のミニマル送信）
+   ============================================================ */
+async function uploadResults() {
+  if (!CONFIG.dataServerUrl) return;
+  const payload = {
+    experimentName: CONFIG.experimentName,
+    sessionId: sessionId,
+    participant: {
+      name: participantLabel || "(anonymous)"
+    },
+    submittedAt: formatTimestamp(new Date()),
+    userAgent: navigator.userAgent,
+    results: results
+  };
+  // リトライ 2 回
+  for (let i = 0; i < 3; i++) {
+    try {
+      const r = await fetch(CONFIG.dataServerUrl, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        keepalive: true
+      });
+      if (r.ok) return;
+    } catch (e) {}
+    await sleep(1500);
+  }
+}
+
+/* ============================================================
+   個人の結果表示
+   ============================================================ */
+function aggregatePersonal() {
+  const map = new Map();
+  results.forEach((r) => {
+    const step = Number(r.continuumStep);
+    if (!map.has(step)) map.set(step, { count: 0, target: 0 });
+    const a = map.get(step);
+    a.count++;
+    if (r.response === CONFIG.targetResponseForGraph) a.target++;
+  });
+  const steps = Array.from(map.keys()).sort((a, b) => a - b);
+  return steps.map((s) => ({ step: s, rate: map.get(s).target / map.get(s).count, n: map.get(s).count }));
+}
+
+function estimateBoundary(data) {
+  // 50% を線形補間で求める
+  for (let i = 0; i < data.length - 1; i++) {
+    const a = data[i], b = data[i + 1];
+    if ((a.rate - 0.5) * (b.rate - 0.5) <= 0 && a.rate !== b.rate) {
+      return a.step + (0.5 - a.rate) / (b.rate - a.rate) * (b.step - a.step);
+    }
+  }
+  return null;
+}
+
+function renderPersonalResult() {
+  const agg = aggregatePersonal();
+  const boundary = estimateBoundary(agg);
+  const targetCount = results.filter((r) => r.response === CONFIG.targetResponseForGraph).length;
+
+  document.getElementById("personalStats").innerHTML =
+    "<div class='stat-cell'><div class='stat-num'>" + results.length + "</div><div class='stat-label'>試行数</div></div>" +
+    "<div class='stat-cell'><div class='stat-num'>" + (targetCount / results.length * 100).toFixed(0) + "%</div><div class='stat-label'>pa と答えた割合</div></div>" +
+    "<div class='stat-cell'><div class='stat-num'>" + (boundary != null ? boundary.toFixed(1) + " ms" : "—") + "</div><div class='stat-label'>あなたのカテゴリ境界</div></div>";
+
+  if (chartPersonal) chartPersonal.destroy();
+  const ctx = document.getElementById("chartPersonal").getContext("2d");
+  chartPersonal = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: agg.map((d) => d.step),
+      datasets: [{
+        label: "「pa」と答えた割合",
+        data: agg.map((d) => +d.rate.toFixed(3)),
+        borderColor: "#0071e3",
+        backgroundColor: "rgba(0,113,227,0.15)",
+        tension: 0.3, pointRadius: 6, fill: true
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        y: { min: 0, max: 1, title: { display: true, text: "「pa」応答率" }, ticks: { stepSize: 0.2 } },
+        x: { title: { display: true, text: "VOT (ms)" } }
+      },
+      plugins: {
+        annotation: {} // boundary の縦線は省略（軽量化）
+      }
+    }
+  });
+}
+
+/* ============================================================
+   教員モード（?teacher=1）
+   ============================================================ */
+async function loadTeacherView() {
+  showScreen("teacher");
+  const err = document.getElementById("teacherError");
+  clearError(err);
+  document.getElementById("teacherStats").innerHTML = "<div class='stat-cell'><div class='stat-num'>…</div><div class='stat-label'>読み込み中</div></div>";
+
+  try {
+    const url = CONFIG.dataServerUrl + "?action=aggregate&experimentName=" +
+                encodeURIComponent(CONFIG.experimentName);
+    const r = await fetch(url, { method: "GET" });
+    const data = await r.json();
+    if (!data.ok) { showError(err, "データ取得に失敗しました: " + (data.error || "")); return; }
+    renderTeacherView(data.results || []);
+  } catch (e) {
+    showError(err, "通信エラー: " + e.message + "\n（Apps Script に doGet が実装されているかご確認ください）");
+  }
+}
+
+function renderTeacherView(rows) {
+  // セッション別にグルーピング
+  const bySession = new Map();
+  rows.forEach((r) => {
+    if (!bySession.has(r.sessionId)) bySession.set(r.sessionId, []);
+    bySession.get(r.sessionId).push(r);
+  });
+
+  // 個人ごとの集計
+  const persons = [];
+  bySession.forEach((trials, sid) => {
+    const map = new Map();
+    trials.forEach((t) => {
+      const step = Number(t.continuumStep);
+      if (!map.has(step)) map.set(step, { count: 0, target: 0 });
+      const a = map.get(step);
+      a.count++;
+      if (t.response === CONFIG.targetResponseForGraph) a.target++;
+    });
+    const steps = Array.from(map.keys()).sort((a, b) => a - b);
+    const agg = steps.map((s) => ({ step: s, rate: map.get(s).target / map.get(s).count }));
+    persons.push({ sessionId: sid, agg: agg, boundary: estimateBoundary(agg) });
+  });
+
+  const allSteps = Array.from(new Set(rows.map((r) => Number(r.continuumStep)))).sort((a, b) => a - b);
+  // クラス平均
+  const classAvg = allSteps.map((s) => {
+    const vals = persons.map((p) => {
+      const found = p.agg.find((d) => d.step === s);
+      return found ? found.rate : null;
+    }).filter((v) => v != null);
+    return vals.length === 0 ? null : vals.reduce((a, b) => a + b, 0) / vals.length;
+  });
+
+  // サマリー
+  const boundaries = persons.map((p) => p.boundary).filter((b) => b != null);
+  const meanBoundary = boundaries.length === 0 ? null :
+    boundaries.reduce((a, b) => a + b, 0) / boundaries.length;
+  document.getElementById("teacherStats").innerHTML =
+    "<div class='stat-cell'><div class='stat-num'>" + persons.length + "</div><div class='stat-label'>参加人数</div></div>" +
+    "<div class='stat-cell'><div class='stat-num'>" + rows.length + "</div><div class='stat-label'>総試行数</div></div>" +
+    "<div class='stat-cell'><div class='stat-num'>" +
+       (meanBoundary != null ? meanBoundary.toFixed(1) + " ms" : "—") +
+       "</div><div class='stat-label'>平均境界</div></div>" +
+    "<div class='stat-cell'><div class='stat-num'>" +
+       (boundaries.length >= 2 ? sd(boundaries).toFixed(1) + " ms" : "—") +
+       "</div><div class='stat-label'>境界SD</div></div>";
+
+  // クラスチャート
+  if (chartClass) chartClass.destroy();
+  const datasets = persons.map((p) => ({
+    label: "",
+    data: allSteps.map((s) => {
+      const found = p.agg.find((d) => d.step === s);
+      return found ? +found.rate.toFixed(3) : null;
+    }),
+    borderColor: "rgba(0,0,0,0.15)",
+    borderWidth: 1,
+    pointRadius: 0,
+    tension: 0.2,
+    fill: false
+  }));
+  datasets.push({
+    label: "クラス平均",
+    data: classAvg.map((v) => v == null ? null : +v.toFixed(3)),
+    borderColor: "#0071e3",
+    backgroundColor: "rgba(0,113,227,0.15)",
+    borderWidth: 4,
+    pointRadius: 6,
+    tension: 0.2,
+    fill: true
+  });
+  chartClass = new Chart(document.getElementById("chartClass").getContext("2d"), {
+    type: "line",
+    data: { labels: allSteps, datasets: datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, labels: { filter: (item) => item.text } } },
+      scales: {
+        y: { min: 0, max: 1, title: { display: true, text: "「pa」応答率" } },
+        x: { title: { display: true, text: "VOT (ms)" } }
+      }
+    }
+  });
+
+  // 境界分布（ヒストグラム）
+  if (chartBoundary) chartBoundary.destroy();
+  const minS = Math.min.apply(null, allSteps);
+  const maxS = Math.max.apply(null, allSteps);
+  const binWidth = 5;
+  const bins = [];
+  for (let v = minS; v <= maxS; v += binWidth) bins.push(v);
+  const histCounts = bins.map(() => 0);
+  boundaries.forEach((b) => {
+    const idx = Math.min(bins.length - 1, Math.max(0, Math.floor((b - minS) / binWidth)));
+    histCounts[idx]++;
+  });
+  chartBoundary = new Chart(document.getElementById("chartBoundary").getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: bins.map((b) => b + "–" + (b + binWidth) + " ms"),
+      datasets: [{ label: "人数", data: histCounts, backgroundColor: "#34c759" }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        y: { beginAtZero: true, ticks: { stepSize: 1 }, title: { display: true, text: "人数" } },
+        x: { title: { display: true, text: "カテゴリ境界 (VOT ms)" } }
+      }
+    }
+  });
+}
+
+function sd(arr) {
+  const m = arr.reduce((a, b) => a + b, 0) / arr.length;
+  const v = arr.reduce((a, b) => a + (b - m) * (b - m), 0) / arr.length;
+  return Math.sqrt(v);
+}
+
+document.getElementById("teacherRefreshBtn").addEventListener("click", loadTeacherView);
+
+/* ============================================================
+   初期化
+   ============================================================ */
+startBtn.addEventListener("click", startExperiment);
+participantInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") startExperiment();
+});
+
+const params = new URLSearchParams(location.search);
+if (params.get("teacher") === "1") {
+  loadTeacherView();
+} else {
+  showScreen("intro");
+}
+</script>
+</body>
+</html>

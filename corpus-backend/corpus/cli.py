@@ -477,6 +477,40 @@ def cmd_boundary_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_pipeline(args: argparse.Namespace) -> int:
+    """End-to-end: acquire a folder of WAVs -> annotate -> assess -> export."""
+    from .orchestrate import run_corpus
+    res = run_corpus(args.dir, args.out, language=args.language,
+                     measure_vowels=not args.no_vowels, do_export=not args.no_export)
+    print(f"acquired {res.n_acquired} recording(s), {res.n_segments} segment(s)")
+    print(f"ready: {res.report.is_ready()}")
+    for issue in res.report.blocking_issues():
+        print(f"  🛑 {issue}")
+    if res.export_counts:
+        print("exports:", json.dumps(res.export_counts, ensure_ascii=False))
+    print(f"outputs in {args.out}/ (segments.jsonl, QUALITY_REPORT.md, export/)")
+    return 0 if res.report.is_ready() else 2
+
+
+def cmd_vowel_plot(args: argparse.Namespace) -> int:
+    """Render the corpus vowel space (F1/F2) to an SVG scatter plot."""
+    from .audio.wav import read_wav
+    from .analysis.vowel_space import measure_segment_vowels, analyze_vowel_space
+    from .analysis.plot import write_vowel_space_svg
+
+    wav = read_wav(args.audio)
+    segs = _load_segments(args.segments)
+    if args.source_id:
+        segs = [s for s in segs if s.source_id == args.source_id]
+    measurements = []
+    for s in segs:
+        measurements.extend(measure_segment_vowels(wav, s))
+    res = analyze_vowel_space(measurements, language=args.language)
+    write_vowel_space_svg(res, args.out)
+    print(f"wrote vowel-space plot ({res.n_vowels_measured} vowels) to {args.out}")
+    return 0
+
+
 def cmd_vowels(args: argparse.Namespace) -> int:
     """Measure the corpus vowel space (F1/F2) and check phonetic plausibility.
 
@@ -724,6 +758,24 @@ def build_parser() -> argparse.ArgumentParser:
     pvd = sub.add_parser("vowels-demo",
                          help="demo vowel-space analysis on synthesised vowels")
     pvd.set_defaults(func=cmd_vowels_demo)
+
+    ppl = sub.add_parser("pipeline",
+                         help="end-to-end: acquire dir -> annotate -> assess -> export")
+    ppl.add_argument("--dir", required=True, help="folder of PCM WAVs")
+    ppl.add_argument("--out", default="./_pipeline_out")
+    ppl.add_argument("--language", default="en")
+    ppl.add_argument("--no-vowels", action="store_true")
+    ppl.add_argument("--no-export", action="store_true")
+    ppl.set_defaults(func=cmd_pipeline)
+
+    pvp = sub.add_parser("vowel-plot",
+                         help="render the vowel space (F1/F2) to an SVG")
+    pvp.add_argument("--audio", required=True)
+    pvp.add_argument("--segments", required=True)
+    pvp.add_argument("--source-id", default=None)
+    pvp.add_argument("--language", default="en")
+    pvp.add_argument("--out", default="./vowel_space.svg")
+    pvp.set_defaults(func=cmd_vowel_plot)
     return p
 
 

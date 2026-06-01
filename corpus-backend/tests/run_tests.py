@@ -18,7 +18,7 @@ MODULES = ["test_audio_quality", "test_pipeline", "test_manifest",
            "test_annotation", "test_acquisition", "test_librivox",
            "test_whisperx_mapping", "test_mfa", "test_diet_jp", "test_export",
            "test_evaluation", "test_boundary_eval", "test_analysis",
-           "test_formants"]
+           "test_formants", "test_integration"]
 
 
 def main() -> int:

@@ -86,6 +86,11 @@ python -m corpus.cli profile-demo
 # LPC; validates the vowel space against linguistic targets. See docs/VOWEL_FORMANTS.md.
 python -m corpus.cli vowels --audio source.wav --segments segments.jsonl --language en
 python -m corpus.cli vowels-demo
+python -m corpus.cli vowel-plot --audio source.wav --segments segments.jsonl --out vs.svg
+
+# End-to-end: acquire a folder of WAVs -> annotate -> assess -> export, and write
+# a single QUALITY_REPORT.md with a ready/not-ready verdict.
+python -m corpus.cli pipeline --dir ./my_audio --out ./corpus_out --language en
 
 # Inspect a prompt set.
 python -m corpus.cli prompts --file examples/prompts_ja.jsonl
@@ -120,19 +125,24 @@ corpus/
   annotation/mfa_prep.py           write wav+txt utterance pairs for MFA (M3)
   annotation/evaluation.py         WER/CER + bootstrap CI + stratified sampling
   annotation/review_sheet.py       human review-sheet round-trip (CSV)
-  analysis/            corpus profiling: phone classes, descriptive stats,
-                       gold-free health checks (vowel>plosive alignment probe),
-                       and LPC vowel formant (F1/F2) vowel-space analysis
+  analysis/            corpus profiling + descriptive stats; gold-free health
+                       checks (vowel>plosive probe); LPC vowel formant (F1/F2)
+                       vowel-space analysis; SVG plot; unified quality report
   export/              corpus exporters: praat (TextGrid), elan (EAF),
                        hf_datasets (audiofolder) + export_all — pure stdlib
+  orchestrate.py       end-to-end run_corpus(): acquire -> annotate -> assess
+                       -> export, emitting a QUALITY_REPORT with a verdict
   pipeline/            read-speech orchestration + acceptance gating
   annotation/          auto segment+label: VAD/diarize/ASR baselines + plugins,
                        confidence gating, WER measurement, manifest
   storage/manifest.py  manifest, CSV, dataset card, commercial export
-  cli.py               prompts / run / annotate / acquire / librivox / diet /
-                       export-demo / review-sheet / measure (+ other demos)
+  cli.py               pipeline / prompts / run / annotate / acquire / librivox /
+                       diet / export / review-sheet / measure / boundary /
+                       profile / vowels / vowel-plot (+ demos)
 docs/                  ARCHITECTURE, LICENSING, QUALITY_STANDARDS,
-                       ANNOTATION_PIPELINE, AUTO_ANNOTATION, SOURCE_CATALOG
+                       ANNOTATION_PIPELINE, M3_ML_INTEGRATION, SOURCE_CATALOG,
+                       EXPORT_FORMATS, WER_WORKFLOW, BOUNDARY_EVAL,
+                       CORPUS_PROFILE, VOWEL_FORMANTS
 examples/              prompt sets (en, ja)
 tests/                 pytest + stdlib fallback runner
 ```

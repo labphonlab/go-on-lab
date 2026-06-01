@@ -82,6 +82,11 @@ python -m corpus.cli boundary-demo
 python -m corpus.cli profile --segments segments.jsonl --markdown --out profile.md
 python -m corpus.cli profile-demo
 
+# Vowel formant (F1/F2) analysis — the gold standard phonetic check. Pure-Python
+# LPC; validates the vowel space against linguistic targets. See docs/VOWEL_FORMANTS.md.
+python -m corpus.cli vowels --audio source.wav --segments segments.jsonl --language en
+python -m corpus.cli vowels-demo
+
 # Inspect a prompt set.
 python -m corpus.cli prompts --file examples/prompts_ja.jsonl
 
@@ -115,8 +120,9 @@ corpus/
   annotation/mfa_prep.py           write wav+txt utterance pairs for MFA (M3)
   annotation/evaluation.py         WER/CER + bootstrap CI + stratified sampling
   annotation/review_sheet.py       human review-sheet round-trip (CSV)
-  analysis/            corpus profiling: phone classes, descriptive stats, and
-                       gold-free health checks (vowel>plosive alignment probe)
+  analysis/            corpus profiling: phone classes, descriptive stats,
+                       gold-free health checks (vowel>plosive alignment probe),
+                       and LPC vowel formant (F1/F2) vowel-space analysis
   export/              corpus exporters: praat (TextGrid), elan (EAF),
                        hf_datasets (audiofolder) + export_all — pure stdlib
   pipeline/            read-speech orchestration + acceptance gating

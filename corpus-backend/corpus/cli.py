@@ -477,6 +477,73 @@ def cmd_boundary_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_vowels(args: argparse.Namespace) -> int:
+    """Measure the corpus vowel space (F1/F2) and check phonetic plausibility.
+
+    Needs the source audio (one WAV) plus its segments with vowel phone
+    alignments. Reports per-vowel F1/F2 means vs. targets and whether the vowel
+    space is correctly ordered (/i/ vs /a/). Exits non-zero if the ordering is
+    wrong -- a strong gold-free validation gate.
+    """
+    from .audio.wav import read_wav
+    from .analysis.vowel_space import measure_segment_vowels, analyze_vowel_space
+
+    wav = read_wav(args.audio)
+    segs = [s for s in _load_segments(args.segments) if s.source_id == args.source_id] \
+        if args.source_id else _load_segments(args.segments)
+    measurements = []
+    for s in segs:
+        measurements.extend(measure_segment_vowels(wav, s))
+    res = analyze_vowel_space(measurements, language=args.language)
+    print(json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+    return 2 if res.ordering_ok is False else 0
+
+
+def cmd_vowels_demo(args: argparse.Namespace) -> int:
+    """Demo vowel-space analysis on synthesised /i/, /ae/, /u/, /a/ vowels."""
+    import math as _m
+    from .audio.wav import WavData
+    from .analysis.vowel_space import measure_segment_vowels, analyze_vowel_space
+    from .annotation.models import Segment, Transcript
+
+    def synth(formants, sr=16000, dur=0.25, f0=120):
+        n = int(sr * dur)
+        src = [0.0] * n
+        for i in range(0, n, int(sr / f0)):
+            src[i] = 1.0
+        y = src
+        for F, B in zip(formants, (60, 90, 120, 150)):
+            r = _m.exp(-_m.pi * B / sr)
+            th = 2 * _m.pi * F / sr
+            a1, a2 = -2 * r * _m.cos(th), r * r
+            out = [0.0] * n
+            for i in range(n):
+                v = y[i]
+                if i >= 1:
+                    v -= a1 * out[i - 1]
+                if i >= 2:
+                    v -= a2 * out[i - 2]
+                out[i] = v
+            y = out
+        mx = max(abs(v) for v in y) or 1.0
+        return [v / mx for v in y]
+
+    cases = [("IY1", (300, 2300, 3000, 3500)), ("AE1", (700, 1700, 2600, 3600)),
+             ("UW1", (350, 900, 2400, 3400)), ("AA1", (750, 1100, 2550, 3500))]
+    measurements = []
+    for i, (label, F) in enumerate(cases):
+        sig = synth(F)
+        dur = len(sig) / 16000
+        wav = WavData(16000, 1, 16, len(sig), sig)
+        seg = Segment(f"demo#{i:04d}", "demo", 0.0, dur, "S0",
+                      transcript=Transcript("x", "en", 0.9),
+                      phones=[{"start_s": 0.0, "end_s": dur, "label": label}])
+        measurements.extend(measure_segment_vowels(wav, seg))
+    res = analyze_vowel_space(measurements, language="en")
+    print(json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
 def cmd_profile(args: argparse.Namespace) -> int:
     """Profile a corpus for health + research value (gold-free checks)."""
     from .analysis.profile import profile_corpus, render_markdown
@@ -644,6 +711,19 @@ def build_parser() -> argparse.ArgumentParser:
     ppd = sub.add_parser("profile-demo",
                          help="demo corpus profiling on a synthetic corpus")
     ppd.set_defaults(func=cmd_profile_demo)
+
+    pv = sub.add_parser("vowels",
+                        help="measure vowel space (F1/F2) and check plausibility")
+    pv.add_argument("--audio", required=True, help="source WAV (PCM)")
+    pv.add_argument("--segments", required=True, help="segments.jsonl path")
+    pv.add_argument("--source-id", default=None,
+                    help="only segments of this source id")
+    pv.add_argument("--language", default="en")
+    pv.set_defaults(func=cmd_vowels)
+
+    pvd = sub.add_parser("vowels-demo",
+                         help="demo vowel-space analysis on synthesised vowels")
+    pvd.set_defaults(func=cmd_vowels_demo)
     return p
 
 

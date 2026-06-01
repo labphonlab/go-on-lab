@@ -76,6 +76,12 @@ python -m corpus.cli eval-demo --out /tmp/evald     # end-to-end demo
 python -m corpus.cli boundary --ref gold.TextGrid --hyp mfa.TextGrid --tier phones
 python -m corpus.cli boundary-demo
 
+# Corpus profile (pre-publication health check + research value, gold-free):
+# coverage/balance, SNR, label quality, and the vowel>plosive alignment check.
+# Exits non-zero if an error-level health flag fires. See docs/CORPUS_PROFILE.md.
+python -m corpus.cli profile --segments segments.jsonl --markdown --out profile.md
+python -m corpus.cli profile-demo
+
 # Inspect a prompt set.
 python -m corpus.cli prompts --file examples/prompts_ja.jsonl
 
@@ -109,6 +115,8 @@ corpus/
   annotation/mfa_prep.py           write wav+txt utterance pairs for MFA (M3)
   annotation/evaluation.py         WER/CER + bootstrap CI + stratified sampling
   annotation/review_sheet.py       human review-sheet round-trip (CSV)
+  analysis/            corpus profiling: phone classes, descriptive stats, and
+                       gold-free health checks (vowel>plosive alignment probe)
   export/              corpus exporters: praat (TextGrid), elan (EAF),
                        hf_datasets (audiofolder) + export_all — pure stdlib
   pipeline/            read-speech orchestration + acceptance gating

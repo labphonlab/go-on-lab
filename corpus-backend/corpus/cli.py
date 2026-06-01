@@ -477,6 +477,53 @@ def cmd_boundary_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_profile(args: argparse.Namespace) -> int:
+    """Profile a corpus for health + research value (gold-free checks)."""
+    from .analysis.profile import profile_corpus, render_markdown
+
+    segs = _load_segments(args.segments)
+    prof = profile_corpus(segs, accepted_only=args.accepted_only)
+    if args.markdown:
+        report = render_markdown(prof)
+        print(report)
+        if args.out:
+            with open(args.out, "w", encoding="utf-8") as fh:
+                fh.write(report)
+            print(f"\nprofile written to {args.out}", file=sys.stderr)
+    else:
+        print(json.dumps(prof.as_dict(), ensure_ascii=False, indent=2))
+    # exit non-zero if any error-level health flag fired (useful in CI/QA gates)
+    return 2 if any(f.level == "error" for f in prof.flags) else 0
+
+
+def cmd_profile_demo(args: argparse.Namespace) -> int:
+    """Demo profiling on a synthetic corpus with realistic phone alignments."""
+    from .analysis.profile import profile_corpus, render_markdown
+    from .annotation.models import Segment, Transcript
+
+    def phones(spec):
+        out, t = [], 0.0
+        for label, d in spec:
+            out.append({"start_s": t, "end_s": t + d, "label": label})
+            t += d
+        return out
+
+    # Two speakers, healthy phone durations (vowels > plosives).
+    segs = []
+    for i in range(6):
+        spk = f"SPEAKER_{i % 2:02d}"
+        ph = phones([("DH", 0.04), ("AH1", 0.11), ("K", 0.05), ("AE1", 0.13),
+                     ("T", 0.06)])
+        s = Segment(f"meeting#{i:04d}", "meeting", 0.0, 0.39, spk,
+                    transcript=Transcript(text="the cat sat", language="en",
+                                          confidence=0.85 + 0.02 * (i % 3)),
+                    phones=ph, scores={"snr_db": 22.0 + i})
+        segs.append(s)
+    prof = profile_corpus(segs)
+    print(render_markdown(prof))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="corpus", description="Go-on Lab corpus backend")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -585,6 +632,18 @@ def build_parser() -> argparse.ArgumentParser:
     pbd = sub.add_parser("boundary-demo",
                          help="demo boundary-error metrics on synthetic alignments")
     pbd.set_defaults(func=cmd_boundary_demo)
+
+    ppf = sub.add_parser("profile",
+                         help="profile a corpus for health + research value")
+    ppf.add_argument("--segments", required=True, help="segments.jsonl path")
+    ppf.add_argument("--markdown", action="store_true", help="render a report")
+    ppf.add_argument("--accepted-only", action="store_true")
+    ppf.add_argument("--out", default=None, help="write the markdown report here")
+    ppf.set_defaults(func=cmd_profile)
+
+    ppd = sub.add_parser("profile-demo",
+                         help="demo corpus profiling on a synthetic corpus")
+    ppd.set_defaults(func=cmd_profile_demo)
     return p
 
 

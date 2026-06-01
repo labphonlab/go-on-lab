@@ -342,6 +342,116 @@ def cmd_export_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def _load_segments(path: str):
+    """Load segments from a segments.jsonl into lightweight Segment objects."""
+    import json as _json
+    from .annotation.models import Segment, Transcript, WordTiming
+    from .models import ItemState
+    segs = []
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            d = _json.loads(line)
+            tr = None
+            td = d.get("transcript")
+            if td:
+                tr = Transcript(
+                    text=td.get("text"), language=td.get("language"),
+                    confidence=td.get("confidence"),
+                    words=[WordTiming(w["word"], w["start_s"], w["end_s"],
+                                      w.get("confidence"))
+                           for w in td.get("words", [])],
+                    is_heuristic=td.get("is_heuristic", False))
+            s = Segment(d["segment_id"], d["source_id"], d["start_s"], d["end_s"],
+                        d["speaker"], transcript=tr, phones=d.get("phones", []),
+                        scores=d.get("scores", {}))
+            s.state = ItemState(d.get("state", "pending"))
+            segs.append(s)
+    return segs
+
+
+def cmd_review_sheet(args: argparse.Namespace) -> int:
+    """Sample segments and write a human review sheet (CSV) for WER/CER."""
+    from .annotation.evaluation import stratified_sample, sample_for_review
+    from .annotation.review_sheet import write_review_sheet
+
+    segs = _load_segments(args.segments)
+    if args.stratified:
+        picked = stratified_sample(segs, args.n, seed=args.seed)
+    else:
+        picked = sample_for_review(segs, args.n, seed=args.seed)
+    n = write_review_sheet(picked, args.out)
+    print(f"wrote review sheet with {n} segment(s) to {args.out}")
+    print("Fill 'ok' (truthy if ASR is correct) or 'corrected_transcript', then "
+          "run: corpus measure --segments ... --sheet " + args.out)
+    return 0
+
+
+def cmd_measure(args: argparse.Namespace) -> int:
+    """Ingest a filled review sheet, compute WER/CER (+CI, by band), update card."""
+    import json as _json
+    from .annotation.evaluation import measure_error_rates
+    from .annotation.review_sheet import read_corrections, review_progress
+
+    segs = _load_segments(args.segments)
+    prog = review_progress(args.sheet)
+    corrections = read_corrections(args.sheet)
+    if not corrections:
+        print(f"no reviewed rows in {args.sheet} "
+              f"({prog['reviewed']}/{prog['total']} done)", file=sys.stderr)
+        return 1
+    res = measure_error_rates(corrections, segs, seed=args.seed)
+    print(f"review progress: {prog['reviewed']}/{prog['total']} "
+          f"({prog['fraction']:.0%})")
+    print(_json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+
+    if args.card:
+        from .annotation.manifest import write_dataset_card
+        write_dataset_card(segs, args.card, wer=res.as_dict())
+        print(f"\nupdated dataset card: {args.card}", file=sys.stderr)
+    return 0
+
+
+def cmd_eval_demo(args: argparse.Namespace) -> int:
+    """End-to-end: sample -> auto-fill a plausible sheet -> measure WER/CER."""
+    from .annotation.whisperx_pipeline import segments_from_whisperx
+    from .annotation.orchestrator import AnnotationPolicy
+    from .annotation.review_sheet import write_review_sheet, read_corrections
+    from .annotation.evaluation import measure_error_rates
+    import csv as _csv, json as _json
+
+    canned = {"language": "en", "segments": [
+        {"start": 0.0, "end": 2.0, "text": "the meeting will begin shortly",
+         "speaker": "SPEAKER_00",
+         "words": [{"word": "the", "start": 0, "end": 0.3, "score": 0.97}]},
+        {"start": 2.5, "end": 4.0, "text": "thank you everyone for coming",
+         "speaker": "SPEAKER_01",
+         "words": [{"word": "thank", "start": 2.5, "end": 2.9, "score": 0.42}]},
+    ]}
+    segs = segments_from_whisperx(canned, source_id="meeting-001",
+                                  policy=AnnotationPolicy(min_snr_db=-999))
+    os.makedirs(args.out, exist_ok=True)
+    sheet = os.path.join(args.out, "review.csv")
+    write_review_sheet(segs, sheet)
+
+    # Simulate a verifier: first segment correct (ok=x), second has a real fix.
+    rows = list(_csv.reader(open(sheet, encoding="utf-8")))
+    hdr = rows[0]
+    ok_i, corr_i = hdr.index("ok"), hdr.index("corrected_transcript")
+    for r in rows[1:]:
+        if r[0].endswith("#0000"):
+            r[ok_i] = "x"
+        else:
+            r[corr_i] = "thank you everyone for joining"  # 'coming'->'joining'
+    _csv.writer(open(sheet, "w", encoding="utf-8", newline="")).writerows(rows)
+
+    res = measure_error_rates(read_corrections(sheet), segs)
+    print(_json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="corpus", description="Go-on Lab corpus backend")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -416,6 +526,29 @@ def build_parser() -> argparse.ArgumentParser:
                          help="export a sample corpus to Praat/ELAN/HF formats")
     pex.add_argument("--out", default="./_export_demo")
     pex.set_defaults(func=cmd_export_demo)
+
+    prs = sub.add_parser("review-sheet",
+                         help="sample segments into a human review sheet (CSV)")
+    prs.add_argument("--segments", required=True, help="segments.jsonl path")
+    prs.add_argument("--out", default="./review.csv")
+    prs.add_argument("--n", type=int, default=50)
+    prs.add_argument("--seed", type=int, default=0)
+    prs.add_argument("--stratified", action="store_true",
+                     help="sample evenly across ASR confidence bands")
+    prs.set_defaults(func=cmd_review_sheet)
+
+    pms = sub.add_parser("measure",
+                         help="compute WER/CER from a filled review sheet")
+    pms.add_argument("--segments", required=True)
+    pms.add_argument("--sheet", required=True)
+    pms.add_argument("--card", default=None, help="dataset card to update")
+    pms.add_argument("--seed", type=int, default=0)
+    pms.set_defaults(func=cmd_measure)
+
+    ped = sub.add_parser("eval-demo",
+                         help="demo the sample->verify->measure WER/CER loop")
+    ped.add_argument("--out", default="./_eval_demo")
+    ped.set_defaults(func=cmd_eval_demo)
     return p
 
 

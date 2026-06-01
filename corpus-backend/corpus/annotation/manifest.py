@@ -57,16 +57,41 @@ def write_dataset_card(segments: list[Segment], path: str,
         "## Measured label quality", "",
     ]
     if wer:
-        lines += [
-            f"- Sampled segments hand-verified: {wer['n_segments']}",
-            f"- **Word Error Rate (WER): {wer['wer']:.1%}** "
-            f"({wer['total_errors']}/{wer['total_words']} words)",
-        ]
+        lines += _quality_lines(wer)
     else:
-        lines.append("- WER not yet measured. Hand-verify a random sample with "
-                     "`corpus.annotation.evaluation` and regenerate this card.")
+        lines.append("- Error rate not yet measured. Sample with "
+                     "`corpus.annotation.evaluation.stratified_sample`, verify via "
+                     "a review sheet (`review_sheet`), then "
+                     "`measure_error_rates` and regenerate this card.")
     with open(path, "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines) + "\n")
+
+
+def _quality_lines(q: dict) -> list[str]:
+    """Render either the rich ErrorRateResult dict or the legacy WER dict."""
+    lines = [f"- Sampled segments hand-verified: {q.get('n_segments', '?')}"]
+    if "cer" in q:  # rich ErrorRateResult
+        wci = q.get("wer_ci95") or []
+        cci = q.get("cer_ci95") or []
+        wci_s = f" (95% CI {wci[0]:.1%}–{wci[1]:.1%})" if len(wci) == 2 else ""
+        cci_s = f" (95% CI {cci[0]:.1%}–{cci[1]:.1%})" if len(cci) == 2 else ""
+        lines += [
+            f"- **Word Error Rate (WER): {q['wer']:.1%}**{wci_s} "
+            f"({q.get('total_word_errors','?')}/{q.get('total_words','?')} words)",
+            f"- **Character Error Rate (CER): {q['cer']:.1%}**{cci_s} "
+            f"({q.get('total_char_errors','?')}/{q.get('total_chars','?')} chars)",
+        ]
+        by_band = q.get("by_band") or {}
+        if by_band:
+            lines += ["", "### Error rate by ASR confidence band", "",
+                      "| band | n | WER | CER |", "|---|---|---|---|"]
+            for band, b in by_band.items():
+                lines.append(f"| {band} | {b['n']} | {b['wer']:.1%} | {b['cer']:.1%} |")
+    else:  # legacy WER-only dict
+        lines.append(
+            f"- **Word Error Rate (WER): {q['wer']:.1%}** "
+            f"({q.get('total_errors','?')}/{q.get('total_words','?')} words)")
+    return lines
 
 
 def export(segments: list[Segment], out_dir: str, wer: dict | None = None,

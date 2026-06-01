@@ -65,6 +65,12 @@ python -m corpus.cli diet --limit 5 --query nameOfMeeting=予算委員会 --out 
 # Hugging Face datasets audiofolder). All pure stdlib — no extra deps.
 python -m corpus.cli export-demo --out /tmp/exp
 
+# Measure label quality (half-automated): sample -> human review sheet ->
+# WER/CER with 95% CI + per-confidence-band breakdown -> dataset card.
+python -m corpus.cli review-sheet --segments segments.jsonl --out review.csv --stratified
+python -m corpus.cli measure --segments segments.jsonl --sheet review.csv --card CARD.md
+python -m corpus.cli eval-demo --out /tmp/evald     # end-to-end demo
+
 # Inspect a prompt set.
 python -m corpus.cli prompts --file examples/prompts_ja.jsonl
 
@@ -95,6 +101,8 @@ corpus/
                        textgrid.py (Praat reader) + mfa.py (phone alignment)
   annotation/whisperx_pipeline.py  WhisperX result -> gated Segments (M3)
   annotation/mfa_prep.py           write wav+txt utterance pairs for MFA (M3)
+  annotation/evaluation.py         WER/CER + bootstrap CI + stratified sampling
+  annotation/review_sheet.py       human review-sheet round-trip (CSV)
   export/              corpus exporters: praat (TextGrid), elan (EAF),
                        hf_datasets (audiofolder) + export_all — pure stdlib
   pipeline/            read-speech orchestration + acceptance gating
@@ -102,7 +110,7 @@ corpus/
                        confidence gating, WER measurement, manifest
   storage/manifest.py  manifest, CSV, dataset card, commercial export
   cli.py               prompts / run / annotate / acquire / librivox / diet /
-                       export-demo (+ other demos)
+                       export-demo / review-sheet / measure (+ other demos)
 docs/                  ARCHITECTURE, LICENSING, QUALITY_STANDARDS,
                        ANNOTATION_PIPELINE, AUTO_ANNOTATION, SOURCE_CATALOG
 examples/              prompt sets (en, ja)

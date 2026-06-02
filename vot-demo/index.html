@@ -70,13 +70,13 @@
     <div class="card">
       <span class="badge">音声学デモ実験</span>
       <h2 style="margin-top:0;">これから何をするか</h2>
-      <p>英語の <strong>/pa/</strong> と <strong>/ba/</strong> の連続体（VOT = Voice Onset Time を段階的に変化させた音）を聞き、聞こえた音を選んでもらいます。</p>
+      <p>英語の <strong>pie</strong> と <strong>buy</strong> の連続体（VOT = Voice Onset Time を段階的に変化させた音）を聞き、聞こえた音を選んでもらいます。</p>
       <p>所要時間: 約 <strong>4〜5 分</strong>（44 試行）<br>必要なもの: <strong>イヤホンまたはヘッドホン</strong></p>
 
       <div class="explain">
         <strong>VOT とは？</strong><br>
         破裂音（/p/, /b/, /t/, /d/, /k/, /g/）の閉鎖開放から声帯振動が始まるまでの時間（ms）です。
-        英語では VOT が短いと「ba」、長いと「pa」に聞こえます。
+        英語では VOT が短いと「buy」、長いと「pie」に聞こえます。
         本デモでは VOT を 0 ms から 50 ms まで段階的に変化させた 11 段階の音を提示し、
         あなたの <em>カテゴリ境界（perceptual boundary）</em>を可視化します。
       </div>
@@ -134,8 +134,8 @@
       <div class="chart-wrap"><canvas id="chartPersonal"></canvas></div>
       <div class="explain" style="margin-top:16px;">
         <strong>グラフの見方:</strong><br>
-        横軸は VOT (ms)、縦軸は「pa」と答えた割合です。<br>
-        曲線が <em>S 字状（シグモイド）</em>になり、ある VOT で急に「ba」→「pa」へ切り替わるのが
+        横軸は VOT (ms)、縦軸は「pie」と答えた割合です。<br>
+        曲線が <em>S 字状（シグモイド）</em>になり、ある VOT で急に「buy」→「pie」へ切り替わるのが
         典型的なカテゴリ知覚の証拠です。50% の地点がカテゴリ境界（perceptual boundary）です。
       </div>
     </div>
@@ -176,11 +176,11 @@
    設定
    ============================================================ */
 const CONFIG = {
-  experimentName: "vot_demo_pa_ba",
+  experimentName: "class_demo_vot_pie_buy_v1",
   // ↓ デモ専用の Apps Script Web App URL（本格実験とは別デプロイ）
   dataServerUrl: "https://script.google.com/macros/s/AKfycbxkKNN6Tz1TZU_uUaqtYrLNkfaIJpK_mKyEQi9bURyHSok9YxseViS5jZArdqTDw1T7/exec",
-  responseOptions: ["pa", "ba"],
-  targetResponseForGraph: "pa",
+  responseOptions: ["pie", "buy"],
+  targetResponseForGraph: "pie",
   repetitionsPerStimulus: 4,         // 11 × 4 = 44 試行（約 4〜5 分）
   randomizeTrials: true,
   fixationDurationMs: 400,
@@ -512,7 +512,7 @@ function renderPersonalResult() {
 
   document.getElementById("personalStats").innerHTML =
     "<div class='stat-cell'><div class='stat-num'>" + results.length + "</div><div class='stat-label'>試行数</div></div>" +
-    "<div class='stat-cell'><div class='stat-num'>" + (targetCount / results.length * 100).toFixed(0) + "%</div><div class='stat-label'>pa と答えた割合</div></div>" +
+    "<div class='stat-cell'><div class='stat-num'>" + (targetCount / results.length * 100).toFixed(0) + "%</div><div class='stat-label'>pie と答えた割合</div></div>" +
     "<div class='stat-cell'><div class='stat-num'>" + (boundary != null ? boundary.toFixed(1) + " ms" : "—") + "</div><div class='stat-label'>あなたのカテゴリ境界</div></div>";
 
   if (chartPersonal) chartPersonal.destroy();
@@ -522,7 +522,7 @@ function renderPersonalResult() {
     data: {
       labels: agg.map((d) => d.step),
       datasets: [{
-        label: "「pa」と答えた割合",
+        label: "「pie」と答えた割合",
         data: agg.map((d) => +d.rate.toFixed(3)),
         borderColor: "#0071e3",
         backgroundColor: "rgba(0,113,227,0.15)",
@@ -532,7 +532,7 @@ function renderPersonalResult() {
     options: {
       responsive: true, maintainAspectRatio: false,
       scales: {
-        y: { min: 0, max: 1, title: { display: true, text: "「pa」応答率" }, ticks: { stepSize: 0.2 } },
+        y: { min: 0, max: 1, title: { display: true, text: "「pie」応答率" }, ticks: { stepSize: 0.2 } },
         x: { title: { display: true, text: "VOT (ms)" } }
       },
       plugins: {
@@ -642,7 +642,7 @@ function renderTeacherView(rows) {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: true, labels: { filter: (item) => item.text } } },
       scales: {
-        y: { min: 0, max: 1, title: { display: true, text: "「pa」応答率" } },
+        y: { min: 0, max: 1, title: { display: true, text: "「pie」応答率" } },
         x: { title: { display: true, text: "VOT (ms)" } }
       }
     }

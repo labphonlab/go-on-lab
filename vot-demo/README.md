@@ -1,6 +1,6 @@
 # VOT 知覚デモ（音声学クラス用）
 
-英語の `/pa/`-`/ba/` 連続体（VOT = Voice Onset Time が 0〜50 ms の 11 段階）を聞いて、
+英語の `pie`-`buy` 連続体（VOT = Voice Onset Time が 0〜50 ms の 11 段階）を聞いて、
 聞こえた音を選んでもらう **音声学授業デモ用 Web アプリ** です。
 
 学生が個別にリンクを開いて受験し、最後に **自分のカテゴリ境界**（perceptual boundary）を
@@ -40,7 +40,7 @@ VOT 値のマッピングは `index.html` 内の `CONFIG.stimuli` 配列で編�
 
 1. 配布された URL を開く
 2. （任意）ニックネーム or ID を入力 → 「開始する」
-3. 11 音 × 4 回 = 44 試行を順次提示（注視点 → 自動再生 → /pa/ or /ba/ を選択 → 次へ）
+3. 11 音 × 4 回 = 44 試行を順次提示（注視点 → 自動再生 → pie or buy を選択 → 次へ）
 4. 結果画面で **自分の心理測定関数** と **カテゴリ境界** を表示
 5. データはバックグラウンドで自動送信（学生は意識しない）
 
@@ -170,13 +170,19 @@ GitHub Pages 等で公開した上で、以下を配布:
 [学生 A] ───POST───┐
 [学生 B] ───POST───┼──→ Apps Script ──→ Google Sheets
 [学生 C] ───POST───┘                     (results_identification シート、
-                                          experimentName = "vot_demo_pa_ba")
+                                          experimentName = "class_demo_vot_pie_buy_v1")
                                                     │
 [教員] ?teacher=1 ──GET──→ Apps Script ─集計→ チャート表示
 ```
 
-すべてのデータは `experimentName: "vot_demo_pa_ba"` でタグ付けされ、
-本格実験のデータ（`identification_pie_buy`）とは混ざりません。
+すべてのデータは `experimentName: "class_demo_vot_pie_buy_v1"` でタグ付けされ、
+他の授業デモ・パイロット・商用版データとは `experimentName` で完全に切り分けられます:
+
+| prefix | 用途 |
+|---|---|
+| `class_demo_*` | 授業デモ（本デモ、`identification-task-app`） |
+| `pilot_*` | リリース前パイロット（`pilot/jpn_kg_klatt` 等） |
+| `release_*` | 販売後の商用版データ |
 
 ## VOT 値のマッピング
 

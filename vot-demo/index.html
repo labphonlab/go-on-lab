@@ -39,8 +39,11 @@
   .play-info { text-align: center; font-size: 14px; color: #6e6e73; margin: 12px 0; min-height: 1.2em; }
   .progress-bar { height: 8px; background: #e8e8ed; border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
   .progress-fill { height: 100%; background: #0071e3; transition: width 0.2s; }
-  .fixation { display: flex; align-items: center; justify-content: center; height: 100px; font-size: 56px; color: #1d1d1f; }
-  .iti { display: flex; align-items: center; justify-content: center; height: 100px; color: #6e6e73; }
+  /* Fixed-size stage so fixation, iti, playInfo, and play button never push the response grid up or down. */
+  .stim-stage { position: relative; height: 140px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+  .stim-stage > * { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .fixation { font-size: 56px; color: #1d1d1f; }
+  .iti { color: #6e6e73; }
   .chart-wrap { position: relative; height: 320px; }
   .note { font-size: 14px; color: #6e6e73; line-height: 1.6; }
   .hidden { display: none !important; }
@@ -66,25 +69,14 @@
 
   <!-- イントロ画面 -->
   <section id="screen-intro">
-    <h1>VOT 知覚デモ</h1>
+    <h1>音声知覚デモ</h1>
     <div class="card">
-      <span class="badge">音声学デモ実験</span>
-      <h2 style="margin-top:0;">これから何をするか</h2>
-      <p>英語の <strong>/pa/</strong> と <strong>/ba/</strong> の連続体（VOT = Voice Onset Time を段階的に変化させた音）を聞き、聞こえた音を選んでもらいます。</p>
-      <p>所要時間: 約 <strong>4〜5 分</strong>（44 試行）<br>必要なもの: <strong>イヤホンまたはヘッドホン</strong></p>
+      <p>聞こえた音が <strong>pie</strong> か <strong>buy</strong> か、ボタンで答えてください。</p>
+      <p>所要時間: 約 <strong>2 分</strong>（22 試行）<br>必要なもの: <strong>イヤホンまたはヘッドホン</strong></p>
 
-      <div class="explain">
-        <strong>VOT とは？</strong><br>
-        破裂音（/p/, /b/, /t/, /d/, /k/, /g/）の閉鎖開放から声帯振動が始まるまでの時間（ms）です。
-        英語では VOT が短いと「ba」、長いと「pa」に聞こえます。
-        本デモでは VOT を 0 ms から 50 ms まで段階的に変化させた 11 段階の音を提示し、
-        あなたの <em>カテゴリ境界（perceptual boundary）</em>を可視化します。
-      </div>
-
-      <div style="margin-top: 24px;">
-        <label for="participantLabel">ニックネーム・ID（任意・後で自分の結果を識別するため）</label>
-        <input type="text" id="participantLabel" placeholder="例: 田中、a01、anonymous など" maxlength="32">
-        <p class="note" style="margin-top:8px;">※ 個人を特定できる情報は集めません。記入は任意です。</p>
+      <div style="margin-top: 20px;">
+        <label for="participantLabel">ニックネーム・ID（任意）</label>
+        <input type="text" id="participantLabel" placeholder="例: a01" maxlength="32">
       </div>
 
       <p class="note" style="margin-top:16px;">
@@ -111,11 +103,13 @@
   <section id="screen-trial" class="hidden">
     <div class="card">
       <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-      <div class="trial-counter"><span id="trialNum">1</span> / <span id="trialTotal">44</span></div>
-      <div class="fixation hidden" id="fixationDisplay">+</div>
-      <div class="iti hidden" id="itiDisplay">・・・</div>
-      <div class="play-info" id="playInfo">画面の表示に従ってください</div>
-      <button class="btn-primary hidden" id="playBtn" style="background:#34c759;">▶ 再生</button>
+      <div class="trial-counter"><span id="trialNum">1</span> / <span id="trialTotal">22</span></div>
+      <div class="stim-stage">
+        <div class="fixation hidden" id="fixationDisplay">+</div>
+        <div class="iti hidden" id="itiDisplay">・・・</div>
+        <div class="play-info" id="playInfo">画面の表示に従ってください</div>
+        <button class="btn-primary hidden" id="playBtn" style="background:#34c759; position:static; width:auto; max-width:280px;">▶ 再生</button>
+      </div>
       <div class="response-grid" id="responseGrid"></div>
     </div>
   </section>
@@ -134,8 +128,8 @@
       <div class="chart-wrap"><canvas id="chartPersonal"></canvas></div>
       <div class="explain" style="margin-top:16px;">
         <strong>グラフの見方:</strong><br>
-        横軸は VOT (ms)、縦軸は「pa」と答えた割合です。<br>
-        曲線が <em>S 字状（シグモイド）</em>になり、ある VOT で急に「ba」→「pa」へ切り替わるのが
+        横軸は VOT (ms)、縦軸は「pie」と答えた割合です。<br>
+        曲線が <em>S 字状（シグモイド）</em>になり、ある VOT で急に「buy」→「pie」へ切り替わるのが
         典型的なカテゴリ知覚の証拠です。50% の地点がカテゴリ境界（perceptual boundary）です。
       </div>
     </div>
@@ -176,12 +170,12 @@
    設定
    ============================================================ */
 const CONFIG = {
-  experimentName: "vot_demo_pa_ba",
+  experimentName: "class_demo_vot_pie_buy_v1",
   // ↓ デモ専用の Apps Script Web App URL（本格実験とは別デプロイ）
   dataServerUrl: "https://script.google.com/macros/s/AKfycbxkKNN6Tz1TZU_uUaqtYrLNkfaIJpK_mKyEQi9bURyHSok9YxseViS5jZArdqTDw1T7/exec",
-  responseOptions: ["pa", "ba"],
-  targetResponseForGraph: "pa",
-  repetitionsPerStimulus: 4,         // 11 × 4 = 44 試行（約 4〜5 分）
+  responseOptions: ["pie", "buy"],
+  targetResponseForGraph: "pie",
+  repetitionsPerStimulus: 2,         // 11 × 2 = 22 試行（約 2 分）
   randomizeTrials: true,
   fixationDurationMs: 400,
   interTrialIntervalMs: 400,
@@ -512,7 +506,7 @@ function renderPersonalResult() {
 
   document.getElementById("personalStats").innerHTML =
     "<div class='stat-cell'><div class='stat-num'>" + results.length + "</div><div class='stat-label'>試行数</div></div>" +
-    "<div class='stat-cell'><div class='stat-num'>" + (targetCount / results.length * 100).toFixed(0) + "%</div><div class='stat-label'>pa と答えた割合</div></div>" +
+    "<div class='stat-cell'><div class='stat-num'>" + (targetCount / results.length * 100).toFixed(0) + "%</div><div class='stat-label'>pie と答えた割合</div></div>" +
     "<div class='stat-cell'><div class='stat-num'>" + (boundary != null ? boundary.toFixed(1) + " ms" : "—") + "</div><div class='stat-label'>あなたのカテゴリ境界</div></div>";
 
   if (chartPersonal) chartPersonal.destroy();
@@ -522,7 +516,7 @@ function renderPersonalResult() {
     data: {
       labels: agg.map((d) => d.step),
       datasets: [{
-        label: "「pa」と答えた割合",
+        label: "「pie」と答えた割合",
         data: agg.map((d) => +d.rate.toFixed(3)),
         borderColor: "#0071e3",
         backgroundColor: "rgba(0,113,227,0.15)",
@@ -532,7 +526,7 @@ function renderPersonalResult() {
     options: {
       responsive: true, maintainAspectRatio: false,
       scales: {
-        y: { min: 0, max: 1, title: { display: true, text: "「pa」応答率" }, ticks: { stepSize: 0.2 } },
+        y: { min: 0, max: 1, title: { display: true, text: "「pie」応答率" }, ticks: { stepSize: 0.2 } },
         x: { title: { display: true, text: "VOT (ms)" } }
       },
       plugins: {
@@ -642,7 +636,7 @@ function renderTeacherView(rows) {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: true, labels: { filter: (item) => item.text } } },
       scales: {
-        y: { min: 0, max: 1, title: { display: true, text: "「pa」応答率" } },
+        y: { min: 0, max: 1, title: { display: true, text: "「pie」応答率" } },
         x: { title: { display: true, text: "VOT (ms)" } }
       }
     }

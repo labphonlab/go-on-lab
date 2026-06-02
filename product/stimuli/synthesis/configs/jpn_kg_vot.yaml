@@ -32,10 +32,10 @@ timing:
 
 burst:
   type: velar       # velar / dental / labial
-  intensity_db: 68
+  intensity_db: 64
 
 aspiration:
-  intensity_db: 58
+  intensity_db: 48
 
 voicing:
   intensity_db: 72

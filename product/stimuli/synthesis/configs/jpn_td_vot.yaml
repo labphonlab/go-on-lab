@@ -28,10 +28,10 @@ timing:
 
 burst:
   type: dental
-  intensity_db: 70  # dental release tends to be slightly more energetic in high freqs
+  intensity_db: 66  # dental release tends to be slightly more energetic in high freqs
 
 aspiration:
-  intensity_db: 60
+  intensity_db: 50
 
 voicing:
   intensity_db: 72

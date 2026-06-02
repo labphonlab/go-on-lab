@@ -32,10 +32,10 @@ timing:
 
 burst:
   type: labial
-  intensity_db: 65   # labial bursts tend to be lower in amplitude
+  intensity_db: 60   # labial bursts tend to be lower in amplitude
 
 aspiration:
-  intensity_db: 62   # English aspirated /p/ has stronger aspiration than Japanese /k/
+  intensity_db: 52   # English aspirated /p/ has stronger aspiration than Japanese /k/
 
 voicing:
   intensity_db: 72

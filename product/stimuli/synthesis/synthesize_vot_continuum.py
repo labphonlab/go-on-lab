@@ -235,47 +235,67 @@ def _set_burst_and_aspiration(
     t_voicing_onset: float,
 ) -> None:
     """
-    Burst: brief frication transient at release.
-    Aspiration: noise between burst end and voicing onset, only for positive VOT.
+    Burst: brief noise transient routed through the *parallel frication* branch,
+    so the spectral peaks are determined by frication formants (place-dependent).
+
+    Aspiration: noise routed through the *cascade* branch via the aspiration
+    amplitude tier, so it inherits the vowel's vocal tract shaping. Klatt's
+    canonical recipe for /Cʰ/ stops.
     """
     burst_dur = cfg.timing.burst_ms / 1000.0
-
-    # Frication formants (place-dependent spectral shape of the burst).
     frication_formants = BURST_FRICATION_FORMANTS[cfg.burst_type]
+
+    # Parallel-branch frication formants. Per-formant amplitudes must be set
+    # explicitly or the source passes through with zero gain; ~30 dB keeps the
+    # burst peak comparable to (not dominant over) the modal vowel after
+    # global RMS normalization.
     for i, fm in enumerate(frication_formants, start=1):
         call(kg, "Add frication formant frequency point", i, t_burst, fm.freq)
         call(kg, "Add frication formant bandwidth point", i, t_burst, fm.bw)
+        call(kg, "Add frication formant amplitude point", i, t_burst, 30.0)
 
-    # Burst envelope: zero -> peak -> decay over burst_dur.
+    # Burst envelope on the frication source.
     call(kg, "Add frication amplitude point", max(0.0, t_burst - 0.002), 0.0)
     call(kg, "Add frication amplitude point", t_burst, cfg.burst_intensity_db)
     call(kg, "Add frication amplitude point", t_burst + burst_dur, cfg.burst_intensity_db - 10.0)
+    call(kg, "Add frication amplitude point", t_burst + burst_dur + 0.001, 0.0)
 
+    # Aspiration via cascade (vowel-shaped) for positive VOT.
     if vot_s > 0:
-        # Aspiration sustained between burst end and voicing onset.
         asp_start = t_burst + burst_dur
         asp_end = max(asp_start + 0.003, t_voicing_onset - 0.003)
-        call(kg, "Add frication amplitude point", asp_start + 0.001, cfg.aspiration_intensity_db)
-        call(kg, "Add frication amplitude point", asp_end, cfg.aspiration_intensity_db)
-        call(kg, "Add frication amplitude point", t_voicing_onset, 0.0)
-    else:
-        call(kg, "Add frication amplitude point", t_burst + burst_dur + 0.001, 0.0)
+        call(kg, "Add aspiration amplitude point", asp_start - 0.001, 0.0)
+        call(kg, "Add aspiration amplitude point", asp_start + 0.001, cfg.aspiration_intensity_db)
+        call(kg, "Add aspiration amplitude point", asp_end, cfg.aspiration_intensity_db)
+        call(kg, "Add aspiration amplitude point", t_voicing_onset, 0.0)
 
 
 # ---------- Resampling and normalization ----------
 
-def _normalize_loudness(samples: np.ndarray, target_dbfs: float = -23.0) -> np.ndarray:
-    """Simple peak-aware RMS normalization. Not full BS.1770 but sufficient for stimuli."""
-    rms = float(np.sqrt(np.mean(samples ** 2)))
-    if rms < 1e-9:
+def _normalize_loudness(
+    samples: np.ndarray,
+    sample_rate: int,
+    vowel_start_s: float,
+    vowel_end_s: float,
+    target_dbfs: float = -23.0,
+) -> np.ndarray:
+    """
+    RMS-normalize the *vowel region* to target_dbfs so the modal-vowel level
+    stays consistent across the continuum. Without this, the burst dominates
+    a global RMS calculation and the vowel gets buried after normalization.
+    A peak guard at -0.5 dBFS prevents clipping when the burst is the peak.
+    """
+    a = max(0, int(vowel_start_s * sample_rate))
+    b = min(len(samples), int(vowel_end_s * sample_rate))
+    vowel_rms = float(np.sqrt(np.mean(samples[a:b] ** 2)))
+    if vowel_rms < 1e-9:
         return samples
-    current_dbfs = 20.0 * np.log10(rms)
-    gain_db = target_dbfs - current_dbfs
-    gain = 10 ** (gain_db / 20.0)
+    current_dbfs = 20.0 * np.log10(vowel_rms)
+    gain = 10 ** ((target_dbfs - current_dbfs) / 20.0)
     out = samples * gain
     peak = float(np.max(np.abs(out)))
-    if peak > 0.99:
-        out = out * (0.99 / peak)
+    if peak > 0.95:
+        out = out * (0.95 / peak)
     return out
 
 
@@ -315,7 +335,12 @@ def synthesize_continuum(cfg: Config, out_root: Path) -> None:
         # KlattGrid synthesis is at 44.1 kHz by default in parselmouth.
         samples = sound.values[0].astype(np.float64)
         src_rate = int(sound.sampling_frequency)
-        samples = _normalize_loudness(samples)
+
+        modal_vowel_start_s, modal_vowel_end_s = _modal_vowel_window(cfg, vot_ms)
+        # Skip the first 30 ms of onset transients for a clean RMS reference.
+        rms_start_s = modal_vowel_start_s + 0.030
+        rms_end_s = modal_vowel_end_s - 0.020
+        samples = _normalize_loudness(samples, src_rate, rms_start_s, rms_end_s)
 
         filename_stem = f"{cfg.set_id}_step{step_idx:02d}"
 
@@ -353,6 +378,17 @@ def synthesize_continuum(cfg: Config, out_root: Path) -> None:
 
     print(f"\nDone. Package at: {set_dir}")
     print(f"To bundle for sale: zip -r {cfg.set_id}_v1.zip {set_dir}/")
+
+
+def _modal_vowel_window(cfg: Config, vot_ms: float) -> tuple[float, float]:
+    """Return (start, end) seconds of the modal vowel after the burst."""
+    timing = cfg.timing
+    lead_s = timing.lead_silence_ms / 1000.0
+    closure_s = max(timing.closure_ms / 1000.0, max(0.0, abs(vot_ms) + 20) / 1000.0)
+    t_burst = lead_s + closure_s
+    modal_start = t_burst + max(0.0, vot_ms / 1000.0)
+    modal_end = modal_start + timing.vowel_ms / 1000.0
+    return modal_start, modal_end
 
 
 def _rate_label(sr_hz: int) -> str:

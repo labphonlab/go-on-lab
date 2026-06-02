@@ -134,27 +134,32 @@ for step from 1 to steps
   Add oral formant bandwidth point: 4, t_anchor, 250
   Add oral formant bandwidth point: 4, t_vowel_end, 250
 
-  # Frication formants.
+  # Frication formants (per-formant amplitude must be set or the source
+  # passes through with zero gain).
   Add frication formant frequency point: 1, t_burst, frf1
   Add frication formant bandwidth point: 1, t_burst, frf1bw
+  Add frication formant amplitude point: 1, t_burst, 30
   Add frication formant frequency point: 2, t_burst, frf2
   Add frication formant bandwidth point: 2, t_burst, frf2bw
+  Add frication formant amplitude point: 2, t_burst, 30
   Add frication formant frequency point: 3, t_burst, frf3
   Add frication formant bandwidth point: 3, t_burst, frf3bw
+  Add frication formant amplitude point: 3, t_burst, 30
 
-  # Burst envelope.
+  # Burst envelope on the frication source.
   Add frication amplitude point: max(0, t_burst - 0.002), 0
   Add frication amplitude point: t_burst, burst_db
   Add frication amplitude point: t_burst + burst_s, burst_db - 10
+  Add frication amplitude point: t_burst + burst_s + 0.001, 0
 
+  # Aspiration via cascade (vowel-shaped) for positive VOT.
   if vot_s > 0
     asp_start = t_burst + burst_s
     asp_end = max(asp_start + 0.003, t_voicing_onset - 0.003)
-    Add frication amplitude point: asp_start + 0.001, aspiration_db
-    Add frication amplitude point: asp_end, aspiration_db
-    Add frication amplitude point: t_voicing_onset, 0
-  else
-    Add frication amplitude point: t_burst + burst_s + 0.001, 0
+    Add aspiration amplitude point: asp_start - 0.001, 0
+    Add aspiration amplitude point: asp_start + 0.001, aspiration_db
+    Add aspiration amplitude point: asp_end, aspiration_db
+    Add aspiration amplitude point: t_voicing_onset, 0
   endif
 
   # Synthesize, normalize, save.

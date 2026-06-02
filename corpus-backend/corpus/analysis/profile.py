@@ -146,10 +146,11 @@ def profile_corpus(segments: list[Segment], accepted_only: bool = False,
         flags.append(HealthFlag(
             "warn", "high_empty_rate",
             f"{empty_rate:.0%} of segments have no transcript"))
-    if texts and dup.most_common(1)[0][1] / len(texts) > 0.2:
+    top_count = dup.most_common(1)[0][1] if texts else 0
+    if texts and top_count > 1 and top_count / len(texts) > 0.2:
         flags.append(HealthFlag(
             "warn", "template_contamination",
-            f"most common transcript is {dup.most_common(1)[0][1]} occurrences"))
+            f"most common transcript is {top_count} occurrences"))
 
     # -- timing -------------------------------------------------------------
     rates = _speaking_rates(segments)

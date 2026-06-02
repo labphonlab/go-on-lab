@@ -98,6 +98,14 @@ def test_empty_transcript_rate_flagged():
     assert any(f.code == "high_empty_rate" for f in prof.flags)
 
 
+def test_all_distinct_transcripts_not_flagged_as_template():
+    # every transcript unique -> top count is 1 -> must NOT flag contamination
+    segs = [_seg(f"a#{i}", f"unique sentence {i}", speaker=f"S{i}")
+            for i in range(4)]
+    prof = profile_corpus(segs)
+    assert not any(f.code == "template_contamination" for f in prof.flags)
+
+
 # -- the gold-free alignment checks --------------------------------------
 
 def test_healthy_phone_durations_no_flags():

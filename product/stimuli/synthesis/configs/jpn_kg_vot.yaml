@@ -1,0 +1,44 @@
+# Japanese /k/-/g/ VOT continuum
+# Vowel: /a/, velar burst, single male-typical speaker
+# Reference VOT range: Riney et al. (2007) JIPA for Japanese velar VOT distributions
+
+set_id: jpn_kg_vot
+set_name: "日本語 /k/-/g/ VOT 連続体"
+language: jp
+contrast: "/k/-/g/"
+vowel: a
+
+# 11-step continuum spanning prevoiced /g/ to long-lag /k/
+vot_steps_ms: [-40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60]
+
+# Vowel /a/ formants (male-typical, Japanese reference)
+# Keys must sort lexicographically (f1 < f2 < f3 < f4)
+formants:
+  f1: { freq: 700,  bw: 90 }
+  f2: { freq: 1200, bw: 110 }
+  f3: { freq: 2600, bw: 170 }
+  f4: { freq: 3500, bw: 250 }
+
+f0:
+  start: 130   # Hz, vowel onset
+  end: 100     # Hz, vowel offset (gentle declination)
+
+timing:
+  lead_silence: 50  # ms before closure
+  closure: 60       # ms of silence (or prevoicing) before burst
+  burst: 5          # ms burst transient
+  vowel: 200        # ms vowel duration after voicing onset
+  trail_silence: 50 # ms after vowel
+
+burst:
+  type: velar       # velar / dental / labial
+  intensity_db: 68
+
+aspiration:
+  intensity_db: 58
+
+voicing:
+  intensity_db: 72
+  prevoicing_intensity_db: 55
+
+sample_rates_hz: [44100, 22050, 16000]

@@ -1,0 +1,40 @@
+# Japanese /t/-/d/ VOT continuum
+# Vowel: /a/, dental burst, single male-typical speaker
+
+set_id: jpn_td_vot
+set_name: "日本語 /t/-/d/ VOT 連続体"
+language: jp
+contrast: "/t/-/d/"
+vowel: a
+
+vot_steps_ms: [-40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60]
+
+formants:
+  f1: { freq: 700,  bw: 90 }
+  f2: { freq: 1200, bw: 110 }
+  f3: { freq: 2600, bw: 170 }
+  f4: { freq: 3500, bw: 250 }
+
+f0:
+  start: 130
+  end: 100
+
+timing:
+  lead_silence: 50
+  closure: 60
+  burst: 5
+  vowel: 200
+  trail_silence: 50
+
+burst:
+  type: dental
+  intensity_db: 70  # dental release tends to be slightly more energetic in high freqs
+
+aspiration:
+  intensity_db: 60
+
+voicing:
+  intensity_db: 72
+  prevoicing_intensity_db: 55
+
+sample_rates_hz: [44100, 22050, 16000]

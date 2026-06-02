@@ -972,7 +972,7 @@
    ============================================================ */
 const DEFAULT_CONFIG = {
   paradigm: "identification",           // "identification" | "ax" | "axb" | "rating"
-  experimentName: "class_demo_pie_buy_v1",
+  experimentName: "identification_pie_buy",
   dataServerUrl: "https://script.google.com/macros/s/AKfycbymD6t3TiqaPsBTm5RPVSV1fvuqg7BgD_yU3fYUg4cQzgfaUhCxxxbIb_lKRM2ICg1v/exec",
 
   // 回答 (paradigm 別)
@@ -1009,8 +1009,8 @@ const DEFAULT_CONFIG = {
   ],
 
   // 文言 (空文字なら paradigm 別のデフォルトを使う)
-  consentTitle: "音声知覚 授業デモ (pie / buy)",
-  consentBody: "本デモは音声学・心理言語学の授業用教材です。pie と buy の音響連続体に対して、聞き取りカテゴリ判定を体験します。\n\n回答データは授業内の集計・可視化のためにのみ使用され、研究目的の解析や外部公開には使用されません。データには class_demo_pie_buy_v1 のタグが付与されます。",
+  consentTitle: "音声知覚タスク",
+  consentBody: "",      // 空ならビルトイン
   instructionsBody: ""  // 空ならビルトイン
 };
 

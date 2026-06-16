@@ -1,0 +1,788 @@
+"""Command-line interface for the corpus backend.
+
+    python -m corpus.cli prompts --file examples/prompts_en.jsonl
+    python -m corpus.cli demo   --out /tmp/goon_demo
+    python -m corpus.cli run    --audio clip.wav --prompt-file prompts.jsonl \\
+                                --prompt-id en-0001 --speaker spk1 --out out/
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+
+from .models import ConsentRecord, License, Recording, Speaker
+from .prompts.store import PromptStore
+from .pipeline.orchestrator import Pipeline
+from .storage import manifest
+
+
+def _demo_consent(speaker_id: str) -> ConsentRecord:
+    return ConsentRecord(
+        consent_id=f"consent-{speaker_id}", speaker_id=speaker_id,
+        version="2026-05-01", commercial_use=True, redistribution=True,
+        derivatives=True, jurisdiction="JP",
+    )
+
+
+def cmd_prompts(args: argparse.Namespace) -> int:
+    store = PromptStore.from_jsonl(args.file)
+    print(f"loaded {len(store)} prompts from {args.file}")
+    langs: dict[str, int] = {}
+    for p in store:
+        langs[p.language] = langs.get(p.language, 0) + 1
+    for lang, n in sorted(langs.items()):
+        print(f"  {lang}: {n}")
+    return 0
+
+
+def cmd_run(args: argparse.Namespace) -> int:
+    store = PromptStore.from_jsonl(args.prompt_file)
+    prompt = store.get(args.prompt_id)
+    rec = Recording(
+        recording_id=args.recording_id or os.path.basename(args.audio),
+        prompt_id=prompt.prompt_id, speaker_id=args.speaker, audio_path=args.audio,
+    )
+    item = Pipeline().process(
+        rec, prompt, _demo_consent(args.speaker), License(args.license))
+    print(json.dumps(item.to_dict(), ensure_ascii=False, indent=2))
+    if args.out:
+        manifest.export_corpus([item], args.out)
+        print(f"\nexported manifest to {args.out}/", file=sys.stderr)
+    return 0 if item.state.value != "rejected" else 2
+
+
+def cmd_demo(args: argparse.Namespace) -> int:
+    """End-to-end demo: synthesise clips, run the pipeline, export a manifest."""
+    from .audio.synth import write_tone_wav
+
+    os.makedirs(args.out, exist_ok=True)
+    store = PromptStore()
+    from .models import Prompt
+    store.add(Prompt("demo-en-1", "en", "the quick brown fox jumps", License.CC0_1_0))
+    store.add(Prompt("demo-ja-1", "ja", "むかし むかし ある ところ に", License.CC0_1_0))
+
+    pipe = Pipeline()
+    items = []
+    specs = [
+        ("clean.wav", dict(duration_s=2.5, amplitude=0.3, noise=0.0), "demo-en-1"),
+        ("noisy.wav", dict(duration_s=2.5, amplitude=0.05, noise=0.08), "demo-en-1"),
+        ("clipped.wav", dict(duration_s=2.5, amplitude=1.2, noise=0.0), "demo-ja-1"),
+    ]
+    for fname, kw, pid in specs:
+        path = os.path.join(args.out, fname)
+        write_tone_wav(path, **kw)
+        rec = Recording(fname, pid, "demo-spk", path)
+        items.append(pipe.process(rec, store.get(pid),
+                                  _demo_consent("demo-spk"), License.CC_BY_4_0))
+
+    for it in items:
+        print(f"{it.recording.recording_id:12s} -> {it.state.value:8s} "
+              f"sellable={it.is_sellable()}  "
+              f"hard_fails={[g.name for g in it.failed_hard()]}")
+    summary = manifest.export_corpus(items, args.out)
+    print("\nsummary:", json.dumps(summary, ensure_ascii=False))
+    print(f"manifest + dataset card written to {args.out}/")
+    return 0
+
+
+def cmd_annotate(args: argparse.Namespace) -> int:
+    """Run the automatic segmentation + labeling pipeline on a recording."""
+    from .annotation.orchestrator import AnnotationPipeline
+    from .annotation import manifest as ann_manifest
+
+    pipe = AnnotationPipeline()
+    segments = pipe.annotate_file(
+        args.audio, source_id=args.source_id, declared_language=args.language)
+
+    for s in segments:
+        txt = (s.transcript.text if s.transcript and s.transcript.text
+               else "<no-transcript>")
+        print(f"{s.segment_id}  [{s.start_s:6.2f}-{s.end_s:6.2f}]  "
+              f"{s.speaker:11s}  {s.state.value:8s}  snr={s.scores.get('snr_db')}  {txt}")
+
+    summary = ann_manifest.summarise(segments)
+    print("\nsummary:", json.dumps(summary, ensure_ascii=False))
+    if args.out:
+        ann_manifest.export(segments, args.out)
+        print(f"segments + dataset card written to {args.out}/", file=sys.stderr)
+    return 0
+
+
+def cmd_annotate_demo(args: argparse.Namespace) -> int:
+    """Synthesise a multi-region recording and run the annotation pipeline."""
+    from .audio.synth import write_segmented_wav
+    from .annotation.orchestrator import AnnotationPipeline
+    from .annotation import manifest as ann_manifest
+
+    os.makedirs(args.out, exist_ok=True)
+    path = os.path.join(args.out, "source.wav")
+    write_segmented_wav(path, regions=[(1.0, 1.2), (1.5, 0.9), (0.8, 1.5)],
+                        gap_s=0.5)
+    segments = AnnotationPipeline().annotate_file(path, source_id="demo-source")
+    for s in segments:
+        print(f"{s.segment_id}  [{s.start_s:6.2f}-{s.end_s:6.2f}]  "
+              f"{s.speaker:11s}  {s.state.value:8s}  snr={s.scores.get('snr_db')}")
+    summary = ann_manifest.export(segments, args.out)
+    print("\nsummary:", json.dumps(summary, ensure_ascii=False))
+    print(f"segments + dataset card written to {args.out}/")
+    return 0
+
+
+def cmd_acquire(args: argparse.Namespace) -> int:
+    """Acquire audio from a local directory into an acquisition store."""
+    from .acquisition.registry import AcquisitionRegistry
+    from .acquisition.adapters.local_dir import LocalDirectorySource
+
+    reg = AcquisitionRegistry(args.store)
+    src = LocalDirectorySource(args.dir, language=args.language,
+                               license=License(args.license))
+    acquired = reg.acquire_from(src, limit=args.limit)
+    print(f"acquired {len(acquired)} new item(s) into {args.store}/")
+    for a in acquired:
+        print(f"  {a.item_id}  {a.language}  {a.license}  "
+              f"sha256={a.sha256[:12]}…  {a.bytes} bytes")
+    print("license summary:", json.dumps(reg.license_summary(), ensure_ascii=False))
+    return 0
+
+
+def cmd_acquire_demo(args: argparse.Namespace) -> int:
+    """Synthesise a folder of audio, acquire it (with dedup), then annotate."""
+    from .audio.synth import write_segmented_wav
+    from .acquisition.registry import AcquisitionRegistry
+    from .acquisition.adapters.local_dir import LocalDirectorySource
+    from .annotation.orchestrator import AnnotationPipeline
+    from .annotation import manifest as ann_manifest
+
+    raw = os.path.join(args.out, "raw")
+    os.makedirs(raw, exist_ok=True)
+    # Two distinct recordings plus an exact duplicate to exercise dedup.
+    write_segmented_wav(os.path.join(raw, "talk_a.wav"),
+                        regions=[(1.0, 1.2), (1.5, 0.9)], gap_s=0.5)
+    write_segmented_wav(os.path.join(raw, "talk_b.wav"),
+                        regions=[(0.8, 1.5), (1.2, 1.0), (1.0, 0.8)], gap_s=0.5)
+    import shutil as _sh
+    _sh.copy2(os.path.join(raw, "talk_a.wav"), os.path.join(raw, "talk_a_copy.wav"))
+
+    reg = AcquisitionRegistry(os.path.join(args.out, "store"))
+    src = LocalDirectorySource(raw, language="ja", license=License.CC0_1_0)
+    acquired = reg.acquire_from(src)
+    print(f"acquired {len(acquired)} item(s) (duplicate skipped by content hash)")
+
+    pipe = AnnotationPipeline()
+    all_segments = []
+    for a in acquired:
+        all_segments.extend(pipe.annotate_file(a.local_path, source_id=a.item_id,
+                                               declared_language=a.language))
+    out_dir = os.path.join(args.out, "corpus")
+    summary = ann_manifest.export(all_segments, out_dir)
+    print("annotation summary:", json.dumps(summary, ensure_ascii=False))
+    print(f"acquisition manifest: {reg.manifest_path}")
+    print(f"corpus segments + card: {out_dir}/")
+    return 0
+
+
+def cmd_librivox(args: argparse.Namespace) -> int:
+    """Acquire public-domain audiobooks from LibriVox (requires network + ffmpeg).
+
+    LibriVox books are multi-track MP3; each track is transcoded to 16 kHz mono
+    WAV and registered separately with provenance + content-hash dedup.
+    """
+    from .acquisition.registry import AcquisitionRegistry
+    from .acquisition.adapters.librivox import LibriVoxSource
+
+    from urllib.error import URLError, HTTPError
+
+    src = LibriVoxSource(language=args.language, transcode=not args.no_transcode)
+    reg = AcquisitionRegistry(args.store)
+    try:
+        catalog = list(src.catalog(limit=args.limit))
+    except (URLError, HTTPError) as exc:
+        print(f"could not reach the LibriVox API: {type(exc).__name__}: {exc}\n"
+              f"This environment may block outbound network "
+              f"(see the network policy). Run where egress to librivox.org is "
+              f"allowed.", file=sys.stderr)
+        return 1
+
+    total = 0
+    for item in catalog:
+        print(f"book {item.item_id}: {item.title}  ({item.duration_s}s)")
+        try:
+            tracks = reg.acquire_tracks(src, item)
+        except Exception as exc:  # network/ffmpeg/zip errors surfaced honestly
+            print(f"  ! failed: {type(exc).__name__}: {exc}", file=sys.stderr)
+            continue
+        total += len(tracks)
+        for t in tracks:
+            print(f"  + {t.item_id}  {t.bytes} bytes  sha256={t.sha256[:12]}…")
+    print(f"\nacquired {total} track(s) into {args.store}/")
+    print("license summary:", json.dumps(reg.license_summary(), ensure_ascii=False))
+    return 0 if total else 1
+
+
+def cmd_whisperx_demo(args: argparse.Namespace) -> int:
+    """Show the WhisperX result -> gated Segment mapping (offline, no ML).
+
+    Uses a canned WhisperX-shaped result so the M3 mapping + gating + decision
+    logic is demonstrable without GPUs/network; the real path is identical via
+    corpus.annotation.whisperx_pipeline.WhisperXPipeline(...).process(audio).
+    """
+    from .annotation.whisperx_pipeline import segments_from_whisperx
+    from .annotation.orchestrator import AnnotationPolicy
+    from .annotation import manifest as ann_manifest
+
+    canned = {
+        "language": "en",
+        "segments": [
+            {"start": 0.0, "end": 2.1, "text": "the meeting will begin shortly",
+             "speaker": "SPEAKER_00",
+             "words": [{"word": "the", "start": 0.0, "end": 0.2, "score": 0.97,
+                        "speaker": "SPEAKER_00"},
+                       {"word": "meeting", "start": 0.2, "end": 0.7, "score": 0.95,
+                        "speaker": "SPEAKER_00"}]},
+            {"start": 2.5, "end": 5.0, "text": "uh maybe later perhaps",
+             "speaker": "SPEAKER_01",
+             "words": [{"word": "uh", "start": 2.5, "end": 2.7, "score": 0.35},
+                       {"word": "maybe", "start": 2.8, "end": 3.2, "score": 0.41}]},
+        ],
+    }
+    segs = segments_from_whisperx(canned, source_id="meeting-001",
+                                  policy=AnnotationPolicy(min_snr_db=-999))
+    for s in segs:
+        print(f"{s.segment_id}  [{s.start_s:5.2f}-{s.end_s:5.2f}]  {s.speaker:11s}  "
+              f"{s.state.value:8s}  conf={s.transcript.confidence}  "
+              f"\"{s.transcript.text}\"")
+    if args.out:
+        ann_manifest.export(segs, args.out)
+        print(f"\nsegments + card written to {args.out}/", file=sys.stderr)
+    return 0
+
+
+def cmd_diet(args: argparse.Namespace) -> int:
+    """List Diet meetings with speaker-labeled verbatim text (needs network).
+
+    The kokkai record API is text-only; audio must be supplied out-of-band and
+    aligned against this transcript. The per-speech speaker labels are the
+    valuable, under-exploited signal (diarization ground truth).
+    """
+    from urllib.error import URLError, HTTPError
+    from .acquisition.adapters.diet_jp import DietJapanSource
+
+    src = DietJapanSource()
+    query = {}
+    for kv in args.query or []:
+        if "=" in kv:
+            k, v = kv.split("=", 1)
+            query[k] = v
+    try:
+        items = list(src.catalog(limit=args.limit, **query))
+    except (URLError, HTTPError) as exc:
+        print(f"could not reach the kokkai API: {type(exc).__name__}: {exc}\n"
+              f"This environment may block outbound network (see the network "
+              f"policy). Run where egress to kokkai.ndl.go.jp is allowed.",
+              file=sys.stderr)
+        return 1
+
+    out_records = []
+    for it in items:
+        speakers = it.extra.get("speakers", [])
+        n_sp = len(it.extra.get("speeches", []))
+        print(f"{it.item_id}  {it.title}  speakers={len(speakers)} speeches={n_sp}")
+        out_records.append(it)
+    if args.out and out_records:
+        import json as _json
+        os.makedirs(args.out, exist_ok=True)
+        path = os.path.join(args.out, "diet_meetings.jsonl")
+        with open(path, "w", encoding="utf-8") as fh:
+            for it in out_records:
+                fh.write(_json.dumps({
+                    "item_id": it.item_id, "title": it.title,
+                    "language": it.language, "license": it.license.value,
+                    "attribution": it.attribution,
+                    "speakers": it.extra.get("speakers"),
+                    "speeches": it.extra.get("speeches"),
+                }, ensure_ascii=False) + "\n")
+        print(f"\nwrote {len(out_records)} meeting(s) to {path}", file=sys.stderr)
+    return 0 if items else 1
+
+
+def cmd_export_demo(args: argparse.Namespace) -> int:
+    """Build a small annotated corpus and export it to Praat / ELAN / HF."""
+    from .annotation.whisperx_pipeline import segments_from_whisperx
+    from .annotation.orchestrator import AnnotationPolicy
+    from . import export as exporters
+
+    canned = {
+        "language": "en",
+        "segments": [
+            {"start": 0.0, "end": 2.1, "text": "the meeting will begin shortly",
+             "speaker": "SPEAKER_00",
+             "words": [{"word": "the", "start": 0.0, "end": 0.3, "score": 0.97},
+                       {"word": "meeting", "start": 0.3, "end": 0.9, "score": 0.96},
+                       {"word": "will", "start": 0.9, "end": 1.2, "score": 0.94},
+                       {"word": "begin", "start": 1.2, "end": 1.7, "score": 0.95},
+                       {"word": "shortly", "start": 1.7, "end": 2.1, "score": 0.93}]},
+            {"start": 2.5, "end": 4.4, "text": "thank you everyone",
+             "speaker": "SPEAKER_01",
+             "words": [{"word": "thank", "start": 2.5, "end": 2.9, "score": 0.96},
+                       {"word": "you", "start": 2.9, "end": 3.2, "score": 0.95},
+                       {"word": "everyone", "start": 3.2, "end": 4.4, "score": 0.91}]},
+        ],
+    }
+    segs = segments_from_whisperx(canned, source_id="meeting-001",
+                                  policy=AnnotationPolicy(min_snr_db=-999))
+    counts = exporters.export_all(segs, args.out,
+                                  media_dir=os.path.join(args.out, "media"))
+    print("exported:", json.dumps(counts, ensure_ascii=False))
+    print(f"  Praat TextGrids: {args.out}/praat/")
+    print(f"  ELAN EAF:        {args.out}/elan/")
+    print(f"  HF datasets:     {args.out}/hf/  (load_dataset('audiofolder', ...))")
+    return 0
+
+
+def _load_segments(path: str):
+    """Load segments from a segments.jsonl into lightweight Segment objects."""
+    import json as _json
+    from .annotation.models import Segment, Transcript, WordTiming
+    from .models import ItemState
+    segs = []
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            d = _json.loads(line)
+            tr = None
+            td = d.get("transcript")
+            if td:
+                tr = Transcript(
+                    text=td.get("text"), language=td.get("language"),
+                    confidence=td.get("confidence"),
+                    words=[WordTiming(w["word"], w["start_s"], w["end_s"],
+                                      w.get("confidence"))
+                           for w in td.get("words", [])],
+                    is_heuristic=td.get("is_heuristic", False))
+            s = Segment(d["segment_id"], d["source_id"], d["start_s"], d["end_s"],
+                        d["speaker"], transcript=tr, phones=d.get("phones", []),
+                        scores=d.get("scores", {}))
+            s.state = ItemState(d.get("state", "pending"))
+            segs.append(s)
+    return segs
+
+
+def cmd_review_sheet(args: argparse.Namespace) -> int:
+    """Sample segments and write a human review sheet (CSV) for WER/CER."""
+    from .annotation.evaluation import stratified_sample, sample_for_review
+    from .annotation.review_sheet import write_review_sheet
+
+    segs = _load_segments(args.segments)
+    if args.stratified:
+        picked = stratified_sample(segs, args.n, seed=args.seed)
+    else:
+        picked = sample_for_review(segs, args.n, seed=args.seed)
+    n = write_review_sheet(picked, args.out)
+    print(f"wrote review sheet with {n} segment(s) to {args.out}")
+    print("Fill 'ok' (truthy if ASR is correct) or 'corrected_transcript', then "
+          "run: corpus measure --segments ... --sheet " + args.out)
+    return 0
+
+
+def cmd_measure(args: argparse.Namespace) -> int:
+    """Ingest a filled review sheet, compute WER/CER (+CI, by band), update card."""
+    import json as _json
+    from .annotation.evaluation import measure_error_rates
+    from .annotation.review_sheet import read_corrections, review_progress
+
+    segs = _load_segments(args.segments)
+    prog = review_progress(args.sheet)
+    corrections = read_corrections(args.sheet)
+    if not corrections:
+        print(f"no reviewed rows in {args.sheet} "
+              f"({prog['reviewed']}/{prog['total']} done)", file=sys.stderr)
+        return 1
+    res = measure_error_rates(corrections, segs, seed=args.seed)
+    print(f"review progress: {prog['reviewed']}/{prog['total']} "
+          f"({prog['fraction']:.0%})")
+    print(_json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+
+    if args.card:
+        from .annotation.manifest import write_dataset_card
+        write_dataset_card(segs, args.card, wer=res.as_dict())
+        print(f"\nupdated dataset card: {args.card}", file=sys.stderr)
+    return 0
+
+
+def cmd_eval_demo(args: argparse.Namespace) -> int:
+    """End-to-end: sample -> auto-fill a plausible sheet -> measure WER/CER."""
+    from .annotation.whisperx_pipeline import segments_from_whisperx
+    from .annotation.orchestrator import AnnotationPolicy
+    from .annotation.review_sheet import write_review_sheet, read_corrections
+    from .annotation.evaluation import measure_error_rates
+    import csv as _csv, json as _json
+
+    canned = {"language": "en", "segments": [
+        {"start": 0.0, "end": 2.0, "text": "the meeting will begin shortly",
+         "speaker": "SPEAKER_00",
+         "words": [{"word": "the", "start": 0, "end": 0.3, "score": 0.97}]},
+        {"start": 2.5, "end": 4.0, "text": "thank you everyone for coming",
+         "speaker": "SPEAKER_01",
+         "words": [{"word": "thank", "start": 2.5, "end": 2.9, "score": 0.42}]},
+    ]}
+    segs = segments_from_whisperx(canned, source_id="meeting-001",
+                                  policy=AnnotationPolicy(min_snr_db=-999))
+    os.makedirs(args.out, exist_ok=True)
+    sheet = os.path.join(args.out, "review.csv")
+    write_review_sheet(segs, sheet)
+
+    # Simulate a verifier: first segment correct (ok=x), second has a real fix.
+    rows = list(_csv.reader(open(sheet, encoding="utf-8")))
+    hdr = rows[0]
+    ok_i, corr_i = hdr.index("ok"), hdr.index("corrected_transcript")
+    for r in rows[1:]:
+        if r[0].endswith("#0000"):
+            r[ok_i] = "x"
+        else:
+            r[corr_i] = "thank you everyone for joining"  # 'coming'->'joining'
+    _csv.writer(open(sheet, "w", encoding="utf-8", newline="")).writerows(rows)
+
+    res = measure_error_rates(read_corrections(sheet), segs)
+    print(_json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def cmd_boundary(args: argparse.Namespace) -> int:
+    """Compare a hypothesis alignment TextGrid to a reference; report boundary error."""
+    from .alignment.boundary_eval import boundary_errors_from_textgrids
+    res = boundary_errors_from_textgrids(args.ref, args.hyp, tier=args.tier)
+    print(json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def cmd_boundary_demo(args: argparse.Namespace) -> int:
+    """Demo boundary-error metrics on a synthetic ref/hyp phone alignment."""
+    from .alignment.textgrid import Interval
+    from .alignment.boundary_eval import boundary_errors
+
+    ref = [Interval(0.00, 0.18, "DH"), Interval(0.18, 0.32, "AH"),
+           Interval(0.32, 0.55, "K"), Interval(0.55, 0.80, "AE"),
+           Interval(0.80, 1.05, "T")]
+    # Hypothesis: small jitter on most boundaries, one larger slip on K.
+    hyp = [Interval(0.00, 0.19, "DH"), Interval(0.19, 0.33, "AH"),
+           Interval(0.33, 0.61, "K"), Interval(0.61, 0.81, "AE"),
+           Interval(0.81, 1.05, "T")]
+    res = boundary_errors(ref, hyp)
+    print(json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def cmd_pipeline(args: argparse.Namespace) -> int:
+    """End-to-end: acquire a folder of WAVs -> annotate -> assess -> export."""
+    from .orchestrate import run_corpus
+    res = run_corpus(args.dir, args.out, language=args.language,
+                     measure_vowels=not args.no_vowels, do_export=not args.no_export)
+    print(f"acquired {res.n_acquired} recording(s), {res.n_segments} segment(s)")
+    print(f"ready: {res.report.is_ready()}")
+    for issue in res.report.blocking_issues():
+        print(f"  🛑 {issue}")
+    if res.export_counts:
+        print("exports:", json.dumps(res.export_counts, ensure_ascii=False))
+    print(f"outputs in {args.out}/ (segments.jsonl, QUALITY_REPORT.md, export/)")
+    return 0 if res.report.is_ready() else 2
+
+
+def cmd_vowel_plot(args: argparse.Namespace) -> int:
+    """Render the corpus vowel space (F1/F2) to an SVG scatter plot."""
+    from .audio.wav import read_wav
+    from .analysis.vowel_space import measure_segment_vowels, analyze_vowel_space
+    from .analysis.plot import write_vowel_space_svg
+
+    wav = read_wav(args.audio)
+    segs = _load_segments(args.segments)
+    if args.source_id:
+        segs = [s for s in segs if s.source_id == args.source_id]
+    measurements = []
+    for s in segs:
+        measurements.extend(measure_segment_vowels(wav, s))
+    res = analyze_vowel_space(measurements, language=args.language)
+    write_vowel_space_svg(res, args.out)
+    print(f"wrote vowel-space plot ({res.n_vowels_measured} vowels) to {args.out}")
+    return 0
+
+
+def cmd_vowels(args: argparse.Namespace) -> int:
+    """Measure the corpus vowel space (F1/F2) and check phonetic plausibility.
+
+    Needs the source audio (one WAV) plus its segments with vowel phone
+    alignments. Reports per-vowel F1/F2 means vs. targets and whether the vowel
+    space is correctly ordered (/i/ vs /a/). Exits non-zero if the ordering is
+    wrong -- a strong gold-free validation gate.
+    """
+    from .audio.wav import read_wav
+    from .analysis.vowel_space import measure_segment_vowels, analyze_vowel_space
+
+    wav = read_wav(args.audio)
+    segs = [s for s in _load_segments(args.segments) if s.source_id == args.source_id] \
+        if args.source_id else _load_segments(args.segments)
+    measurements = []
+    for s in segs:
+        measurements.extend(measure_segment_vowels(wav, s))
+    res = analyze_vowel_space(measurements, language=args.language)
+    print(json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+    return 2 if res.ordering_ok is False else 0
+
+
+def cmd_vowels_demo(args: argparse.Namespace) -> int:
+    """Demo vowel-space analysis on synthesised /i/, /ae/, /u/, /a/ vowels."""
+    import math as _m
+    from .audio.wav import WavData
+    from .analysis.vowel_space import measure_segment_vowels, analyze_vowel_space
+    from .annotation.models import Segment, Transcript
+
+    def synth(formants, sr=16000, dur=0.25, f0=120):
+        n = int(sr * dur)
+        src = [0.0] * n
+        for i in range(0, n, int(sr / f0)):
+            src[i] = 1.0
+        y = src
+        for F, B in zip(formants, (60, 90, 120, 150)):
+            r = _m.exp(-_m.pi * B / sr)
+            th = 2 * _m.pi * F / sr
+            a1, a2 = -2 * r * _m.cos(th), r * r
+            out = [0.0] * n
+            for i in range(n):
+                v = y[i]
+                if i >= 1:
+                    v -= a1 * out[i - 1]
+                if i >= 2:
+                    v -= a2 * out[i - 2]
+                out[i] = v
+            y = out
+        mx = max(abs(v) for v in y) or 1.0
+        return [v / mx for v in y]
+
+    cases = [("IY1", (300, 2300, 3000, 3500)), ("AE1", (700, 1700, 2600, 3600)),
+             ("UW1", (350, 900, 2400, 3400)), ("AA1", (750, 1100, 2550, 3500))]
+    measurements = []
+    for i, (label, F) in enumerate(cases):
+        sig = synth(F)
+        dur = len(sig) / 16000
+        wav = WavData(16000, 1, 16, len(sig), sig)
+        seg = Segment(f"demo#{i:04d}", "demo", 0.0, dur, "S0",
+                      transcript=Transcript("x", "en", 0.9),
+                      phones=[{"start_s": 0.0, "end_s": dur, "label": label}])
+        measurements.extend(measure_segment_vowels(wav, seg))
+    res = analyze_vowel_space(measurements, language="en")
+    print(json.dumps(res.as_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def cmd_profile(args: argparse.Namespace) -> int:
+    """Profile a corpus for health + research value (gold-free checks)."""
+    from .analysis.profile import profile_corpus, render_markdown
+
+    segs = _load_segments(args.segments)
+    prof = profile_corpus(segs, accepted_only=args.accepted_only)
+    if args.markdown:
+        report = render_markdown(prof)
+        print(report)
+        if args.out:
+            with open(args.out, "w", encoding="utf-8") as fh:
+                fh.write(report)
+            print(f"\nprofile written to {args.out}", file=sys.stderr)
+    else:
+        print(json.dumps(prof.as_dict(), ensure_ascii=False, indent=2))
+    # exit non-zero if any error-level health flag fired (useful in CI/QA gates)
+    return 2 if any(f.level == "error" for f in prof.flags) else 0
+
+
+def cmd_profile_demo(args: argparse.Namespace) -> int:
+    """Demo profiling on a synthetic corpus with realistic phone alignments."""
+    from .analysis.profile import profile_corpus, render_markdown
+    from .annotation.models import Segment, Transcript
+
+    def phones(spec):
+        out, t = [], 0.0
+        for label, d in spec:
+            out.append({"start_s": t, "end_s": t + d, "label": label})
+            t += d
+        return out
+
+    # Two speakers, healthy phone durations (vowels > plosives).
+    segs = []
+    for i in range(6):
+        spk = f"SPEAKER_{i % 2:02d}"
+        ph = phones([("DH", 0.04), ("AH1", 0.11), ("K", 0.05), ("AE1", 0.13),
+                     ("T", 0.06)])
+        s = Segment(f"meeting#{i:04d}", "meeting", 0.0, 0.39, spk,
+                    transcript=Transcript(text="the cat sat", language="en",
+                                          confidence=0.85 + 0.02 * (i % 3)),
+                    phones=ph, scores={"snr_db": 22.0 + i})
+        segs.append(s)
+    prof = profile_corpus(segs)
+    print(render_markdown(prof))
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(prog="corpus", description="Go-on Lab corpus backend")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    pp = sub.add_parser("prompts", help="load and summarise a prompt set")
+    pp.add_argument("--file", required=True)
+    pp.set_defaults(func=cmd_prompts)
+
+    pr = sub.add_parser("run", help="process a single recording")
+    pr.add_argument("--audio", required=True)
+    pr.add_argument("--prompt-file", required=True)
+    pr.add_argument("--prompt-id", required=True)
+    pr.add_argument("--speaker", required=True)
+    pr.add_argument("--recording-id", default=None)
+    pr.add_argument("--license", default="CC-BY-4.0")
+    pr.add_argument("--out", default=None)
+    pr.set_defaults(func=cmd_run)
+
+    pd = sub.add_parser("demo", help="synthesise clips and run the full pipeline")
+    pd.add_argument("--out", default="./_demo_out")
+    pd.set_defaults(func=cmd_demo)
+
+    pa = sub.add_parser("annotate",
+                        help="auto segment+label a recording (pseudo-labeling)")
+    pa.add_argument("--audio", required=True)
+    pa.add_argument("--source-id", default=None)
+    pa.add_argument("--language", default=None)
+    pa.add_argument("--out", default=None)
+    pa.set_defaults(func=cmd_annotate)
+
+    pad = sub.add_parser("annotate-demo",
+                         help="synthesise multi-region audio and annotate it")
+    pad.add_argument("--out", default="./_annotate_demo")
+    pad.set_defaults(func=cmd_annotate_demo)
+
+    paq = sub.add_parser("acquire", help="acquire audio from a local directory")
+    paq.add_argument("--dir", required=True)
+    paq.add_argument("--store", default="./_acquire_store")
+    paq.add_argument("--language", default="und")
+    paq.add_argument("--license", default="CC0-1.0")
+    paq.add_argument("--limit", type=int, default=None)
+    paq.set_defaults(func=cmd_acquire)
+
+    paqd = sub.add_parser("acquire-demo",
+                          help="acquire (with dedup) then annotate, end to end")
+    paqd.add_argument("--out", default="./_acquire_demo")
+    paqd.set_defaults(func=cmd_acquire_demo)
+
+    plv = sub.add_parser("librivox",
+                         help="acquire public-domain audiobooks (network + ffmpeg)")
+    plv.add_argument("--language", default="english")
+    plv.add_argument("--store", default="./_librivox_store")
+    plv.add_argument("--limit", type=int, default=5)
+    plv.add_argument("--no-transcode", action="store_true",
+                     help="keep original MP3 instead of converting to WAV")
+    plv.set_defaults(func=cmd_librivox)
+
+    pwx = sub.add_parser("whisperx-demo",
+                         help="demo the WhisperX result -> gated Segment mapping")
+    pwx.add_argument("--out", default=None)
+    pwx.set_defaults(func=cmd_whisperx_demo)
+
+    pdt = sub.add_parser("diet",
+                         help="list Diet meetings with speaker-labeled text (network)")
+    pdt.add_argument("--limit", type=int, default=5)
+    pdt.add_argument("--query", action="append",
+                     help="kokkai API param as key=value (e.g. nameOfMeeting=予算委員会)")
+    pdt.add_argument("--out", default=None)
+    pdt.set_defaults(func=cmd_diet)
+
+    pex = sub.add_parser("export-demo",
+                         help="export a sample corpus to Praat/ELAN/HF formats")
+    pex.add_argument("--out", default="./_export_demo")
+    pex.set_defaults(func=cmd_export_demo)
+
+    prs = sub.add_parser("review-sheet",
+                         help="sample segments into a human review sheet (CSV)")
+    prs.add_argument("--segments", required=True, help="segments.jsonl path")
+    prs.add_argument("--out", default="./review.csv")
+    prs.add_argument("--n", type=int, default=50)
+    prs.add_argument("--seed", type=int, default=0)
+    prs.add_argument("--stratified", action="store_true",
+                     help="sample evenly across ASR confidence bands")
+    prs.set_defaults(func=cmd_review_sheet)
+
+    pms = sub.add_parser("measure",
+                         help="compute WER/CER from a filled review sheet")
+    pms.add_argument("--segments", required=True)
+    pms.add_argument("--sheet", required=True)
+    pms.add_argument("--card", default=None, help="dataset card to update")
+    pms.add_argument("--seed", type=int, default=0)
+    pms.set_defaults(func=cmd_measure)
+
+    ped = sub.add_parser("eval-demo",
+                         help="demo the sample->verify->measure WER/CER loop")
+    ped.add_argument("--out", default="./_eval_demo")
+    ped.set_defaults(func=cmd_eval_demo)
+
+    pb = sub.add_parser("boundary",
+                        help="boundary error of a hypothesis alignment vs reference")
+    pb.add_argument("--ref", required=True, help="reference TextGrid")
+    pb.add_argument("--hyp", required=True, help="hypothesis TextGrid")
+    pb.add_argument("--tier", default="phones")
+    pb.set_defaults(func=cmd_boundary)
+
+    pbd = sub.add_parser("boundary-demo",
+                         help="demo boundary-error metrics on synthetic alignments")
+    pbd.set_defaults(func=cmd_boundary_demo)
+
+    ppf = sub.add_parser("profile",
+                         help="profile a corpus for health + research value")
+    ppf.add_argument("--segments", required=True, help="segments.jsonl path")
+    ppf.add_argument("--markdown", action="store_true", help="render a report")
+    ppf.add_argument("--accepted-only", action="store_true")
+    ppf.add_argument("--out", default=None, help="write the markdown report here")
+    ppf.set_defaults(func=cmd_profile)
+
+    ppd = sub.add_parser("profile-demo",
+                         help="demo corpus profiling on a synthetic corpus")
+    ppd.set_defaults(func=cmd_profile_demo)
+
+    pv = sub.add_parser("vowels",
+                        help="measure vowel space (F1/F2) and check plausibility")
+    pv.add_argument("--audio", required=True, help="source WAV (PCM)")
+    pv.add_argument("--segments", required=True, help="segments.jsonl path")
+    pv.add_argument("--source-id", default=None,
+                    help="only segments of this source id")
+    pv.add_argument("--language", default="en")
+    pv.set_defaults(func=cmd_vowels)
+
+    pvd = sub.add_parser("vowels-demo",
+                         help="demo vowel-space analysis on synthesised vowels")
+    pvd.set_defaults(func=cmd_vowels_demo)
+
+    ppl = sub.add_parser("pipeline",
+                         help="end-to-end: acquire dir -> annotate -> assess -> export")
+    ppl.add_argument("--dir", required=True, help="folder of PCM WAVs")
+    ppl.add_argument("--out", default="./_pipeline_out")
+    ppl.add_argument("--language", default="en")
+    ppl.add_argument("--no-vowels", action="store_true")
+    ppl.add_argument("--no-export", action="store_true")
+    ppl.set_defaults(func=cmd_pipeline)
+
+    pvp = sub.add_parser("vowel-plot",
+                         help="render the vowel space (F1/F2) to an SVG")
+    pvp.add_argument("--audio", required=True)
+    pvp.add_argument("--segments", required=True)
+    pvp.add_argument("--source-id", default=None)
+    pvp.add_argument("--language", default="en")
+    pvp.add_argument("--out", default="./vowel_space.svg")
+    pvp.set_defaults(func=cmd_vowel_plot)
+    return p
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

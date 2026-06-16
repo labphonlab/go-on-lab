@@ -1,0 +1,35 @@
+name: corpus-backend
+
+on:
+  push:
+    paths:
+      - "corpus-backend/**"
+      - ".github/workflows/corpus-backend.yml"
+  pull_request:
+    paths:
+      - "corpus-backend/**"
+      - ".github/workflows/corpus-backend.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: corpus-backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # The core is zero-dependency by design: no install step is needed.
+      - name: Byte-compile
+        run: python -m compileall -q corpus tests
+      - name: Run tests (stdlib runner)
+        run: python tests/run_tests.py
+      - name: Smoke-test the CLI demos
+        run: |
+          python -m corpus.cli annotate-demo --out /tmp/ann
+          python -m corpus.cli eval-demo --out /tmp/eval
+          python -m corpus.cli boundary-demo
+          python -m corpus.cli vowels-demo
+          python -m corpus.cli profile-demo

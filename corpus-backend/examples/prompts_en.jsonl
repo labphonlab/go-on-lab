@@ -1,0 +1,5 @@
+# English prompt set. text_license CC0-1.0 = public-domain / authored, clear for resale.
+{"prompt_id": "en-0001", "language": "en", "text": "The quick brown fox jumps over the lazy dog.", "text_license": "CC0-1.0", "domain": "phonetic"}
+{"prompt_id": "en-0002", "language": "en", "text": "She sells seashells by the seashore on sunny days.", "text_license": "CC0-1.0", "domain": "phonetic"}
+{"prompt_id": "en-0003", "language": "en", "text": "Please record the following sentence in a quiet room.", "text_license": "CC0-1.0", "domain": "instruction"}
+{"prompt_id": "en-0004", "language": "en", "text": "Our quarterly results exceeded every analyst expectation.", "text_license": "CC0-1.0", "domain": "business"}

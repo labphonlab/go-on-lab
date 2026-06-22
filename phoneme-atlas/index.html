@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phoneme Atlas — parallel phoneme inventories of the world's languages</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site"><div class="inner">
+  <span class="brand">🌍 Phoneme Atlas</span>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="segment.html">Segments</a>
+    <a href="about.html">About</a>
+  </nav>
+</div></header>
+
+<div class="container">
+  <h1>Phoneme inventories of the world's languages — shown side by side</h1>
+  <p class="lead">A transparent window onto PHOIBLE 2.0. When a language has been
+  described more than once, this atlas places the inventories <strong>next to each
+  other</strong> rather than merging them — so you can see where sources agree and
+  where they disagree. <span id="stats" class="muted"></span></p>
+
+  <div class="card">
+    <label for="q">Search a language by name, Glottocode, or ISO code</label>
+    <input type="search" id="q" placeholder="e.g. English, stan1293, eng…" autocomplete="off">
+    <ul class="results" id="results"></ul>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">World map</h2>
+    <p class="muted small">Each point is a language with at least one inventory.
+    Larger / darker points have more inventories (and thus more potential
+    disagreement). Click a point to open its page.</p>
+    <div id="map"></div>
+  </div>
+
+  <footer class="site" id="footer"></footer>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

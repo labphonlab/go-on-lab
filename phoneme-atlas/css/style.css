@@ -1,0 +1,119 @@
+:root {
+  --bg: #f5f5f7;
+  --fg: #1d1d1f;
+  --muted: #6e6e73;
+  --card: #ffffff;
+  --line: #e2e2e6;
+  --accent: #0071e3;
+  --common: #1a7f37;     /* segment present in all inventories */
+  --common-bg: #e7f5ec;
+  --unique: #b35900;     /* segment present in only this inventory */
+  --unique-bg: #fbeede;
+  --shared: #1d1d1f;     /* present in some but not all */
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.5;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; }
+
+header.site {
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+header.site .inner {
+  max-width: 1100px; margin: 0 auto; padding: 14px 16px;
+  display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+}
+header.site .brand { font-weight: 700; font-size: 18px; color: var(--fg); }
+header.site nav a { margin-right: 14px; font-size: 15px; }
+
+h1 { font-size: 26px; margin: 8px 0 4px; }
+h2 { font-size: 20px; margin: 28px 0 12px; }
+h3 { font-size: 16px; margin: 0 0 8px; }
+
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.lead { font-size: 17px; color: var(--muted); max-width: 70ch; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+input[type="text"], input[type="search"] {
+  width: 100%; font-size: 17px; padding: 12px 14px;
+  border: 2px solid #d2d2d7; border-radius: 10px; background: #fff;
+  font-family: inherit;
+}
+input:focus { outline: none; border-color: var(--accent); }
+
+.results { list-style: none; margin: 10px 0 0; padding: 0; }
+.results li { border-bottom: 1px solid var(--line); }
+.results li:last-child { border-bottom: none; }
+.results a {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 10px 4px; color: var(--fg);
+}
+.results a:hover { background: #f0f6ff; text-decoration: none; }
+.results .meta { color: var(--muted); font-size: 13px; }
+
+#map { height: 460px; border-radius: 14px; border: 1px solid var(--line); }
+.badge {
+  display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 20px;
+  background: #eef0f2; color: var(--muted); margin-left: 6px;
+}
+.badge.warn { background: #fff2cf; color: #8a6d00; }
+
+/* Parallel inventory display — the core of the project. */
+.inv-grid {
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.inv-col { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+.inv-col h3 { display: flex; justify-content: space-between; align-items: baseline; }
+.inv-col .src { font-weight: 700; }
+.inv-col .count { color: var(--muted); font-size: 13px; font-weight: 400; }
+.inv-col .dialect { color: var(--muted); font-size: 13px; margin: -4px 0 8px; }
+
+.segs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.seg {
+  font-family: "Charis SIL", "Doulos SIL", "Gentium Plus", "Times New Roman", serif;
+  font-size: 16px; padding: 3px 8px; border-radius: 8px;
+  border: 1px solid var(--line); background: #fafafa; cursor: pointer;
+}
+.seg:hover { text-decoration: none; border-color: var(--accent); }
+.seg.common { background: var(--common-bg); border-color: #bfe6cb; color: var(--common); }
+.seg.unique { background: var(--unique-bg); border-color: #f0d2ac; color: var(--unique); }
+.seg.marginal::after { content: "?"; font-size: 10px; vertical-align: super; opacity: .7; }
+
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; margin: 10px 0; }
+.legend .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 4px; vertical-align: -2px; margin-right: 5px; border: 1px solid var(--line); }
+.swatch.common { background: var(--common-bg); border-color: #bfe6cb; }
+.swatch.unique { background: var(--unique-bg); border-color: #f0d2ac; }
+.swatch.shared { background: #fafafa; }
+
+table.kv { border-collapse: collapse; }
+table.kv td { padding: 3px 14px 3px 0; vertical-align: top; }
+table.kv td.k { color: var(--muted); white-space: nowrap; }
+
+footer.site { border-top: 1px solid var(--line); margin-top: 32px; padding-top: 16px; }
+.disclaimer {
+  background: #fff8e6; border: 1px solid #f0e3b8; border-radius: 10px;
+  padding: 10px 14px; font-size: 14px;
+}
+.notice { font-size: 13px; color: var(--muted); }

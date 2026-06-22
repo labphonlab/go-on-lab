@@ -1,0 +1,3020 @@
+InventoryID,Glottocode,LanguageName,Macroarea,Source,n_segments
+1483,aari1239,Aari,Africa,ph,36
+1617,abar1238,Mungbam,Africa,ph,36
+1160,abau1245,Abau,Papunesia,ph,14
+649,abid1235,Abidji,Africa,aa,39
+1526,abid1235,Abidji,Africa,ph,38
+1914,abip1241,Abipon,South America,saphon,23
+235,abip1241,ABIPON,South America,upsid,20
+1923,abis1238,Aʔɨwa,South America,saphon,27
+2468,abkh1244,Abkhaz,Eurasia,ea,62
+2552,abkh1244,Abkhaz,Eurasia,ea,70
+1297,abua1244,Abua,Africa,ph,40
+1701,abuj1237,Abujmaria,Eurasia,ra,39
+1521,abur1243,Abure,Africa,ph,38
+587,acat1239,TLAPANEC,North America,upsid,30
+2548,acha1249,Achang,Eurasia,ea,59
+1803,acha1250,Achagua,South America,saphon,29
+1428,ache1245,Asharon,Africa,ph,38
+2068,ache1246,Aché,South America,saphon,34
+348,ache1246,ACHE,South America,upsid,21
+1093,achi1257,Acehnese,Eurasia,ph,55
+199,achu1247,ACHUMAWI,North America,upsid,23
+1946,achu1248,Achuar-Shiwiar,South America,saphon,27
+1433,acol1236,Acholi,Africa,ph,29
+712,adam1253,Fulfulde,Africa,aa,34
+1234,adam1253,Adamawa Fulfulde; Adamawa Fulani,Africa,ph,36
+1241,adam1253,Fulfulde (Cameroon),Africa,ph,47
+1253,adam1253,fulfulde (fuunaangere),Africa,ph,39
+692,adan1247,Dangme,Africa,aa,39
+1090,adan1251,Adang,Papunesia,ph,40
+650,adio1239,Adioukrou,Africa,aa,31
+1527,adio1239,Adioukrou,Africa,ph,32
+2931,adny1235,Adnyamathanha,Australia,er,27
+2349,adyg1241,Adyghe,Eurasia,ea,59
+41,adze1240,Adzera,Papunesia,spa,25
+200,adze1240,ADZERA,Papunesia,upsid,25
+198,afad1236,KOTOKO,Africa,upsid,36
+1342,afar1241,Afar,Africa,ph,27
+1295,afit1238,Afitti,Africa,ph,26
+1395,afri1274,Afrikaans,Africa,ph,39
+1524,aghe1239,Aghem,Africa,ph,49
+204,aghe1239,AGHEM,Africa,upsid,35
+2880,aghu1254,Aghu Tharnggala,Australia,er,27
+1947,agua1253,Aguaruna,South America,saphon,20
+1400,ahan1243,Ahanta,Africa,ph,40
+1544,ahan1244,Ahaan,Africa,ph,43
+1014,aheu1239,So,Eurasia,ph,72
+1216,aheu1239,Aheu; Thavung,Eurasia,ph,47
+206,ahte1237,AHTNA,North America,upsid,35
+2118,aika1237,Aikanã,South America,saphon,25
+563,aika1237,HUARI,South America,upsid,32
+196,ainu1240,Ainu,Eurasia,spa,17
+207,ainu1240,AINU,Eurasia,upsid,16
+651,ajab1235,Adja,Africa,aa,45
+652,ajab1235,Adja,Africa,aa,37
+1250,ajas1235,aja,Africa,ph,48
+1807,ajyi1238,Ashéninka,South America,saphon,26
+655,akan1250,Akan,Africa,aa,31
+1245,akan1250,Akan,Africa,ph,60
+140,akan1250,Akan,Africa,spa,40
+208,akan1250,AKAN,Africa,upsid,35
+1572,akas1242,Akasilimi,Africa,ph,52
+1873,akaw1239,Ingarikó,South America,saphon,21
+209,akaw1239,AKAWAIO,South America,upsid,23
+2608,akha1245,Akha,Eurasia,ea,57
+1162,akha1245,Akha,Eurasia,ph,44
+1095,akla1241,Aklan,Papunesia,ph,20
+656,akoo1248,Akɔɔse,Africa,aa,44
+1554,akoo1248,Akoose,Africa,ph,32
+1532,akpe1248,Akpes,Africa,ph,34
+2069,akun1241,Akuntsú,South America,saphon,22
+1862,akur1238,Akurio,South America,saphon,24
+79,alab1237,Alabama,North America,spa,21
+210,alab1237,ALABAMA,North America,upsid,17
+1451,alab1254,Alaaba,Africa,ph,62
+221,alam1246,ALAMBLAK,Papunesia,upsid,25
+2681,alaw1244,Alawa,Australia,er,26
+50,alaw1244,Alawa,Australia,spa,28
+214,alaw1244,ALAWA,Australia,upsid,26
+61,aleu1260,Aleut,North America,spa,36
+213,aleu1260,ALEUT,North America,upsid,27
+1529,alla1248,Alladian,Africa,ph,36
+212,alla1248,ALLADIAN,Africa,upsid,36
+2908,alng1239,Alngith,Australia,er,28
+2412,alut1245,Alutor,Eurasia,ea,27
+2702,alya1239,Alyawarr,Australia,er,43
+1163,alya1239,Alyawarra,Australia,ph,32
+1998,amah1246,Amahuaca,South America,saphon,23
+120,amah1246,Amahuaca,South America,spa,22
+216,amah1246,AMAHUACA,South America,upsid,22
+1164,aman1265,Amanab,Papunesia,ph,19
+2666,amar1271,Amurdak,Australia,er,24
+1920,amar1274,Amarakaeri,South America,saphon,33
+504,amas1236,NYIMANG,Africa,upsid,25
+1091,ambe1247,Ambele,Africa,ph,51
+1684,ambo1250,Ambon Malay,Papunesia,ph,23
+1159,ambu1247,Abulas,Papunesia,ph,24
+2534,amdo1237,Khalong Tibetan,Eurasia,ea,59
+2553,amdo1237,gSerpa,Eurasia,ea,58
+2614,amdo1237,Themchen Tibetan,Eurasia,ea,49
+202,amel1241,AMELE,Papunesia,upsid,20
+2156,amha1245,Amharic,Africa,ph,68
+131,amha1245,Amharic,Africa,spa,59
+219,amha1245,AMHARIC,Africa,upsid,37
+2641,amii1238,Emmi,Australia,er,32
+220,amoo1242,AMO,Africa,upsid,35
+2070,amun1246,Amundava,South America,saphon,26
+2705,ande1247,Antekerrepenhe,Australia,er,44
+2465,andi1255,Andi,Eurasia,ea,68
+2138,ando1255,Andoa,South America,saphon,25
+1922,ando1256,Andoke,South America,saphon,35
+224,ando1256,ANDOKE,South America,upsid,26
+1228,anei1239,Aneityum; Anejom̃,Papunesia,ph,26
+1661,anfi1235,Anfillo,Africa,ph,48
+1703,anga1288,Angami,Eurasia,ra,49
+203,anga1290,ANGAATIHA,Papunesia,upsid,21
+2918,angg1238,Angkamuthi,Australia,er,24
+1551,ango1258,Angolar,Africa,ph,36
+2884,angu1242,Anguthimri,Australia,er,36
+1658,anii1245,Anii,Africa,ph,36
+2651,anin1240,Anindilyakwa,Australia,er,26
+2958,anta1253,Antakirinya,Australia,er,23
+44,anta1253,Western Desert,Australia,spa,23
+225,anta1253,WESTERN DESERT,Australia,upsid,20
+1094,anti1245,Antiguan Creole,North America,ph,37
+1165,anua1242,Anywa,Africa,ph,47
+658,anuf1239,Anufɔ,Africa,aa,43
+1246,anuf1239,anufɔ,Africa,ph,59
+653,anyi1244,Agni Sanvi,Africa,aa,37
+1244,anyi1244,Agni Morofo,Africa,ph,49
+1242,anyi1245,Anyi Sanvi,Africa,ph,40
+1243,anyi1245,Agni Djuablin,Africa,ph,36
+1298,anyi1245,Anyi,Africa,ph,39
+1704,aona1235,Ao-Naga,Eurasia,ra,35
+497,aona1235,AO,Eurasia,upsid,20
+1863,apal1257,Apalaí,South America,saphon,24
+1705,apat1240,Apatani,Eurasia,ra,40
+2071,apia1248,Apiaká,South America,saphon,22
+1953,apin1244,Apinayé,South America,saphon,34
+122,apin1244,Apinaye,South America,spa,49
+226,apin1244,APINAYE,South America,upsid,30
+205,apro1235,AIZI,Africa,upsid,33
+1702,apuc1241,Andamanese,Eurasia,ra,35
+227,apuc1241,ANDAMANESE,Eurasia,upsid,24
+1092,apur1254,Apurinã,South America,ph,40
+1804,apur1254,Apurinã,South America,saphon,34
+2761,arab1267,Arabana,Australia,er,24
+2139,arab1268,Arabela,South America,saphon,29
+229,arab1268,ARABELA,South America,upsid,18
+2375,arag1245,Aragonese,Eurasia,ea,27
+1055,arag1245,Aragonese,Eurasia,ph,45
+1166,aran1237,Arandai,Papunesia,ph,18
+2044,arao1248,Araona,South America,saphon,23
+2072,araw1273,Araweté,South America,saphon,21
+1805,araw1276,Lokono,South America,saphon,21
+2438,arbe1236,Arbëresh Albanian,Eurasia,ea,36
+2487,arbe1236,Arbëresh Albanian,Eurasia,ea,37
+1525,arbo1245,Arbore,Africa,ph,59
+228,arch1244,ARCHI,Eurasia,upsid,91
+1396,argo1244,Argobba,Africa,ph,38
+1096,arhu1242,Ika,South America,ph,32
+1891,arhu1242,Ika,South America,saphon,21
+1954,arik1265,Arikapú,South America,saphon,25
+1425,arin1244,Aringa,Africa,ph,49
+2909,arit1239,Aritinngithigh,Australia,er,22
+1806,asha1243,Asháninka,South America,saphon,22
+110,asha1243,Campa,South America,spa,21
+288,asha1243,CAMPA,South America,upsid,19
+1808,ashe1272,Ashéninka,South America,saphon,28
+2598,assa1263,Assamese,Eurasia,ea,36
+2159,assa1263,Assamese,Eurasia,ph,33
+1706,assa1263,Assamese,Eurasia,ra,37
+2516,astu1245,Asturian,Eurasia,ea,26
+2571,astu1245,Asturian,Eurasia,ea,27
+2917,atam1239,Uradhi,Australia,er,22
+2919,atam1239,Atampaya,Australia,er,26
+2373,atay1247,Atayal,Papunesia,ea,24
+30,atay1247,Atayal,Papunesia,spa,27
+562,atay1247,ATAYAL,Papunesia,upsid,26
+1550,atti1239,Attie,Africa,ph,47
+1169,auuu1241,Au,Papunesia,ph,17
+2075,avac1239,Avá-Canoeiro,South America,saphon,24
+2467,avar1256,Avar,Eurasia,ea,64
+233,avar1256,AVAR,Eurasia,upsid,49
+1296,avat1244,Avatime,Africa,ph,50
+1358,avik1243,Avikam,Africa,ph,34
+660,avok1242,Avokaya,Africa,aa,55
+2987,awab1243,Awabakal,Australia,er,16
+1120,awac1239,Awa Pit,South America,ph,21
+1853,awac1239,Awa-Cuaiquer,South America,saphon,26
+1707,awad1243,Awadhi,Eurasia,ra,45
+1175,awar1248,Awara,Papunesia,ph,25
+2076,awet1244,Awetí,South America,saphon,26
+1176,awin1248,Awing,Africa,ph,56
+57,awiy1238,Auyana,Papunesia,spa,20
+1542,awng1244,Awngi,Africa,ph,39
+128,awng1244,Awiya,Africa,spa,39
+234,awng1244,AWIYA,Africa,upsid,35
+1177,awtu1239,Awtuw,Papunesia,ph,18
+2560,axiy1235,Ahi,Eurasia,ea,52
+2898,ayab1239,Ayapathu,Australia,er,25
+2903,ayab1239,Yintyingka,Australia,er,26
+2032,ayac1239,Ayacucho Quechua,South America,saphon,17
+1545,ayer1245,Uwu,Africa,ph,43
+2707,ayer1246,Ayerrerenge,Australia,er,43
+2137,ayor1240,Ayoreo,South America,saphon,30
+741,baan1242,Kambari,Africa,aa,56
+669,baat1238,Bariba,Africa,aa,31
+240,baat1238,BARIBA,Africa,upsid,30
+1178,baba1264,Baba,Africa,ph,30
+1179,baba1266,Babanki,Africa,ph,33
+1708,bada1257,Badaga,Eurasia,ra,38
+1437,bade1248,Bade,Africa,ph,46
+2768,badi1246,Badimaya,Australia,er,23
+1329,bady1239,Pajade,Africa,ph,43
+926,bafa1247,Bafo,Africa,ph,47
+1656,bafa1249,Nchufie,Africa,ph,59
+1258,bafi1243,kpaʔ,Africa,ph,48
+1444,bafi1243,Bafia,Africa,ph,51
+662,bafu1246,Bafut,Africa,aa,49
+1199,baga1272,Baga Sitem,Africa,ph,26
+1060,baga1273,Baga Koga; Koba; Barka,Africa,ph,25
+1469,bagi1246,Bagirmi,Africa,ph,48
+2346,baim1244,Baima,Eurasia,ea,66
+663,baka1272,Baka,Africa,aa,38
+1574,baka1272,Baka,Africa,ph,35
+1555,baka1273,Bakaka (Mwaneka),Africa,ph,34
+1556,baka1273,Bakaka (Babong),Africa,ph,31
+1557,baka1273,Bakaka (Mkaa'),Africa,ph,32
+1249,baka1274,baka,Africa,ph,46
+1865,baka1277,Bakairí,South America,saphon,30
+1866,baka1277,Bakairí,South America,saphon,28
+254,baka1277,BAKAIRI,South America,upsid,29
+2249,bakh1245,Bakhtiari,Eurasia,ea,36
+1180,bako1249,Bakoko,Africa,ph,33
+914,bako1250,Kole,Africa,ph,34
+1391,bala1302,Balante,Africa,ph,50
+1693,bali1278,Balinese,Papunesia,ph,24
+2306,balt1258,Balti,Eurasia,ea,40
+1709,balt1258,Balti,Eurasia,ra,53
+1349,bamb1262,Northern Mao,Africa,ph,36
+1204,bamb1265,Bambalang; Círàmbɔ́,Africa,ph,57
+664,bamb1269,Bambara,Africa,aa,43
+1496,bamb1269,Bamana,Africa,ph,58
+238,bamb1269,BAMBARA,Africa,upsid,35
+934,bame1260,Mamenyan,Africa,ph,50
+1009,bamu1253,Shupamem,Africa,ph,38
+1182,bamu1256,Bamunka,Africa,ph,32
+1248,bana1305,bana,Africa,ph,44
+2875,band1337,Bandjigali,Australia,er,26
+665,band1345,Banda,Africa,aa,45
+666,band1345,Banda,Africa,aa,46
+667,band1352,Bandi,Africa,aa,48
+1685,band1353,Banda Malay,Papunesia,ph,23
+2935,bang1339,Parnkalla,Australia,er,23
+1183,bang1356,Bangolan,Africa,ph,40
+1075,bani1255,Kurripako; Baniwa; Baniwa (Icana),South America,ph,37
+1811,bani1255,Baniwa,South America,saphon,24
+1812,bani1255,Baniwa,South America,saphon,26
+1522,bank1256,Bankon,Africa,ph,37
+668,baou1238,Baoulé,Africa,aa,37
+1100,baou1238,Baule,Africa,ph,23
+2050,bara1380,Barasana-Eduria,South America,saphon,17
+862,barb1263,Barbareño,North America,ph,40
+1239,barb1263,Barbareño,North America,ph,44
+2697,bard1255,Bardi,Australia,er,24
+2160,bard1255,Bardi,Australia,ph,25
+245,bard1255,BARDI,Australia,upsid,24
+1813,bare1276,Baré,South America,saphon,23
+1612,bare1279,Barein (Jalkiya),Africa,ph,41
+1613,bare1279,Barein (Giliya),Africa,ph,29
+1614,bare1279,Barein (Jalking),Africa,ph,44
+1615,bare1279,Barein (Komiya),Africa,ph,44
+1185,bari1286,Bariai,Papunesia,ph,17
+1892,bari1297,Barí,South America,saphon,22
+2892,barr1247,Malthanmungu,Australia,er,25
+1039,baru1269,Baruga,Papunesia,ph,24
+670,basa1284,Basaa,Africa,aa,41
+2500,bash1264,Bashkir,Eurasia,ea,39
+237,bash1264,BASHKIR,Eurasia,upsid,38
+2340,basq1248,Basque,Eurasia,ea,30
+2419,basq1248,Basque,Eurasia,ea,36
+2583,basq1248,Basque,Eurasia,ea,30
+2615,basq1248,Basque,Eurasia,ea,28
+2161,basq1248,Basque,Eurasia,ph,35
+179,basq1248,Basque,Eurasia,spa,28
+321,basq1248,BASQUE,Eurasia,upsid,28
+2381,basq1250,Zuberoan Basque,Eurasia,ea,43
+1559,bass1260,Bassossi,Africa,ph,34
+1184,bata1285,Banoo,Africa,ph,31
+1099,bata1289,Toba-Batak,Papunesia,ph,27
+33,bata1289,Batak,Papunesia,spa,21
+241,bata1289,BATAK,Papunesia,upsid,21
+1665,bata1293,Karo Batak,Papunesia,ph,24
+2390,bats1242,Bats,Eurasia,ea,51
+242,bats1242,BATS,Eurasia,upsid,45
+1843,baur1253,Baure,South America,saphon,18
+2741,bayu1240,Payungu,Australia,er,26
+144,beem1239,Beembe,Africa,spa,41
+251,beem1239,BEEMBE,Africa,upsid,26
+1186,befa1241,Befang,Africa,ph,59
+1530,begb1241,Tinɔr,Africa,ph,36
+249,beja1238,BEJA,Africa,upsid,26
+674,bekw1241,Bekwarra,Africa,aa,36
+1435,bela1255,Belanda Viri,Africa,ph,43
+1434,bela1256,Belanda Boor,Africa,ph,38
+1669,bela1260,Belait,Papunesia,ph,25
+2236,belh1239,Belhare,Eurasia,ph,36
+1105,beli1260,Belizean Creole,North America,ph,35
+255,bell1243,BELLA COOLA,North America,upsid,31
+1188,bemb1257,Bemba,Africa,ph,25
+1513,bena1262,Bena,Africa,ph,34
+1477,benc1235,Gimira,Africa,ph,56
+1478,benc1235,Bench,Africa,ph,40
+2624,beng1280,Bengali,Eurasia,ea,47
+2162,beng1280,Bengali,Eurasia,ph,72
+1711,beng1280,Bengali,Eurasia,ra,48
+177,beng1280,Bengali,Eurasia,spa,53
+250,beng1280,BENGALI,Eurasia,upsid,43
+676,beng1286,Bɛ̀ŋ,Africa,aa,49
+1189,berb1259,Berbice Dutch,South America,ph,26
+675,bero1242,Berom,Africa,aa,31
+257,bero1242,BIROM,Africa,upsid,29
+621,bert1248,BERTA,Africa,upsid,29
+2268,bese1243,Beserman,Eurasia,ea,33
+2347,besi1244,Mah Meri,Eurasia,ea,58
+2201,besi1244,Mah Meri,Eurasia,ph,58
+1401,besl1239,Besleri,Africa,ph,50
+2354,bett1235,Betta Kurumba,Eurasia,ea,37
+1190,bett1235,Betta Kurumba,Eurasia,ph,37
+677,bhel1238,Bhele,Africa,aa,28
+1712,bhil1251,Bhili,Eurasia,ra,62
+2357,bhoj1244,Bhojpuri,Eurasia,ea,51
+1191,biak1248,Biak,Papunesia,ph,24
+1683,biak1248,Biak,Papunesia,ph,19
+678,bial1238,Biali,Africa,aa,27
+2865,bibb1234,Bibbulman,Australia,er,22
+2797,bidy1243,Bidyara,Australia,er,20
+2812,bidy1243,Dharawala,Australia,er,17
+2821,bidy1243,Wadjabangay,Australia,er,18
+2823,bidy1243,Yandjibara,Australia,er,21
+2824,bidy1243,Yiningay,Australia,er,19
+1494,bidy1244,Bijogo,Africa,ph,25
+2982,biga1237,Bigambal,Australia,er,16
+1102,bike1242,Bikele,Africa,ph,56
+1251,bila1255,bila,Africa,ph,33
+2851,bili1250,Bilinarra,Australia,er,23
+1192,bili1250,Bilinara,Australia,ph,23
+1332,bili1260,Blin,Africa,ph,38
+1104,bilo1248,Biloxi,North America,ph,20
+1210,bilu1245,Bilua,Papunesia,ph,41
+679,bimo1239,Bimoba,Africa,aa,44
+1193,bina1277,Binandere,Papunesia,ph,35
+2688,binb1242,Binbinka,Australia,er,23
+704,bini1246,Ẹdo,Africa,aa,48
+872,binu1245,Binumarien,Papunesia,ph,16
+2799,biri1256,Barna,Australia,er,18
+2800,biri1256,Biri,Australia,er,18
+2804,biri1256,Garingbal,Australia,er,18
+2805,biri1256,Miyan,Australia,er,18
+2806,biri1256,Wiri,Australia,er,18
+2807,biri1256,Yambina,Australia,er,18
+2808,biri1256,Yangga,Australia,er,18
+2810,biri1256,Yilba,Australia,er,18
+2811,biri1256,Yuwi,Australia,er,18
+2822,biri1256,Wangan,Australia,er,18
+680,biss1248,Bisa,Africa,aa,41
+253,biss1248,BISA,Africa,upsid,24
+1065,blan1242,Blang; Plang; Bulang; Pulang; Pula; Kawa; K''ala; Kontoi',Eurasia,ph,40
+2576,bodo1267,Gutob,Eurasia,ea,36
+1726,bodo1267,Gutob,Eurasia,ra,40
+263,bodo1269,BODO,Eurasia,upsid,21
+984,boik1241,Boiken,Papunesia,ph,25
+682,boko1266,Boussa,Africa,aa,34
+1511,bomi1238,Leke,Africa,ph,28
+2588,bona1250,Baoan,Eurasia,ea,36
+2305,bond1245,Remo,Eurasia,ea,42
+1101,bond1245,Remo,Eurasia,ph,27
+1781,bond1245,Remo,Eurasia,ra,40
+1196,bong1285,Bongo,Africa,ph,29
+1857,bora1263,Bora,South America,saphon,41
+1362,bora1271,Galla,Africa,ph,36
+1897,bord1248,Border Kuna,South America,saphon,24
+435,bord1248,CUNA,South America,upsid,21
+1197,boro1277,Boro,Africa,ph,25
+1714,boro1277,BoRo,Africa,ra,32
+1955,boro1282,Borôro,South America,saphon,22
+258,boro1282,BORORO,South America,upsid,20
+1607,boun1243,Kulango,Africa,ph,46
+28,bouy1240,Yay,Eurasia,spa,38
+515,bouy1240,YAY,Eurasia,upsid,34
+2290,brah1256,Brahui,Eurasia,ea,43
+2377,brah1256,Brahui,Eurasia,ea,43
+261,brah1256,BRAHUI,Eurasia,upsid,33
+2584,bret1244,Breton,Eurasia,ea,66
+157,bret1244,Breton,Eurasia,spa,42
+260,bret1244,BRETON,Eurasia,upsid,45
+268,brib1243,BRIBRI,North America,upsid,27
+1198,brok1247,Brokskat,Eurasia,ph,41
+1715,brok1247,Brokskat,Eurasia,ra,56
+1603,buam1238,Bwamut,Africa,ph,28
+1200,bubi1249,Bubia,Africa,ph,39
+1336,budu1250,Kibudu,Africa,ph,43
+1694,bugi1244,Bugis,Papunesia,ph,25
+2299,bujh1238,Bhujel,Eurasia,ea,47
+1201,buku1249,Bukusu,Africa,ph,30
+2946,bula1255,Bularnu,Australia,er,32
+2368,bulg1262,Bulgarian,Eurasia,ea,43
+2163,bulg1262,Bulgarian,Eurasia,ph,30
+167,bulg1262,Bulgarian,Eurasia,spa,49
+265,bulg1262,BULGARIAN,Eurasia,upsid,42
+1390,buli1254,Buli,Africa,ph,46
+684,bulu1251,Bulu,Africa,aa,36
+1167,bumb1241,Arapesh,Papunesia,ph,22
+1575,bumm1238,Bum,Africa,ph,47
+2630,buna1275,Bunuba,Australia,er,24
+1716,bund1253,Bundeli,Eurasia,ra,55
+2717,bung1264,Buwandik,Australia,er,23
+1676,buol1237,Buol,Papunesia,ph,23
+2629,bura1267,Burarra,Australia,er,26
+266,bura1267,BURARRA,Australia,upsid,21
+2742,burd1238,Purduna,Australia,er,26
+1657,burj1242,Burji,Africa,ph,36
+2561,buru1296,Burushaski,Eurasia,ea,48
+2577,buru1296,Burushaski,Eurasia,ea,59
+2613,buru1296,Burushaski,Eurasia,ea,48
+6,buru1296,Burushaski,Eurasia,spa,53
+264,buru1296,BURUSHASKI,Eurasia,upsid,43
+1313,buru1301,Burun,Africa,ph,38
+1252,busa1253,busa,Africa,ph,31
+1402,buwa1243,Buwal,Africa,ph,43
+1814,cabi1241,Cabiyarí,South America,saphon,17
+1950,cacu1241,Kakua,South America,saphon,26
+275,cacu1241,CACUA,South America,upsid,22
+269,cadd1256,CADDO,North America,upsid,23
+2022,caja1238,Cajamarca Quechua,South America,saphon,22
+1985,call1235,Callawaya,South America,saphon,32
+773,came1252,Mambila,Africa,aa,40
+1583,came1252,Mambila,Africa,ph,35
+454,came1252,MAMBILA,Africa,upsid,25
+2546,camp1261,Campidanese Sardinian,Eurasia,ea,58
+1924,cams1241,Camsá,South America,saphon,27
+392,cams1241,CAMSA,South America,upsid,28
+1925,cand1248,Candoshi-Shapra,South America,saphon,27
+1956,cane1242,Canela,South America,saphon,29
+2000,capa1241,Capanahua,South America,saphon,24
+1815,caqu1242,Caquinte,South America,saphon,27
+2054,cara1272,Karapanã,South America,saphon,23
+1870,cari1279,Carijona,South America,saphon,21
+271,carn1240,NICOBARESE,Eurasia,upsid,25
+2001,cash1251,Cashibo-Cacataibo,South America,saphon,21
+2003,cash1254,Kashinawa,South America,saphon,23
+854,cavi1250,Cavinena,South America,ph,24
+2045,cavi1250,Cavineña,South America,saphon,24
+1926,cayu1262,Cayubaba,South America,saphon,33
+296,cayu1262,CAYUVAVA,South America,upsid,33
+1256,ceba1235,Senoufo-Cebaara,Africa,ph,38
+1650,ceba1235,"Senoufo, Cebaara",Africa,ph,43
+537,ceba1235,SENADI,Africa,upsid,36
+2430,cebu1242,Cebuano,Papunesia,ea,19
+1692,cebu1242,Cebuano,Papunesia,ph,21
+2250,cent1972,Kurdish,Eurasia,ea,39
+2322,cent1973,Wazirwola,Eurasia,ea,31
+2431,cent1973,Wazirwola,Eurasia,ea,30
+173,cent1973,Pashto,Eurasia,spa,38
+521,cent1973,PASHTO,Eurasia,upsid,38
+2597,cent1989,Central Khmer,Eurasia,ea,46
+14,cent1989,Cambodian,Eurasia,spa,42
+407,cent1989,KHMER,Eurasia,upsid,42
+1773,cent1990,Nicobarese,Eurasia,ra,35
+244,cent2004,BAI,Eurasia,upsid,29
+713,cent2018,Fulfulde,Africa,aa,37
+742,cent2050,Kanuri,Africa,aa,25
+150,cent2050,Kanuri,Africa,spa,35
+421,cent2050,KANURI,Africa,upsid,29
+1695,cent2087,Bikol (Bicolano),Papunesia,ph,28
+2208,cent2092,Central Sama,Papunesia,ph,36
+319,cent2128,YUPIK,Eurasia,upsid,36
+1851,cent2142,Aymara,South America,saphon,32
+2145,cent2142,Aymara,South America,saphon,31
+98,cent2144,Mazahua,North America,spa,63
+452,cent2144,MAZAHUA,North America,upsid,60
+1899,cent2150,Tunebo,South America,saphon,19
+1609,cent2194,Tamazight Berber,Africa,ph,39
+685,cerm1238,Cerma,Africa,aa,46
+1854,chac1249,Cha'palaa,South America,saphon,27
+101,chac1249,Cayapa,South America,spa,28
+273,chac1249,CAYAPA,South America,upsid,28
+2023,chac1250,Chachapoyas Quechua,South America,saphon,18
+2002,chac1251,Chácobo,South America,saphon,20
+121,chac1251,Chacobo,South America,spa,21
+1461,chah1248,Chaha,Africa,ph,44
+2281,chal1275,Modern Aramaic,Eurasia,ea,45
+38,cham1312,Chamorro,Papunesia,spa,36
+277,cham1312,CHAMORRO,Papunesia,upsid,26
+2136,cham1315,Chamacoco,South America,saphon,37
+855,cham1318,Chamicuro,South America,ph,29
+1816,cham1318,Chamicuro,South America,saphon,29
+2356,chan1310,Chantyal,Eurasia,ea,48
+1717,chau1259,Chandangs and Byangs,Eurasia,ra,42
+1861,chay1248,Shawi,South America,saphon,18
+2276,chec1245,Chechen,Eurasia,ea,67
+2512,chec1245,Chechen,Eurasia,ea,64
+2549,chec1245,Chechen,Eurasia,ea,70
+2574,chec1245,Chechen,Eurasia,ea,64
+856,chec1245,Chechen,Eurasia,ph,44
+1068,chee1238,Che; Rukuba; Kuche; Bache; Inchazi; Sale,Africa,ph,57
+2474,chen1255,Nyinpa Cone,Eurasia,ea,70
+857,chep1245,Chepang,Eurasia,ph,24
+1323,cher1271,Hill Guang,Africa,ph,38
+280,cher1273,CHEROKEE,North America,upsid,17
+1893,chib1270,Muisca,South America,saphon,22
+1230,chic1270,Chickasaw,North America,ph,25
+1021,chim1300,San Miguel Chimalapa Zoque,North America,ph,26
+1082,chim1301,Chimariko,North America,ph,42
+1157,chim1302,Chimborazo Quichua,South America,ph,36
+1894,chim1309,Chimila,South America,saphon,36
+63,chip1261,Chipewyan,North America,spa,61
+278,chip1261,CHIPEWYAN,North America,upsid,52
+2126,chip1262,Chipaya,South America,saphon,51
+1957,chiq1248,Bésɨro,South America,saphon,26
+99,chiq1250,Mazateco,North America,spa,38
+450,chiq1250,MAZATEC,North America,upsid,33
+2142,chir1286,Nhandeva,South America,saphon,29
+1071,choc1276,Choctaw,North America,ph,21
+1718,chok1243,Chokri,Eurasia,ra,39
+860,chol1282,"Tila, Chiapas",North America,ph,26
+1921,chol1284,Cholón,South America,saphon,20
+910,chon1284,Chong,Eurasia,ph,40
+1586,chon1287,Chonyi,Africa,ph,47
+861,chra1242,Chrau,Eurasia,ph,33
+284,chua1250,CHUAVE,Papunesia,upsid,17
+291,chua1256,HMONG,Eurasia,upsid,56
+2362,chuk1273,Chukchi,Eurasia,ea,20
+195,chuk1273,Chukchi,Eurasia,spa,22
+285,chuk1273,CHUKCHI,Eurasia,upsid,22
+686,chum1261,Chumburung,Africa,aa,30
+189,chuv1255,Chuvash,Eurasia,spa,39
+281,chuv1255,CHUVASH,Eurasia,upsid,30
+1909,coca1259,Kokama-Kokamilla,South America,saphon,16
+2222,coco1260,Cocos Malay,Papunesia,ph,27
+863,coeu1236,Coeur d''Alene',North America,ph,48
+1895,cofa1242,Cofán,South America,saphon,37
+289,cofa1242,COFAN,South America,upsid,35
+1896,cogu1240,Kogi,South America,saphon,36
+2773,cola1237,Kolakngat,Australia,er,22
+1222,colo1256,Colorado; Tsafiki,South America,ph,25
+1856,colo1256,Tsáfiki,South America,saphon,26
+864,coma1245,Comanche,North America,ph,18
+1107,como1259,Comox,North America,ph,42
+83,copa1236,Zoque,North America,spa,32
+646,copa1236,ZOQUE,North America,upsid,22
+1318,copi1238,Copi,Africa,ph,68
+2021,coro1247,Ancash Quechua,South America,saphon,24
+1139,croa1245,Croatian,Eurasia,ph,36
+781,cros1244,Mbembe,Africa,aa,37
+1238,crow1244,Crow,North America,ph,23
+2051,cube1242,Kubeo,South America,saphon,17
+295,cube1242,CUBEO,South America,upsid,23
+1910,cuib1242,Cuiba,South America,saphon,25
+1848,culi1244,Kulina,South America,saphon,21
+865,cupe1243,Cupeno,North America,ph,38
+1817,curr1243,Curripaco,South America,saphon,29
+2024,cusc1236,Cuzco-Collao Quechua,South America,saphon,31
+866,cuvo1236,Cuvok,Africa,ph,29
+2274,czec1258,Czech,Eurasia,ea,40
+2480,czec1258,Czech,Eurasia,ea,40
+1140,czec1258,Czech,Eurasia,ph,38
+468,dadi1250,DADIBI,Papunesia,upsid,23
+690,dagb1246,Dagbani,Africa,aa,31
+139,dagb1246,Dagbani,Africa,spa,37
+299,dagb1246,DAGBANI,Africa,upsid,29
+1430,dagi1241,Thakik,Africa,ph,26
+301,daha1245,DAHALO,Africa,upsid,59
+2350,dakp1242,Northern Cuona,Eurasia,ea,53
+252,dalo1238,BETE,Africa,upsid,37
+297,dang1274,DANGALEAT,Africa,upsid,28
+2265,dani1285,Danish,Eurasia,ea,26
+2167,dani1285,Danish,Eurasia,ph,69
+691,dann1241,Dan,Africa,aa,48
+1393,dann1241,Dan,Africa,ph,92
+298,dann1241,DAN,Africa,upsid,39
+300,darf1239,DAJU,Africa,upsid,30
+2256,dark1243,Darkhat,Eurasia,ea,39
+2876,darl1243,Southern Paakintyi,Australia,er,26
+2383,darm1243,Darma,Eurasia,ea,34
+1719,darm1243,Darmiya,Eurasia,ra,42
+2774,daun1234,Daungwurrung,Australia,er,23
+2312,daur1238,Daur,Eurasia,ea,57
+312,daur1238,DAGUR,Eurasia,upsid,29
+343,dawr1236,KULLO,Africa,upsid,29
+1990,daww1239,Dâw,South America,saphon,39
+693,daza1242,Daza,Africa,aa,32
+1385,defa1248,Defaka,Africa,ph,42
+1452,dege1246,Degema,Africa,ph,36
+787,degg1238,Mo,Africa,aa,52
+1845,deni1241,Dení,South America,saphon,22
+867,deny1238,Denya,Africa,ph,30
+395,dera1245,DERA,Papunesia,upsid,17
+420,dera1248,KANAKURU,Africa,upsid,35
+2052,desa1247,Desano,South America,saphon,18
+1299,dghw1239,Dghwede,Africa,ph,38
+2743,dhal1245,Thalanyji,Australia,er,26
+2973,dhal1246,Dhay'yi,Australia,er,26
+2971,dhan1270,Dhangu,Australia,er,26
+2745,dhar1247,Tharrkari,Australia,er,31
+2813,dhar1248,Dharumbal,Australia,er,21
+2463,dhim1246,Dhimal,Eurasia,ea,53
+2315,dhiv1236,Dhivehi,Eurasia,ea,39
+2727,dhud1236,Dhudhuroa,Australia,er,21
+2995,dhur1239,Dhurga,Australia,er,25
+314,dhuw1249,YOLNGU,Australia,upsid,23
+1247,dibo1245,babole,Africa,ph,31
+1431,didi1258,Didinga,Africa,ph,58
+2329,dido1241,Tsez,Eurasia,ea,42
+2749,dier1241,Diyari,Australia,er,25
+2757,dier1241,Yarluyandi,Australia,er,24
+305,dier1241,DIYARI,Australia,upsid,25
+2590,digo1242,Digor Ossetic,Eurasia,ea,42
+1587,digo1243,Digo,Africa,ph,48
+1440,dime1235,Dime,Africa,ph,73
+1109,diml1238,Dimili,Eurasia,ph,44
+1398,dink1262,Dinka,Africa,ph,49
+2750,dira1238,Thirarri,Australia,er,25
+1271,diri1252,diriku,Africa,ph,28
+697,dita1238,Ditammari,Africa,aa,32
+457,dizi1235,DIZI,Africa,upsid,30
+2785,djab1234,Djabwurung,Australia,er,21
+2783,djad1246,Jardwadjali,Australia,er,21
+2683,djam1255,Jaminjung,Australia,er,22
+2974,djam1256,Djambarrpuyngu,Australia,er,31
+2893,djan1238,Djangun,Australia,er,16
+2992,djap1238,Djapu,Australia,er,25
+2662,djau1244,Jawoyn,Australia,er,27
+2700,djaw1238,Jawi,Australia,er,20
+2676,djee1236,Ndjebbana,Australia,er,21
+1960,djeo1235,Jabutí,South America,saphon,24
+2687,djin1251,Jingulu,Australia,er,20
+2977,djin1252,Djinba,Australia,er,25
+2976,djin1253,Djinang,Australia,er,25
+2744,djiw1241,Jiwarli,Australia,er,26
+981,dobu1241,Dobu,Papunesia,ph,24
+2255,dolg1241,Dolgan,Eurasia,ea,42
+2530,doma1258,Domari,Eurasia,ea,45
+1495,domp1238,Dompo,Africa,ph,31
+2477,dong1285,Dongxiang,Eurasia,ea,34
+698,doya1240,Doayo,Africa,aa,48
+310,doya1240,DOAYO,Africa,upsid,34
+700,dual1243,Duala,Africa,aa,33
+2253,dupa1235,Dupaningan Agta,Papunesia,ea,21
+1085,dupa1235,Dupaningan Agta; Eastern Cagayan Agta; Dupaninan Agta,Papunesia,ph,20
+1777,duru1236,Parji,Eurasia,ra,31
+701,duru1249,Duruma,Africa,aa,49
+1588,duru1249,Duruma,Africa,ph,47
+2405,dutc1256,Dutch,Eurasia,ea,43
+1050,dutc1256,Dutch,Eurasia,ph,39
+2169,dutc1256,Dutch,Eurasia,ph,37
+2170,dutc1256,Dutch,Eurasia,ph,56
+2171,dutc1256,Dutch,Eurasia,ph,51
+2172,dutc1256,Dutch,Eurasia,ph,54
+2173,dutc1256,Dutch,Eurasia,ph,58
+2174,dutc1256,Dutch,Eurasia,ph,57
+2943,duun1241,Duungidjawu,Australia,er,23
+2890,dyaa1242,Djabugay,Australia,er,19
+2699,dyab1238,Jabirr-Jabirr,Australia,er,20
+2991,dyan1250,Thanggati,Australia,er,19
+2732,dyir1250,Dyirbal,Australia,er,16
+303,dyir1250,DYIRBAL,Australia,upsid,16
+2695,dyug1238,Jukun,Australia,er,28
+696,dyul1238,Dioula,Africa,aa,39
+2379,dzal1238,Southern Cuona,Eurasia,ea,59
+2394,dzon1239,Dzongkha,Eurasia,ea,58
+1468,dzuu1241,Dzuungoo,Africa,ph,55
+2593,east2282,Latgalian,Eurasia,ea,55
+2399,east2295,Eastern Yiddish,Eurasia,ea,37
+1049,east2295,Standard Yiddish,Eurasia,ph,47
+2498,east2304,Eastern Hill Balochi,Eurasia,ea,54
+2241,east2328,Meadow Mari,Eurasia,ea,27
+2413,east2328,Eastern Mari,Eurasia,ea,31
+2506,east2328,Meadow Mari,Eurasia,ea,31
+2532,east2328,Meadow Mari,Eurasia,ea,30
+858,east2328,Cheremis,Eurasia,ph,27
+181,east2328,Cheremis,Eurasia,spa,34
+460,east2328,MARI,Eurasia,upsid,33
+2242,east2337,Eastern Yugur,Eurasia,ea,42
+2451,east2347,Tamang,Eurasia,ea,47
+2544,east2347,Tamang,Eurasia,ea,53
+561,east2347,TAMANG,Eurasia,upsid,29
+2708,east2379,Eastern Arrernte,Australia,er,44
+2158,east2379,"Arrernte, Central",Australia,ph,31
+201,east2379,ARRERNTE,Australia,upsid,30
+2703,east2380,Eastern Anmatyerre,Australia,er,44
+906,east2398,Kar,Africa,ph,26
+777,east2426,Manding,Africa,aa,36
+1037,east2440,East Makian,Papunesia,ph,24
+1151,east2440,Taba,Papunesia,ph,37
+1682,east2440,"Makian, East (Taba)",Papunesia,ph,23
+414,east2516,KEWA,Papunesia,upsid,20
+72,east2542,Ojibwa,North America,spa,27
+508,east2542,OJIBWA,North America,upsid,27
+2077,east2555,Chiriguano,South America,saphon,24
+2078,east2555,Chiriguano,South America,saphon,24
+1671,east2563,Phan Rang Cham (Eastern Cham),Eurasia,ph,30
+29,east2563,Cham,Eurasia,spa,35
+282,east2563,CHAM,Eurasia,upsid,32
+1552,east2652,"Oromo, Eastern",Africa,ph,60
+2388,east2773,Dolakha Newar,Eurasia,ea,36
+702,ebir1243,Ebira,Africa,aa,31
+316,efik1245,EFIK,Africa,upsid,20
+1523,efut1241,Efutu,Africa,ph,50
+1233,egaa1242,Ega,Africa,ph,39
+873,eggo1239,Eggon,Africa,ph,42
+132,egyp1253,Egyptian Arabic,Africa,spa,67
+231,egyp1253,ARABIC,Africa,upsid,35
+706,ejag1239,Ejagham de l'ouest,Africa,aa,32
+1654,ejag1239,Ejagham,Africa,ph,29
+320,ejag1239,EJAGHAM,Africa,upsid,27
+317,ekar1243,EKARI,Papunesia,upsid,15
+874,ekpe1253,Ekpeye,Africa,ph,37
+2473,elfd1234,Elfdalian,Eurasia,ea,87
+969,elip1238,Nulibie,Africa,ph,30
+1300,eloy1241,Eloyi,Africa,ph,51
+707,emai1241,Emai,Africa,aa,48
+1901,embe1259,Emberá-Baudó,South America,saphon,33
+1902,embe1260,Emberá-Catío,South America,saphon,31
+1903,embe1262,Emberá-Chamí,South America,saphon,28
+2079,emer1243,Emerillon,South America,saphon,30
+1880,enap1235,Panare,South America,saphon,20
+514,enap1235,PANARE,South America,upsid,25
+1818,enaw1238,Enawené-Nawé,South America,saphon,25
+875,endo1242,Endo,Africa,ph,36
+708,enge1239,Engenni,Africa,aa,33
+1905,epen1239,Epena,South America,saphon,38
+546,epen1239,EPENA PEDEE,South America,upsid,31
+2648,erre1238,Erre,Australia,er,23
+2533,ersu1241,Ersu,Eurasia,ea,60
+2199,ersu1241,Lizu,Eurasia,ph,61
+2616,erzy1239,Erzya,Eurasia,ea,35
+2046,esee1248,Ese Ejja,South America,saphon,21
+2047,esee1248,Ese Eja,South America,saphon,22
+876,esim1238,Esimbi,Africa,ph,37
+2248,esto1258,Estonian,Eurasia,ea,26
+2181,esto1258,Estonian,Eurasia,ph,54
+1533,eten1239,Iten,Africa,ph,74
+1563,eton1253,Eton,Africa,ph,38
+2292,even1259,Solon,Eurasia,ea,25
+2238,even1259,Evenki,Eurasia,ph,29
+2288,even1260,Even,Eurasia,ea,36
+192,even1260,Even,Eurasia,spa,36
+322,even1260,EVEN,Eurasia,upsid,27
+703,ewee1241,Eʋe,Africa,aa,42
+142,ewee1241,Ewe,Africa,spa,45
+323,ewee1241,EWE,Africa,upsid,40
+709,ewon1239,Ewondo,Africa,aa,25
+324,ewon1239,EWONDO,Africa,upsid,34
+325,eyak1241,EYAK,North America,upsid,45
+705,ezaa1238,Ẹzaa,Africa,aa,38
+1460,ezha1238,Ezha,Africa,ph,39
+974,faiw1243,Faiwol,Papunesia,ph,20
+1377,fali1285,Kirya-Konzɘl,Africa,ph,50
+877,fang1246,Fan,Africa,ph,41
+1621,fang1248,Fang,Africa,ph,36
+2378,faro1244,Faroese,Eurasia,ea,36
+326,fasu1242,FASU,Papunesia,upsid,21
+710,fefe1239,Fe'efe'fe,Africa,aa,44
+330,fefe1239,FE?FE?,Africa,upsid,25
+1438,fern1234,Pichi,Africa,ph,30
+328,fiji1243,FIJIAN,Papunesia,upsid,30
+1212,fili1244,Filipino,Papunesia,ph,27
+2535,finn1318,Finnish,Eurasia,ea,23
+180,finn1318,Finnish,Eurasia,spa,42
+329,finn1318,FINNISH,Eurasia,upsid,25
+1659,fipa1238,Fipa,Africa,ph,35
+711,fonn1241,Fɔn,Africa,aa,42
+1310,food1238,Foodo,Africa,ph,44
+2469,fore1265,Forest Enets,Eurasia,ea,33
+2450,fore1274,Forest Nenets,Eurasia,ea,38
+1325,fraf1238,Frafra,Africa,ph,30
+2334,friu1240,Friulian,Eurasia,ea,39
+1231,friu1240,Friulian,Eurasia,ph,39
+716,fuli1240,Fuliru,Africa,aa,35
+1651,fuli1240,Fuliiru,Africa,ph,36
+1979,fuln1247,Yaathe,South America,saphon,33
+332,fuln1247,IATE,South America,upsid,30
+333,furr1244,FUR,Africa,upsid,30
+878,furu1242,Furu,Africa,ph,41
+852,fwee1238,Fwe,Africa,ph,60
+717,gaaa1244,Ga,Africa,aa,38
+141,gaaa1244,Ga,Africa,spa,47
+335,gaaa1244,GA,Africa,upsid,41
+1500,gaaa1245,Tiba,Africa,ph,34
+1616,gaam1241,Gaahmg,Africa,ph,49
+564,gaam1241,TABI,Africa,upsid,33
+2941,gabi1248,Gabi-Gabi,Australia,er,19
+1721,gade1236,Gade-Lohar,Eurasia,ra,50
+56,gads1258,Gadsup,Papunesia,spa,19
+336,gads1258,GADSUP,Papunesia,upsid,15
+2331,gaga1249,Gagauz,Eurasia,ea,46
+2653,gaga1251,Gaagudju,Australia,er,27
+673,gagn1235,Bété,Africa,aa,51
+1562,gagu1242,Gban,Africa,ph,36
+2619,gali1258,Galician,Eurasia,ea,30
+1141,gali1258,Galician,Eurasia,ph,28
+1867,gali1262,Carib,South America,saphon,17
+1868,gali1262,Carib,South America,saphon,15
+1869,gali1262,Carib,South America,saphon,15
+116,gali1262,Carib,South America,spa,28
+272,gali1262,CARIB,South America,upsid,22
+1722,galo1242,Gallong,Eurasia,ra,29
+3008,gamb1251,Gambera,Australia,er,25
+2719,gami1243,Gamilaraay,Australia,er,21
+1481,gamo1243,Gamo,Africa,ph,36
+2788,gana1268,Bidhawal,Australia,er,25
+2789,gana1278,Muk-Thang,Australia,er,22
+2790,gana1278,Thangguai,Australia,er,22
+2791,gana1278,Nulit,Australia,er,22
+770,gand1255,Luganda,Africa,aa,33
+3001,gang1267,Gangalidda,Australia,er,24
+2798,gang1268,Barada,Australia,er,18
+2801,gang1268,Gabalbara,Australia,er,18
+2802,gang1268,Gangulu,Australia,er,22
+2803,gang1268,Ganulu,Australia,er,18
+2809,gang1268,Yetimarala,Australia,er,18
+2645,gara1269,Garrwa,Australia,er,17
+2647,gara1269,Kunindirri,Australia,er,17
+337,gara1269,GARAWA,Australia,upsid,22
+2670,gari1254,Garig,Australia,er,24
+1723,garo1247,Garo,Eurasia,ra,21
+24,garo1247,Garo,Eurasia,spa,26
+2435,gata1239,Gtaʔ,Eurasia,ea,40
+1720,gata1239,Didayi,Eurasia,ra,38
+1577,gava1241,Gavar,Africa,ph,55
+2080,gavi1246,Gavião do Jiparaná,South America,saphon,29
+1052,gayo1244,Gayo,Papunesia,ph,27
+339,gbag1258,GWARI,Africa,upsid,26
+880,gbar1246,Gbari,Africa,ph,31
+939,gbay1281,Mbodomo; Mbódɔ̀mɔ́,Africa,ph,37
+1407,gbay1281,Mbodomo,Africa,ph,38
+720,gbay1287,Gbaya,Africa,aa,45
+148,gbay1287,Gbeya,Africa,spa,45
+338,gbay1287,GBEYA,Africa,upsid,43
+755,gbay1288,Kresh,Africa,aa,56
+1282,gbes1238,gbesi,Africa,ph,47
+721,genn1243,Gɛn-mina,Africa,aa,44
+722,genn1243,Gɛn-mina,Africa,aa,40
+2358,gheg1238,Gheg Albanian,Eurasia,ea,43
+2565,ghod1238,Godoberi,Eurasia,ea,66
+1384,ghom1247,Banjun,Africa,ph,59
+2713,gida1240,Gidabal,Australia,er,21
+901,gida1247,Kada,Africa,ph,38
+1302,giky1238,Gechode,Africa,ph,51
+2370,gily1242,Nivkh,Eurasia,ea,34
+194,gily1242,Gilyak,Eurasia,spa,44
+496,gily1242,NIVKH,Eurasia,upsid,35
+1303,giny1241,Genyanga,Africa,ph,53
+1589,giry1241,Giryama,Africa,ph,47
+1590,giry1241,Jiβana,Africa,ph,47
+1593,giry1241,Raβai,Africa,ph,47
+1594,giry1241,Reβe,Africa,ph,47
+1543,glav1244,Glavda,Africa,ph,43
+723,godi1239,Godié,Africa,aa,42
+881,goli1247,Golin,Papunesia,ph,23
+724,gonj1241,Gonja,Africa,aa,39
+2631,goon1238,Gooniyandi,Australia,er,23
+2866,gore1235,Goreng,Australia,er,22
+727,gour1243,Gulmancema,Africa,aa,33
+393,gras1249,KOIARI,Papunesia,upsid,16
+1911,guah1255,Guahibo,South America,saphon,35
+346,guah1255,GUAHIBO,South America,upsid,29
+882,guaj1255,Guajajara,South America,ph,21
+2082,guaj1255,Guajajára,South America,saphon,22
+2081,guaj1256,Guajá,South America,saphon,24
+1855,guam1248,Guambiano,South America,saphon,25
+347,guam1248,GUAMBIANO,South America,upsid,24
+1113,guan1269,Wanano,South America,ph,24
+2053,guan1269,Wanano,South America,saphon,28
+1820,guan1270,Kinikinao,South America,saphon,23
+2085,guar1292,Guarayu,South America,saphon,26
+1834,guar1293,Warekena,South America,saphon,25
+1959,guat1253,Guató,South America,saphon,25
+1912,guay1257,Guayabero,South America,saphon,22
+2689,guda1243,Gudanji,Australia,er,19
+726,gude1246,Guɗe,Africa,aa,36
+1578,gude1246,Gu'de,Africa,ph,36
+2818,gudj1237,Gudjal,Australia,er,18
+222,guer1243,AMUZGO,North America,upsid,37
+2828,guga1239,Kukatj,Australia,er,23
+2819,gugu1253,Gugu Badhun,Australia,er,17
+2922,gugu1254,Koko Bera,Australia,er,21
+2886,gugu1255,Guugu Yimidhirr,Australia,er,23
+334,guib1244,PO-AI,Eurasia,upsid,35
+754,guin1254,Kpɛlɛwoo,Africa,aa,35
+1514,guin1254,"Kpelle, North",Africa,ph,39
+2452,guja1252,Gujarati,Eurasia,ea,58
+1725,guja1252,Gujarati,Eurasia,ra,60
+1112,guja1253,Gojri; Gujari; Gujar,Eurasia,ph,50
+1724,guja1253,Gojri,Eurasia,ra,57
+2660,guma1252,Kunwinjku,Australia,er,27
+2975,guma1253,Gumatj,Australia,er,31
+1462,gume1239,Gumer,Africa,ph,42
+1475,gumu1244,Gumuz,Africa,ph,44
+2656,gund1246,Gun-Dedjnjenghmi,Australia,er,27
+2657,gund1246,Gun-Djeihmi,Australia,er,27
+2997,gund1248,Gundungurra,Australia,er,25
+2658,gune1238,Kune,Australia,er,28
+2814,gung1248,Gungabula,Australia,er,20
+883,gunw1252,Gunwinggu,Australia,ph,24
+2816,guny1241,Gunya,Australia,er,31
+2972,gupa1247,Gupapuyngu,Australia,er,31
+2677,gura1252,Gurr-Goni,Australia,er,27
+2905,gurd1238,Kurtjar,Australia,er,28
+2938,gure1255,Gureng-gureng,Australia,er,23
+2939,gure1255,Guweng,Australia,er,23
+2853,guri1247,Gurindji,Australia,er,23
+1605,guro1248,Gouro,Africa,ph,57
+2344,guru1261,Gurung,Eurasia,ea,49
+2737,guwa1242,Guwa,Australia,er,23
+3017,guwa1243,Guwamu,Australia,er,21
+2714,guwa1244,Guwar,Australia,er,19
+1352,gwan1268,Gwandara (Karshi),Africa,ph,46
+1353,gwan1268,Gwandara (Cancara),Africa,ph,52
+1354,gwan1268,Gwandara (Toni),Africa,ph,48
+1355,gwan1268,Gwandara (Gitata),Africa,ph,64
+1356,gwan1268,Gwandara (Koro),Africa,ph,48
+1357,gwan1268,Gwandara (Nimbia),Africa,ph,65
+1638,gwen1239,Kigweno,Africa,ph,29
+1363,hadi1240,Hadiyya,Africa,ph,56
+357,hadz1240,HADZA,Africa,upsid,62
+683,hain1253,Bozo,Africa,aa,34
+1360,haio1238,San,Africa,ph,29
+287,haka1240,LAI,Eurasia,upsid,52
+2323,hakk1236,Hakka Chinese,Eurasia,ea,39
+2165,hakk1236,Hakka Chinese,Eurasia,ph,47
+18,hakk1236,Hakka,Eurasia,spa,31
+350,hakk1236,HAKKA,Eurasia,upsid,22
+1727,halb1244,Halbi,Eurasia,ra,42
+191,halh1238,Khalkha,Eurasia,spa,35
+405,halh1238,KHALKHA,Eurasia,upsid,33
+1115,halk1245,Chilliwak Halkomelem,North America,ph,47
+218,hame1242,HAMER,Africa,upsid,35
+728,hang1258,Hanga,Africa,aa,29
+1643,hang1260,Kihangaza,Africa,ph,35
+1064,hang1263,Hanga Hundi; Kwasengen; West Wosera,Papunesia,ph,23
+1397,hara1271,Harari,Africa,ph,34
+729,haus1257,Hausa,Africa,aa,43
+730,haus1257,Hausa,Africa,aa,31
+2188,haus1257,Hausa,Africa,ph,46
+124,haus1257,Hausa,Africa,spa,45
+351,haus1257,HAUSA,Africa,upsid,38
+43,hawa1245,Hawaiian,Papunesia,spa,19
+352,hawa1245,HAWAIIAN,Papunesia,upsid,13
+2984,hawk1239,Darkinyung,Australia,er,18
+884,haya1250,Haya,Africa,ph,29
+1403,hdii1240,Hide,Africa,ph,41
+2449,hebr1245,Israeli Hebrew,Eurasia,ea,25
+2189,hebr1245,Hebrew,Eurasia,ph,27
+135,hebr1245,Modern Hebrew,Eurasia,spa,30
+1497,heib1243,Heiban,Africa,ph,34
+2391,hela1238,Yolmo,Eurasia,ea,46
+1255,here1253,herero,Africa,ph,26
+1696,hili1240,Hiligaynon,Papunesia,ph,25
+2542,hind1269,Hindi,Eurasia,ea,55
+2190,hind1269,Hindi,Eurasia,ph,74
+1728,hind1269,Hindi,Eurasia,ra,58
+176,hind1269,Hindi-Urdu,Eurasia,spa,94
+354,hind1269,HINDI-URDU,Eurasia,upsid,61
+1871,hixk1239,Hixkaryána,South America,saphon,23
+355,hixk1239,HIXKARYANA,South America,upsid,23
+2239,hmon1264,Hmong Njua,Eurasia,ea,61
+1211,hoav1238,Hoava,Papunesia,ph,21
+1389,holo1240,Holoholo,Africa,ph,26
+2359,hooo1248,Ho,Eurasia,ea,35
+1729,hooo1248,Ho,Eurasia,ra,43
+95,hopi1249,Hopi,North America,spa,49
+356,hopi1249,HOPI,North America,upsid,28
+1379,huaa1248,!Xóõ,Africa,ph,161
+2034,hual1241,Huallaga Huánuco Quechua,South America,saphon,22
+1948,huam1247,Huambisa,South America,saphon,23
+1155,huam1248,Huallaga (Huanuco) Quechua,South America,ph,31
+1033,huar1255,Warihio,North America,ph,26
+1116,huas1242,Huastec,North America,ph,36
+360,huas1242,HUASTECO,North America,upsid,26
+887,huay1240,Huaylas,South America,ph,30
+1304,huba1236,Kilba,Africa,ph,31
+1083,hueh1236,"Tepehua, Huehuetla; Tepehua de Hidalgo; Tepehua de Huehuetla",North America,ph,36
+886,huic1243,Huichol,North America,ph,25
+2313,huml1238,Humla Bhotia,Eurasia,ea,69
+2557,hung1274,Hungarian,Eurasia,ea,39
+2191,hung1274,Hungarian,Eurasia,ph,64
+183,hung1274,Hungarian,Eurasia,spa,65
+358,hung1274,HUNGARIAN,Eurasia,upsid,40
+1114,hung1278,Kihungan,Africa,ph,33
+2237,hunz1247,Hunzib,Eurasia,ph,60
+65,hupa1239,Hupa,North America,spa,42
+359,hupa1239,HUPA,North America,upsid,35
+1020,hupd1244,Hup,South America,ph,29
+1991,hupd1244,Hup,South America,saphon,34
+885,huro1249,Huron,North America,ph,17
+39,iaai1238,Iai,Papunesia,spa,52
+363,iaai1238,IAI,Papunesia,upsid,52
+891,iban1261,Ibani,Africa,ph,38
+364,iban1264,IBAN,Papunesia,upsid,25
+1057,ibib1240,Ibibio,Africa,ph,32
+2568,icel1247,Icelandic,Eurasia,ea,45
+158,icel1247,Icelandic,Eurasia,spa,39
+1187,idaa1241,Ida''an',Papunesia,ph,23
+1536,idom1241,Idu,Africa,ph,75
+731,ifee1241,Ifɛ̀,Africa,aa,34
+733,iged1239,Igede,Africa,aa,38
+1844,igna1246,Ignaciano,South America,saphon,19
+111,igna1246,Moxo,South America,spa,25
+366,igna1246,MOXO,South America,upsid,25
+654,igoo1238,Ahlõ,Africa,aa,33
+1580,igoo1238,Igo,Africa,ph,33
+1276,ikal1242,Ikalanga,Africa,ph,71
+2878,ikar1243,Ikarranggal,Australia,er,23
+2879,ikar1243,Takalak,Australia,er,27
+368,ikkk1242,IK,Africa,upsid,44
+1872,ikpe1245,Ikpeng,South America,saphon,18
+1405,ikwe1242,Ikwere,Africa,ph,46
+735,ikwo1238,Ikwo,Africa,aa,40
+2671,ilga1238,Ilgar,Australia,er,24
+2606,ilok1237,Ilocano,Papunesia,ea,25
+1117,ilok1237,Ilocano,Papunesia,ph,21
+1670,ilok1237,Iloko/Ilocano,Papunesia,ph,23
+2026,imba1240,Imbabura Quichua,South America,saphon,20
+892,imon1245,Imonda,Papunesia,ph,23
+1819,inap1243,Iñapari,South America,saphon,31
+1144,indo1316,Indonesian,Papunesia,ph,31
+1690,indo1316,Indonesian,Papunesia,ph,31
+247,indo1317,SAMA,Papunesia,upsid,32
+2027,inga1252,Inga,South America,saphon,22
+2251,ingu1240,Ingush,Eurasia,ea,69
+893,ingu1240,Ingush,Eurasia,ph,48
+1465,inor1238,Ennemor,Africa,ph,47
+1466,inor1238,Endegen,Africa,ph,45
+1467,inor1238,Ener,Africa,ph,45
+2140,iqui1243,Iquito,South America,saphon,19
+1927,iran1263,Mỹky,South America,saphon,39
+371,iran1263,IRANXE,South America,upsid,39
+129,iraq1241,Iraqw,Africa,spa,48
+370,iraq1241,IRAQW,Africa,upsid,45
+369,irar1238,IRARUTU,Papunesia,upsid,19
+1537,irig1241,Rigwe,Africa,ph,95
+2262,iris1253,Irish,Eurasia,ea,49
+2521,iris1253,Irish,Eurasia,ea,52
+2193,iris1253,Irish,Eurasia,ph,50
+156,iris1253,Irish Gaelic,Eurasia,spa,68
+342,iris1253,IRISH,Eurasia,upsid,69
+1730,irul1243,Irula,Eurasia,ra,52
+1737,irul1243,Kasaba,Eurasia,ra,30
+2270,ishk1246,Ishkashimi,Eurasia,ea,39
+107,isla1278,Island Carib,North America,spa,29
+292,isla1278,ISLAND CARIB,North America,upsid,27
+372,isok1239,ISOKO,Africa,upsid,37
+2218,isth1244,Isthmus (Juchitán) Zapotec,North America,ph,32
+2427,ital1282,Italian,Eurasia,ea,30
+1145,ital1282,Italian,Eurasia,ph,30
+2195,ital1282,Italian,Eurasia,ph,70
+2297,itel1242,Itelmen,Eurasia,ea,32
+373,itel1242,ITELMEN,Eurasia,upsid,32
+1928,iton1250,Itonama,South America,saphon,25
+103,iton1250,Itonama,South America,spa,25
+374,iton1250,ITONAMA,South America,upsid,25
+20,iumi1238,Yao,Eurasia,spa,49
+375,iumi1238,MIEN,Eurasia,upsid,41
+376,ivat1242,IVATAN,Papunesia,upsid,23
+2672,iwai1244,Iwaidja,Australia,er,23
+377,iwam1256,IWAM,Papunesia,upsid,17
+1664,iyiv1238,Iyive,Africa,ph,64
+1981,iyow1239,Chorote,South America,saphon,21
+896,izer1241,Hill Jarawa,Africa,ph,39
+1538,izer1241,Izere,Africa,ph,39
+736,izii1239,Izi,Africa,aa,51
+367,izon1238,KOLOKUMA IJO,Africa,upsid,37
+2567,jahh1242,Jah-Hut,Eurasia,ea,52
+897,jama1261,Jarawara,South America,ph,15
+1846,jama1261,Jamamadí,South America,saphon,16
+1847,jama1261,Jarawara,South America,saphon,19
+1053,jama1262,Jamaican Creole,North America,ph,33
+1442,jams1239,"Jamsay, Dogon",Africa,ph,47
+2728,jand1248,Jandai,Australia,er,19
+2407,japh1234,Japhug,Eurasia,ea,58
+1874,japr1238,Japreria,South America,saphon,20
+386,japr1238,JAPRERIA,South America,upsid,24
+1852,jaqa1244,Jaqaru,South America,saphon,42
+105,jaqa1244,Aymara,South America,spa,42
+385,jaqa1244,JAQARU,South America,upsid,39
+2854,jaru1254,Jaru,Australia,er,23
+889,jauj1238,Huanca,South America,ph,27
+2029,jauj1238,Jauja-Huanca Quechua,South America,saphon,22
+1731,jaun1243,Jaunsari,Eurasia,ra,51
+1675,java1254,Javanese,Papunesia,ph,33
+36,java1254,Javanese,Papunesia,spa,30
+380,java1254,JAVANESE,Papunesia,upsid,29
+1860,jebe1250,Shiwilu,South America,saphon,21
+381,jebe1250,JEBERO,South America,upsid,23
+898,jeme1245,Jemez,North America,ph,61
+1739,jenn1240,Kattunaika,Eurasia,ra,33
+1539,jere1244,Jere,Africa,ph,44
+2596,jerr1238,Jèrriais,Eurasia,ea,55
+2257,jiar1240,Caodeng rGyalrong,Eurasia,ea,63
+1208,jiar1240,Jiarong,Eurasia,ph,57
+1232,jica1244,Jicarilla Apache,North America,ph,56
+1439,jita1239,Jita,Africa,ph,29
+1311,jola1262,Joola Huluf,Africa,ph,51
+737,jola1263,Joola,Africa,aa,29
+315,jola1263,DIOLA,Africa,upsid,29
+1287,jowu1238,jowulu,Africa,ph,45
+2258,juan1238,Juang,Eurasia,ea,37
+1089,juan1238,Juang,Eurasia,ph,29
+1732,juan1238,Juang,Eurasia,ra,36
+2284,jude1256,Juhuri,Eurasia,ea,31
+432,juho1239,!XU,Africa,upsid,141
+2086,juma1249,Júma,South America,saphon,24
+1312,jumj1238,Jumjum,Africa,ph,39
+2028,jung1240,Inga,South America,saphon,16
+738,jurm1239,Jur mödö,Africa,aa,49
+2087,juru1256,Jurúna,South America,saphon,28
+2310,kaba1278,Kabardian,Eurasia,ea,55
+2401,kaba1278,Kabardian,Eurasia,ea,63
+2610,kaba1278,Kabardian,Eurasia,ea,51
+4,kaba1278,Kabardian,Eurasia,spa,56
+391,kaba1278,KABARDIAN,Eurasia,upsid,56
+2940,kabi1260,Butchulla,Australia,er,24
+2942,kabi1260,Barunggam,Australia,er,23
+739,kabi1261,Kabiyɛ,Africa,aa,47
+1142,kabi1261,Kabiye,Africa,ph,47
+1606,kabu1256,Cape Verde Creole,Africa,ph,28
+900,kaby1243,Kabyle,Africa,ph,30
+387,kach1280,JINGPHO,Eurasia,upsid,30
+1118,kadi1248,Kadiweu,South America,ph,31
+1915,kadi1248,Kadiwéu,South America,saphon,31
+394,kafa1242,KEFA,Africa,upsid,27
+1535,kagf1238,West Kainji,Africa,ph,56
+1381,kagu1239,Kagulu,Africa,ph,31
+1642,kahe1238,Kikahe,Africa,ph,32
+1961,kain1272,Kaingang,South America,saphon,16
+402,kain1272,KAINGANG,South America,upsid,27
+2089,kaiw1246,Kaiwá,South America,saphon,26
+1515,kaka1265,Kakabe,Africa,ph,38
+740,kako1242,Kakɔ,Africa,aa,50
+1581,kako1242,Kako,Africa,ph,47
+2967,kala1377,Kala Lagaw Ya,Australia,er,24
+475,kala1377,KALA LAGAW YA,Australia,upsid,24
+2966,kala1378,Kala Kawaw Ya,Australia,er,24
+2835,kala1379,Galaagu,Australia,er,26
+2767,kala1380,Garlali,Australia,er,21
+1048,kala1381,Kalabari; Kirike; Kalabari-Ijo,Africa,ph,43
+62,kala1399,Inuit,North America,spa,38
+388,kala1399,INUIT,North America,upsid,22
+2836,kala1401,Kalaamaya,Australia,er,26
+40,kali1299,Kaliai,Papunesia,spa,28
+2739,kalk1246,Kalkatungu,Australia,er,26
+431,kalk1246,KALKATUNGU,Australia,upsid,23
+2599,kalm1243,Kalmyk,Eurasia,ea,39
+2459,kama1351,Kamassian,Eurasia,ea,37
+617,kama1365,WOISIKA,Papunesia,upsid,28
+903,kama1367,Kamasau,Papunesia,ph,29
+2090,kama1373,Kamayurá,South America,saphon,26
+1443,kamb1297,Kikamba,Africa,ph,31
+1591,kamb1298,Kambe,Africa,ph,47
+1679,kamb1299,Kambera,Papunesia,ph,29
+1373,kamb1316,Kambaata,Africa,ph,59
+1368,kamw1239,Higi,Africa,ph,35
+1733,kang1280,Kangri,Eurasia,ra,41
+2301,kang1281,Kangjia,Eurasia,ea,36
+1419,kang1288,Kanga (Kanga),Africa,ph,76
+1420,kang1288,Kanga (Kufa),Africa,ph,75
+2867,kani1276,Kaniyang,Australia,er,22
+904,kano1245,Kanoe,South America,ph,26
+2121,kano1245,Kanoé,South America,saphon,26
+2540,kara1462,Tofa,Eurasia,ea,67
+2403,kara1464,Karaim,Eurasia,ea,37
+2318,kara1467,Karakalpak,Eurasia,ea,38
+2440,kara1474,Tukita,Eurasia,ea,53
+2580,kara1474,Karata,Eurasia,ea,56
+2825,kara1476,Karajarri,Australia,er,21
+879,kara1476,Garadjari,Australia,ph,20
+744,kara1478,Karaŋ,Africa,aa,40
+1351,kara1483,Karimojong,Africa,ph,66
+1962,kara1500,Karajá,South America,saphon,24
+2751,kara1508,Karangura,Australia,er,25
+1736,karb1241,Karbi (Mikir),Eurasia,ra,42
+2446,kare1335,Karelian,Eurasia,ea,30
+1347,kare1338,Kare,Africa,ph,57
+2122,kari1255,Karirí-Xocó,South America,saphon,21
+907,kari1301,Karipuna Creole,South America,ph,32
+2839,kari1304,Kariyarra,Australia,er,23
+1076,kari1311,Karitiana; Karitiâna,South America,ph,25
+2091,kari1311,Karitiâna,South America,saphon,31
+88,karo1304,Karok,North America,spa,41
+438,karo1304,KAROK,North America,upsid,27
+1097,karo1306,Karo,South America,ph,27
+2092,karo1306,Karo,South America,saphon,25
+2952,kart1247,Kartujarra,Australia,er,24
+745,kase1253,Kasem,Africa,aa,40
+746,kase1253,Kasɩm,Africa,aa,45
+1738,kash1277,Kashmiri,Eurasia,ra,56
+174,kash1277,Kashimiri,Eurasia,spa,56
+389,kash1277,KASHMIRI,Eurasia,upsid,55
+1421,katc1249,Kadugli (Kadugli),Africa,ph,62
+1422,katc1249,Kadugli (Miri),Africa,ph,63
+1423,katc1249,Kadugli (Katcha),Africa,ph,61
+627,katc1249,KADUGLI,Africa,upsid,27
+136,katc1250,Katcha,Africa,spa,32
+1592,kaum1238,Kauma,Africa,ph,47
+2932,kaur1267,Kaurna,Australia,er,25
+624,kawa1283,KAWAIISU,North America,upsid,31
+2882,kawa1290,Ogh Awarrangg,Australia,er,28
+2883,kawa1290,Ogh Unyjan,Australia,er,28
+2005,kaxa1239,Kaxararí,South America,saphon,20
+1875,kaxu1237,Kaxuiâna,South America,saphon,18
+3002,kaya1319,Kayardild,Australia,er,23
+3004,kaya1319,Yangkaralda,Australia,er,24
+902,kaya1329,Kaiabi,South America,ph,24
+2093,kaya1329,Kayabí,South America,saphon,26
+1963,kaya1330,Mebengokre,South America,saphon,33
+2711,kayt1238,Kaytetye,Australia,er,43
+2225,keda1250,Kedayan,Papunesia,ph,22
+1417,keig1242,Keiga,Africa,ph,59
+397,kekc1242,K'EKCHI,North America,upsid,26
+1173,kela1255,Kela,Papunesia,ph,30
+1337,kele1255,Iikile,Africa,ph,30
+1339,keli1248,Kaliko,Africa,ph,45
+1412,keme1240,Kemezung,Africa,ph,34
+905,kens1251,Kensei Nsei,Africa,ph,65
+908,keny1279,Kenyang,Africa,ph,41
+1215,keoo1238,Ke''o; Kéo',Papunesia,ph,30
+2220,kera1255,Kera,Africa,ph,30
+398,kera1255,KERA,Africa,upsid,30
+2792,kera1256,Keramin,Australia,er,23
+1290,kete1252,kete,Africa,ph,25
+2395,kett1243,Ket,Eurasia,ea,25
+2,kett1243,Ket,Eurasia,spa,32
+399,kett1243,KET,Eurasia,upsid,25
+1449,kgal1244,Shekgalagari,Africa,ph,53
+2433,khak1248,Khakas,Eurasia,ea,39
+2537,khal1271,Khalkhal,Eurasia,ea,37
+2327,kham1282,Rgyalthang Tibetan,Eurasia,ea,62
+2328,kham1282,Brag-g.yab Tibetan,Eurasia,ea,61
+2489,kham1282,Nangchenpa Tibetan,Eurasia,ea,96
+2519,kham1282,Soghpo Tibetan,Eurasia,ea,133
+2525,kham1282,Kami Tibetan,Eurasia,ea,77
+2587,kham1282,Sangdam Tibetan,Eurasia,ea,64
+2591,kham1282,Dongwang Tibetan,Eurasia,ea,78
+2600,kham1282,Kham Tibetan,Eurasia,ea,51
+2271,khan1273,Northern Khanty,Eurasia,ea,25
+2279,khan1273,Northern Khanty,Eurasia,ea,26
+2376,khan1273,Northern Khanty,Eurasia,ea,36
+1137,khan1273,Eastern Khanty,Eurasia,ph,31
+184,khan1273,Ostyak,Eurasia,spa,32
+396,khan1273,KHANTY,Eurasia,upsid,32
+2511,khar1287,Kharia,Eurasia,ea,39
+909,khar1287,Kharia,Eurasia,ph,47
+1740,khar1287,Kharia,Eurasia,ra,45
+11,khar1287,Kharia,Eurasia,spa,41
+408,khar1287,KHARIA,Eurasia,upsid,36
+1741,khas1269,Khasi,Eurasia,ra,40
+12,khas1269,Khasi,Eurasia,spa,28
+403,khas1269,KHASI,Eurasia,upsid,29
+1742,khez1235,Khezha,Eurasia,ra,53
+1994,khit1238,Kithaulhu,South America,saphon,31
+412,khmu1256,KHMU?,Eurasia,upsid,41
+1154,kich1262,Quiche,North America,ph,32
+748,kiku1240,Kikuyu,Africa,aa,32
+2260,kild1236,Kildin Saami,Eurasia,ea,128
+1668,kima1244,Kimaragang,Papunesia,ph,23
+955,kima1246,Khmu,Papunesia,ph,44
+1226,kinn1249,Kinnauri; Kanauri,Eurasia,ph,46
+911,kiny1244,Kinyarwanda,Africa,ph,49
+409,kiow1266,KIOWA,North America,upsid,42
+1387,kips1239,Kipsigis,Africa,ph,37
+2382,kirg1245,Kyrgyz,Eurasia,ea,37
+188,kirg1245,Kirghiz,Eurasia,spa,36
+410,kirg1245,KIRGHIZ,Eurasia,upsid,30
+912,kiri1254,Kirike,Africa,ph,36
+1446,kisa1263,Olukisa,Africa,ph,38
+1457,kist1241,Goggot,Africa,ph,41
+779,kita1249,Maninka-kan,Africa,aa,33
+2674,kitj1240,Kija,Australia,er,24
+792,kitu1245,Munukutuba,Africa,aa,22
+1571,kitu1246,Kituba,Africa,ph,22
+416,klam1254,KLAMATH,North America,upsid,37
+417,klao1243,KLAO,Africa,upsid,27
+1380,koal1240,Koalib,Africa,ph,45
+1106,koas1236,Koasati,North America,ph,25
+1743,koda1255,Kod̩agu,Eurasia,ra,52
+1305,kofy1242,Kofyar,Africa,ph,36
+425,koho1244,SRE,Eurasia,upsid,37
+246,kohu1244,KOHUMONO,Africa,upsid,38
+2937,koka1244,Kukata,Australia,er,23
+1794,kokb1239,Tripuri,Eurasia,ra,34
+2904,kokn1236,Kok Nar,Australia,er,25
+913,koko1269,Kokota,Papunesia,ph,27
+750,komc1235,Kom,Africa,aa,75
+2460,komi1268,Komi-Zyrian,Eurasia,ea,37
+182,komi1268,Komi,Eurasia,spa,36
+426,komi1268,KOMI,Eurasia,upsid,33
+2575,komi1269,Komi-Permyak,Eurasia,ea,37
+2384,komi1277,Yodzyak Komi,Eurasia,ea,37
+1484,komo1258,Komo,Africa,ph,28
+625,komo1258,KOMA,Africa,upsid,31
+751,komo1260,Komo,Africa,aa,35
+1745,kond1295,Kon̩d̩a or Kubi,Eurasia,ra,43
+2481,kond1303,Konda,Papunesia,ea,33
+1747,konk1267,Konkani,Eurasia,ra,45
+422,konk1267,KONKANI,Eurasia,upsid,37
+752,konk1269,Konkomba,Africa,aa,42
+1508,konk1269,Konkomba,Africa,ph,38
+915,konn1242,Konni,Africa,ph,49
+747,koon1245,Kɔɔzime,Africa,aa,52
+1482,koor1239,Koorete,Africa,ph,61
+871,kora1295,Korafe,Papunesia,ph,24
+2287,kore1280,Korean,Eurasia,ea,38
+2197,kore1280,Korean,Eurasia,ph,48
+1,kore1280,Korean,Eurasia,spa,40
+423,kore1280,KOREAN,Eurasia,upsid,32
+2055,kore1283,Koreguaje,South America,saphon,30
+2528,kork1243,Korku,Eurasia,ea,41
+1749,kork1243,Korku,Eurasia,ra,37
+1748,korr1238,Koraga,Eurasia,ra,34
+2006,koru1247,Korubo,South America,saphon,20
+427,kory1246,KORYAK,Eurasia,upsid,21
+1620,kosh1246,Koshin,Africa,ph,37
+1750,kota1263,Kota,Eurasia,ra,41
+9,kota1263,Kota,Eurasia,spa,34
+400,kota1263,KOTA,Eurasia,upsid,28
+1281,kota1272,kotafon,Africa,ph,45
+1751,koya1251,Koya,Eurasia,ra,31
+401,koya1251,KOYA,Eurasia,upsid,24
+1498,koya1253,Koyaga,Africa,ph,43
+819,koyr1240,Songhoy,Africa,aa,36
+1257,koyr1240,songhoy,Africa,ph,43
+1274,koyr1242,"Songhay, Koyraboro Senni",Africa,ph,37
+149,koyr1242,Songhai,Africa,spa,48
+539,koyr1242,SONGHAI,Africa,upsid,24
+424,kpan1246,KPAN,Africa,upsid,34
+1306,krac1238,Krache,Africa,ph,44
+1964,krah1246,Krahô,South America,saphon,46
+1965,kren1239,Krenak,South America,saphon,35
+1966,krik1239,Krinkati-Timbira,South America,saphon,26
+1307,krim1238,Krim,Africa,ph,38
+756,krio1253,Krio,Africa,aa,32
+1570,krio1253,Krio,Africa,ph,35
+894,kris1246,Isaka,Papunesia,ph,18
+1418,kron1241,Krongo,Africa,ph,62
+1501,kuan1247,Kwanyama,Africa,ph,33
+916,kuay1244,Kuay,Eurasia,ph,47
+1752,kuii1252,Kui,Eurasia,ra,39
+1876,kuik1246,Kuikúro-Kalapálo,South America,saphon,26
+2959,kuka1246,Kukatja,Australia,er,23
+2885,kuku1273,Gugu Wakura,Australia,er,16
+2887,kuku1273,Kuku Yalanji,Australia,er,16
+2889,kuku1273,Wagaman,Australia,er,16
+349,kuku1273,GUGU-YALANDYI,Australia,upsid,16
+917,kulu1253,Kulung,Eurasia,ph,43
+1753,kuma1273,Kumauni,Eurasia,ra,42
+2734,kumb1268,Baanbay,Australia,er,19
+2735,kumb1268,Gumbaynggir,Australia,er,19
+90,kumi1248,Digueno,North America,spa,34
+306,kumi1248,DIEGUENO,North America,upsid,34
+2355,kumy1244,Kumyk,Eurasia,ea,31
+2221,kumz1235,Kumzari,Eurasia,ph,35
+2198,kuna1268,Kunama,Africa,ph,34
+433,kuna1268,KUNAMA,Africa,upsid,26
+2815,kung1258,Gunggari,Australia,er,18
+2675,kung1259,Kungarakany,Australia,er,22
+1383,kung1261,!Xun,Africa,ph,120
+58,kuni1267,Kunimaipa,Papunesia,spa,20
+434,kuni1267,KUNIMAIPA,Papunesia,upsid,20
+2336,kuni1268,Kunigami,Eurasia,ea,25
+46,kunj1245,Kunjen,Australia,spa,28
+1365,kuny1238,Nyanga,Africa,ph,55
+2123,kunz1244,Kunza,South America,saphon,33
+1346,kuoo1238,Kuo,Africa,ph,56
+918,kuot1243,Kuot,Papunesia,ph,19
+1687,kupa1239,Kupang Malay,Papunesia,ph,25
+428,kups1238,SEBEI,Africa,upsid,26
+1622,kura1250,Kuranko,Africa,ph,54
+758,kuri1259,Kuria,Africa,aa,22
+2840,kurr1243,Kurrama,Australia,er,27
+2439,kurt1248,Kurtoep,Eurasia,ea,45
+1754,kuru1302,Kurux,Eurasia,ra,56
+7,kuru1302,Kurukh,Eurasia,spa,68
+429,kuru1302,KURUKH,Eurasia,upsid,32
+2094,kuru1309,Kuruáya,South America,saphon,28
+759,kusa1250,Kusal,Africa,aa,44
+919,kusu1250,Kusunda,Eurasia,ph,38
+1119,kute1248,Kuteb,Africa,ph,46
+2906,kuth1240,Kuthant,Australia,er,25
+2900,kuuk1238,Kuugu Ya'u,Australia,er,21
+2765,kuun1236,Kungkari,Australia,er,25
+2293,kuvi1243,Kuvi,Eurasia,ea,37
+920,kuvi1243,Kuvi,Eurasia,ph,37
+1755,kuvi1243,Kuvi,Eurasia,ra,47
+1549,kuwa1246,Kwatay,Africa,ph,34
+436,kwai1243,KWAIO,Papunesia,upsid,21
+71,kwak1269,Kwakiutl,North America,spa,55
+437,kwak1269,KWAKW'ALA,North America,upsid,48
+1487,kwam1249,Kwama,Africa,ph,25
+1604,kwam1250,Kwami,Africa,ph,40
+1503,kwam1251,Kwambi,Africa,ph,37
+1272,kwan1273,kwangari,Africa,ph,27
+1582,kwan1276,Kwanja,Africa,ph,43
+1646,kway1241,Eciruuri,Africa,ph,29
+921,kwaz1243,Kwaza,South America,ph,45
+2124,kwaz1243,Kwaza,South America,saphon,35
+1291,kwes1244,kwezo,Africa,ph,25
+3009,kwin1241,Kwini,Australia,er,28
+53,kwom1262,Washkuk,Papunesia,spa,31
+418,kwom1262,KWOMA,Papunesia,upsid,31
+1519,kyen1242,Kyanga,Africa,ph,37
+2393,kyer1238,Kyirong Tibetan,Eurasia,ea,63
+2366,lada1244,Ladakhi,Eurasia,ea,38
+922,lada1244,Ladakhi,Eurasia,ph,38
+1756,lada1244,Ladakhi,Eurasia,ra,45
+2285,ladi1251,Judaeo-Spanish,Eurasia,ea,25
+2194,ladi1251,Judeo-Spanish,Eurasia,ph,34
+2779,ladj1234,Ladji-Ladji,Australia,er,21
+1406,lagw1237,Lagwan,Africa,ph,41
+2319,lahu1253,Lahu,Eurasia,ea,46
+23,lahu1253,Lahu,Eurasia,spa,40
+443,lahu1253,LAHU,Eurasia,upsid,35
+1087,lake1258,Lake Miwok; Miwok (Lake),North America,ph,39
+26,lakk1238,Lakkia,Eurasia,spa,59
+439,lakk1238,LAKKIA,Eurasia,upsid,55
+2335,lakk1252,Lak,Eurasia,ea,68
+3,lakk1252,Lak,Eurasia,spa,69
+440,lakk1252,LAK,Eurasia,upsid,69
+695,lako1244,Dida,Africa,aa,57
+75,lako1247,Dakota,North America,spa,36
+445,lako1247,DAKOTA,North America,upsid,36
+760,lama1275,Lama,Africa,aa,53
+1404,lama1288,Lamang,Africa,ph,41
+1710,lamb1269,Banjara,Eurasia,ra,34
+1757,lamb1269,Lamani,Eurasia,ra,48
+2025,lamb1276,Ferreñafe Quechua,South America,saphon,19
+804,lamn1239,Nsoʼ,Africa,aa,45
+2894,lamu1254,Lamalama,Australia,er,29
+3020,lamu1254,Tableland Lamalama,Australia,er,29
+923,lang1320,Langi,Africa,ph,52
+1579,lang1322,Lango,Africa,ph,32
+1445,lang1324,Lango,Africa,ph,40
+2246,laoo1244,Lao,Eurasia,ea,42
+2320,laoo1244,Lao,Eurasia,ea,33
+2385,laoo1244,Lao,Eurasia,ea,33
+924,laoo1244,Lao,Eurasia,ph,40
+2642,lara1258,Larrakia,Australia,er,24
+1688,lara1260,Larantuka Malay,Papunesia,ph,25
+3003,lard1243,Lardil,Australia,er,25
+1995,latu1238,Latunde,South America,saphon,28
+259,lave1249,BRAO,Eurasia,upsid,31
+925,lavu1241,Lavukaleve,Papunesia,ph,20
+2254,lazz1240,Laz,Eurasia,ea,38
+2300,lazz1240,Laz,Eurasia,ea,34
+2341,lazz1240,Laz,Eurasia,ea,38
+2371,lazz1240,Laz,Eurasia,ea,38
+2410,lazz1240,Laz,Eurasia,ea,36
+1088,lazz1240,Laz,Eurasia,ph,32
+859,leal1235,Chinanteco,North America,ph,35
+1929,leco1242,Leco,South America,saphon,30
+1259,lega1249,lega-shabunda,Africa,ph,38
+1540,legb1242,Leggbo,Africa,ph,53
+441,lele1264,LELEMI,Africa,upsid,34
+1516,lele1266,Lele,Africa,ph,28
+761,lele1276,Lele,Africa,aa,36
+1275,lele1276,Lele,Africa,ph,36
+584,lena1238,LENAKEL,Papunesia,upsid,21
+762,lend1245,Lendu,Africa,aa,55
+1338,leng1258,Lengola,Africa,ph,32
+2912,leni1238,Linngithigh,Australia,er,29
+1758,lepc1244,Lepca,Eurasia,ra,36
+1636,lese1243,Balese,Africa,ph,42
+1681,leti1246,Leti,Papunesia,ph,22
+2311,lezg1247,Lezgian,Eurasia,ea,47
+2524,lezg1247,Lezgian,Eurasia,ea,96
+1561,libe1240,Liberian English,Africa,ph,36
+753,libe1247,Kpelle,Africa,aa,45
+137,libe1247,Kpelle,Africa,spa,49
+626,libe1247,KPELLE,Africa,upsid,34
+1098,liby1240,Lebanese Arabic,Africa,ph,50
+765,ligb1244,Ligbi,Africa,aa,38
+2325,ligu1248,Ligurian,Eurasia,ea,45
+899,liji1238,Jili,Africa,ph,48
+1334,lika1243,Lika,Africa,ph,45
+767,limb1268,Limbum,Africa,aa,35
+1260,limb1268,limbum (southern),Africa,ph,52
+1261,limb1268,limbum (central),Africa,ph,41
+1262,limb1268,limbum (northern),Africa,ph,33
+768,ling1263,Lingala,Africa,aa,22
+591,lish1246,NEO-ARAMAIC,Eurasia,upsid,40
+2578,lisu1250,Lisu,Eurasia,ea,42
+1121,lisu1250,Lisu,Eurasia,ph,39
+2244,lith1251,Lithuanian,Eurasia,ea,60
+2282,lith1251,Lithuanian,Eurasia,ea,59
+2316,lith1251,Lithuanian,Eurasia,ea,40
+2488,lith1251,Lithuanian,Eurasia,ea,57
+168,lith1251,Lithuanian,Eurasia,spa,47
+444,lith1251,LITHUANIAN,Eurasia,upsid,52
+2448,livv1244,Livonian,Eurasia,ea,31
+2352,lizu1234,Lizu,Eurasia,ea,58
+1541,logb1245,Logba,Africa,ph,35
+1294,logo1259,Logo,Africa,ph,39
+764,loko1255,Lɔkɔ,Africa,aa,25
+763,loma1260,Lɔgɔmagooi,Africa,aa,42
+1517,loma1260,Looma,Africa,ph,51
+1278,long1387,longto,Africa,ph,31
+1122,loni1238,Loniu,Papunesia,ph,23
+1759,loth1237,Lotha,Eurasia,ra,46
+2263,lowa1242,gLo Tibetan,Eurasia,ea,43
+2504,lowa1242,South Mustang Tibetan,Eurasia,ea,42
+2602,lowe1385,Lower Sorbian,Eurasia,ea,42
+2793,lowe1402,Ngayawang,Australia,er,23
+308,lowe1415,DANI,Papunesia,upsid,24
+2709,lowe1436,Lower Southern Aranda,Australia,er,44
+1022,loxi1235,Zapotec,North America,ph,30
+928,luch1239,Lucazi,Africa,ph,42
+771,lugb1240,Lugbara,Africa,aa,39
+151,lugb1240,Logbara,Africa,spa,42
+442,lugb1240,LUGBARA,Africa,upsid,36
+94,luis1253,Luiseno,North America,spa,34
+447,luis1253,LUISENO,North America,upsid,26
+769,lukp1238,Lokpa,Africa,aa,37
+1930,lule1238,Lule,South America,saphon,21
+1427,lumu1239,Lumun,Africa,ph,35
+927,lund1266,Lunda,Africa,ph,32
+694,luok1236,Dholuo,Africa,aa,38
+153,luok1236,Luo,Africa,spa,35
+448,luok1236,LUO,Africa,upsid,32
+1760,lush1249,Lushai,Eurasia,ra,43
+406,lusi1240,KALIAI,Papunesia,upsid,21
+2913,luth1234,Luthigh,Australia,er,22
+2374,luuu1242,Lue,Eurasia,ea,39
+404,luuu1242,LUE,Eurasia,upsid,31
+146,luva1239,Luvale,Africa,spa,36
+1432,luwo1239,Luwo,Africa,ph,32
+2337,luxe1241,Luxembourgish,Eurasia,ea,48
+2200,luxe1241,Luxembourgish,Eurasia,ph,46
+890,luya1241,Louyi,Africa,ph,22
+772,lyel1241,Lyélé,Africa,aa,44
+1240,lyel1241,Lele (Lyélé),Africa,ph,34
+714,maas1239,Fulfulde,Africa,aa,37
+1315,maay1238,Maay,Africa,ph,32
+1316,maba1273,Mabaan,Africa,ph,45
+456,maba1277,MABA,Africa,upsid,29
+1913,maca1259,Macaguán,South America,saphon,22
+1982,maca1260,Maka,South America,saphon,32
+2363,mace1250,Macedonian,Eurasia,ea,32
+930,mace1250,Macedonian,Eurasia,ph,32
+1283,mach1266,machame,Africa,ph,46
+1822,mach1267,Matsigenka,South America,saphon,27
+1821,mach1268,Manchinere,South America,saphon,18
+1877,macu1259,Macushi,South America,saphon,22
+2056,macu1260,Macuna,South America,saphon,22
+1284,mada1282,mada,Africa,ph,41
+931,mada1293,Mada,Africa,ph,40
+2780,madh1244,Madhi-Madhi,Australia,er,20
+932,madi1260,Ma'di,Africa,ph,54
+2632,madn1237,Matngele,Australia,er,22
+2202,mafe1237,Mavea,Papunesia,ph,24
+2454,maga1260,Magahi,Eurasia,ea,50
+938,maib1239,Maybrat,Papunesia,ph,16
+2302,mait1250,Maithili,Eurasia,ea,51
+1761,mait1250,Maithili,Eurasia,ra,42
+783,maka1304,Mekaa,Africa,aa,55
+1677,maka1311,Makassar,Papunesia,ph,23
+1007,mako1251,Shimakonde,Africa,ph,28
+2095,maku1278,Makuráp,South America,saphon,20
+2559,mala1464,Malayalam,Eurasia,ea,53
+1762,mala1464,Malayalam,Eurasia,ra,43
+1686,mala1481,Manado Malay,Papunesia,ph,25
+1898,mala1522,Damana,South America,saphon,27
+2769,malg1242,Malkana,Australia,er,26
+986,mall1246,Mal,Eurasia,ph,41
+2855,maln1239,Malngin,Australia,er,21
+1051,malo1243,Tamambo; Malo,Papunesia,ph,21
+2275,malt1254,Maltese,Eurasia,ea,35
+134,malt1254,Maltese,Eurasia,spa,55
+2968,maly1234,Malyangapa,Australia,er,27
+786,mama1271,Minyanka,Africa,aa,50
+1996,mama1278,Mamaindé,South America,saphon,34
+1054,mamb1294,Mambay; Mambai,Africa,ph,54
+1289,mamb1296,cilungu,Africa,ph,36
+1128,mamm1241,Western Mam; Tacanec,North America,ph,43
+775,mamp1244,Mampruli,Africa,aa,32
+1327,mamp1244,Mampruli,Africa,ph,36
+2620,mana1288,Manange,Eurasia,ea,41
+935,mana1288,Manange,Eurasia,ph,45
+933,mana1295,Manam,Papunesia,ph,18
+463,manc1252,MANCHU,Eurasia,upsid,25
+2457,mand1415,Standard Chinese,Eurasia,ea,46
+1047,mand1415,Standard Chinese; Mandarin,Eurasia,ph,49
+16,mand1415,Mandarin Chinese,Eurasia,spa,43
+286,mand1415,MANDARIN,Eurasia,upsid,32
+1126,mand1436,Mandingo,Africa,ph,34
+2682,mang1381,Mangarrayi,Australia,er,22
+2649,mang1382,Mengerrdji,Australia,er,23
+2826,mang1383,Mangala,Australia,er,24
+778,mang1394,Mangbetu,Africa,aa,47
+1125,mani1292,Manipuri,Eurasia,ph,33
+1764,mani1292,Manipuri,Eurasia,ra,38
+1518,mann1248,Mano,Africa,ph,39
+2475,mans1258,Northern Mansi,Eurasia,ea,31
+2953,many1256,Manjiljarra,Australia,er,23
+1369,many1261,Manya,Africa,ph,27
+1765,maon1238,Mao-Naga,Eurasia,ra,30
+42,maor1246,Maori,Papunesia,spa,20
+1878,mapo1246,Mapoyo,South America,saphon,19
+1802,mapu1245,Mapudungun,South America,saphon,28
+106,mapu1245,Araucanian,South America,spa,26
+230,mapu1245,ARAUCANIAN,South America,upsid,26
+1879,maqu1238,Yekwana,South America,saphon,26
+1766,mara1378,Marathi,Eurasia,ra,55
+2679,mara1385,Marra,Australia,er,23
+937,mara1385,Mara,Australia,ph,24
+47,mara1386,Maranungku,Australia,spa,24
+471,mara1404,MARANAO,Papunesia,upsid,17
+2667,marg1251,Marrgu,Australia,er,26
+2817,marg1253,Margany,Australia,er,31
+126,marg1265,Margi,Africa,spa,44
+470,marg1265,MARGI,Africa,upsid,34
+2637,mari1417,Marramaninyshi,Australia,er,20
+2638,mari1419,Marringarr,Australia,er,32
+2639,mari1424,Marrithiyel,Australia,er,24
+2640,mart1254,Marti Ke,Australia,er,31
+2841,mart1255,Martuthunira,Australia,er,26
+991,marw1260,Marwari,Eurasia,ph,46
+1367,masa1299,Orusyan,Africa,ph,63
+154,masa1300,Maasai,Africa,spa,43
+451,masa1300,MAASAI,Africa,upsid,28
+988,matb1237,Matbat,Papunesia,ph,20
+2007,mati1255,Matís,South America,saphon,21
+2119,mato1253,Arára do Mato Grosso,South America,saphon,33
+1124,mats1244,Matses,South America,ph,21
+2008,mats1244,Matsés,South America,saphon,21
+1266,matu1259,matuumbi,Africa,ph,23
+2669,maun1240,Mawng,Australia,er,22
+48,maun1240,Maung,Australia,spa,24
+467,maun1240,MAUNG,Australia,upsid,22
+1378,mawa1270,Mawa,Africa,ph,33
+1967,maxa1247,Maxakalí,South America,saphon,20
+453,maxa1247,MAXAKALI,South America,upsid,20
+2830,maya1280,Mayi-Kutuna,Australia,er,21
+2832,mayi1235,Mayi-Yapi,Australia,er,21
+2829,mayi1236,Mayi-Kulan,Australia,er,21
+1488,mayo1261,Mayogo,Africa,ph,46
+1042,maza1291,Mazanderani,Eurasia,ph,29
+458,mbaa1245,MBA-NE,Africa,upsid,31
+2928,mbab1239,Mbabaram,Australia,er,27
+606,mbab1239,MBABARAM,Australia,upsid,24
+1502,mbal1255,Mbalanhu,Africa,ph,31
+2895,mbar1253,Rimanggudinhma,Australia,er,29
+2927,mbar1254,Mbara,Australia,er,27
+1474,mbay1241,Mbay,Africa,ph,44
+1285,mbee1249,mbe,Africa,ph,37
+1599,mbee1249,Mbe,Africa,ph,57
+2914,mbiy1238,Mbiywom,Australia,er,29
+782,mboc1235,Mboó,Africa,aa,31
+1558,mboc1235,Mbo (Ekanang),Africa,ph,35
+1560,mboc1235,Mbo (Ngwatta),Africa,ph,36
+1270,mbuk1240,mbukushu,Africa,ph,29
+1408,mbuk1243,Mbuko,Africa,ph,45
+455,mbum1254,MBUM,Africa,upsid,38
+1619,mbuu1238,Ajumbu,Africa,ph,39
+2083,mbya1239,Mbyá,South America,saphon,26
+940,medu1238,Medumba,Africa,ph,25
+1472,meen1242,Me'en,Africa,ph,40
+1823,mehi1240,Mehináku,South America,saphon,23
+2510,mehr1241,Mehri,Eurasia,ea,45
+784,mend1266,Mende,Africa,aa,34
+1584,mere1246,Mere,Africa,ph,44
+2491,merg1238,Myeik Burmese,Eurasia,ea,48
+1641,meru1245,Kimeru,Africa,ph,27
+951,mesc1238,Chiricahua Apache,North America,ph,51
+1458,mesq1240,Masqan,Africa,ph,41
+785,meta1238,Metta,Africa,aa,33
+1227,mewa1250,Mewati,Eurasia,ph,50
+97,mezq1235,Otomi,North America,spa,58
+1601,mfum1238,Mfumte,Africa,ph,89
+973,mian1257,Mianmin,Papunesia,ph,25
+1072,mich1243,Michif,North America,ph,41
+957,mich1245,Michoacan Nahual,North America,ph,25
+1767,miju1243,Mishmi,Eurasia,ra,54
+1698,mina1268,Minangkabau,Papunesia,ph,33
+2562,mind1253,Min Dong Chinese,Eurasia,ea,35
+276,mind1253,FUZHOU,Eurasia,upsid,21
+2409,ming1252,Mingrelian,Eurasia,ea,36
+2417,ming1252,Mingrelian,Eurasia,ea,37
+2436,ming1252,Mingrelian,Eurasia,ea,35
+941,ming1252,Mingrelian,Eurasia,ph,35
+2128,mini1256,"Huitoto, Minica",South America,saphon,24
+2715,minj1242,Minjungbal,Australia,er,20
+2691,mink1237,Minkin,Australia,er,23
+481,minn1241,XIAMEN,Eurasia,upsid,25
+1768,miny1240,Mising,Eurasia,ra,46
+2278,mira1251,Mirandese,Eurasia,ea,49
+1858,mira1254,Miraña,South America,saphon,31
+2673,miri1266,Miriwoong,Australia,er,20
+2748,mith1236,Mithaka,Australia,er,29
+2453,miya1259,Miyako,Eurasia,ea,19
+1596,mmaa1238,Numala,Africa,ph,34
+1322,mman1238,Mmani,Africa,ph,36
+942,mmen1238,Mmen,Africa,ph,41
+1644,moch1256,Kimochi,Africa,ph,25
+1931,moch1259,Mochica,South America,saphon,32
+1127,moco1246,Mocovi,South America,ph,31
+1916,moco1246,Mocoví,South America,saphon,29
+2458,mode1248,Greek,Eurasia,ea,29
+2186,mode1248,Greek,Eurasia,ph,41
+2187,mode1248,Greek,Eurasia,ph,23
+170,mode1248,Modern Greek,Eurasia,spa,26
+318,mode1248,GREEK,Eurasia,upsid,26
+788,mofu1248,Mofu-gudur,Africa,aa,44
+1598,mofu1248,"Mofu, South",Africa,ph,40
+459,mogh1245,MOGHOL,Eurasia,upsid,29
+1625,mogh1246,Moghamo,Africa,ph,50
+943,moke1242,Moken,Eurasia,ph,32
+1673,moke1242,Moken,Eurasia,ph,38
+1672,mokl1243,Moklen,Eurasia,ph,46
+1626,mokp1239,Mokpwe,Africa,ph,31
+2243,moks1248,Moksha,Eurasia,ea,40
+2245,moks1248,Moksha,Eurasia,ea,41
+1123,mola1238,Molalla,North America,ph,30
+1409,molo1266,Moloko,Africa,ph,47
+2464,mong1331,Mongolian,Eurasia,ea,46
+1277,mong1338,mongo-nkundu,Africa,ph,56
+1344,mono1269,Mono,Africa,ph,62
+1143,mono1270,Mono,Africa,ph,44
+464,morb1239,MOR,Papunesia,upsid,19
+1678,mori1268,Mori Bawah,Papunesia,ph,27
+1569,mori1278,Mauritian Creole,Africa,ph,30
+1424,moro1284,Morokodo,Africa,ph,54
+465,moro1285,MORO,Africa,upsid,29
+133,moro1292,Moroccan Arabic,Africa,spa,78
+1293,moru1253,Moru,Africa,ph,38
+944,mose1249,Moseten,South America,ph,38
+1986,mose1249,Mosetén de Covendo,South America,saphon,39
+1987,mose1249,Mosetén de Santa Ana,South America,saphon,41
+1988,mose1249,Tsimané,South America,saphon,41
+789,moss1236,Moore,Africa,aa,43
+948,motl1237,Mwotlap,Papunesia,ph,22
+1932,movi1243,Movima,South America,saphon,29
+479,movi1243,MOVIMA,South America,upsid,23
+1769,moyo1238,Moyon,Eurasia,ra,40
+1597,mpad1242,Kotoko,Africa,ph,40
+2915,mpal1238,Mpalitjanh,Australia,er,26
+2706,mpar1238,Central Arrernte,Australia,er,44
+945,mpon1254,Mpumpun,Africa,ph,38
+2856,mudb1240,Mudburra,Australia,er,23
+1746,mudh1235,Kon̩ekar Gadaba,Eurasia,ra,31
+869,mufi1238,Muhiang,Papunesia,ph,22
+1859,muin1242,Muinane,South America,saphon,28
+256,muin1242,MUINANE,South America,upsid,28
+2633,mull1237,Malak-Malak,Australia,er,19
+466,mull1237,MALAKMALAK,Australia,upsid,19
+2888,mulu1243,Muluridji,Australia,er,16
+1214,muna1247,Muna,Papunesia,ph,33
+2295,mund1320,Mundari,Eurasia,ea,28
+1713,mund1320,Bhumij,Eurasia,ra,54
+1770,mund1320,Mundari,Eurasia,ra,39
+10,mund1320,Mundari,Eurasia,spa,37
+602,mund1320,MUNDARI,Eurasia,upsid,37
+1343,mund1325,Mundang,Africa,ph,67
+780,mund1326,Mündü,Africa,aa,41
+791,mund1327,Mundani,Africa,aa,41
+1618,mund1328,Mundabli,Africa,ph,38
+1129,mund1330,Mundurukú,South America,ph,39
+2096,mund1330,Mundurukú,South America,saphon,37
+946,mung1266,Mungaka,Africa,ph,33
+1933,muni1258,Muniche,South America,saphon,27
+2289,munj1244,Munji,Eurasia,ea,44
+2659,mura1269,Kuninjku,Australia,er,27
+793,murl1244,Murle,Africa,aa,34
+474,murr1258,MURINHPATHA,Australia,upsid,25
+2634,murr1259,Murrinh-patha,Australia,er,28
+473,murs1242,MURSI,Africa,upsid,26
+2720,muru1266,Muruwari,Australia,er,25
+2129,muru1274,"Huitoto, Murui",South America,saphon,20
+1410,muya1243,Muyang,Africa,ph,46
+947,mvum1238,Mvumbo,Africa,ph,55
+794,mwag1236,Mwaghavul,Africa,aa,37
+1341,mwal1237,Mwali,Africa,ph,24
+1448,mwan1247,Kimwani,Africa,ph,26
+790,mwan1250,Muan,Africa,aa,39
+1263,myen1241,myene,Africa,ph,36
+60,naas1242,Nasioi,Papunesia,spa,18
+483,naas1242,NASIOI,Papunesia,upsid,13
+1992,nade1244,Nadëb,South America,saphon,34
+795,nafa1258,Nafaanra,Africa,aa,44
+958,naga1394,Nagamese,Eurasia,ph,47
+2661,naia1238,Mayali,Australia,er,27
+1771,naik1250,Naiki,Eurasia,ra,46
+2607,najd1235,Najdi Arabic,Eurasia,ea,33
+2678,naka1260,Nakara,Australia,er,25
+956,naki1238,Naki,Africa,ph,44
+482,nama1264,NAMA,Africa,upsid,41
+155,nama1265,Nama,Africa,spa,33
+949,nami1256,Namia,Papunesia,ph,15
+341,nana1257,NANAI,Eurasia,upsid,24
+954,nand1266,Nandi,Africa,ph,23
+2635,nang1259,Ngan'gityemerri,Australia,er,23
+961,nang1259,Nganikurungkurr,Australia,ph,28
+953,nank1250,Nankina,Papunesia,ph,20
+1824,nant1250,Nanti,South America,saphon,27
+2039,napo1242,Napo Quichua,South America,saphon,23
+2203,nara1262,Nara,Africa,ph,59
+501,nara1262,NERA,Africa,upsid,22
+1493,nari1240,Laarim,Africa,ph,34
+2784,nari1241,Nari Nari,Australia,er,23
+2617,narp1239,Nar-Phu,Eurasia,ea,49
+2795,narr1259,Yaraldi,Australia,er,25
+2936,naru1238,Narrungga,Australia,er,27
+1413,nate1242,Nateni,Africa,ph,40
+557,natu1246,NAMBAKAENGO,Papunesia,upsid,47
+2291,nauk1242,Naukan Yupik,Eurasia,ea,22
+66,nava1243,Navaho,North America,spa,54
+484,nava1243,NAVAJO,North America,upsid,47
+796,nawd1238,Nawdm,Africa,aa,35
+1660,nawu1242,Nawuri,Africa,ph,40
+485,naxi1245,NAXI,Eurasia,upsid,49
+1600,ncan1245,Nchane,Africa,ph,41
+1348,ndai1238,Galke,Africa,ph,57
+1471,ndal1241,Chindali,Africa,ph,31
+1611,ndam1239,Ndamba,Africa,ph,24
+950,ndem1249,Ndemli,Africa,ph,53
+1436,ndog1248,Ndogo,Africa,ph,38
+1269,ndon1254,ndonga,Africa,ph,30
+1505,ndon1254,Ndonga (Kwaluudhi),Africa,ph,36
+1506,ndon1254,Ndonga (Kolonkadhi),Africa,ph,36
+1507,ndon1254,Ndonga (Eunda),Africa,ph,36
+2910,ndra1239,Ndra'ngith,Australia,er,23
+487,ndut1239,NDUT,Africa,upsid,34
+1547,ndzw1235,"Comorian, Ndzwani",Africa,ph,39
+2402,nene1249,Tundra Nenets,Eurasia,ea,35
+2482,nene1249,Tundra Nenets,Eurasia,ea,35
+2603,nene1249,Tundra Nenets,Eurasia,ea,33
+185,nene1249,Yurak,Eurasia,spa,34
+638,nene1249,NENETS,Eurasia,upsid,35
+868,nepa1253,Dhangar,Eurasia,ph,39
+2342,nepa1254,Nepali,Eurasia,ea,44
+2204,nepa1254,Nepali,Eurasia,ph,74
+1772,nepa1254,Nepali,Eurasia,ra,47
+488,nepa1254,NEPALI,Eurasia,upsid,39
+489,newa1246,NEWARI,Eurasia,upsid,32
+81,nezp1238,Nez Perce,North America,spa,36
+490,nezp1238,NEZ PERCE,North America,upsid,30
+2962,ngaa1240,Ngaanyatjarra,Australia,er,23
+2837,ngad1258,Mirrniny,Australia,er,26
+2838,ngad1258,Ngadjunmaya,Australia,er,26
+1213,ngad1261,Ngad''a; Ngadha',Papunesia,ph,27
+2652,ngal1292,Dalabon,Australia,er,29
+2654,ngal1293,Ngalakgan,Australia,er,27
+960,ngal1293,Ngalakan,Australia,ph,26
+2684,ngal1294,Ngaliwurru,Australia,er,21
+799,ngam1268,Ngambai,Africa,aa,34
+2752,ngam1284,Ngamini,Australia,er,25
+2461,ngan1291,Nganasan,Eurasia,ea,30
+494,ngan1291,NGANASAN,Eurasia,upsid,29
+2655,ngan1295,Ngandi,Australia,er,35
+2990,ngan1296,Nganyaywana,Australia,er,17
+718,ngan1299,Gangam,Africa,aa,39
+1504,ngan1300,Ngandjera,Africa,ph,37
+2858,ngar1235,Ngarinyman,Australia,er,23
+2686,ngar1283,Ngarnka,Australia,er,21
+3007,ngar1284,Ngarinyin,Australia,er,22
+601,ngar1284,NGARINJIN,Australia,upsid,24
+2843,ngar1287,Ngarluma,Australia,er,23
+2857,ngar1288,Ngardi,Australia,er,24
+2961,ngar1296,Ngarlawangka,Australia,er,23
+2998,ngar1297,Ngarigu,Australia,er,18
+1473,ngas1238,Ongamo,Africa,ph,31
+657,ngas1240,Angas,Africa,aa,36
+125,ngas1240,Angas,Africa,spa,44
+223,ngas1240,ANGAS,Africa,upsid,43
+2831,ngaw1240,Mayi-Thakurti,Australia,er,22
+2833,ngaw1240,Ngawun,Australia,er,21
+2834,ngaw1240,Wunumara,Australia,er,22
+1531,ngaz1238,Shindazidja,Africa,ph,48
+800,ngba1285,Ngbaka,Africa,aa,34
+936,ngem1255,Ngemba,Africa,ph,40
+802,ngie1241,Ngyembɔɔn,Africa,aa,28
+1628,ngie1241,Ngiemboon,Africa,ph,30
+2794,ngin1247,Ngintait,Australia,er,23
+1470,ngit1239,Ngiti,Africa,ph,56
+491,ngiz1242,NGIZIM,Africa,upsid,40
+2916,ngko1236,Ngkoth,Australia,er,26
+963,ngom1271,Ngombale,Africa,ph,59
+962,ngom1272,Ngomba,Africa,ph,32
+1411,ngom1272,Ngomba,Africa,ph,25
+959,ngos1238,Ngishe,Africa,ph,34
+2692,ngum1253,Ngumbarl,Australia,er,20
+1286,ngwe1238,ngwe,Africa,ph,38
+2770,nhan1238,Nhanda,Australia,er,33
+2097,nhen1239,Nheengatú,South America,saphon,23
+2755,nhir1234,Nhirrpi,Australia,er,29
+2844,nhuw1239,Nhuwala,Australia,er,26
+1674,nias1242,Nias,Papunesia,ph,25
+1623,niel1243,Lwaa,Africa,ph,59
+493,niel1243,LUA,Africa,upsid,36
+1254,nige1253,fulfulde (NGA),Africa,ph,57
+1301,nige1253,Fula (Nigeria),Africa,ph,38
+774,nige1255,Mambila,Africa,aa,43
+1134,nige1257,Nigerian Pidgin,Africa,ph,32
+2846,nija1241,Nyiyaparli,Australia,er,25
+2847,nija1241,Palyku,Australia,er,26
+2698,nima1245,Nimanburu,Australia,er,23
+2132,nina1238,Ninam,South America,saphon,18
+980,ning1273,Ningil,Papunesia,ph,21
+1130,nisg1240,Nishgha,North America,ph,42
+1983,niva1238,Chulupí,South America,saphon,28
+270,niva1238,ASHUSLAY,South America,upsid,28
+1371,njeb1242,Nzɛbi,Africa,ph,34
+1602,njye1238,Njem,Africa,ph,42
+1455,nkon1248,Nkonya,Africa,ph,34
+152,nobi1240,Mahas-Fiyadikka,Africa,spa,45
+327,nobi1240,NUBIAN,Africa,upsid,21
+798,noma1260,Nɔmaa,Africa,aa,30
+1825,noma1263,Nomatsigenga,South America,saphon,25
+2130,nonu1241,Nonuya,South America,saphon,26
+492,noon1243,NONI,Africa,upsid,33
+1111,nort2626,Frisian,Eurasia,ph,42
+1131,nort2627,Low German,Eurasia,ph,37
+2484,nort2641,Northern Kurdish,Eurasia,ea,38
+419,nort2641,KURDISH,Eurasia,upsid,47
+2321,nort2646,Yousafzai Pashto,Eurasia,ea,33
+2332,nort2647,Northwestern Pashto,Eurasia,ea,36
+2235,nort2671,Northern Saami,Eurasia,ph,74
+965,nort2684,Northern Khmer,Eurasia,ph,43
+2372,nort2686,Northern Altai,Eurasia,ea,34
+603,nort2690,UZBEK,Eurasia,upsid,30
+2296,nort2697,North Azerbaijani,Eurasia,ea,39
+187,nort2697,Azerbaijani,Eurasia,spa,34
+236,nort2697,AZERBAIJANI,Eurasia,upsid,33
+2445,nort2699,Kolami,Eurasia,ea,26
+1744,nort2699,Kolami,Eurasia,ra,34
+2429,nort2722,Northern Qiang,Eurasia,ea,73
+2486,nort2722,Northern Qiang,Eurasia,ea,63
+309,nort2735,KAM,Eurasia,upsid,27
+2518,nort2740,Northern Thai,Eurasia,ea,33
+2314,nort2741,Northeastern Thai,Eurasia,ea,32
+2414,nort2741,Northeastern Thai,Eurasia,ea,32
+2422,nort2741,Northeastern Thai,Eurasia,ea,32
+2492,nort2741,Northeastern Thai,Eurasia,ea,32
+2496,nort2741,Northeastern Thai,Eurasia,ea,33
+2286,nort2745,Tundra Yukaghir,Eurasia,ea,39
+193,nort2745,Yukaghir,Eurasia,spa,32
+634,nort2745,YUKAGHIR,Eurasia,upsid,26
+749,nort2765,Kisiei,Africa,aa,42
+801,nort2774,Ngbandi,Africa,aa,31
+719,nort2775,Gbaya,Africa,aa,53
+689,nort2780,Dagara,Africa,aa,41
+797,nort2784,Nʋni,Africa,aa,54
+835,nort2787,Toussian,Africa,aa,35
+1491,nort2795,Ndebele,Africa,ph,68
+725,nort2810,Grebo,Africa,aa,36
+307,nort2815,DINKA,Africa,upsid,32
+681,nort2819,Bobo,Africa,aa,40
+1512,nort2819,"Bobo, North",Africa,ph,37
+243,nort2819,BOBO-FING,Africa,upsid,33
+1689,nort2828,North Maluku Malay,Papunesia,ph,27
+1205,nort2845,North Marquesan,Papunesia,ph,22
+1077,nort2943,Iñupiaq; Iñupiat; Inupiat; Inupiaq,North America,ph,27
+82,nort2952,Maidu,North America,spa,24
+498,nort2952,MAIDU,North America,upsid,23
+966,nort2954,Northern Paiute,North America,ph,24
+486,nort2957,NAHUATL,North America,upsid,20
+1135,nort2966,Northern Pomo,North America,ph,39
+1904,nort2972,Northern Emberá,South America,saphon,32
+2033,nort2976,Bolivian Quechua,South America,saphon,28
+2035,nort2979,Huaylas-Conchucos Quechua,South America,saphon,23
+2030,nort2980,North Junín Quechua,South America,saphon,25
+2031,nort2980,North Junín Quechua,South America,saphon,25
+2037,nort2980,Yaru Quechua,South America,saphon,22
+1132,nort2984,Northern Pame,North America,ph,54
+1624,nort3047,Gisiga,Africa,ph,37
+2441,norw1258,Norwegian,Eurasia,ea,40
+159,norw1259,Norwegian,Eurasia,spa,48
+499,norw1259,NORWEGIAN,Eurasia,upsid,46
+672,ntch1242,Bassar,Africa,aa,30
+1264,ntch1242,N'cam,Africa,ph,43
+1453,ntch1242,Basari,Africa,ph,30
+1662,ntom1248,Bokala-Nkole,Africa,ph,30
+967,nubi1253,Nubi,Africa,ph,35
+171,nucl1235,Armenian,Eurasia,spa,37
+362,nucl1235,ARMENIAN,Eurasia,upsid,36
+478,nucl1240,MUMUYE,Africa,upsid,34
+1028,nucl1290,Wa,Eurasia,ph,49
+2416,nucl1301,Turkish,Eurasia,ea,38
+2217,nucl1301,Turkish,Eurasia,ph,36
+186,nucl1301,Turkish,Eurasia,spa,40
+597,nucl1301,TURKISH,Eurasia,upsid,33
+2428,nucl1302,Georgian,Eurasia,ea,33
+2183,nucl1302,georgian,Eurasia,ph,33
+5,nucl1302,Georgian,Eurasia,spa,35
+390,nucl1302,GEORGIAN,Eurasia,upsid,34
+2277,nucl1305,Kannada,Eurasia,ea,44
+1734,nucl1305,Kannada,Eurasia,ra,47
+2338,nucl1310,Burmese,Eurasia,ea,54
+2164,nucl1310,Burmese,Eurasia,ph,56
+22,nucl1310,Burmese,Eurasia,spa,50
+476,nucl1310,BURMESE,Eurasia,upsid,46
+2643,nucl1327,Limilngan,Australia,er,25
+570,nucl1339,TEMEIN,Africa,upsid,25
+841,nucl1347,Wolof,Africa,aa,54
+138,nucl1347,Wolof,Africa,spa,40
+618,nucl1347,WOLOF,Africa,upsid,40
+732,nucl1417,Igbo,Africa,aa,36
+2192,nucl1417,Igbo,Africa,ph,35
+143,nucl1417,Igbo,Africa,spa,65
+365,nucl1417,IGBO,Africa,upsid,59
+671,nucl1418,Bassa,Africa,aa,36
+1565,nucl1440,Masalit,Africa,ph,45
+644,nucl1454,YAWA,Papunesia,upsid,19
+1691,nucl1460,Madurese,Papunesia,ph,35
+610,nucl1620,WAHGI,Papunesia,upsid,23
+52,nucl1632,Sentani,Papunesia,spa,17
+540,nucl1632,SENTANI,Papunesia,upsid,17
+495,nucl1633,NIMBORAN,Papunesia,upsid,18
+1013,nucl1634,Skou,Papunesia,ph,23
+2196,nucl1643,Japanese,Eurasia,ph,21
+197,nucl1643,Japanese,Eurasia,spa,40
+384,nucl1643,JAPANESE,Eurasia,upsid,20
+592,nucl1649,TSIMSHIAN,North America,upsid,41
+1952,nucl1668,Katukína,South America,saphon,20
+687,nucl1683,Daba,Africa,aa,47
+1576,nucl1683,Daba,Africa,ph,46
+1195,nucl1695,Bole,Africa,ph,38
+1567,nucl1696,Tangale,Africa,ph,60
+968,nuer1246,Nuer,Africa,ph,48
+1534,nuer1246,Nuer,Africa,ph,48
+2933,nugu1241,Nukunu,Australia,er,28
+805,nugu1242,Nugunu,Africa,aa,26
+1629,nugu1242,Nugunu,Africa,ph,35
+1951,nuka1242,Nukak,South America,saphon,24
+2009,nuku1263,Nukini,South America,saphon,20
+502,nung1283,LUNGCHOW,Eurasia,upsid,32
+2665,nung1290,Wubuy,Australia,er,25
+49,nung1290,Nunggubuyu,Australia,spa,24
+503,nung1290,NUNGGUBUYU,Australia,upsid,23
+2685,nung1291,Nungali,Australia,er,17
+806,nupe1254,Nupe,Africa,aa,38
+964,nuuc1236,Nootka,North America,ph,47
+70,nuuc1236,Nootka,North America,spa,47
+500,nuuc1236,TSESHAHT,North America,upsid,42
+803,nyab1255,Niaboua,Africa,aa,44
+274,nyah1250,NYAH KUR,Eurasia,upsid,50
+2845,nyam1271,Nyamal,Australia,er,23
+970,nyam1276,Kinyamwezi,Africa,ph,53
+1392,nyam1277,Kinyambo,Africa,ph,33
+1376,nyam1285,Nyam,Africa,ph,56
+2827,nyan1301,Nyangumarta,Australia,er,21
+45,nyan1301,Nyangumata,Australia,spa,27
+990,nyan1307,Runyankore,Africa,ph,28
+505,nyan1313,NYANGI,Africa,upsid,25
+2426,nyaw1245,Nyaw,Eurasia,ea,31
+2628,nyaw1245,Nyaw,Eurasia,ea,31
+2862,nyaw1247,Nyawaygi,Australia,er,18
+971,nyeu1238,Nyeu,Eurasia,ph,40
+2693,nyig1240,Nyikina,Australia,er,20
+21,nyis1236,Dafla,Eurasia,spa,27
+302,nyis1236,DAFLA,Eurasia,upsid,24
+1447,nyol1238,Nyole,Africa,ph,36
+1181,nyon1241,Bali-Kumbat,Africa,ph,42
+2701,nyul1247,Nyulnyul,Australia,er,20
+2864,nyun1247,Balardung,Australia,er,22
+2868,nyun1247,Minang,Australia,er,22
+2872,nyun1247,Wiilman,Australia,er,22
+2873,nyun1247,Wudjari,Australia,er,22
+2874,nyun1247,Yuwat,Australia,er,22
+1399,nzim1238,Nzema,Africa,ph,40
+972,obol1243,Obolo,Africa,ph,37
+2131,ocai1244,Ocaina,South America,saphon,35
+117,ocai1244,Ocaina,South America,spa,38
+506,ocai1244,OCAINA,South America,upsid,34
+2478,occi1239,Occitan,Eurasia,ea,58
+1968,ofay1240,Ofayé,South America,saphon,24
+507,ogbi1239,OGBIA,Africa,upsid,34
+1382,okoo1245,Oko,Africa,ph,30
+975,okuu1243,Oku,Africa,ph,29
+1314,olub1238,Lulubo,Africa,ph,46
+1207,olut1240,Oluta Popoluca; Olutec,North America,ph,32
+2098,omag1248,Omagua,South America,saphon,18
+1907,onaa1245,Chon,South America,saphon,29
+77,onei1249,Oneida,North America,spa,22
+1206,onge1236,Öñge; Ong; Onge,Eurasia,ph,24
+1486,opuu1239,Opo,Africa,ph,25
+2057,orej1242,Máíhɨki,South America,saphon,20
+2495,oriy1255,Oriya,Eurasia,ea,42
+1775,oriy1255,Oriya,Eurasia,ra,43
+1631,orma1241,Orma,Africa,ph,33
+510,ormu1247,ORMURI,Eurasia,upsid,31
+929,orok1266,Lukundu,Africa,ph,29
+978,orok1269,Orokaiva,Papunesia,ph,17
+1889,orow1243,Oro Win,South America,saphon,18
+2283,osse1243,Iron Ossetic,Eurasia,ea,39
+2324,osse1243,Iron Ossetic,Eurasia,ea,47
+2351,osse1243,Iron Ossetic,Eurasia,ea,44
+2389,osse1243,Iron Ossetic,Eurasia,ea,47
+2408,osse1243,Iron Ossetic,Eurasia,ea,47
+2424,osse1243,Iron Ossetic,Eurasia,ea,47
+2432,osse1243,Iron Ossetic,Eurasia,ea,40
+2476,osse1243,Iron Ossetic,Eurasia,ea,44
+2509,osse1243,Iron Ossetic,Eurasia,ea,43
+2626,osse1243,Iron Ossetic,Eurasia,ea,46
+976,osse1243,Ossetian,Eurasia,ph,39
+1374,otor1240,Otoro,Africa,ph,44
+1366,otuh1238,Otuho,Africa,ph,56
+2930,oyka1239,Oykangand,Australia,er,28
+2152,paca1246,Pacahuara,South America,saphon,20
+511,paco1243,PACOH,Eurasia,upsid,33
+1934,paez1247,Páez,South America,saphon,49
+102,paez1247,Paez,South America,spa,39
+513,paez1247,PAEZ,South America,upsid,37
+1070,pagi1243,Pagibete; Apakabeti; Apakibeti; Apagibete;Apagibeti; Pagabete,Africa,ph,51
+1776,pait1244,Paite,Eurasia,ra,30
+2099,pait1247,Pai Tavytera,South America,saphon,27
+2397,paiw1248,Paiwan,Papunesia,ea,25
+522,paiw1248,PAIWAN,Papunesia,upsid,26
+2901,paka1251,Bakanh,Australia,er,31
+977,pala1344,Palauan,Papunesia,ph,22
+1826,pali1279,Palikúr,South America,saphon,24
+2877,pall1243,Pallanganmiddang,Australia,er,25
+1324,palo1243,Ndut-Falor,Africa,ph,43
+2529,pamp1243,Kapampangan,Papunesia,ea,22
+1697,pamp1243,Kapampangan,Papunesia,ph,22
+1633,pana1294,Pana,Africa,ph,66
+1133,pana1305,Panamint,North America,ph,36
+1969,pana1307,Panará,South America,saphon,26
+807,pand1265,Pandikeri,Africa,aa,38
+1388,pang1287,Pangwa,Africa,ph,35
+1699,pang1290,Pagasinan,Papunesia,ph,21
+2479,panj1256,Panjabi,Eurasia,ea,44
+1780,panj1256,Punjabi,Eurasia,ra,54
+175,panj1256,Punjabi,Eurasia,spa,73
+2004,pano1254,Katukína,South America,saphon,19
+2010,pano1255,Panobo,South America,saphon,18
+2848,pany1241,Panyjima,Australia,er,25
+1043,paok1235,"Pa-O, Taungthu",Eurasia,ph,34
+84,papa1238,Totonac,North America,spa,26
+585,papa1238,TOTONAC,North America,upsid,22
+520,para1301,PARAUK,Eurasia,upsid,77
+1864,para1310,"Arára, Pará",South America,saphon,17
+2084,para1311,Paraguayan Guaraní,South America,saphon,30
+119,para1311,Guarani,South America,spa,36
+345,para1311,GUARANI,South America,upsid,36
+2100,para1312,Parakanã,South America,saphon,17
+1958,para1315,Gavião do Pará,South America,saphon,21
+1970,para1315,Parkateje,South America,saphon,26
+1827,para1316,Paraujano,South America,saphon,25
+2364,pare1266,Gorum,Eurasia,ea,26
+1828,pare1272,Paresí,South America,saphon,19
+808,park1239,Podoko,Africa,aa,35
+1172,pate1247,Patep,Papunesia,ph,44
+1778,patt1248,Pat̩t̩an̩i,Eurasia,ra,44
+1849,paum1247,Paumarí,South America,saphon,28
+512,pech1241,PAYA,North America,upsid,28
+1883,pemo1245,Pémono,South America,saphon,19
+1881,pemo1248,Pemon,South America,saphon,21
+1882,pemo1248,Pemon,South America,saphon,17
+1779,peng1244,Pengo,Eurasia,ra,32
+1361,pero1241,Pero,Africa,ph,30
+1171,peta1245,Petats,Papunesia,ph,30
+446,peve1243,LAME,Africa,upsid,38
+985,phai1238,Pray,Eurasia,ph,35
+1036,phal1254,Palula (Phalura),Eurasia,ph,40
+2517,phut1244,Phu Tai,Eurasia,ea,30
+2531,phut1244,Phu Tai,Eurasia,ea,29
+1829,piap1246,Piapoco,South America,saphon,19
+2042,piar1243,Piaroa,South America,saphon,30
+1809,pich1237,Ashéninka,South America,saphon,30
+92,picu1248,Tiwa,North America,spa,41
+598,picu1248,PICURIS,North America,upsid,38
+1073,pila1245,Pilaga; Pilagá,South America,ph,22
+1917,pila1245,Pilagá,South America,saphon,22
+2869,pinj1244,Pinjarup,Australia,er,22
+2963,pint1250,Pintupi,Australia,er,23
+1632,piny1238,Pinyin,Africa,ph,66
+1989,pira1253,Pirahã,South America,saphon,11
+477,pira1253,PIRAHA,South America,upsid,11
+2058,pira1254,Piratapuyo,South America,saphon,24
+2753,pirl1238,Pirlatapa,Australia,er,25
+2766,pirr1240,Pirriya,Australia,er,24
+2143,pisa1245,Pisamira,South America,saphon,17
+2497,pite1240,Pite Saami,Eurasia,ea,54
+2234,pite1240,Pite Saami,Eurasia,ph,52
+2960,pitj1243,Ngalia,Australia,er,23
+2964,pitj1243,Pitjantjatjara,Australia,er,23
+2226,pitj1243,Pitjantjatjara,Australia,ph,25
+2763,pitt1247,Pitta Pitta,Australia,er,26
+31,plat1254,Malagasy,Africa,spa,36
+517,plat1254,MALAGASY,Africa,upsid,25
+2224,plau1238,Mennonite Plautdietsch,North America,ph,55
+2627,pnar1238,Pnar,Eurasia,ea,39
+519,pohn1238,POHNPEIAN,Papunesia,upsid,20
+1394,poko1263,Pokot,Africa,ph,39
+2604,poli1260,Polish,Eurasia,ea,35
+1046,poli1260,Polish,Eurasia,ph,37
+378,popt1235,JACALTEC,North America,upsid,32
+2623,port1283,Portuguese,Eurasia,ea,41
+2206,port1283,Portuguese (European),Eurasia,ph,47
+2207,port1283,Portuguese (Brazilian),Eurasia,ph,47
+163,port1283,Portuguese,Eurasia,spa,38
+2543,pott1240,Gadaba,Eurasia,ea,39
+1774,pott1240,Ollari,Eurasia,ra,34
+2011,poya1241,Poyanáwa,South America,saphon,21
+1454,prin1242,Principense,Africa,ph,31
+2954,pudi1238,Putijarra,Australia,er,23
+1906,puel1244,Günün Yajich,South America,saphon,36
+1935,puin1248,Puinave,South America,saphon,19
+810,pula1262,Pular,Africa,aa,38
+809,pula1263,Pulaar,Africa,aa,38
+2125,pume1238,Pumé,South America,saphon,38
+2758,punt1240,Punthamara,Australia,er,21
+2386,puoc1238,Ksingmul,Eurasia,ea,38
+87,pure1242,Tarascan,North America,spa,32
+594,pure1242,TARASCAN,North America,upsid,39
+2456,puri1258,Purki,Eurasia,ea,37
+1971,puri1262,Puri,South America,saphon,18
+2298,puxi1242,Puxi,Eurasia,ea,66
+1224,pwon1235,Pwo Karen,Eurasia,ph,52
+523,pwon1235,PHLONG,Eurasia,upsid,37
+267,qaqe1238,BAINING,Papunesia,upsid,22
+340,qaua1234,GELAO,Eurasia,upsid,43
+1801,qawa1238,Kawesqar,South America,saphon,24
+2144,qawa1238,Alacalufe,South America,saphon,24
+211,qawa1238,QAWASQAR,South America,upsid,19
+1161,qima1242,Agaw,Africa,ph,39
+952,quec1382,Yuma,North America,ph,38
+525,quil1240,QUILEUTE,North America,upsid,37
+279,quio1240,HIGHLAND CHINANTEC,North America,upsid,41
+2247,rajb1243,Rājbanshi,Eurasia,ea,43
+987,rama1270,Rama,North America,ph,28
+1799,ravu1237,Yerava,Eurasia,ra,39
+2360,rawa1265,Rawang,Eurasia,ea,34
+1634,reel1238,Thok Reel,Africa,ph,63
+2663,remb1249,Rembarrnga,Australia,er,28
+811,rend1243,Rendille,Africa,aa,33
+1830,resi1247,Resígaro,South America,saphon,37
+526,resi1247,RESIGARO,South America,upsid,35
+1564,reun1238,Reunionnais,Africa,ph,42
+2048,reye1240,Reyesano,South America,saphon,22
+1972,rikb1245,Rikbaktsa,South America,saphon,28
+2979,rita1239,Ritharrngu,Australia,er,31
+2304,roma1326,Vallader Romansh,Eurasia,ea,46
+2443,roma1327,Romanian,Eurasia,ea,51
+165,roma1327,Rumanian,Eurasia,spa,31
+527,roma1327,ROMANIAN,Eurasia,upsid,32
+1546,rong1268,Ronga,Africa,ph,69
+528,roto1249,ROTOKAS,Papunesia,upsid,11
+311,ruka1240,RUKAI,Papunesia,upsid,27
+989,rund1242,Rundi,Africa,ph,29
+2261,russ1263,Russian,Eurasia,ea,42
+166,russ1263,Russian,Eurasia,spa,38
+530,russ1263,RUSSIAN,Eurasia,upsid,38
+2317,russ1264,Buriat,Eurasia,ea,45
+2343,rusy1239,Rusyn,Eurasia,ea,44
+531,rutu1240,RUTUL,Eurasia,upsid,64
+1489,saam1283,Lusaamia,Africa,ph,34
+996,saan1246,Saanich,North America,ph,40
+812,saba1262,Sabaot,Africa,aa,31
+34,saba1265,Sa'ban,Papunesia,spa,46
+551,saba1265,SA'BAN,Papunesia,upsid,26
+995,saba1268,Sabane,South America,ph,18
+1997,saba1268,Sabanê,South America,saphon,16
+2361,saek1240,Saek,Eurasia,ea,44
+1217,saki1248,Sakirabiá; Mekens,South America,ph,35
+2101,saki1248,Sakirabiá,South America,saphon,26
+2523,sala1264,Salar,Eurasia,ea,43
+1146,sala1272,Salasaca Quichua,South America,ph,29
+2040,sala1272,Salasca Quechua,South America,saphon,26
+2043,sali1298,Sáliba,South America,saphon,30
+548,sali1298,SALIBA,South America,upsid,32
+992,samb1305,Samba Leko,Africa,ph,34
+982,samo1303,Samo,Papunesia,ph,18
+994,samr1245,Samre,Eurasia,ph,41
+1652,sand1273,Sandawe,Africa,ph,64
+532,sand1273,SANDAWE,Africa,upsid,54
+813,sang1328,Sango,Africa,aa,44
+814,sang1328,Sango,Africa,aa,42
+533,sang1328,SANGO,Africa,upsid,37
+1078,sanj1284,"Tlacolula Valley Zapotec; Western Tlacolula Zapotec; Zapotec, San Juan Guelavía",North America,ph,47
+888,sanm1287,"Huave, San Mateo del Mar",North America,ph,24
+361,sanm1287,HUAVE,North America,upsid,29
+2036,sanm1289,San Martin Quechua,South America,saphon,18
+100,sanm1295,Mixtec,North America,spa,32
+461,sanm1295,MIXTEC,North America,upsid,25
+2216,sanm1298,Itunyoso Trique,North America,ph,48
+1782,sans1269,Sanskrit,Eurasia,ra,45
+2550,sant1410,Santali,Eurasia,ea,57
+1783,sant1410,Santali,Eurasia,ra,46
+2038,sant1432,Santiago del Estero Quechua,South America,saphon,25
+1236,sanu1240,Sanuma; Sanumá,South America,ph,24
+2133,sanu1240,Sanumá,South America,saphon,24
+2148,sanu1240,Sanömá of Kolulu,South America,saphon,31
+1980,saop1235,"Kaingáng, São Paulo",South America,saphon,27
+1566,saot1239,Saotomense,Africa,ph,32
+997,sasa1249,Sasak,Papunesia,ph,30
+1018,sata1237,Satawalese,Papunesia,ph,42
+2102,sate1243,Sateré-Mawé,South America,saphon,27
+1735,saur1248,Kanigke:rgotti,Eurasia,ra,42
+2339,saur1249,Malto,Eurasia,ea,34
+1763,saur1249,Malto,Eurasia,ra,34
+559,savo1255,SAVOSAVO,Papunesia,upsid,22
+1492,saxw1241,"Saxwe, Gbe",Africa,ph,38
+1370,saya1246,Syan,Africa,ph,54
+999,sayu1241,Popoluca de Sayula,North America,ph,25
+2505,scot1243,Scots,Eurasia,ea,37
+2601,scot1245,Scottish Gaelic,Eurasia,ea,82
+1459,seba1251,Muher,Africa,ph,42
+1463,seba1251,Gura,Africa,ph,42
+1464,seba1251,Gyeto,Africa,ph,45
+1000,seco1241,Secoya,South America,ph,18
+2059,seco1241,Secoya,South America,saphon,26
+13,seda1262,Sedang,Eurasia,spa,53
+535,seda1262,SEDANG,Eurasia,upsid,55
+1002,seim1238,Seimat,Papunesia,ph,28
+1326,sekp1241,Likpe,Africa,ph,33
+1062,sela1259,Selaru,Papunesia,ph,19
+1330,sele1249,Sele,Africa,ph,33
+59,sele1250,Selepet,Papunesia,spa,21
+554,sele1250,SELEPET,Papunesia,upsid,21
+2485,selk1253,Taz Selkup,Eurasia,ea,41
+538,selk1253,SELKUP,Eurasia,upsid,34
+1003,seme1247,Semelai,Eurasia,ph,51
+815,sena1262,Senoufo,Africa,aa,51
+76,sene1264,Seneca,North America,spa,27
+536,sene1264,SENECA,North America,upsid,19
+1011,sera1259,Siraiki,Eurasia,ph,83
+2499,serb1264,Serbian,Eurasia,ea,34
+816,sere1260,Sereer,Africa,aa,43
+1147,seri1257,Seri,North America,ph,25
+1004,serr1255,Serrano,North America,ph,42
+25,sgaw1245,Karen,Eurasia,spa,39
+430,sgaw1245,KAREN,Eurasia,upsid,36
+1005,shab1252,Shabo,Africa,ph,43
+2367,shan1277,Shan,Eurasia,ea,34
+2423,shan1277,Shan,Eurasia,ea,32
+2507,shan1277,Shan,Eurasia,ea,33
+2551,shan1277,Shan,Eurasia,ea,31
+1520,shan1282,Shanga,Africa,ph,37
+2013,shan1283,Shanenawa,South America,saphon,18
+1999,shar1245,Arara do Acre,South America,saphon,22
+2014,shar1245,Sharanawa,South America,saphon,23
+544,shas1239,SHASTA,North America,upsid,21
+1012,shaw1249,Shawnee,North America,ph,19
+2621,sheh1240,Jibbali,Eurasia,ea,38
+2307,sher1255,Solu Sherpa,Eurasia,ea,50
+2522,sher1255,Solu Sherpa,Eurasia,ea,47
+1321,sher1258,Sherbro,Africa,ph,31
+1359,shil1265,Shilluk,Africa,ph,54
+1785,shin1264,Shina,Eurasia,ra,48
+2015,ship1255,Shipibo,South America,saphon,24
+2539,shix1238,Shixing,Eurasia,ea,88
+2230,shix1238,Xumi,Eurasia,ph,66
+2231,shix1238,Xumi,Eurasia,ph,67
+1008,shon1251,Shona,Africa,ph,42
+1949,shua1257,Shuar,South America,saphon,21
+113,shua1257,Jivaro,South America,spa,24
+383,shua1257,JIVARO,South America,upsid,23
+2502,shum1243,Labrang Tibetan,Eurasia,ea,50
+543,shus1248,SHUSWAP,North America,upsid,44
+1499,shwa1239,Cwaya,Africa,ph,38
+1627,siam1242,Siamou,Africa,ph,41
+1010,siar1238,Siar-Lak,Papunesia,ph,22
+2483,sich1238,Nuosu,Eurasia,ea,74
+1080,sida1246,Sidaama; Sidamo; Sidamic,Africa,ph,35
+2415,sikk1242,Denjongka,Eurasia,ea,65
+1103,siks1238,Blackfoot,North America,ph,25
+1414,silt1240,Silt'i,Africa,ph,56
+2437,sind1272,Sindhi,Eurasia,ea,56
+2508,sind1272,Sindhi,Eurasia,ea,64
+1148,sind1272,Sindhi,Eurasia,ph,54
+1786,sind1272,Sindhi,Eurasia,ra,61
+178,sinh1246,Sinhalese,Eurasia,spa,53
+545,sinh1246,SINHALESE,Eurasia,upsid,36
+2060,sion1247,Siona,South America,saphon,30
+550,sion1247,SIONA,South America,upsid,30
+1156,sipa1247,Sipakapense Maya,North America,ph,32
+2116,siri1273,Sirionó,South America,saphon,30
+118,siri1273,Siriono,South America,spa,28
+556,siri1273,SIRIONO,South America,upsid,28
+2061,siri1274,Siriano,South America,saphon,23
+817,siss1242,Sissala,Africa,aa,51
+818,siss1242,Sissala,Africa,aa,42
+1610,siwi1239,Siwi,Africa,ph,38
+1320,siwu1238,Siwu,Africa,ph,37
+2566,skol1241,Skolt Saami,Eurasia,ea,75
+2455,slov1268,Slovene,Eurasia,ea,35
+1149,slov1268,Slovene,Eurasia,ph,37
+2447,slov1269,Slovak,Eurasia,ea,45
+2209,slov1269,Slovak,Eurasia,ph,44
+1108,soch1239,Sochiapan Chinantec,North America,ph,39
+1456,sodd1242,Soddo,Africa,ph,41
+127,soma1255,Somali,Africa,spa,52
+552,soma1255,SOMALI,Africa,upsid,32
+820,soni1259,Soninke,Africa,aa,39
+821,soni1259,Sooninke,Africa,aa,52
+1273,soni1259,soninke (kaedi (MRT)),Africa,ph,50
+1476,sooo1256,Soo,Africa,ph,28
+555,soqo1240,SOCOTRI,Africa,upsid,34
+2526,sora1254,Sora,Eurasia,ea,26
+998,sora1254,Savara,Eurasia,ph,30
+1787,sora1254,Soːra,Eurasia,ra,31
+2586,sout2436,Southwestern Pashto,Eurasia,ea,33
+2545,sout2642,Southern Balochi,Eurasia,ea,32
+2227,sout2672,Southeastern Pashayi,Eurasia,ph,40
+549,sout2674,SAAMI,Eurasia,upsid,45
+2442,sout2679,Võro,Eurasia,ea,44
+2259,sout2697,South Azerbaijani,Eurasia,ea,33
+2585,sout2729,Southern Pumi,Eurasia,ea,60
+2333,sout2746,Southern Tai,Eurasia,ea,35
+2472,sout2746,Southern Tai,Eurasia,ea,35
+2573,sout2746,Southern Tai,Eurasia,ea,32
+2625,sout2750,Kolyma Yukaghir,Eurasia,ea,36
+1027,sout2750,Yukaghir (Kolyma),Eurasia,ph,33
+2999,sout2770,Ngunawal,Australia,er,25
+2996,sout2771,Djirringany,Australia,er,25
+3000,sout2771,Thawa,Australia,er,25
+734,sout2774,Ijo de l'est; Eastern Ijo,Africa,aa,44
+688,sout2789,Dagaare,Africa,aa,54
+1548,sout2790,Birifor,Africa,ph,52
+1490,sout2795,Nouni,Africa,ph,60
+1017,sout2807,Sesotho,Africa,ph,46
+1292,sout2828,Madi,Africa,ph,59
+2168,sout2832,Luanyjang Dinka,Africa,ph,63
+1309,sout2833,"Dinka, South Central",Africa,ph,60
+1194,sout2840,Bobo,Africa,ph,38
+993,sout2844,Samo de Toma,Africa,ph,26
+1015,sout2856,South Efate,Papunesia,ph,20
+1061,sout2895,Southern Nuautl,Papunesia,ph,17
+1667,sout2918,Southern Sama,Papunesia,ph,23
+411,sout2949,SOUTHERN KIWAI,Papunesia,upsid,19
+67,sout2956,Haida,North America,spa,50
+353,sout2956,HAIDA,North America,upsid,49
+69,sout2965,Salish,North America,spa,43
+449,sout2965,LUSHOOTSEED,North America,upsid,37
+89,sout2982,Pomo,North America,spa,38
+518,sout2982,POMO,North America,upsid,32
+547,sout2985,SIERRA MIWOK,North America,upsid,21
+104,sout2991,Quechua,South America,spa,37
+524,sout2991,QUECHUA,South America,upsid,36
+480,sout2994,SOUTHERN NAMBIQUARA,South America,upsid,43
+2369,spit1240,Spiti Tibetan,Eurasia,ea,40
+1016,spok1245,Spokan,North America,ph,43
+68,squa1248,Squamish,North America,spa,37
+2303,stan1288,Spanish,Eurasia,ea,45
+2308,stan1288,Spanish,Eurasia,ea,25
+2210,stan1288,Spanish,Eurasia,ph,38
+164,stan1288,Spanish,Eurasia,spa,25
+553,stan1288,SPANISH,Eurasia,upsid,25
+2425,stan1289,Catalan,Eurasia,ea,34
+2555,stan1289,Catalan,Eurasia,ea,35
+2594,stan1289,Catalan,Eurasia,ea,35
+1138,stan1289,Catalan,Eurasia,ph,39
+2269,stan1290,French,Eurasia,ea,34
+2182,stan1290,French,Eurasia,ph,36
+162,stan1290,French,Eurasia,spa,40
+331,stan1290,FRENCH,Eurasia,upsid,37
+2252,stan1293,English,Africa,ea,44
+2515,stan1293,English,Africa,ea,40
+2175,stan1293,English (American),Africa,ph,39
+2176,stan1293,American English,Africa,ph,39
+2177,stan1293,English (Australian),Africa,ph,44
+2178,stan1293,English (British),Africa,ph,40
+2179,stan1293,English (New Zealand),Africa,ph,45
+2180,stan1293,English (British),Africa,ph,39
+160,stan1293,English,Africa,spa,40
+2398,stan1295,German,Eurasia,ea,40
+2184,stan1295,German,Eurasia,ph,40
+161,stan1295,German,Eurasia,spa,39
+304,stan1295,GERMAN,Eurasia,upsid,41
+2223,stan1306,Standard Malay,Eurasia,ph,30
+32,stan1306,Malay,Eurasia,spa,27
+2157,stan1318,Arabic,Eurasia,ph,37
+2493,stan1325,Latvian,Eurasia,ea,42
+2264,stod1241,Tod Tibetan,Eurasia,ea,41
+1645,suba1252,Kisimbiti,Africa,ph,39
+1202,subi1246,Subiya,Africa,ph,51
+659,suda1236,Arabe,Africa,aa,62
+558,suen1241,SUENA,Papunesia,upsid,18
+1317,suga1248,Nizaa,Africa,ph,90
+2605,suii1243,Sui,Eurasia,ea,61
+560,suii1243,SUI,Eurasia,upsid,54
+1568,suku1261,Sukuma,Africa,ph,57
+1639,sumb1240,Sisumbwa,Africa,ph,32
+2211,sumi1235,Sumi,Eurasia,ph,41
+1784,sumi1235,Sema,Eurasia,ra,49
+35,sund1252,Sundanese,Papunesia,spa,26
+1209,suri1267,Suri,Africa,ph,31
+1174,surs1246,Sursurunga,Papunesia,ph,21
+2103,suru1262,Suruí,South America,saphon,29
+1850,suru1263,Suruahá,South America,saphon,23
+822,susu1250,Soso,Africa,aa,35
+1973,suya1243,Suyá,South America,saphon,28
+1974,suya1243,Tapayuna,South America,saphon,31
+2392,svan1243,Svan,Eurasia,ea,47
+823,swah1253,Swahili,Africa,aa,37
+145,swah1253,Swahili,Africa,spa,36
+2554,swed1254,Swedish,Eurasia,ea,35
+1150,swed1254,Swedish,Eurasia,ph,35
+2272,swis1247,Zurich German,Eurasia,ea,55
+2185,swis1247,Swiss German,Eurasia,ph,56
+2985,sydn1236,Dharuk,Australia,er,19
+2986,sydn1236,Eora,Australia,er,19
+85,taba1266,Chontal,North America,spa,37
+2049,taca1256,Tacana,South America,saphon,22
+583,taca1256,TACANA,South America,upsid,22
+1648,tach1250,Tachelhit,Africa,ph,37
+2229,tach1250,Tashlhiyt Berber,Africa,ph,74
+123,tach1250,Shilha,Africa,spa,49
+542,tach1250,SHILHA,Africa,upsid,31
+1372,tada1238,Tadaksahak,Africa,ph,70
+2513,taga1270,Tagalog,Papunesia,ea,26
+1666,taga1270,Tagalog,Papunesia,ph,24
+37,taga1270,Tagalog,Papunesia,spa,28
+573,taga1270,TAGALOG,Papunesia,upsid,23
+1041,tagw1240,Tagwana,Africa,ph,45
+575,taha1241,TAMASHEQ,Africa,upsid,37
+2582,taid1248,Tay Yo,Eurasia,ea,34
+2471,taid1249,Tay Daeng,Eurasia,ea,35
+2572,tain1252,Tai Nuea,Eurasia,ea,29
+2266,taji1245,Tajik,Eurasia,ea,29
+2219,taji1245,Bukharan Tajik,Eurasia,ph,29
+580,talo1250,JOMANG,Africa,upsid,21
+581,tama1331,TAMA,Africa,upsid,30
+825,tama1365,Tamasheq,Africa,aa,43
+2611,tami1289,Tamil,Eurasia,ea,36
+1058,tami1289,Tamil,Eurasia,ph,33
+1788,tami1289,Tamil,Eurasia,ra,43
+54,tamn1235,Asmat,Papunesia,spa,19
+582,tamn1235,ASMAT,Papunesia,upsid,17
+586,tamp1252,TAMPULMA,Africa,upsid,33
+1168,tana1290,Tanacross,North America,ph,54
+1789,tang1336,Tangkul Naga,Eurasia,ra,40
+2062,tani1257,Tanimuca-Retuarã,South America,saphon,21
+1038,tapi1253,Tapiete,South America,ph,27
+2104,tapi1253,Tapieté,South America,saphon,27
+2105,tapi1254,Tapirapé,South America,saphon,23
+1831,tari1256,Tariana,South America,saphon,38
+826,taro1263,Tarok,Africa,aa,37
+631,taro1263,TAROK,Africa,upsid,32
+1001,taro1264,Sedik,Papunesia,ph,43
+1790,tase1235,Tangsa,Eurasia,ra,29
+2609,tata1255,Tatar,Eurasia,ea,43
+1066,tata1257,Tatana''; Tatanaq; Tatana',Papunesia,ph,21
+1040,tatu1247,Tatuyo,South America,ph,17
+2063,tatu1247,Tatuyo,South America,saphon,17
+2365,taus1251,Tausug,Papunesia,ea,23
+2212,taus1251,Tausug (Suluk),Papunesia,ph,23
+1936,taus1253,Taushiro,South America,saphon,17
+824,tawa1286,Tamajaq,Africa,aa,37
+828,teda1241,Teda,Africa,aa,35
+293,tedi1235,TIDDIM CHIN,Eurasia,upsid,26
+1386,teee1242,Tee,Africa,ph,38
+827,teen1242,Téén,Africa,aa,38
+1908,tehu1242,Tehuelche,South America,saphon,31
+567,tehu1242,TEHUELCHE,South America,upsid,35
+415,teke1280,TEKE,Africa,upsid,28
+55,tele1256,Telefol,Papunesia,spa,27
+2387,telu1262,Telugu,Eurasia,ea,44
+1791,telu1262,Telugu,Eurasia,ra,51
+8,telu1262,Telugu,Eurasia,spa,68
+568,telu1262,TELUGU,Eurasia,upsid,43
+2106,temb1276,Tembé,South America,saphon,21
+2563,temi1246,Temiar,Eurasia,ea,49
+829,temm1241,Tem,Africa,aa,36
+2041,tena1240,Tena Quechua,South America,saphon,24
+1700,teng1272,Tengger,Papunesia,ph,42
+2107,tenh1241,Tenharim,South America,saphon,26
+757,tepo1239,Kroumen Tépo,Africa,aa,39
+2214,tera1251,Tera,Africa,ph,53
+595,tera1251,TERA,Africa,upsid,48
+1832,tere1279,Terêna,South America,saphon,23
+1044,tern1247,Ternate,Papunesia,ph,25
+2494,ters1235,Ter Saami,Eurasia,ea,69
+1426,tese1238,These,Africa,ph,47
+1680,tetu1245,Tetun,Papunesia,ph,18
+571,tetu1245,TETUN,Papunesia,upsid,19
+93,tewa1260,Tewa,North America,spa,57
+1136,texi1237,Texistepec Popoluca,North America,ph,29
+1792,thad1238,Thaadou,Eurasia,ra,34
+2215,thai1261,Thai,Eurasia,ph,47
+27,thai1261,Thai,Eurasia,spa,45
+574,thai1261,THAI,Eurasia,upsid,30
+2294,thak1245,Thakali,Eurasia,ea,29
+2881,thay1248,Awu Alaya,Australia,er,31
+2923,thay1249,Thaayorre,Australia,er,26
+2746,thii1234,Thiin,Australia,er,26
+1220,thul1246,Thulung; Thulung Rai,Eurasia,ph,38
+2993,thur1254,Dharawal,Australia,er,25
+2994,thur1254,Dharumba,Australia,er,25
+1528,tiag1235,"Aizi, Tiagba",Africa,ph,32
+2380,tibe1272,Lhasa Tibetan,Eurasia,ea,50
+2411,tibe1272,Drokpa Tibetan,Eurasia,ea,42
+2421,tibe1272,Dingri Tibetan,Eurasia,ea,41
+2558,tibe1272,Shigatse Tibetan,Eurasia,ea,56
+1067,tibe1272,Tibetan,Eurasia,ph,34
+1937,ticu1245,Ticuna,South America,saphon,33
+115,ticu1245,Ticuna,South America,spa,38
+565,ticu1245,TICUNA,South America,upsid,29
+1450,tiey1235,Tigemaxo Bozo,Africa,ph,36
+572,tiga1245,TIGAK,Papunesia,upsid,17
+1630,tigo1236,Mbembe,Africa,ph,116
+130,tigr1270,Tigre,Africa,spa,54
+576,tigr1270,TIGRE,Africa,upsid,33
+1350,tigr1271,Tigrinya,Africa,ph,66
+832,tika1246,Tikar,Africa,aa,46
+1056,tilq1235,Tilquiapan Zapotec,North America,ph,30
+831,timn1235,Themne,Africa,aa,30
+2213,timn1235,Temne,Africa,ph,36
+569,timn1235,TEMNE,Africa,upsid,25
+1938,tini1245,Tinigua,South America,saphon,40
+1170,tinp1237,Tinputz,Papunesia,ph,26
+1375,tira1254,Tira,Africa,ph,42
+578,tiru1241,TIRURAY,Papunesia,upsid,22
+1331,tivv1240,Tiv,Africa,ph,40
+3005,tiwi1244,Tiwi,Australia,er,22
+1218,tiwi1244,Tiwi,Australia,ph,18
+577,tiwi1244,TIWI,Australia,upsid,26
+1158,tlac1235,Tepehua,North America,ph,34
+579,tlin1245,TLINGIT,North America,upsid,48
+589,toar1246,TAORIPI,Papunesia,upsid,14
+1045,toba1269,Toba (Argentina),South America,ph,28
+1918,toba1269,Toba,South America,saphon,26
+1919,toba1269,Toba,South America,saphon,28
+2074,toca1235,Asuriní do Tocantins,South America,saphon,16
+1429,toch1257,Tocco,Africa,ph,27
+1793,toda1252,Toda,Eurasia,ra,53
+830,tofi1235,Tɔfin,Africa,aa,41
+96,toho1245,Pima,North America,spa,29
+509,toho1245,PAPAGO,North America,upsid,24
+382,toll1241,TOL,North America,upsid,28
+1069,tolo1259,Tolowa; Tolowa-Chetco,North America,ph,31
+64,tolo1259,Chasta Costa,North America,spa,44
+1328,tong1318,Shanjo,Africa,ph,41
+1086,tong1325,Tongan; Tonga,Papunesia,ph,17
+590,tonk1249,TONKAWA,North America,upsid,25
+833,topo1242,Toposa,Africa,aa,27
+699,toro1252,Dogon,Africa,aa,42
+313,toro1252,DOGON,Africa,upsid,28
+1219,torw1241,Torwali,Eurasia,ph,51
+2592,tosk1239,Tosk Albanian,Eurasia,ea,38
+169,tosk1239,Albanian,Eurasia,spa,35
+215,tosk1239,ALBANIAN,Eurasia,upsid,35
+1203,tote1238,Totela,Africa,ph,54
+472,toto1305,MIXE,North America,upsid,23
+834,tour1242,Toura,Africa,aa,50
+1637,tour1242,Toura,Africa,ph,39
+2155,trin1274,Trinitario,South America,saphon,30
+1884,trio1238,Trió,South America,saphon,24
+1939,trum1247,Trumai,South America,saphon,29
+588,trum1247,TRUMAI,South America,upsid,24
+1608,tsam1247,Ts'amakko,Africa,ph,68
+2280,tsha1245,Tshangla,Eurasia,ea,39
+1221,tsha1245,Tshangla,Eurasia,ph,37
+1441,tsot1241,Lutsootso,Africa,ph,31
+593,tsou1248,TSOU,Papunesia,upsid,21
+1063,tsuv1239,Tsuvadi; Avadi; Abadi; Evadi; Kamberi; Ibeto,Africa,ph,52
+1653,tsuv1239,Tsuvaɗi,Africa,ph,55
+2064,tuca1252,Tucano,South America,saphon,27
+1152,tuka1248,Tukang Besi,Papunesia,ph,29
+1573,tuki1240,Tuki,Africa,ph,39
+1416,tuli1249,Tulishi,Africa,ph,59
+2547,tulu1258,Tulu,Eurasia,ea,35
+1795,tulu1258,Tulu,Eurasia,ra,35
+566,tulu1258,TULU,Eurasia,upsid,37
+1663,tumt1243,Talasa,Africa,ph,55
+1265,tune1261,Nen,Africa,ph,26
+1649,tuni1251,Tounia,Africa,ph,40
+80,tuni1252,Tunica,North America,spa,25
+596,tuni1252,TUNICA,North America,upsid,24
+2108,tupa1250,Tuparí,South America,saphon,29
+2109,tupi1273,Tupinambá,South America,saphon,25
+1345,tupu1244,Tupuri,Africa,ph,56
+2595,turk1304,Turkmen,Eurasia,ea,37
+2501,tuuu1240,Mongghul,Eurasia,ea,35
+2556,tuuu1240,Mangghuer,Eurasia,ea,31
+462,tuuu1240,MONGUOR,Eurasia,upsid,28
+2579,tuvi1240,Tuvan,Eurasia,ea,52
+1225,tuvi1240,Tuva; Tuvan,Eurasia,ph,37
+599,tuvi1240,TUVA,Eurasia,upsid,29
+2065,tuyu1244,Tuyuca,South America,saphon,23
+248,twee1234,BANDJALANG,Australia,upsid,16
+2911,tyan1235,Thaynakwithi,Australia,er,29
+86,tzel1254,Tzeltal,North America,spa,30
+600,tzel1254,TZELTAL,North America,upsid,28
+1079,tzot1259,"Tzotzil, Chamula",North America,ph,26
+1223,tzut1248,Tzutujil,North America,ph,35
+1810,ucay1237,Ashéninka,South America,saphon,32
+2570,udih1248,Udihe,Eurasia,ea,40
+2240,udmu1245,Udmurt,Eurasia,ea,36
+2353,udmu1245,Udmurt,Eurasia,ea,36
+2400,udmu1245,Udmurt,Eurasia,ea,37
+2536,udmu1245,Udmurt,Eurasia,ea,33
+1485,uduk1239,Twampa,Africa,ph,28
+2612,uigh1240,Uyghur,Eurasia,ea,43
+2503,ukra1253,Ukrainian,Eurasia,ea,41
+1035,ukra1253,Ukrainian,Eurasia,ph,30
+2924,ulku1238,Olkol,Australia,er,28
+1019,ulwa1239,Sumo,North America,ph,28
+2644,umbu1235,Umbugarla,Australia,er,25
+2929,umbu1256,Umbuygamu,Australia,er,32
+1268,umbu1257,umbundu,Africa,ph,30
+3011,umii1236,Umiida,Australia,er,25
+1975,umot1240,Umotína,South America,saphon,20
+2902,umpi1239,Umpila,Australia,er,22
+73,unam1242,Delaware,North America,spa,39
+3012,ungg1243,Unggumi,Australia,er,24
+2541,uppe1395,Upper Sorbian,Eurasia,ea,42
+2564,uppe1400,Upper Saxon,Eurasia,ea,35
+2232,uppe1400,Upper Saxon,Eurasia,ph,35
+283,uppe1439,UPPER CHEHALIS,North America,upsid,34
+1553,uppe1455,Kriyol,Africa,ph,28
+1796,ural1274,Urali,Eurasia,ra,46
+1940,urar1246,Urarina,South America,saphon,21
+2466,urdu1245,Urdu,Eurasia,ea,58
+1797,urdu1245,Urdu,Eurasia,ra,54
+983,urii1240,Urii,Papunesia,ph,24
+2650,urni1239,Urningangg,Australia,er,23
+2088,urub1250,Kaapor,South America,saphon,26
+2110,urue1240,Uru-Eu-Wau-Wau,South America,saphon,26
+2127,uruu1244,Uru,South America,saphon,33
+616,usan1239,USAN,Papunesia,upsid,20
+870,usar1243,Usarufa,Papunesia,ph,22
+1084,utes1238,Southern Ute; Ute; Ute-Southern Paiute,North America,ph,37
+1798,vaag1238,Vaagri Boli,Eurasia,ra,37
+2434,vach1239,Eastern Khanty,Eurasia,ea,30
+836,vagl1239,Vagala,Africa,aa,54
+1034,vaii1241,Vai,Africa,ph,43
+1595,vame1236,Vame,Africa,ph,46
+604,vani1248,VANIMO,Papunesia,upsid,28
+2404,varl1238,Varli,Eurasia,ea,46
+661,veng1238,Babungo,Africa,aa,82
+2490,veps1250,Veps,Eurasia,ea,44
+2462,viet1252,Vietnamese,Eurasia,ea,37
+2233,viet1252,Vietnamese,Eurasia,ph,45
+15,viet1252,Vietnamese,Eurasia,spa,39
+605,viet1252,VIETNAMESE,Eurasia,upsid,36
+1941,vile1241,Vilela,South America,saphon,29
+2569,vlax1238,Vlax Romani,Eurasia,ea,34
+2228,vlax1238,greek Thrace Xoraxane Romane,Eurasia,ph,39
+2326,voti1245,Votic,Eurasia,ea,55
+837,vute1244,Vute,Africa,aa,59
+2716,waal1238,Waalubal,Australia,er,20
+838,waam1244,Waama,Africa,aa,41
+2781,wadi1260,Wathi Wathi,Australia,er,21
+2969,wadi1261,Wadikali,Australia,er,27
+2636,wadj1254,Patjtjamalh,Australia,er,22
+2947,waga1260,Eastern Wakaya,Australia,er,25
+2949,waga1260,Western Wakaya,Australia,er,26
+3006,wage1238,Wagiman,Australia,er,27
+529,waim1251,RORO,Papunesia,upsid,14
+1885,waim1253,Waimiri-Atroarí,South America,saphon,27
+2066,waim1255,Waimaha,South America,saphon,22
+114,waim1255,Barasano,South America,spa,25
+239,waim1255,BARASANO,South America,upsid,23
+1886,waiw1244,Waiwai,South America,saphon,20
+2771,waja1257,Watjarri,Australia,er,26
+2871,waju1234,Wajuk,Australia,er,22
+2944,waka1274,Waka Waka,Australia,er,23
+2514,wakh1245,Wakhi,Eurasia,ea,50
+2907,wala1263,Walangama,Australia,er,28
+2859,walm1241,Walmajarri,Australia,er,23
+2527,walu1241,Walungge,Eurasia,ea,46
+2690,wamb1258,Wambaya,Australia,er,23
+1029,wamb1259,Wambon,Papunesia,ph,26
+290,wame1240,KONYAGI,Africa,upsid,46
+2926,wami1239,Agwamin,Australia,er,21
+2680,wand1263,Warndarrang,Australia,er,20
+1585,wand1278,Mandara,Africa,ph,52
+2589,wane1241,Waneci,Eurasia,ea,30
+2955,wang1288,Wangkajunga,Australia,er,23
+2764,wang1289,Wangkayutyuru,Australia,er,26
+2762,wang1290,Wangkangurru,Australia,er,24
+2721,wang1291,Ngiyambaa,Australia,er,21
+623,wang1291,NGIYAMBAA,Australia,upsid,18
+2957,wanm1242,Warnman,Australia,er,23
+839,wann1242,Wan,Africa,aa,36
+615,want1252,WANTOAT,Papunesia,upsid,21
+2852,wany1244,Wanyjirra,Australia,er,21
+2646,wany1247,Waanyi,Australia,er,20
+1942,waor1240,Waorani,South America,saphon,32
+232,waor1240,AUCA,South America,upsid,21
+1833,wapi1253,Wapichana,South America,saphon,22
+108,wapi1253,Wapishana,South America,spa,29
+608,wapi1253,WAPISHANA,South America,upsid,25
+607,wapp1239,WAPPO,North America,upsid,35
+2664,wara1290,Warray,Australia,er,21
+620,wara1290,WARAY,Australia,upsid,21
+1943,wara1303,Warao,South America,saphon,16
+609,wara1303,WARAO,South America,upsid,21
+3015,ward1246,Wardaman,Australia,er,22
+2870,ward1248,Wardandi,Australia,er,22
+2747,wari1262,Warriyangga,Australia,er,26
+619,wari1266,WARIS,Papunesia,upsid,22
+1237,wari1268,Wari; Wari''; Wariʔ; Oro Nao',South America,ph,20
+1890,wari1268,Wari',South America,saphon,21
+2861,warl1254,Warlpiri,Australia,er,24
+2860,warl1255,Warlmanpa,Australia,er,28
+2948,warl1256,Warluwarra,Australia,er,33
+2733,warr1255,Warrgamay,Australia,er,19
+2718,warr1257,Warrnambool,Australia,er,26
+2694,warr1258,Warrwa,Australia,er,20
+2820,waru1264,Warungu,Australia,er,17
+2951,waru1265,Warumungu,Australia,er,28
+1030,wash1253,Washo,North America,ph,32
+2776,wath1238,Wathawurrung,Australia,er,23
+1835,waur1244,Waurá,South America,saphon,26
+1647,wawa1246,Wawa,Africa,ph,49
+1031,waya1269,Wayana,South America,ph,16
+1887,waya1269,Wayana,South America,saphon,16
+2111,waya1270,Wayampi,South America,saphon,25
+2112,waya1270,Wayampi,South America,saphon,26
+2722,wayi1238,Wayilwan,Australia,er,21
+2396,wayu1241,Hayu,Eurasia,ea,54
+1836,wayu1243,Wayúu,South America,saphon,20
+109,wayu1243,Goajiro,South America,spa,46
+344,wayu1243,GUAJIRO,South America,upsid,26
+1415,wehh1238,Weh,Africa,ph,47
+2406,wels1247,Welsh,Eurasia,ea,48
+2786,wemb1241,Wemba Wemba,Australia,er,22
+840,weno1238,Wobé,Africa,aa,48
+3019,werg1234,Piangil,Australia,er,21
+2470,west2354,Frisian,Eurasia,ea,51
+2345,west2368,Western Balochi,Eurasia,ea,44
+2348,west2368,Western Balochi,Eurasia,ea,34
+2618,west2368,Western Balochi,Eurasia,ea,33
+2622,west2368,Western Balochi,Eurasia,ea,33
+2520,west2369,Farsi,Eurasia,ea,29
+2205,west2369,Persian,Eurasia,ph,29
+172,west2369,Persian,Eurasia,spa,30
+516,west2369,FARSI,Eurasia,upsid,30
+2273,west2392,Hill Mari,Eurasia,ea,34
+2581,west2392,Hill Mari,Eurasia,ea,33
+262,west2397,BRUU,Eurasia,upsid,42
+2538,west2408,Muria Gondi,Eurasia,ea,26
+3018,west2437,Ngardily,Australia,er,24
+2710,west2441,Western Arrernte,Australia,er,44
+1235,west2441,Arrarnte,Australia,ph,29
+2704,west2442,Western Anmatyerre,Australia,er,44
+2782,west2443,East Djadjawurung,Australia,er,21
+2988,west2443,West Djadjawurung,Australia,er,21
+766,west2450,Limba,Africa,aa,24
+715,west2454,Fulfulde,Africa,aa,32
+1280,west2456,western xwla,Africa,ph,45
+1308,west2458,"Banda, West Central",Africa,ph,46
+743,west2466,Karaboro,Africa,aa,45
+776,west2500,Mande,Africa,aa,27
+1081,west2560,"Bajau, West Coast; Land Bajaw; West Coast Bajao",Papunesia,ph,23
+469,west2600,WEST MAKIAN,Papunesia,upsid,23
+413,west2632,ACOMA,North America,upsid,51
+294,west2644,CHATINO,North America,upsid,25
+74,wich1260,Wichita,North America,spa,29
+611,wich1260,WICHITA,North America,upsid,29
+1984,wich1264,Wichí,South America,saphon,28
+2896,wikm1247,Wik Mungkan,Australia,er,26
+51,wikm1247,Wik-Munkan,Australia,spa,23
+612,wikm1247,WIK-MUNKAN,Australia,upsid,18
+2897,wikn1245,Wik-Ngathan,Australia,er,28
+2899,wikn1246,Kugu Nganhcara,Australia,er,30
+613,wint1259,WINTU,North America,upsid,35
+2723,wira1262,Wiradjuri,Australia,er,21
+2934,wira1265,Wirangu,Australia,er,23
+2724,wirr1237,Wiriyaraay,Australia,er,21
+614,wiyo1248,WIYOT,North America,upsid,29
+1032,woge1237,Wogeo,Papunesia,ph,20
+2775,woiw1237,Boonwurrung,Australia,er,23
+2777,woiw1237,Woiwurrung,Australia,er,23
+1364,wola1242,Welamo,Africa,ph,48
+2759,wong1246,Kungardutji,Australia,er,30
+2760,wong1246,Wangkumara,Australia,er,30
+1340,wong1247,Wongo,Africa,ph,24
+2989,wori1245,Katthang,Australia,er,19
+3013,worr1237,Worrorra,Australia,er,25
+2787,wotj1234,Wotjobaluk,Australia,er,19
+1900,woun1238,Woun Meu,South America,saphon,33
+17,wuch1236,Wu,Eurasia,spa,41
+622,wuch1236,CHANGZHOU,Eurasia,upsid,34
+2863,wulg1239,Wulguru,Australia,er,21
+2945,wuli1242,Wuli Wuli,Australia,er,23
+3010,wuna1249,Wunambal,Australia,er,28
+2668,wurr1238,Wurrugu,Australia,er,23
+1635,wuzl1236,Ouldeme,Africa,ph,42
+2330,wymy1235,Wymysorys,Eurasia,ea,35
+1333,xamt1239,Xamtanga,Africa,ph,31
+1976,xava1240,Xavánte,South America,saphon,24
+1977,xere1240,Xerénte,South America,saphon,27
+2113,xeta1241,Xetá,South America,saphon,24
+1319,xhos1239,Xhosa,Africa,ph,84
+2073,xing1248,Asurini do Xingú,South America,saphon,27
+2114,xipa1240,Xipaya,South America,saphon,23
+1837,xiri1243,Xiriâna,South America,saphon,24
+541,xiri1243,SHIRIANA,South America,upsid,25
+1978,xokl1240,Xokleng,South America,saphon,37
+1279,xwel1235,xwela,Africa,ph,45
+1888,yaba1248,Yabarana,South America,saphon,18
+2920,yadh1237,Yadhaykenu,Australia,er,26
+632,yaga1260,YAGARIA,Papunesia,upsid,23
+2730,yaga1262,Turubul,Australia,er,19
+2731,yaga1262,Yagara,Australia,er,19
+2418,yagn1238,Yaghnobi,Eurasia,ea,36
+2019,yagu1244,Yagua,South America,saphon,23
+628,yagu1244,YAGUA,South America,upsid,23
+2444,yaku1245,Sakha,Eurasia,ea,40
+190,yaku1245,Yakut,Eurasia,spa,49
+534,yaku1245,YAKUT,Eurasia,upsid,34
+2740,yala1262,Yalarnnga,Australia,er,24
+1288,yala1263,yala,Africa,ph,38
+895,yalu1240,Jalonke,Africa,ph,33
+1944,yama1264,Yahgan,South America,saphon,20
+842,yamb1251,Yamba,Africa,aa,38
+843,yamb1252,Yambɛta,Africa,aa,28
+2020,yame1242,Yameo,South America,saphon,18
+2012,yami1256,Saynawa,South America,saphon,17
+2016,yami1256,Yaminawa,South America,saphon,22
+635,yana1271,YANA,North America,upsid,30
+2738,yand1251,Yanda,Australia,er,24
+2754,yand1253,Yandruwandha,Australia,er,30
+1838,yane1238,Yánesha,South America,saphon,33
+112,yane1238,Amuesha,South America,spa,29
+217,yane1238,AMUESHA,South America,upsid,26
+3016,yang1288,Yangman,Australia,er,22
+2965,yank1247,Yankunytjatjara,Australia,er,23
+2978,yann1237,Nhangu,Australia,er,31
+2135,yano1261,Yanomamö,South America,saphon,19
+2149,yano1261,Yanomamɨ of Parawau,South America,saphon,32
+2151,yano1261,Yanomamɨ of Venezuela,South America,saphon,33
+2134,yano1262,Yanomámi,South America,saphon,20
+2146,yano1262,Yanomama of Papiu,South America,saphon,33
+2147,yano1262,Yanomae of Demini/Tototopi,South America,saphon,34
+1335,yans1239,Yanzi,Africa,ph,42
+2950,yany1243,Yanyuwa,Australia,er,24
+379,yany1243,YANYUWA,Australia,upsid,32
+1267,yaoo1241,yao,Africa,ph,29
+844,yaou1238,Yaouré,Africa,aa,45
+1024,yape1248,Yapese,Papunesia,ph,44
+629,yaqu1251,YAQUI,North America,upsid,22
+2970,yard1234,Yardliyawarra,Australia,er,27
+637,yare1248,YAREBA,Papunesia,upsid,18
+2778,yari1243,Yari-Yari,Australia,er,23
+2150,yaro1235,Yãroamë of Serra do Pacu/Ajarani,South America,saphon,29
+1839,yavi1244,Yavitero,South America,saphon,21
+2756,yawa1258,Yawarrawarrka,Australia,er,30
+1006,yawa1260,Shanenawa,South America,ph,18
+2017,yawa1260,Yawanawa,South America,saphon,19
+1840,yawa1261,Yawalapití,South America,saphon,21
+3014,yawi1239,Yawijibaya,Australia,er,25
+2696,yawu1244,Yawuru,Australia,er,28
+2736,yayg1236,Yaygir,Australia,er,20
+1110,yekh1238,Etsako,Africa,ph,36
+845,yemb1246,Yemba,Africa,aa,35
+1655,yemb1246,Yemba,Africa,ph,27
+1479,yems1235,Yemsa,Africa,ph,40
+1800,yeru1240,Yerukala,Eurasia,ra,38
+639,yess1239,YESSAN-MAYO,Papunesia,upsid,20
+853,yeyi1239,Yeyi,Africa,ph,90
+2891,yidi1250,Yidiny,Australia,er,19
+633,yidi1250,YIDINY,Australia,upsid,16
+979,yill1241,Yil,Papunesia,ph,23
+2849,yind1247,Yindjibarndi,Australia,er,25
+2850,yind1247,Yinhawangka,Australia,er,26
+1153,yine1238,Yine,South America,ph,26
+1841,yine1238,Yine,South America,saphon,26
+2772,ying1247,Yingkarta,Australia,er,26
+2842,yinh1234,Ngarla,Australia,er,23
+2921,yinw1236,Yinwum,Australia,er,27
+2925,yiry1245,Yir Yoront,Australia,er,26
+2796,yith1234,Yitha Yitha,Australia,er,23
+846,yomm1242,Yom,Africa,aa,38
+2267,yong1270,Yongning Na,Eurasia,ea,47
+2018,yora1241,Yora,South America,saphon,22
+2980,yort1237,Yabula-Yabula,Australia,er,20
+2981,yort1237,Yorta Yorta,Australia,er,19
+847,yoru1245,Yorouba,Africa,aa,31
+848,yoru1245,Yorouba,Africa,aa,32
+636,yoru1245,YORUBA,Africa,upsid,29
+640,yuca1254,YUCATEC,North America,upsid,30
+1074,yuch1247,Euchee; Yuchi,North America,ph,49
+78,yuch1247,Yuchi,North America,spa,64
+641,yuch1247,YUCHI,North America,upsid,46
+1842,yucu1253,Yucuna,South America,saphon,21
+630,yucu1253,YUCUNA,South America,upsid,21
+2309,yuec1235,Yue Chinese,Eurasia,ea,41
+2166,yuec1235,Chinese,Eurasia,ph,48
+19,yuec1235,Cantonese,Eurasia,spa,32
+642,yuec1235,TAISHAN,Eurasia,upsid,25
+2983,yuga1244,Yugambal,Australia,er,16
+2712,yugu1249,Bundjalung,Australia,er,20
+1993,yuhu1238,Yuhup,South America,saphon,35
+1023,yuki1243,Yuki,North America,ph,30
+2153,yukp1241,Yukpa,South America,saphon,21
+2154,yukp1241,Yukpa,South America,saphon,18
+2956,yulp1239,Yulparija,Australia,er,23
+643,yulu1243,YULU,Africa,upsid,42
+2117,yuqu1240,Yuqui,South America,saphon,40
+1026,yura1255,Yuracure,South America,ph,25
+1945,yura1255,Yurakaré,South America,saphon,25
+1025,yuro1248,Yurok,North America,ph,35
+2067,yuru1263,Yurutí,South America,saphon,17
+2725,yuwa1242,Yuwaalaraay,Australia,er,21
+2726,yuwa1243,Yuwaliyaay,Australia,er,21
+2120,yuwa1244,Hoti,South America,saphon,35
+1509,zagh1240,Beria,Africa,ph,33
+1229,zaiw1241,Zaiwa,Eurasia,ph,32
+849,zand1248,Zande,Africa,aa,32
+645,zand1248,AZANDE,Africa,upsid,35
+2141,zapa1253,Záparo,South America,saphon,22
+850,zarm1239,Zarma,Africa,aa,40
+1480,zays1236,Zayse,Africa,ph,32
+1510,zayy1238,Zway,Africa,ph,37
+2420,zhon1235,Zhongu Tibetan,Eurasia,ea,68
+1640,zinz1238,Luzinza,Africa,ph,30
+2115,zoee1240,Zo'é,South America,saphon,26
+1059,zoog1238,San Bartolomé Zoogocho Zapotec,North America,ph,65
+851,zulg1242,Zulgo,Africa,aa,34
+147,zulu1248,Zulu,Africa,spa,43
+647,zulu1248,ZULU,Africa,upsid,37
+91,zuni1245,Zuni,North America,spa,54
+648,zuni1245,ZUNI,North America,upsid,25

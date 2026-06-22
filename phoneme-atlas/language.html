@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language — Phoneme Atlas</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site"><div class="inner">
+  <span class="brand">🌍 Phoneme Atlas</span>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="segment.html">Segments</a>
+    <a href="about.html">About</a>
+  </nav>
+</div></header>
+
+<div class="container">
+  <p><a href="index.html">← Back to search</a></p>
+  <div id="header"></div>
+
+  <div id="single-note"></div>
+
+  <h2>Inventories, side by side</h2>
+  <div class="legend">
+    <span><span class="swatch common"></span>in <em>every</em> inventory of this language</span>
+    <span><span class="swatch unique"></span>only in <em>this</em> inventory</span>
+    <span><span class="swatch shared"></span>in some but not all</span>
+    <span class="muted">a small <strong>?</strong> marks a segment flagged marginal</span>
+  </div>
+  <div class="inv-grid" id="grid"></div>
+
+  <div id="agreement"></div>
+
+  <footer class="site" id="footer"></footer>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/language.js"></script>
+</body>
+</html>

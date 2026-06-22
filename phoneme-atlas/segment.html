@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Segments — Phoneme Atlas</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site"><div class="inner">
+  <span class="brand">🌍 Phoneme Atlas</span>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="segment.html">Segments</a>
+    <a href="about.html">About</a>
+  </nav>
+</div></header>
+
+<div class="container">
+  <div id="detail" style="display:none">
+    <p><a href="segment.html">← All segments</a></p>
+    <div id="seg-header"></div>
+    <div class="card">
+      <h2 style="margin-top:0">Where it occurs</h2>
+      <p class="muted small">Languages with at least one inventory containing this
+      segment. Where a language has multiple inventories, the popup notes in how
+      many of them the segment appears — presence is rarely unanimous.</p>
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <div id="browse">
+    <h1>Segments</h1>
+    <p class="lead">PHOIBLE distinguishes <span id="nseg"></span> segments. Search
+    one to see its geographic distribution, or browse the most widespread below.</p>
+    <div class="card">
+      <label for="q">Search a segment (IPA)</label>
+      <input type="search" id="q" placeholder="e.g. ŋ, kʼ, a, t̪…" autocomplete="off">
+      <ul class="results" id="results"></ul>
+    </div>
+    <div class="card">
+      <h2 style="margin-top:0">Most widespread segments</h2>
+      <div class="segs" id="top"></div>
+    </div>
+  </div>
+
+  <footer class="site" id="footer"></footer>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="js/data.js"></script>
+<script src="js/segment.js"></script>
+</body>
+</html>

@@ -88,6 +88,27 @@ pytest
 実際にバンドルされる `app/data/course.json` の中身・音声ファイルのコピーまで）。Next.js側の
 型チェック・lintは下記のE2Eフローで確認する。
 
+### ClaudeClassifierのライブAPIテスト
+
+`tests/test_classify_live.py` は `--mock` が使うHeuristicClassifierではなく、本番用の
+`ClaudeClassifier` を実際のClaude APIで検証する唯一のテスト。`ANTHROPIC_API_KEY` が
+環境変数に無ければ自動的にskipされるため、CI（キーなし）は今まで通り通る。
+
+```bash
+# 通常のpytestではskipされる（CIと同じ挙動）
+pytest
+
+# 実APIで検証（要 ANTHROPIC_API_KEY）
+ANTHROPIC_API_KEY=sk-... pytest -m live
+
+# 一致率・根拠文の所見を docs/live-test-report.md にも出力
+ANTHROPIC_API_KEY=sk-... LINGUAFORGE_LIVE_REPORT=1 pytest -m live -s
+```
+
+検証内容: (a) content_typeがスキーマ5種別のいずれか、(b) samples/の各セクションで
+HeuristicClassifierとの一致率をログ出力、(c) 各セクションの習得目標推定・学習方法選択の
+根拠文が空でなく、CLAUDE.mdのSLA原則表にある理論名を最低1つ引用していること。
+
 ## E2Eテスト（samples/ → 実際にビルド）
 
 ```bash

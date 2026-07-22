@@ -10,18 +10,28 @@ See AGENTS.md for the full architecture and README.md for current scope.
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 import tempfile
 from pathlib import Path
 
 import yaml
 
+_SINGLE_WORD_RE = re.compile(r"[A-Za-z']+")
+
+
+def _as_single_word(text: str) -> str | None:
+    """Returns the word if `text` is exactly one alphabetic token (ND is a
+    word-level metric, not defined for a whole sentence), else None."""
+    stripped = text.strip()
+    return stripped if _SINGLE_WORD_RE.fullmatch(stripped) else None
+
 from analysis.align import align_section_items
 from analysis.classify import DEFAULT_MODEL, build_classifier
 from analysis.difficulty import flag_item
 from analysis.generator import generate_app
 from analysis.parser import load_sections
-from analysis.priority import order_by_priority, score_item
+from analysis.priority import order_by_priority, score_item, word_neighborhood_density
 from analysis.report import write_report
 from analysis.schema import Course, Item, Section
 
@@ -63,6 +73,7 @@ def run_pipeline(input_dir: Path, output_dir: Path, lang: str | None, mock: bool
     )
 
     all_warnings: list[str] = []
+    oov_words: set[str] = set()
 
     with tempfile.TemporaryDirectory(prefix="linguaforge_work_") as work_dir_str:
         work_dir = Path(work_dir_str)
@@ -91,6 +102,14 @@ def run_pipeline(input_dir: Path, output_dir: Path, lang: str | None, mock: bool
             items = []
             for idx, src_idx in enumerate(order, start=1):
                 raw_item, aligned_item, flags, score = built[src_idx]
+
+                nd = nd_l1 = None
+                word = _as_single_word(raw_item["text"])
+                if word is not None:
+                    nd, nd_l1 = word_neighborhood_density(word)
+                    if nd is None:
+                        oov_words.add(word.lower())
+
                 items.append(
                     Item(
                         id=f"{raw.id}-{idx:03d}",
@@ -102,6 +121,8 @@ def run_pipeline(input_dir: Path, output_dir: Path, lang: str | None, mock: bool
                         difficulty_flags=flags,
                         alignment_confidence=aligned_item.confidence,
                         priority_score=score,
+                        nd=nd,
+                        nd_l1_weighted=nd_l1,
                     )
                 )
 
@@ -118,7 +139,7 @@ def run_pipeline(input_dir: Path, output_dir: Path, lang: str | None, mock: bool
 
     output_dir.mkdir(parents=True, exist_ok=True)
     generate_app(course, output_dir, audio_dir=audio_dir)
-    write_report(course, all_warnings, output_dir)
+    write_report(course, all_warnings, output_dir, oov_words=sorted(oov_words))
 
     return course
 

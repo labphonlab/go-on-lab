@@ -47,6 +47,12 @@ class Item:
     difficulty_flags: list = field(default_factory=list)
     alignment_confidence: Optional[float] = None
     priority_score: Optional[float] = None
+    # Word-level neighborhood density (analysis/neighborhood.py), populated
+    # only for single-word items — ND isn't well-defined for a whole
+    # sentence. None also covers "word not in CMUdict", distinguished in
+    # report.md's OOV list rather than in this field.
+    nd: Optional[int] = None
+    nd_l1_weighted: Optional[int] = None
 
     def to_dict(self) -> dict:
         d = {
@@ -62,6 +68,10 @@ class Item:
             d["audio"] = self.audio.to_dict()
         if self.priority_score is not None:
             d["priority_score"] = self.priority_score
+        if self.nd is not None:
+            d["nd"] = self.nd
+        if self.nd_l1_weighted is not None:
+            d["nd_l1_weighted"] = self.nd_l1_weighted
         if self.alignment_confidence is not None:
             d["alignment_confidence"] = round(self.alignment_confidence, 3)
         return d

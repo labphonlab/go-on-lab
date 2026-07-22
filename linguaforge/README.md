@@ -1,7 +1,8 @@
 # LinguaForge — 語学学習アプリ生成パイプライン（パイロット版）
 
 既存の語学教材（テキスト＋音声）から、学習用Webアプリ（PWA）を自動生成する3層パイプライン。
-設計の詳細・理論的根拠は [`/AGENTS.md`](../AGENTS.md) を参照。
+設計の詳細・理論的根拠・実装状況は [`AGENTS.md`](AGENTS.md) を参照
+（リポジトリ直下の `/AGENTS.md` はこのサブプロジェクトとは無関係な、別のNext.jsアプリ向けの注意書き）。
 
 現在の対応範囲:
 
@@ -26,13 +27,16 @@ linguaforge/
     classify.py           Claude API による content_type 判定・項目抽出（+ オフラインfallback）
     align.py               MFA (english_mfa) による強制アラインメント（+ 未インストール時fallback）
     difficulty.py          日本語話者向け困難音素・連続音声過程のフラグ付け
-    priority.py             L1加重FL指標による出題優先度スコア・並び替え
+    priority.py             L1加重ND・FL指標による出題優先度スコア・並び替え
+    neighborhood.py          CMUdictベースの音韻近接度(ND)・L1加重ND計算
     schema.py              第2層: 中間表現（Course/Section/Item）のスキーマ
     report.py              output/report.md 生成
     generator.py           第3層 glue: templates/base-app を output/app にコピーしデータを注入
   data_tables/
-    l1_interference_en_ja.json   difficulty.py が参照する困難音素対テーブル（フェーズ3でKO版に差し替え）
+    l1_interference_en_ja.json   difficulty.py/neighborhood.py が参照するL1干渉音素対テーブル
+                                  （IPA用とneighborhood.py用ARPAbet併合ペアの両方を保持。フェーズ3でKO版に差し替え）
     frequency_bands_en.json      priority.py が参照する簡易頻度帯テーブル（NGSL本体に差し替え可能）
+    priority_weights.json        priority.pyの合成スコアの重み（nd_weight/nd_half_saturation/flag_weight）
   templates/base-app/      第3層: 生成層（Next.js 14 App Router + Tailwind, 固定テンプレート）
   samples/input/           E2Eテスト用の短い教材（テキスト+合成音声+config.yaml、md/html混在）
   tests/                   pytest単体テスト（schema/difficulty/extract/parser/classify/report + パイプラインE2E）
@@ -130,26 +134,43 @@ cd /tmp/lf_test/app && npm install && npm run build && npm run lint
 プレースホルダーなので、納品前に `templates/base-app/public/icons/` を差し替えれば教材・
 クライアントごとのブランドアイコンにできる。
 
-## 出題優先度スコア（L1加重FL指標）
+## 出題優先度スコア（L1加重ND・FL指標）
 
 `analysis/priority.py` が各項目に `priority_score` を付与し、`vocabulary_list` /
 `grammar_note`（項目同士に会話・文章としての順序依存がなく、並べ替えても安全な種別）は
 このスコア昇順に自動配列する。`dialogue` / `reading_passage` / `pattern_drill` は
 スコアだけ記録し、会話・文章としての意味を壊さないよう元の順序を保持する。
 
-正直な実装スコープの注記:
+```
+priority = freq_band(FL) - nd_weight × (L1加重ND / (L1加重ND + nd_half_saturation))
+                          - flag_weight × len(difficulty_flags)
+```
 
-- **FL（頻度レベル）**: `data_tables/frequency_bands_en.json` は5段階の簡易頻度帯テーブルで、
+重みは `data_tables/priority_weights.json` で調整可能。
+
+- **FL（頻度レベル）**: `data_tables/frequency_bands_en.json` の5段階簡易頻度帯テーブル。
   ライセンスされたNGSLデータセットそのものではない（手作業で作成した代替）。実データに
   差し替える場合はこのJSONファイルを置き換えるだけでよい設計
-- **ND（音韻近接度）×L1加重**: 真の近接度計算には発音辞書（CMUdict相当）が必要なため未実装。
-  代わりに `difficulty.py` が既に付与しているL1干渉フラグ数をスコアに軽く反映させることで、
-  日本語話者にとって紛らわしい音を含む項目をわずかに前倒しする近似としている
+- **ND / L1加重ND（音韻近接度）**: `analysis/neighborhood.py` がCMUdict（発音辞書）を使って
+  実計算する。通常NDは編集距離1（置換・挿入・削除）の隣接語数（Vitevitch & Luce型）。
+  L1加重NDは `data_tables/l1_interference_en_ja.json` の `arpabet_merge_pairs`
+  （L/R, B/V, S/TH, Z/DH, IH/IY, F/HH）を同一音素とみなして再計算した近接度で、
+  記号の併合は距離を縮めることはあっても広げないため「L1加重ND ≥ 通常ND」は構造的に保証される
+  （`tests/test_neighborhood.py` で不変条件として検証）。単語項目（1トークンの項目）のみに
+  付与され、CMUdict未収載語は `report.md` に一覧化される
+- **NDの母集団**: 現状はCMUdict全体（約12.6万語）。AGENTS.mdが想定するNGSL語彙表への
+  絞り込みは、NGSL 1.2データの入手がこの開発環境のネットワークポリシーでブロックされている
+  ため未実施（下記参照）
 
 ## まだ実装していないもの（次フェーズ以降）
 
 - Azure発音評価（`PronunciationCheck.tsx`）、韓国語対応、スキャン画像PDFのOCR
-- 真の音韻近接度（ND）計算（発音辞書ベース）— 上記の通り現状はL1干渉フラグによる近似
+- **NGSL 1.2本家データセットへの差し替え**: `newgeneralservicelist.org` はこの開発環境の
+  ネットワークポリシーで到達不可（プロキシが403で拒否）。PyPIの`ngsl`パッケージも試したが、
+  ライセンス表記が無く（`License: UNKNOWN`）、収録語に`pause`/`unclear`のような書き起こし
+  由来の語が混じっており本家NGSLと同一のデータか検証できないため、Browne, Culligan, Phillipsの
+  著作物として帰属表示するのは不正確になり採用を見送った。実データファイルを直接提供いただくか、
+  ネットワークポリシーで当該ドメインへのアクセスを許可いただければ差し替え可能
 - オフラインヒューリスティック分類器（`--mock`）はタイトルのキーワードや文の形状で
   content_type を推測する簡易ロジック。本番は必ず `ANTHROPIC_API_KEY` を設定した
   `ClaudeClassifier` 経由で解析すること

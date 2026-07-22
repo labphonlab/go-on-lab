@@ -1,5 +1,6 @@
 anthropic>=0.40.0
 PyYAML>=6.0
+cmudict>=1.0.24    # analysis/neighborhood.py — pronouncing dictionary for ND computation
 
 # input format extraction (analysis/extract.py) — only needed for the
 # formats actually used; each is imported lazily so plain .md/.txt input

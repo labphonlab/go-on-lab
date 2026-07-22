@@ -7,5 +7,14 @@
     {"flag": "i_ii_contrast", "ipa_matches": ["ɪ"], "note": "日本語の母音体系では /ɪ/ と /iː/ の長短・音質の区別が弱い。"},
     {"flag": "f_h_contrast", "ipa_matches": ["f"], "note": "語頭の /f/ が日本語の /h/ (フ) に近く知覚され代用されやすい。"},
     {"flag": "consonant_cluster", "ipa_matches": ["st", "str", "spl", "skr", "kt", "mpt"], "note": "日本語は開音節中心のため、子音連続に母音が挿入されやすい。"}
+  ],
+  "_arpabet_comment": "The same contrastive pairs above, re-expressed in CMUdict's ARPAbet symbols for analysis/neighborhood.py's L1-weighted neighborhood density. Each pair is [phone, mergedWith] -- consonant_cluster has no single-phone ARPAbet equivalent (it's an insertion pattern, not a phone contrast) so it has no entry here.",
+  "arpabet_merge_pairs": [
+    ["L", "R"],
+    ["B", "V"],
+    ["S", "TH"],
+    ["Z", "DH"],
+    ["IH", "IY"],
+    ["F", "HH"]
   ]
 }

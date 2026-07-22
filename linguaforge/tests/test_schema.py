@@ -7,7 +7,16 @@ def test_item_to_dict_omits_absent_optional_fields():
     assert "audio" not in d
     assert "pos" not in d
     assert "alignment_confidence" not in d
+    assert "nd" not in d
+    assert "nd_l1_weighted" not in d
     assert d["difficulty_flags"] == []
+
+
+def test_item_to_dict_includes_nd_fields_when_present():
+    item = Item(id="02-001", text="day", nd=146, nd_l1_weighted=149)
+    d = item.to_dict()
+    assert d["nd"] == 146
+    assert d["nd_l1_weighted"] == 149
 
 
 def test_item_to_dict_includes_audio_and_confidence_when_present():

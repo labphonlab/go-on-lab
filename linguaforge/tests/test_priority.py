@@ -1,4 +1,4 @@
-from analysis.priority import order_by_priority, score_item
+from analysis.priority import order_by_priority, score_item, word_neighborhood_density
 
 
 def test_common_words_score_lower_than_rare_words():
@@ -14,9 +14,23 @@ def test_l1_difficulty_flags_lower_the_score():
 
 
 def test_unknown_words_default_to_mid_band():
-    # made-up word, not in the frequency table at all
+    # made-up word, not in the frequency table (or CMUdict) at all
     score = score_item("xyzzyplugh", [])
     assert 2.5 <= score <= 3.5
+
+
+def test_word_neighborhood_density_feeds_into_score_item():
+    # "day" and "friend" are both band-1 words in frequency_bands_en.json,
+    # but "day" has a much higher L1-weighted ND than "friend" -- real ND
+    # should push "day" to a lower (earlier) score than frequency band alone
+    # would predict, proving the composite isn't just re-deriving FL.
+    nd_day = word_neighborhood_density("day")
+    nd_friend = word_neighborhood_density("friend")
+    assert nd_day[1] > nd_friend[1]
+
+    score_day = score_item("day", [])
+    score_friend = score_item("friend", [])
+    assert score_day < score_friend
 
 
 def test_order_by_priority_reorders_vocabulary_list():

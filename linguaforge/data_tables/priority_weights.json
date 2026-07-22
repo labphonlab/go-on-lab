@@ -1,0 +1,6 @@
+{
+  "_comment": "Tunable weights for analysis/priority.py's composite score. priority = freq_band - nd_weight * (nd / (nd + nd_half_saturation)) - flag_weight * len(difficulty_flags). Lower score = presented earlier. nd_half_saturation is the ND value at which the normalized signal reaches 0.5 -- a smooth asymptote rather than a hard cap, since real (CMUdict-backed) ND for common short words is often 80-150+ and a hard cap saturates almost everything to 1.0.",
+  "nd_weight": 1.0,
+  "nd_half_saturation": 15,
+  "flag_weight": 0.3
+}

@@ -14,7 +14,12 @@ from pathlib import Path
 from .schema import Course
 
 
-def render_report(course: Course, alignment_warnings: list[str], generated_at: datetime | None = None) -> str:
+def render_report(
+    course: Course,
+    alignment_warnings: list[str],
+    generated_at: datetime | None = None,
+    oov_words: list[str] | None = None,
+) -> str:
     generated_at = generated_at or datetime.now(timezone.utc)
     lines: list[str] = []
     lines.append(f"# {course.title} — 解析レポート")
@@ -43,17 +48,20 @@ def render_report(course: Course, alignment_warnings: list[str], generated_at: d
         lines.append("- 警告なし")
     lines.append("")
 
-    lines.append("## 抽出内容の確認用一覧（訳・IPA）")
+    lines.append("## 抽出内容の確認用一覧（訳・IPA・ND）")
     lines.append("")
     lines.append("Claude APIの出力はそのまま信用せず、必ずここで確認すること。")
+    lines.append("ND / L1加重ND は単語項目のみ（文には未定義）。CMUdict未収載語は下記に別途一覧。")
     lines.append("")
     for section in course.sections:
         lines.append(f"### {section.id} {section.title}")
         lines.append("")
-        lines.append("| id | text | ipa | ja | difficulty_flags | alignment |")
-        lines.append("|---|---|---|---|---|---|")
+        lines.append("| id | text | ipa | ja | difficulty_flags | ND | L1加重ND | alignment |")
+        lines.append("|---|---|---|---|---|---|---|---|")
         for item in section.items:
             flags = ", ".join(item.difficulty_flags) or "-"
+            nd_col = str(item.nd) if item.nd is not None else "-"
+            nd_l1_col = str(item.nd_l1_weighted) if item.nd_l1_weighted is not None else "-"
             if item.alignment_confidence is None:
                 align_col = "音声なし"
             elif item.alignment_confidence < 0.5:
@@ -61,14 +69,31 @@ def render_report(course: Course, alignment_warnings: list[str], generated_at: d
             else:
                 align_col = "OK"
             lines.append(
-                f"| {item.id} | {item.text} | {item.ipa} | {item.ja} | {flags} | {align_col} |"
+                f"| {item.id} | {item.text} | {item.ipa} | {item.ja} | {flags} | "
+                f"{nd_col} | {nd_l1_col} | {align_col} |"
             )
         lines.append("")
+
+    lines.append("## CMUdict未収載語（NDスコア計算対象外）")
+    lines.append("")
+    if oov_words:
+        lines.append("以下の単語項目はCMUdictに発音情報が無く、ND / L1加重NDを計算できなかった:")
+        lines.append("")
+        for w in oov_words:
+            lines.append(f"- {w}")
+    else:
+        lines.append("- 未収載語なし")
+    lines.append("")
 
     return "\n".join(lines)
 
 
-def write_report(course: Course, alignment_warnings: list[str], output_dir: Path) -> Path:
+def write_report(
+    course: Course,
+    alignment_warnings: list[str],
+    output_dir: Path,
+    oov_words: list[str] | None = None,
+) -> Path:
     report_path = Path(output_dir) / "report.md"
-    report_path.write_text(render_report(course, alignment_warnings), encoding="utf-8")
+    report_path.write_text(render_report(course, alignment_warnings, oov_words=oov_words), encoding="utf-8")
     return report_path

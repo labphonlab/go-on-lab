@@ -44,6 +44,18 @@ def test_pipeline_runs_end_to_end_on_samples_in_mock_mode(tmp_path: Path):
     for wav in ("01_intro.wav", "02_vocab.wav", "03_snacks.wav", "05_reading.wav", "06_pattern.wav"):
         assert (app_dir / "public" / "audio" / wav).exists()
 
+    # single-word vocabulary_list items get real CMUdict-backed ND scores
+    vocab_items = course.sections[1].items
+    assert all(it.nd is not None for it in vocab_items), vocab_items
+    assert all(it.nd_l1_weighted >= it.nd for it in vocab_items)
+
+    # multi-word dialogue items have no per-word ND (not a single-word metric)
+    assert all(it.nd is None for it in course.sections[0].items)
+
+    report_text = (output_dir / "report.md").read_text(encoding="utf-8")
+    assert "CMUdict未収載語" in report_text
+    assert "L1加重ND" in report_text
+
 
 def test_pipeline_rejects_non_english_lang_in_phase_1(tmp_path: Path):
     import pytest

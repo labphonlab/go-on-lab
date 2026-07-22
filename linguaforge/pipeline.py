@@ -117,6 +117,7 @@ def run_pipeline(input_dir: Path, output_dir: Path, lang: str | None, mock: bool
                         ja=raw_item.get("ja", ""),
                         ipa=raw_item.get("ipa", ""),
                         pos=raw_item.get("pos", ""),
+                        speaker=raw_item.get("speaker", ""),
                         audio=aligned_item.audio,
                         difficulty_flags=flags,
                         alignment_confidence=aligned_item.confidence,

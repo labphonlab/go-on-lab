@@ -43,6 +43,7 @@ class Item:
     ja: str = ""
     ipa: str = ""
     pos: str = ""
+    speaker: str = ""  # dialogue turns only — which of the conversation's speakers this line belongs to
     audio: Optional[AudioRef] = None
     difficulty_flags: list = field(default_factory=list)
     alignment_confidence: Optional[float] = None
@@ -64,6 +65,8 @@ class Item:
         }
         if self.pos:
             d["pos"] = self.pos
+        if self.speaker:
+            d["speaker"] = self.speaker
         if self.audio is not None:
             d["audio"] = self.audio.to_dict()
         if self.priority_score is not None:

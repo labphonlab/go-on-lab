@@ -10,9 +10,13 @@ export interface Item {
   ipa: string;
   ja: string;
   pos?: string;
+  speaker?: string;
   audio?: AudioRef;
   difficulty_flags: string[];
   alignment_confidence?: number;
+  priority_score?: number;
+  nd?: number;
+  nd_l1_weighted?: number;
 }
 
 export interface Section {

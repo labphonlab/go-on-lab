@@ -9,6 +9,8 @@ import Shadowing from "./Shadowing";
 import ClozeDrill from "./ClozeDrill";
 import KaraokeReader from "./KaraokeReader";
 import SubstitutionDrill from "./SubstitutionDrill";
+import Roleplay from "./Roleplay";
+import ListeningChoice from "./ListeningChoice";
 
 // Each entry maps one learning_methods value (schema.py's CONTENT_TYPE_METHODS)
 // to the component that renders it. A content_type's other listed methods
@@ -17,8 +19,10 @@ import SubstitutionDrill from "./SubstitutionDrill";
 // component's stage stepper.
 const METHOD_META: Record<string, { label: string; icon: string }> = {
   flashcard: { label: "フラッシュカード", icon: "🗂️" },
+  listening_choice: { label: "聞き取り選択", icon: "👂" },
   dictation: { label: "ディクテーション", icon: "✍️" },
   shadowing: { label: "シャドーイング", icon: "🎧" },
+  roleplay: { label: "ロールプレイ", icon: "🎭" },
   cloze_drill: { label: "文法ドリル", icon: "📘" },
   karaoke_reading: { label: "音読", icon: "📖" },
   substitution_drill: { label: "パターンドリル", icon: "🔁" },
@@ -81,8 +85,10 @@ export default function SectionView({ section }: { section: Section }) {
 
           <div key={active} className="animate-fade-up">
             {active === "flashcard" && <Flashcard section={section} />}
+            {active === "listening_choice" && <ListeningChoice section={section} />}
             {active === "dictation" && <Dictation section={section} />}
             {active === "shadowing" && <Shadowing section={section} />}
+            {active === "roleplay" && <Roleplay section={section} />}
             {active === "cloze_drill" && <ClozeDrill section={section} />}
             {active === "karaoke_reading" && <KaraokeReader section={section} />}
             {active === "substitution_drill" && <SubstitutionDrill section={section} />}

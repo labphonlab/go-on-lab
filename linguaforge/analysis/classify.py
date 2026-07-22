@@ -53,7 +53,7 @@ class SectionAnalysis:
     learning_target_summary: str
     learning_methods: list
     rationale: str
-    items: list  # list[dict]: text, ja, ipa, pos
+    items: list  # list[dict]: text, ja, ipa, pos, speaker (dialogue only)
 
 
 _TOOL_SCHEMA = {
@@ -88,6 +88,7 @@ _TOOL_SCHEMA = {
                         "ja": {"type": "string", "description": "日本語訳"},
                         "ipa": {"type": "string", "description": "IPA表記"},
                         "pos": {"type": "string", "description": "品詞（vocabulary_listのみ）"},
+                        "speaker": {"type": "string", "description": "話者名（dialogueのみ。例: A, B, Maria）"},
                     },
                     "required": ["text", "ja", "ipa"],
                 },
@@ -106,6 +107,8 @@ _SYSTEM_PROMPT = """あなたは第二言語習得（SLA）研究に基づいて
    アウトプット仮説・スキル習得理論・関与負荷仮説・HVPT・シャドーイング研究・i+1・明示的フィードバック研究）
    に照らして学習方法を「認識→再生→産出」の順に選び、一言で理論的根拠を述べる
 4. 節内のテキストを項目（例文・語彙）に分割し、各項目について日本語訳とIPA表記を付与する
+5. content_type が dialogue の場合、各項目にその発話者名（speaker）を付与する
+   （ロールプレイで話者ごとにミュート・切替するために使用する）
 
 日本語母語の学習者を想定すること。IPAは可能な限り正確に付与すること。"""
 
@@ -179,6 +182,8 @@ class HeuristicClassifier:
         dialogue_lines = [self._DIALOGUE_LINE.match(l) for l in lines]
         dialogue_hits = sum(1 for m in dialogue_lines if m)
 
+        speakers: list[str] = []
+
         if self._GRAMMAR_TITLE.search(section.title):
             # A title is a much more reliable offline signal than trying to
             # infer grammar content from sentence shape alone.
@@ -190,6 +195,7 @@ class HeuristicClassifier:
         elif dialogue_hits >= max(2, len(lines) // 2):
             content_type = "dialogue"
             texts = [m.group(2).strip() for m in dialogue_lines if m]
+            speakers = [m.group(1).strip() for m in dialogue_lines if m]
         elif any(self._BULLET_OR_TABLE.match(l) for l in lines):
             content_type = "vocabulary_list"
             texts = [re.sub(r"^\s*([-*]|\|)\s*", "", l).split("|")[0].strip() for l in lines]
@@ -205,8 +211,13 @@ class HeuristicClassifier:
         else:
             content_type = "dialogue"
             texts = [l.strip() for l in lines]
+            speakers = [(m.group(1).strip() if m else "") for m in dialogue_lines]
 
-        items = [{"text": t, "ja": "", "ipa": "", "pos": ""} for t in texts if t]
+        items = [
+            {"text": t, "ja": "", "ipa": "", "pos": "", "speaker": (speakers[i] if i < len(speakers) else "")}
+            for i, t in enumerate(texts)
+            if t
+        ]
 
         return SectionAnalysis(
             content_type=content_type,

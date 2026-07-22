@@ -13,6 +13,12 @@ def test_classifies_dialogue_from_speaker_lines():
     assert result.items[0]["text"] == "Hello"
 
 
+def test_dialogue_items_carry_speaker_labels_for_roleplay():
+    section = _section("Cafe Talk", "A: Hello\nB: Hi there\nA: How are you?\nB: Fine, thanks.")
+    result = HeuristicClassifier().classify(section)
+    assert [it["speaker"] for it in result.items] == ["A", "B", "A", "B"]
+
+
 def test_classifies_vocabulary_list_from_bullets():
     section = _section("Words", "- coffee\n- sugar\n- receipt")
     result = HeuristicClassifier().classify(section)

@@ -150,8 +150,10 @@ report.mdには各セクションで選択した方法とその理論的根拠�
 - [x] L1加重ND/FLベースの出題優先度スコア（`analysis/priority.py` + `analysis/neighborhood.py`）
       — FLは簡易頻度帯テーブル、NDはCMUdictベースの実計算。母集団はCMUdict全体
       （NGSL本家データへの絞り込みは下記の理由で未実施）
-- [ ] `Roleplay.tsx`（dialogue: 片側ミュート＋自己録音確認）— 未着手
-- [ ] `ListeningChoice.tsx`（vocabulary_list: 4択聞き取り、L1加重ND高語を優先的にディストラクタ化）— 未着手
+- [x] `Roleplay.tsx`（dialogue: 片側ミュート＋自己録音確認。話者ラベルは
+      `classify.py`（Claude API・ヒューリスティック双方）が項目ごとに付与し、
+      中間JSONの `speaker` フィールド経由でUIに渡る）
+- [x] `ListeningChoice.tsx`（vocabulary_list: 4択聞き取り、L1加重ND高語を優先的にディストラクタ化）
 - [ ] **NGSL 1.2本家データセットへの差し替え**: `newgeneralservicelist.org` がこの開発環境の
       ネットワークポリシーでブロックされており取得不可。PyPIの`ngsl`パッケージはライセンス
       不明・データ由来検証不能のため不採用。実データの直接提供、またはネットワークポリシー

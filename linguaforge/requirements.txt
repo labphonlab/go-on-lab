@@ -1,2 +1,10 @@
 anthropic>=0.40.0
 PyYAML>=6.0
+
+# input format extraction (analysis/extract.py) — only needed for the
+# formats actually used; each is imported lazily so plain .md/.txt input
+# works without any of these installed.
+striprtf>=0.0.26   # .rtf
+python-docx>=1.1.0 # .docx
+pypdf>=4.0.0       # .pdf
+python-pptx>=0.6.23 # .pptx

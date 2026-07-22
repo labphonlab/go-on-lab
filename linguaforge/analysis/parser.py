@@ -1,9 +1,10 @@
-"""Text-structure input (第1層 1.) — turns input/text/*.md into raw sections
+"""Text-structure input (第1層 1.) — turns input/text/* into raw sections
 paired with their input/audio/*.wav counterpart by filename stem.
 
 One text file == one section, per AGENTS.md's `01_intro.md <-> 01_intro.wav`
-convention. Phase 1 only reads Markdown/plain text; docx is a later
-priority (python-docx would slot in here behind the same return shape).
+convention. Supported formats: Markdown, plain text, HTML, RTF, DOCX, PDF,
+PPTX — each is normalized to markdown-ish text by extract.py before parsing
+proceeds, so everything below this point is format-agnostic.
 """
 
 from __future__ import annotations
@@ -12,7 +13,9 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-TEXT_EXTENSIONS = (".md", ".markdown", ".txt")
+from .extract import SUPPORTED_EXTENSIONS as TEXT_EXTENSIONS
+from .extract import extract_text
+
 AUDIO_EXTENSIONS = (".wav", ".mp3")
 
 
@@ -57,7 +60,7 @@ def load_sections(text_dir: Path, audio_dir: Path) -> list[RawSection]:
     sections = []
     for path in files:
         stem = path.stem
-        body = path.read_text(encoding="utf-8")
+        body = extract_text(path)
         section_id = re.match(r"^(\d+)", stem)
         sections.append(
             RawSection(

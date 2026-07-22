@@ -1,46 +1,29 @@
-import Link from "next/link";
 import { course } from "@/lib/data";
-
-const CONTENT_TYPE_LABEL: Record<string, string> = {
-  vocabulary_list: "語彙",
-  dialogue: "会話",
-  grammar_note: "文法",
-  reading_passage: "読解",
-  pattern_drill: "パターンドリル",
-};
+import SectionCard from "@/components/SectionCard";
 
 export default function HomePage() {
   return (
-    <div className="space-y-4">
-      <div>
-        <h1 className="text-xl font-bold">{course.meta.title}</h1>
-        <p className="text-sm text-slate-500">レベル: {course.meta.level}</p>
+    <div className="space-y-6 animate-fade-up">
+      <div className="card p-5">
+        <p className="text-xs uppercase tracking-wide text-indigo-500 dark:text-indigo-400 font-medium">
+          {course.meta.level}
+        </p>
+        <h1 className="text-xl font-bold mt-1">{course.meta.title}</h1>
+        <p className="text-sm text-stone-500 dark:text-stone-400 mt-1">
+          {course.sections.length} セクション・少しずつ進めましょう。
+        </p>
       </div>
-      <ul className="space-y-2">
+
+      <div className="space-y-3">
         {course.sections.map((section) => (
-          <li key={section.id}>
-            <Link
-              href={`/section/${section.id}`}
-              className="block rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-slate-400 dark:hover:border-slate-500"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-medium">
-                  {section.id}. {section.title}
-                </span>
-                <span className="text-xs rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-1">
-                  {CONTENT_TYPE_LABEL[section.content_type] ?? section.content_type}
-                </span>
-              </div>
-              <p className="text-sm text-slate-500 mt-1">{section.items.length} 項目</p>
-            </Link>
-          </li>
+          <SectionCard key={section.id} section={section} />
         ))}
         {course.sections.length === 0 && (
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-stone-500">
             まだセクションがありません。pipeline.py --input ./input --output ./output を実行してください。
           </p>
         )}
-      </ul>
+      </div>
     </div>
   );
 }

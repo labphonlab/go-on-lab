@@ -5,6 +5,7 @@ import type { Section } from "@/lib/types";
 import { loadJSON, saveJSON } from "@/lib/storage";
 import { useSegmentPlayer } from "@/lib/useAudio";
 import { explainFlags } from "@/lib/flagExplanations";
+import ProgressBar from "./ProgressBar";
 
 function normalize(s: string): string[] {
   return s
@@ -47,12 +48,19 @@ export default function Dictation({ section }: { section: Section }) {
   const current = items[index];
 
   if (items.length === 0) {
-    return <p className="text-sm text-slate-500">音声のある項目がありません。</p>;
+    return <p className="text-sm text-stone-500">音声のある項目がありません。</p>;
   }
   if (!current) {
     return (
-      <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-6 text-center">
+      <div className="card p-8 text-center space-y-2 animate-pop-in">
+        <div className="text-4xl">🎉</div>
         <p className="font-medium">このセクションのディクテーションは終わりです。</p>
+        <button
+          onClick={() => setIndex(0)}
+          className="mt-2 rounded-full border border-stone-200 dark:border-stone-700 px-4 py-1.5 text-sm hover:bg-stone-50 dark:hover:bg-stone-800"
+        >
+          最初からやり直す
+        </button>
       </div>
     );
   }
@@ -71,81 +79,101 @@ export default function Dictation({ section }: { section: Section }) {
   }
 
   return (
-    <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-6 space-y-4">
-      <p className="text-xs text-slate-400">
-        {index + 1} / {items.length}
-      </p>
+    <div className="space-y-3">
+      <ProgressBar current={index} total={items.length} />
 
-      <div className="flex items-center justify-center gap-3">
-        <button
-          disabled={playing}
-          onClick={() => current.audio && play(current.audio, rate)}
-          className="rounded-full border border-slate-300 dark:border-slate-600 px-5 py-2 disabled:opacity-50"
-        >
-          🔊 再生 ({rate}x)
-        </button>
-        <div className="flex text-xs border rounded overflow-hidden border-slate-300 dark:border-slate-600">
-          {[0.75, 1.0].map((r) => (
-            <button
-              key={r}
-              onClick={() => setRate(r as 0.75 | 1.0)}
-              className={`px-2 py-1 ${rate === r ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900" : ""}`}
-            >
-              {r}x
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {!checked ? (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setChecked(true);
-          }}
-          className="space-y-3"
-        >
-          <input
-            autoFocus
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="聞き取った内容を入力してください"
-            className="w-full rounded border border-slate-300 dark:border-slate-600 bg-transparent px-3 py-2"
-          />
-          <button type="submit" className="w-full rounded bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 py-2">
-            答え合わせ
+      <div className="card p-6 space-y-4">
+        <div className="flex items-center justify-center gap-3">
+          <button
+            disabled={playing}
+            onClick={() => current.audio && play(current.audio, rate)}
+            className="rounded-full bg-indigo-600 text-white px-5 py-2.5 font-medium hover:bg-indigo-500 disabled:opacity-50"
+          >
+            🔊 再生
           </button>
-        </form>
-      ) : (
-        <div className="space-y-3">
-          <p className={`text-center font-medium ${allCorrect ? "text-green-600" : "text-red-600"}`}>
-            {allCorrect ? "正解です！" : "違いを確認しましょう"}
-          </p>
-          <p className="flex flex-wrap gap-1 justify-center">
-            {diff!.map((d, i) => (
-              <span
-                key={i}
-                className={d.correct ? "text-green-600" : "text-red-600 underline decoration-wavy"}
+          <div className="flex text-xs border rounded-full overflow-hidden border-stone-200 dark:border-stone-700">
+            {[0.75, 1.0].map((r) => (
+              <button
+                key={r}
+                onClick={() => setRate(r as 0.75 | 1.0)}
+                className={`px-3 py-2 ${
+                  rate === r
+                    ? "bg-stone-800 text-white dark:bg-stone-100 dark:text-stone-900"
+                    : "text-stone-500"
+                }`}
               >
-                {d.word}
-              </span>
+                {r}x
+              </button>
             ))}
-          </p>
-          <p className="text-sm text-center text-slate-500">正解: {current.text}</p>
-
-          {explanations.length > 0 && (
-            <ul className="text-xs text-amber-700 dark:text-amber-400 space-y-1 bg-amber-50 dark:bg-amber-950/30 rounded p-2">
-              {explanations.map((e, i) => (
-                <li key={i}>⚠️ {e}</li>
-              ))}
-            </ul>
-          )}
-
-          <button onClick={markDoneAndNext} className="w-full rounded bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 py-2">
-            次へ
-          </button>
+          </div>
         </div>
-      )}
+
+        {!checked ? (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setChecked(true);
+            }}
+            className="space-y-3"
+          >
+            <input
+              autoFocus
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="聞き取った内容を入力してください"
+              className="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-transparent px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            />
+            <button
+              type="submit"
+              className="w-full rounded-xl bg-indigo-600 text-white py-2.5 font-medium hover:bg-indigo-500"
+            >
+              答え合わせ
+            </button>
+          </form>
+        ) : (
+          <div className="space-y-3 animate-fade-up">
+            <p
+              className={`text-center font-medium rounded-lg py-1.5 ${
+                allCorrect
+                  ? "text-emerald-700 bg-emerald-50 dark:text-emerald-300 dark:bg-emerald-950/40"
+                  : "text-rose-700 bg-rose-50 dark:text-rose-300 dark:bg-rose-950/40"
+              }`}
+            >
+              {allCorrect ? "正解です！" : "違いを確認しましょう"}
+            </p>
+            <p className="flex flex-wrap gap-1.5 justify-center">
+              {diff!.map((d, i) => (
+                <span
+                  key={i}
+                  className={`rounded-md px-1.5 py-0.5 text-sm ${
+                    d.correct
+                      ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
+                      : "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300"
+                  }`}
+                >
+                  {d.word}
+                </span>
+              ))}
+            </p>
+            <p className="text-sm text-center text-stone-500">正解: {current.text}</p>
+
+            {explanations.length > 0 && (
+              <ul className="text-xs text-amber-700 dark:text-amber-400 space-y-1 bg-amber-50 dark:bg-amber-950/30 rounded-lg p-2.5">
+                {explanations.map((e, i) => (
+                  <li key={i}>⚠️ {e}</li>
+                ))}
+              </ul>
+            )}
+
+            <button
+              onClick={markDoneAndNext}
+              className="w-full rounded-xl bg-indigo-600 text-white py-2.5 font-medium hover:bg-indigo-500"
+            >
+              次へ
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

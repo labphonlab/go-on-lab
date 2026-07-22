@@ -7,5 +7,37 @@ html {
 }
 
 body {
-  @apply bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100;
+  @apply bg-canvas-light text-stone-800 dark:bg-canvas-dark dark:text-stone-100;
+  font-feature-settings: "cv11", "ss01";
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Comfortable defaults for anything interactive — no jarring instant
+   color snaps, but nothing slow enough to feel laggy either. */
+button,
+a {
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease,
+    transform 150ms ease, box-shadow 150ms ease;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.card {
+  @apply rounded-2xl border border-stone-200 bg-white shadow-sm dark:border-stone-800 dark:bg-stone-900/60;
+}
+
+.perspective {
+  perspective: 1200px;
 }

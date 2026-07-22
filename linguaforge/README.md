@@ -5,8 +5,11 @@
 
 フェーズ1（このMVP）の対応範囲:
 
-- 入力: Markdownテキスト + wav音声、`vocabulary_list` / `dialogue` の2種別
-- 出力: フラッシュカード（SRS/SM-2）、ディクテーション、シャドーイングを実装したNext.js静的PWA
+- 入力: `.md` / `.txt` / `.html` / `.rtf` / `.docx` / `.pdf` / `.pptx` テキスト + wav音声、
+  `vocabulary_list` / `dialogue` の2種別
+- 出力: フラッシュカード（SRS/SM-2）、ディクテーション、シャドーイングを実装したNext.js静的PWA。
+  UIは長時間の学習でも疲れにくい配色・タイポグラフィと、フリップカードや進捗バーなどの
+  マイクロインタラクションで単調にならないよう設計
 - 対象言語: 英語のみ（韓国語はフェーズ3）
 
 ## ディレクトリ構成
@@ -15,7 +18,8 @@
 linguaforge/
   pipeline.py            CLI エントリポイント
   analysis/               第1層: 解析層（Python）
-    parser.py             Markdown入力 → 節ごとのRawSection
+    extract.py             md/txt/html/rtf/docx/pdf/pptx → 統一テキスト抽出
+    parser.py             入力ファイル → 節ごとのRawSection
     classify.py           Claude API による content_type 判定・項目抽出（+ オフラインfallback）
     align.py               MFA (english_mfa) による強制アラインメント（+ 未インストール時fallback）
     difficulty.py          日本語話者向け困難音素・連続音声過程のフラグ付け
@@ -46,10 +50,14 @@ python pipeline.py --input samples/input --output ./output --mock
 
 ```
 input/
-  text/01_intro.md, 02_vocab.md, ...   # ファイル名の先頭数字がセクションIDになる
-  audio/01_intro.wav, 02_vocab.wav     # テキストと同じstemで対応付け
-  config.yaml                          # title, level, lang など
+  text/01_intro.md, 02_vocab.pdf, 03_dialogue.docx, ...   # ファイル名の先頭数字がセクションIDになる
+  audio/01_intro.wav, 02_vocab.wav, 03_dialogue.wav       # テキストと同じstemで対応付け
+  config.yaml                                             # title, level, lang など
 ```
+
+形式はセクションごとに混在してよい（`extract.py` が拡張子で自動判別する）。旧形式の `.doc`
+（バイナリ形式）は非対応 — `.docx` に変換してから配置すること。PDFはテキストレイヤーからの
+抽出のみで見出し構造は復元されない（スキャン画像PDFはOCR未対応、フェーズ2で検討）。
 
 出力:
 

@@ -16,8 +16,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <SettingsProvider>
           <div className="mx-auto max-w-2xl min-h-screen flex flex-col">
-            <header className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-700">
-              <a href="/" className="font-semibold">
+            <header className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-stone-200/80 dark:border-stone-800/80 bg-canvas-light/90 dark:bg-canvas-dark/90 backdrop-blur">
+              <a href="/" className="font-semibold tracking-tight">
                 {course.meta.title}
               </a>
               <SettingsBar />

@@ -17,9 +17,6 @@ CONTENT_TYPES = (
     "pattern_drill",
 )
 
-# Phase 1 (MVP) only implements these two content types end-to-end.
-PHASE1_CONTENT_TYPES = ("vocabulary_list", "dialogue")
-
 CONTENT_TYPE_METHODS = {
     "vocabulary_list": ["flashcard", "listening_choice"],
     "dialogue": ["dictation", "shadowing", "roleplay"],
@@ -49,6 +46,7 @@ class Item:
     audio: Optional[AudioRef] = None
     difficulty_flags: list = field(default_factory=list)
     alignment_confidence: Optional[float] = None
+    priority_score: Optional[float] = None
 
     def to_dict(self) -> dict:
         d = {
@@ -62,6 +60,8 @@ class Item:
             d["pos"] = self.pos
         if self.audio is not None:
             d["audio"] = self.audio.to_dict()
+        if self.priority_score is not None:
+            d["priority_score"] = self.priority_score
         if self.alignment_confidence is not None:
             d["alignment_confidence"] = round(self.alignment_confidence, 3)
         return d

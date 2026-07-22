@@ -1,0 +1,19 @@
+{
+  "_comment": "Simplified proxy for AGENTS.md's 'NGSLベースの語彙指標テーブル' — NOT the licensed NGSL dataset. Five hand-compiled frequency bands (1 = most frequent/basic, 5 = least frequent) covering common beginner-to-intermediate ESL vocabulary, meant as a real-but-modest starting point. Swap this file for the actual NGSL frequency list (or a Korean PDI-based equivalent in phase 3) without touching analysis/priority.py — that is the whole point of loading it as an external file.",
+  "bands": {
+    "1": ["a", "i", "you", "the", "is", "are", "am", "it", "to", "and", "of", "in", "on", "at", "for",
+          "have", "has", "do", "does", "go", "goes", "like", "want", "good", "yes", "no", "please",
+          "thanks", "hello", "hi", "coffee", "tea", "water", "food", "day", "time", "name", "friend",
+          "book", "school", "work", "home", "eat", "drink", "see", "know", "think", "say"],
+    "2": ["would", "could", "should", "will", "can", "may", "might", "must", "order", "table", "menu",
+          "receipt", "price", "sugar", "milk", "cup", "plate", "window", "counter", "station", "morning",
+          "evening", "weekend", "newspaper", "owner", "customer", "visit", "try", "remember", "reach",
+          "hurry", "watch", "sit", "stay", "walk", "read", "sandwich", "cookie", "snack", "juice"],
+    "3": ["blend", "volume", "thin", "cafe", "reserve", "counter", "queue", "aroma", "roast", "grind",
+          "brew", "pastry", "napkin", "receipt", "invoice", "server", "barista", "sip", "steep",
+          "linger", "commute", "routine", "errand"],
+    "4": ["substitution", "colloquial", "reduction", "contraction", "palatalization", "assimilation",
+          "elision", "intonation", "discourse", "register", "connotation", "idiomatic"],
+    "5": ["phonotactic", "allophonic", "prosodic", "morphosyntactic", "orthographic", "diachronic"]
+  }
+}

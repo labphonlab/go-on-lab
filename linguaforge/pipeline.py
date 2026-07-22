@@ -4,10 +4,7 @@ generated learning-app in output/{app,data,report.md}.
 
     python pipeline.py --input ./input --output ./output --lang en
 
-See AGENTS.md for the full architecture. Phase 1 (MVP) only processes
-vocabulary_list and dialogue sections end-to-end; other content types get
-classified and reported but are not yet routed to a learning-method
-component.
+See AGENTS.md for the full architecture and README.md for current scope.
 """
 
 from __future__ import annotations
@@ -24,8 +21,9 @@ from analysis.classify import DEFAULT_MODEL, build_classifier
 from analysis.difficulty import flag_item
 from analysis.generator import generate_app
 from analysis.parser import load_sections
+from analysis.priority import order_by_priority, score_item
 from analysis.report import write_report
-from analysis.schema import PHASE1_CONTENT_TYPES, AudioRef, Course, Item, Section
+from analysis.schema import Course, Item, Section
 
 
 def load_config(input_dir: Path, cli_lang: str | None) -> dict:
@@ -72,12 +70,6 @@ def run_pipeline(input_dir: Path, output_dir: Path, lang: str | None, mock: bool
         for raw in raw_sections:
             analysis = classifier.classify(raw, lang=config["lang"])
 
-            if analysis.content_type not in PHASE1_CONTENT_TYPES:
-                all_warnings.append(
-                    f"section {raw.id}: content_type={analysis.content_type!r} is classified but "
-                    f"has no phase-1 learning-method components yet — included in report.md only."
-                )
-
             item_texts = [it["text"] for it in analysis.items]
             aligned, warnings = align_section_items(
                 section_id=raw.id,
@@ -88,9 +80,17 @@ def run_pipeline(input_dir: Path, output_dir: Path, lang: str | None, mock: bool
             )
             all_warnings.extend(warnings)
 
-            items = []
-            for idx, (raw_item, aligned_item) in enumerate(zip(analysis.items, aligned), start=1):
+            built = []
+            for raw_item, aligned_item in zip(analysis.items, aligned):
                 flags = flag_item(raw_item["text"], raw_item.get("ipa", ""))
+                score = score_item(raw_item["text"], flags)
+                built.append((raw_item, aligned_item, flags, score))
+
+            order = order_by_priority(analysis.content_type, [(i, b[3]) for i, b in enumerate(built)])
+
+            items = []
+            for idx, src_idx in enumerate(order, start=1):
+                raw_item, aligned_item, flags, score = built[src_idx]
                 items.append(
                     Item(
                         id=f"{raw.id}-{idx:03d}",
@@ -101,6 +101,7 @@ def run_pipeline(input_dir: Path, output_dir: Path, lang: str | None, mock: bool
                         audio=aligned_item.audio,
                         difficulty_flags=flags,
                         alignment_confidence=aligned_item.confidence,
+                        priority_score=score,
                     )
                 )
 

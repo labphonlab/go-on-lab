@@ -26,11 +26,13 @@ linguaforge/
     classify.py           Claude API による content_type 判定・項目抽出（+ オフラインfallback）
     align.py               MFA (english_mfa) による強制アラインメント（+ 未インストール時fallback）
     difficulty.py          日本語話者向け困難音素・連続音声過程のフラグ付け
+    priority.py             L1加重FL指標による出題優先度スコア・並び替え
     schema.py              第2層: 中間表現（Course/Section/Item）のスキーマ
     report.py              output/report.md 生成
     generator.py           第3層 glue: templates/base-app を output/app にコピーしデータを注入
   data_tables/
     l1_interference_en_ja.json   difficulty.py が参照する困難音素対テーブル（フェーズ3でKO版に差し替え）
+    frequency_bands_en.json      priority.py が参照する簡易頻度帯テーブル（NGSL本体に差し替え可能）
   templates/base-app/      第3層: 生成層（Next.js 14 App Router + Tailwind, 固定テンプレート）
   samples/input/           E2Eテスト用の短い教材（テキスト+合成音声+config.yaml、md/html混在）
   tests/                   pytest単体テスト（schema/difficulty/extract/parser/classify/report + パイプラインE2E）
@@ -80,7 +82,7 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
-`analysis/` の各モジュール（schema/difficulty/extract/parser/classify/report）の単体テストに加え、
+`analysis/` の各モジュール（schema/difficulty/priority/extract/parser/classify/report）の単体テストに加え、
 `tests/test_pipeline_e2e.py` が `samples/input` に対する `--mock` 実行を丸ごと検証する
 （6セクション・5 content_typeすべての生成・report.md/data/course.json の存在・生成アプリに
 実際にバンドルされる `app/data/course.json` の中身・音声ファイルのコピーまで）。Next.js側の
@@ -107,11 +109,26 @@ cd /tmp/lf_test/app && npm install && npm run build && npm run lint
 プレースホルダーなので、納品前に `templates/base-app/public/icons/` を差し替えれば教材・
 クライアントごとのブランドアイコンにできる。
 
+## 出題優先度スコア（L1加重FL指標）
+
+`analysis/priority.py` が各項目に `priority_score` を付与し、`vocabulary_list` /
+`grammar_note`（項目同士に会話・文章としての順序依存がなく、並べ替えても安全な種別）は
+このスコア昇順に自動配列する。`dialogue` / `reading_passage` / `pattern_drill` は
+スコアだけ記録し、会話・文章としての意味を壊さないよう元の順序を保持する。
+
+正直な実装スコープの注記:
+
+- **FL（頻度レベル）**: `data_tables/frequency_bands_en.json` は5段階の簡易頻度帯テーブルで、
+  ライセンスされたNGSLデータセットそのものではない（手作業で作成した代替）。実データに
+  差し替える場合はこのJSONファイルを置き換えるだけでよい設計
+- **ND（音韻近接度）×L1加重**: 真の近接度計算には発音辞書（CMUdict相当）が必要なため未実装。
+  代わりに `difficulty.py` が既に付与しているL1干渉フラグ数をスコアに軽く反映させることで、
+  日本語話者にとって紛らわしい音を含む項目をわずかに前倒しする近似としている
+
 ## まだ実装していないもの（次フェーズ以降）
 
-- L1加重ND/FLベースの出題優先度スコア（`difficulty.py` は現在テーブル駆動の単純フラグ付けのみ、
-  NGSLベースの語彙指標テーブルは未導入）
 - Azure発音評価（`PronunciationCheck.tsx`）、韓国語対応、スキャン画像PDFのOCR
+- 真の音韻近接度（ND）計算（発音辞書ベース）— 上記の通り現状はL1干渉フラグによる近似
 - オフラインヒューリスティック分類器（`--mock`）はタイトルのキーワードや文の形状で
   content_type を推測する簡易ロジック。本番は必ず `ANTHROPIC_API_KEY` を設定した
   `ClaudeClassifier` 経由で解析すること

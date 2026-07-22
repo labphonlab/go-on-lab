@@ -1,0 +1,49 @@
+name: LinguaForge CI
+
+on:
+  push:
+    branches: [main]
+    paths: ["linguaforge/**"]
+  pull_request:
+    paths: ["linguaforge/**"]
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: linguaforge
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements-dev.txt
+      - run: pytest -q
+
+  generated-app-build:
+    runs-on: ubuntu-latest
+    needs: python-tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install pipeline dependencies
+        working-directory: linguaforge
+        run: pip install -r requirements.txt
+      - name: Generate app from samples (offline heuristic classifier, no API key needed)
+        working-directory: linguaforge
+        run: python pipeline.py --input samples/input --output ./output --mock
+      - name: Install generated app dependencies
+        working-directory: linguaforge/output/app
+        run: npm install
+      - name: Build generated app (static export)
+        working-directory: linguaforge/output/app
+        run: npm run build
+      - name: Lint generated app
+        working-directory: linguaforge/output/app
+        run: npm run lint

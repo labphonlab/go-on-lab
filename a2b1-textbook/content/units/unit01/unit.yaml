@@ -1,0 +1,109 @@
+unit: 1
+title: "Making Plans with Friends"
+cefr_j: "A2.2"
+
+can_do:
+  - id: "A2.2-SI-3"
+    ja: "友人と予定を調整し、簡単な提案・修正ができる"
+  - id: "A2.2-SI-4"
+    ja: "誘いを受けたり断ったりして、理由を簡単に添えることができる"
+
+grammar_focus:
+  - "be going to vs will"
+  - "shall we / why don't we"
+
+vocabulary_targets:
+  - weekend
+  - plan
+  - movie
+  - park
+  - museum
+  - zoo
+  - concert
+  - party
+  - beach
+  - cafe
+  - gym
+  - mall
+  - birthday
+  - invite
+  - join
+  - bring
+  - meet up
+  - hang out
+  - text
+  - call back
+  - cancel
+  - reschedule
+  - maybe
+  - actually
+  - probably
+  - sure
+  - definitely
+  - busy
+  - free
+  - tired
+  - tonight
+  - weather
+  - rainy
+  - sunny
+  - activity
+  - sound like
+  - sounds great
+  - count me in
+  - i'm in
+  - rain check
+  - later
+  - schedule
+  - event
+  - suggestion
+  - looking forward to
+
+sections:
+  - id: "01-warmup"
+    type: warmup
+    strand: meaning_output
+    medium: paper
+    app_components: []
+
+  - id: "01-input-dialogue"
+    type: input_dialogue
+    strand: meaning_input
+    medium: both
+    app_components: [karaoke_reader, shadowing, dictation]
+
+  - id: "01-noticing"
+    type: noticing
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "01-form-pi"
+    type: form_pi
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "01-form-production"
+    type: form_production
+    strand: language_focus
+    medium: paper
+    app_components: [cloze]
+
+  - id: "01-main-task"
+    type: main_task
+    strand: meaning_output
+    medium: both
+    app_components: [roleplay_ai]
+
+  - id: "01-fluency"
+    type: fluency
+    strand: fluency
+    medium: app
+    app_components: [shadowing, dictation]
+
+  - id: "01-reflection"
+    type: reflection
+    strand: meaning_output
+    medium: both
+    app_components: [can_do_survey]

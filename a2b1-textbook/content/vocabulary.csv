@@ -1,0 +1,46 @@
+word,pos,ja,ipa,ngsl_rank,nd,fl,l1_weighted_nd,hvpt,unit
+weekend,noun,週末,/ˈwiːkɛnd/,1042,12,0.71,0.30,0,1
+plan,noun/verb,計画・予定,/plæn/,612,18,0.85,0.35,1,1
+movie,noun,映画,/ˈmuːvi/,1180,9,0.62,0.28,0,1
+park,noun,公園,/pɑːrk/,1350,14,0.58,0.40,1,1
+museum,noun,博物館,/mjuːˈziːəm/,2210,6,0.31,0.25,0,1
+zoo,noun,動物園,/zuː/,2480,4,0.29,0.20,0,1
+concert,noun,コンサート,/ˈkɒnsərt/,1890,7,0.44,0.22,0,1
+party,noun,パーティー,/ˈpɑːrti/,1120,15,0.77,0.33,1,1
+beach,noun,ビーチ・浜辺,/biːtʃ/,1560,10,0.55,0.45,1,1
+cafe,noun,カフェ,/kæˈfeɪ/,2050,5,0.40,0.18,0,1
+gym,noun,ジム,/dʒɪm/,2340,3,0.27,0.15,0,1
+mall,noun,ショッピングモール,/mɔːl/,2270,6,0.30,0.20,0,1
+birthday,noun,誕生日,/ˈbɜːrθdeɪ/,1470,11,0.60,0.55,1,1
+invite,verb,誘う・招待する,/ɪnˈvaɪt/,1680,13,0.48,0.30,0,1
+join,verb,参加する,/dʒɔɪn/,1230,17,0.66,0.28,0,1
+bring,verb,持ってくる,/brɪŋ/,1090,20,0.73,0.32,0,1
+meet up,phrasal verb,会う・落ち合う,/miːt ʌp/,2150,8,0.35,0.24,0,1
+hang out,phrasal verb,一緒に過ごす,/hæŋ aʊt/,2390,5,0.26,0.26,0,1
+text,verb,メールする（携帯で）,/tɛkst/,1730,9,0.50,0.20,0,1
+call back,phrasal verb,折り返し電話する,/kɔːl bæk/,1950,7,0.38,0.22,0,1
+cancel,verb,キャンセルする,/ˈkænsəl/,1810,10,0.42,0.28,0,1
+reschedule,verb,予定を変更する,/riːˈskɛdʒuːl/,2620,4,0.20,0.18,0,1
+maybe,adverb,たぶん,/ˈmeɪbi/,730,16,0.80,0.30,0,1
+actually,adverb,実は,/ˈæktʃuəli/,1040,14,0.68,0.32,1,1
+probably,adverb,おそらく,/ˈprɒbəbli/,1160,12,0.63,0.30,1,1
+sure,adjective,確かな・もちろん,/ʃʊr/,860,11,0.75,0.24,1,1
+definitely,adverb,絶対に,/ˈdɛfɪnɪtli/,1590,9,0.46,0.26,0,1
+busy,adjective,忙しい,/ˈbɪzi/,1310,13,0.64,0.34,1,1
+free,adjective,暇な・自由な,/friː/,970,15,0.72,0.28,0,1
+tired,adjective,疲れた,/ˈtaɪərd/,1250,10,0.58,0.30,0,1
+tonight,adverb,今夜,/təˈnaɪt/,1070,8,0.66,0.20,0,1
+weather,noun,天気,/ˈwɛðər/,1150,9,0.61,0.42,1,1
+rainy,adjective,雨の,/ˈreɪni/,1980,6,0.33,0.24,0,1
+sunny,adjective,晴れの,/ˈsʌni/,1870,7,0.36,0.22,0,1
+activity,noun,活動,/ækˈtɪvɪti/,1620,8,0.47,0.25,0,1
+sound like,phrasal verb,〜のように聞こえる,/saʊnd laɪk/,1740,10,0.49,0.28,0,1
+sounds great,expression,いいね（賛成の表現）,/saʊndz greɪt/,2010,6,0.34,0.22,0,1
+count me in,expression,私も参加する,/kaʊnt miː ɪn/,2560,3,0.18,0.20,0,1
+i'm in,expression,参加する（決定）,/aɪm ɪn/,2440,4,0.19,0.18,0,1
+rain check,expression,また今度に延期すること,/reɪn tʃɛk/,2700,2,0.14,0.24,1,1
+later,adverb,あとで,/ˈleɪtər/,780,17,0.78,0.26,0,1
+schedule,noun/verb,予定・スケジュール,/ˈskɛdʒuːl/,1420,11,0.57,0.30,0,1
+event,noun,行事・イベント,/ɪˈvɛnt/,1300,10,0.62,0.24,0,1
+suggestion,noun,提案,/səˈdʒɛstʃən/,2130,7,0.38,0.26,0,1
+looking forward to,expression,楽しみにしている,/ˈlʊkɪŋ ˈfɔːrwərd tuː/,2280,6,0.32,0.28,0,1

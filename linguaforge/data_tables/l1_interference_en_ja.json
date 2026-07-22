@@ -1,0 +1,11 @@
+{
+  "_comment": "Japanese-L1 difficulty phoneme pairs/segments for English. IPA substrings are matched against an item's `ipa` field. Extend this table rather than hardcoding pairs in code -- phase 3 swaps in a Korean (PDI) table in the same shape.",
+  "phoneme_flags": [
+    {"flag": "l_r_contrast", "ipa_matches": ["l", "r"], "note": "日本語には /l/-/r/ の区別がなく、両方とも「ラ行」に近い音として知覚されやすい。"},
+    {"flag": "b_v_contrast", "ipa_matches": ["v"], "note": "日本語の /b/ に近く聞こえ、/v/ を /b/ で代用しやすい。"},
+    {"flag": "s_th_contrast", "ipa_matches": ["θ", "ð"], "note": "歯間音 /θ/ /ð/ は日本語に存在せず、/s/ /z/ や /d/ で代用されやすい。"},
+    {"flag": "i_ii_contrast", "ipa_matches": ["ɪ"], "note": "日本語の母音体系では /ɪ/ と /iː/ の長短・音質の区別が弱い。"},
+    {"flag": "f_h_contrast", "ipa_matches": ["f"], "note": "語頭の /f/ が日本語の /h/ (フ) に近く知覚され代用されやすい。"},
+    {"flag": "consonant_cluster", "ipa_matches": ["st", "str", "spl", "skr", "kt", "mpt"], "note": "日本語は開音節中心のため、子音連続に母音が挿入されやすい。"}
+  ]
+}

@@ -1,6 +1,7 @@
 anthropic>=0.40.0
 PyYAML>=6.0
 cmudict>=1.0.24    # analysis/neighborhood.py — pronouncing dictionary for ND computation
+wordfreq>=3.0.0    # analysis/priority.py — real word-frequency data (FL), Apache-2.0 licensed
 
 # input format extraction (analysis/extract.py) — only needed for the
 # formats actually used; each is imported lazily so plain .md/.txt input

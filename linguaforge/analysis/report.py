@@ -16,7 +16,7 @@ from .schema import Course
 
 def render_report(
     course: Course,
-    alignment_warnings: list[str],
+    warnings: list[str],
     generated_at: datetime | None = None,
     oov_words: list[str] | None = None,
 ) -> str:
@@ -39,10 +39,12 @@ def render_report(
         lines.append(f"- 項目数: {len(section.items)}")
         lines.append("")
 
-    lines.append("## アラインメント警告（要人手確認）")
+    lines.append("## 警告（要人手確認）")
     lines.append("")
-    if alignment_warnings:
-        for w in alignment_warnings:
+    lines.append("音声アラインメントの信頼度低下だけでなく、解析データソースのフォールバック等も含む。")
+    lines.append("")
+    if warnings:
+        for w in warnings:
             lines.append(f"- ⚠️ {w}")
     else:
         lines.append("- 警告なし")
@@ -90,10 +92,10 @@ def render_report(
 
 def write_report(
     course: Course,
-    alignment_warnings: list[str],
+    warnings: list[str],
     output_dir: Path,
     oov_words: list[str] | None = None,
 ) -> Path:
     report_path = Path(output_dir) / "report.md"
-    report_path.write_text(render_report(course, alignment_warnings, oov_words=oov_words), encoding="utf-8")
+    report_path.write_text(render_report(course, warnings, oov_words=oov_words), encoding="utf-8")
     return report_path

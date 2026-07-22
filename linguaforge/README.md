@@ -144,15 +144,18 @@ cd /tmp/lf_test/app && npm install && npm run build && npm run lint
 スコアだけ記録し、会話・文章としての意味を壊さないよう元の順序を保持する。
 
 ```
-priority = freq_band(FL) - nd_weight × (L1加重ND / (L1加重ND + nd_half_saturation))
-                          - flag_weight × len(difficulty_flags)
+priority = freq_score(FL) - nd_weight × (L1加重ND / (L1加重ND + nd_half_saturation))
+                           - flag_weight × len(difficulty_flags)
 ```
 
 重みは `data_tables/priority_weights.json` で調整可能。
 
-- **FL（頻度レベル）**: `data_tables/frequency_bands_en.json` の5段階簡易頻度帯テーブル。
-  ライセンスされたNGSLデータセットそのものではない（手作業で作成した代替）。実データに
-  差し替える場合はこのJSONファイルを置き換えるだけでよい設計
+- **FL（頻度レベル）**: [`wordfreq`](https://github.com/rspeer/wordfreq)（Robyn Speer,
+  Apache-2.0）による実際の単語頻度データ（Zipf尺度）を使用。ライセンスされたNGSLデータセット
+  そのものではないが、実データに基づく・カバレッジが広い（事実上あらゆる英単語）・ライセンスが
+  明確、という3点で誠実に使える代替。`wordfreq` が未インストールの環境では
+  `data_tables/frequency_bands_en.json`（手作業の簡易頻度帯テーブル、約200語のみ）に
+  自動フォールバックし、`report.md` に警告として明記される
 - **ND / L1加重ND（音韻近接度）**: `analysis/neighborhood.py` がCMUdict（発音辞書）を使って
   実計算する。通常NDは編集距離1（置換・挿入・削除）の隣接語数（Vitevitch & Luce型）。
   L1加重NDは `data_tables/l1_interference_en_ja.json` の `arpabet_merge_pairs`
@@ -167,12 +170,14 @@ priority = freq_band(FL) - nd_weight × (L1加重ND / (L1加重ND + nd_half_satu
 ## まだ実装していないもの（次フェーズ以降）
 
 - Azure発音評価（`PronunciationCheck.tsx`）、韓国語対応、スキャン画像PDFのOCR
-- **NGSL 1.2本家データセットへの差し替え**: `newgeneralservicelist.org` はこの開発環境の
+- **NGSL 1.2本家データセット**: `newgeneralservicelist.org` はこの開発環境の
   ネットワークポリシーで到達不可（プロキシが403で拒否）。PyPIの`ngsl`パッケージも試したが、
   ライセンス表記が無く（`License: UNKNOWN`）、収録語に`pause`/`unclear`のような書き起こし
   由来の語が混じっており本家NGSLと同一のデータか検証できないため、Browne, Culligan, Phillipsの
-  著作物として帰属表示するのは不正確になり採用を見送った。実データファイルを直接提供いただくか、
-  ネットワークポリシーで当該ドメインへのアクセスを許可いただければ差し替え可能
+  著作物として帰属表示するのは不正確になり採用を見送った。代わりにライセンスの明確な`wordfreq`
+  （上記）を採用済み。NGSL固有の「ESL教育向けに厳選された基本語彙」という性質（wordfreqは
+  生コーパス頻度でありESL選定基準を経ていない）が必要な場合は、実データファイルを直接
+  提供いただくか、ネットワークポリシーで当該ドメインへのアクセスを許可いただければ差し替え可能
 - オフラインヒューリスティック分類器（`--mock`）はタイトルのキーワードや文の形状で
   content_type を推測する簡易ロジック。本番は必ず `ANTHROPIC_API_KEY` を設定した
   `ClaudeClassifier` 経由で解析すること

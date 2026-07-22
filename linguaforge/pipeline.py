@@ -17,6 +17,15 @@ from pathlib import Path
 
 import yaml
 
+from analysis.align import align_section_items
+from analysis.classify import DEFAULT_MODEL, build_classifier
+from analysis.difficulty import flag_item
+from analysis.generator import generate_app
+from analysis.parser import load_sections
+from analysis.priority import USES_WORDFREQ, order_by_priority, score_item, word_neighborhood_density
+from analysis.report import write_report
+from analysis.schema import Course, Item, Section
+
 _SINGLE_WORD_RE = re.compile(r"[A-Za-z']+")
 
 
@@ -25,15 +34,6 @@ def _as_single_word(text: str) -> str | None:
     word-level metric, not defined for a whole sentence), else None."""
     stripped = text.strip()
     return stripped if _SINGLE_WORD_RE.fullmatch(stripped) else None
-
-from analysis.align import align_section_items
-from analysis.classify import DEFAULT_MODEL, build_classifier
-from analysis.difficulty import flag_item
-from analysis.generator import generate_app
-from analysis.parser import load_sections
-from analysis.priority import order_by_priority, score_item, word_neighborhood_density
-from analysis.report import write_report
-from analysis.schema import Course, Item, Section
 
 
 def load_config(input_dir: Path, cli_lang: str | None) -> dict:
@@ -74,6 +74,13 @@ def run_pipeline(input_dir: Path, output_dir: Path, lang: str | None, mock: bool
 
     all_warnings: list[str] = []
     oov_words: set[str] = set()
+
+    if not USES_WORDFREQ:
+        all_warnings.append(
+            "priority.py: wordfreq が未インストールのため、出題優先度スコアのFL(頻度レベル)は "
+            "data_tables/frequency_bands_en.json の簡易頻度帯テーブル（約200語のみ収録）に "
+            "フォールバックしています。pip install wordfreq を推奨。"
+        )
 
     with tempfile.TemporaryDirectory(prefix="linguaforge_work_") as work_dir_str:
         work_dir = Path(work_dir_str)

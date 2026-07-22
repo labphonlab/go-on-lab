@@ -148,16 +148,21 @@ report.mdには各セクションで選択した方法とその理論的根拠�
       `pattern_drill` → SubstitutionDrill）
 - [x] ClaudeClassifierの実APIテスト基盤（`tests/test_classify_live.py`、`ANTHROPIC_API_KEY`必須）
 - [x] L1加重ND/FLベースの出題優先度スコア（`analysis/priority.py` + `analysis/neighborhood.py`）
-      — FLは簡易頻度帯テーブル、NDはCMUdictベースの実計算。母集団はCMUdict全体
-      （NGSL本家データへの絞り込みは下記の理由で未実施）
+      — FLは`wordfreq`（Apache-2.0）による実頻度データ、NDはCMUdictベースの実計算。
+      母集団はCMUdict全体（NGSL本家データへの絞り込みは下記の理由で未実施）
 - [x] `Roleplay.tsx`（dialogue: 片側ミュート＋自己録音確認。話者ラベルは
       `classify.py`（Claude API・ヒューリスティック双方）が項目ごとに付与し、
       中間JSONの `speaker` フィールド経由でUIに渡る）
 - [x] `ListeningChoice.tsx`（vocabulary_list: 4択聞き取り、L1加重ND高語を優先的にディストラクタ化）
-- [ ] **NGSL 1.2本家データセットへの差し替え**: `newgeneralservicelist.org` がこの開発環境の
+- [x] （代替対応）**FL用実頻度データ**: NGSL本家の代わりに`wordfreq`（Robyn Speer, Apache-2.0）
+      を採用。ライセンス明確・カバレッジが事実上全英単語と、NGSL不採用の埋め合わせとして
+      誠実に使える。`wordfreq`未インストール時は簡易頻度帯テーブルにフォールバック
+      （`report.md`に警告表示）
+- [ ] **NGSL 1.2本家データセットそのもの**: `newgeneralservicelist.org` がこの開発環境の
       ネットワークポリシーでブロックされており取得不可。PyPIの`ngsl`パッケージはライセンス
-      不明・データ由来検証不能のため不採用。実データの直接提供、またはネットワークポリシー
-      調整が必要（README「まだ実装していないもの」参照）
+      不明・データ由来検証不能のため不採用。NGSL固有の「ESL教育向け厳選語彙」という性質が
+      必要な場合は、実データの直接提供、またはネットワークポリシー調整が必要
+      （README「まだ実装していないもの」参照）
 - [ ] Azure発音評価（`PronunciationCheck.tsx`）— 要Azure契約・APIキー、未着手
 
 ### フェーズ3 — 未着手

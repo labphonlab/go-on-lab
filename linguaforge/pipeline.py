@@ -20,7 +20,7 @@ from pathlib import Path
 import yaml
 
 from analysis.align import align_section_items
-from analysis.classify import build_classifier
+from analysis.classify import DEFAULT_MODEL, build_classifier
 from analysis.difficulty import flag_item
 from analysis.generator import generate_app
 from analysis.parser import load_sections
@@ -55,7 +55,7 @@ def run_pipeline(input_dir: Path, output_dir: Path, lang: str | None, mock: bool
         )
 
     raw_sections = load_sections(text_dir, audio_dir)
-    classifier = build_classifier(mock=mock, model=model) if model else build_classifier(mock=mock)
+    classifier = build_classifier(mock=mock, model=model or DEFAULT_MODEL)
 
     course = Course(
         title=config["title"],

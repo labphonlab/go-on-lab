@@ -29,7 +29,8 @@ linguaforge/
   data_tables/
     l1_interference_en_ja.json   difficulty.py が参照する困難音素対テーブル（フェーズ3でKO版に差し替え）
   templates/base-app/      第3層: 生成層（Next.js 14 App Router + Tailwind, 固定テンプレート）
-  samples/input/           E2Eテスト用の短い教材（テキスト+合成音声+config.yaml）
+  samples/input/           E2Eテスト用の短い教材（テキスト+合成音声+config.yaml、md/html混在）
+  tests/                   pytest単体テスト（schema/difficulty/extract/parser/report + パイプラインE2E）
 ```
 
 ## 使い方
@@ -68,12 +69,26 @@ output/
   report.md  解析結果・学習方法選択の根拠・アラインメント警告の一覧（納品前チェック用）
 ```
 
-## E2Eテスト（samples/）
+## 自動テスト
+
+```bash
+cd linguaforge
+pip install -r requirements-dev.txt
+pytest
+```
+
+`analysis/` の各モジュール（schema/difficulty/extract/parser/report）の単体テストに加え、
+`tests/test_pipeline_e2e.py` が `samples/input` に対する `--mock` 実行を丸ごと検証する
+（3セクション生成・report.md/data/course.json の存在・生成アプリに実際にバンドルされる
+`app/data/course.json` の中身・音声ファイルのコピーまで）。Next.js側の型チェック・lintは
+下記のE2Eフローで確認する。
+
+## E2Eテスト（samples/ → 実際にビルド）
 
 ```bash
 cd linguaforge
 python pipeline.py --input samples/input --output /tmp/lf_test --mock
-cd /tmp/lf_test/app && npm install && npm run build
+cd /tmp/lf_test/app && npm install && npm run build && npm run lint
 ```
 
 `samples/input/audio/*.wav` は実音声ではなく合成トーンのプレースホルダーのため、MFAを実行しても
@@ -81,9 +96,17 @@ cd /tmp/lf_test/app && npm install && npm run build
 動作で、`output/report.md` の「アラインメント警告」セクションに列挙され、人手確認の対象として扱われる。
 実教材では `input/audio/` に実際の教師音声を置くこと。
 
+## PWA / オフライン対応
+
+生成アプリには `manifest.json`・アイコン一式（`public/icons/`）・オフラインキャッシュ用の
+`sw.js`（stale-while-revalidate、初回訪問後はオフラインでも動作）が同梱済みで、スマホの
+ホーム画面に追加してアプリのように使える。アイコンは合同会社語音の汎用モノグラム（"LF"）の
+プレースホルダーなので、納品前に `templates/base-app/public/icons/` を差し替えれば教材・
+クライアントごとのブランドアイコンにできる。
+
 ## フェーズ1で未実装のもの（次フェーズ以降）
 
 - `grammar_note` / `reading_passage` / `pattern_drill` の学習方法コンポーネント（content_typeの判定・
   report.mdへの記載までは実施、UIコンポーネント未実装）
 - L1加重ND/FLベースの出題優先度スコア（`difficulty.py` は現在テーブル駆動の単純フラグ付けのみ）
-- Azure発音評価、docx入力、韓国語対応
+- Azure発音評価、韓国語対応、スキャン画像PDFのOCR

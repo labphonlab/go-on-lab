@@ -147,12 +147,31 @@ class ClaudeClassifier:
         )
 
 
+def _word_overlap_ratio(lines: list[str]) -> float:
+    """High when consecutive lines share most of their words — the shape of
+    a substitution drill (one slot changes, the rest of the sentence
+    repeats)."""
+    word_sets = [set(re.findall(r"[a-zA-Z']+", l.lower())) for l in lines]
+    ratios = []
+    for a, b in zip(word_sets, word_sets[1:]):
+        if not a or not b:
+            continue
+        ratios.append(len(a & b) / max(len(a | b), 1))
+    return sum(ratios) / len(ratios) if ratios else 0.0
+
+
 class HeuristicClassifier:
     """Deterministic, offline fallback. Used when ANTHROPIC_API_KEY is unset
-    so `samples/` can still be run end-to-end without network access."""
+    so `samples/` can still be run end-to-end without network access.
+
+    This is intentionally crude pattern-matching, not real SLA inference —
+    real deliveries always go through ClaudeClassifier, which reasons about
+    the actual content instead of guessing content_type from text shape."""
 
     _DIALOGUE_LINE = re.compile(r"^\s*([A-Za-z][\w .]{0,20}):\s*(.+)$")
     _BULLET_OR_TABLE = re.compile(r"^\s*([-*]|\|)\s*")
+    _GRAMMAR_TITLE = re.compile(r"grammar|tense|文法", re.I)
+    _DRILL_TITLE = re.compile(r"\bdrill\b|pattern|ドリル|パターン", re.I)
 
     def classify(self, section: RawSection, lang: str = "en") -> SectionAnalysis:
         lines = [l for l in section.body.splitlines() if l.strip() and not l.strip().startswith("#")]
@@ -160,13 +179,29 @@ class HeuristicClassifier:
         dialogue_lines = [self._DIALOGUE_LINE.match(l) for l in lines]
         dialogue_hits = sum(1 for m in dialogue_lines if m)
 
-        if dialogue_hits >= max(2, len(lines) // 2):
+        if self._GRAMMAR_TITLE.search(section.title):
+            # A title is a much more reliable offline signal than trying to
+            # infer grammar content from sentence shape alone.
+            content_type = "grammar_note"
+            texts = [l.strip() for l in lines]
+        elif self._DRILL_TITLE.search(section.title):
+            content_type = "pattern_drill"
+            texts = [l.strip() for l in lines]
+        elif dialogue_hits >= max(2, len(lines) // 2):
             content_type = "dialogue"
             texts = [m.group(2).strip() for m in dialogue_lines if m]
         elif any(self._BULLET_OR_TABLE.match(l) for l in lines):
             content_type = "vocabulary_list"
             texts = [re.sub(r"^\s*([-*]|\|)\s*", "", l).split("|")[0].strip() for l in lines]
             texts = [t for t in texts if t]
+        elif len(lines) >= 3 and _word_overlap_ratio(lines) > 0.45:
+            content_type = "pattern_drill"
+            texts = [l.strip() for l in lines]
+        elif len(lines) <= 3 and sum(len(l.split()) for l in lines) >= 20:
+            # a handful of long, unbulleted lines reads as prose, not a list
+            content_type = "reading_passage"
+            joined = " ".join(l.strip() for l in lines)
+            texts = [s.strip() for s in re.split(r"(?<=[.!?])\s+", joined) if s.strip()]
         else:
             content_type = "dialogue"
             texts = [l.strip() for l in lines]

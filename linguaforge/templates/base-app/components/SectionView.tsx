@@ -6,13 +6,22 @@ import type { Section } from "@/lib/types";
 import Flashcard from "./Flashcard";
 import Dictation from "./Dictation";
 import Shadowing from "./Shadowing";
+import ClozeDrill from "./ClozeDrill";
+import KaraokeReader from "./KaraokeReader";
+import SubstitutionDrill from "./SubstitutionDrill";
 
-// Phase 1 (MVP) only ships components for these methods; other content types
-// are classified and reported (see report.md) but have no UI yet.
+// Each entry maps one learning_methods value (schema.py's CONTENT_TYPE_METHODS)
+// to the component that renders it. A content_type's other listed methods
+// (e.g. grammar_note's structured_input/reorder_drill) are internal stages
+// folded into the mapped component here, not separate tabs — see each
+// component's stage stepper.
 const METHOD_META: Record<string, { label: string; icon: string }> = {
   flashcard: { label: "フラッシュカード", icon: "🗂️" },
   dictation: { label: "ディクテーション", icon: "✍️" },
   shadowing: { label: "シャドーイング", icon: "🎧" },
+  cloze_drill: { label: "文法ドリル", icon: "📘" },
+  karaoke_reading: { label: "音読", icon: "📖" },
+  substitution_drill: { label: "パターンドリル", icon: "🔁" },
 };
 
 const IMPLEMENTED_METHODS = new Set(Object.keys(METHOD_META));
@@ -74,6 +83,9 @@ export default function SectionView({ section }: { section: Section }) {
             {active === "flashcard" && <Flashcard section={section} />}
             {active === "dictation" && <Dictation section={section} />}
             {active === "shadowing" && <Shadowing section={section} />}
+            {active === "cloze_drill" && <ClozeDrill section={section} />}
+            {active === "karaoke_reading" && <KaraokeReader section={section} />}
+            {active === "substitution_drill" && <SubstitutionDrill section={section} />}
           </div>
         </>
       )}

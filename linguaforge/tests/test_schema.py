@@ -9,7 +9,25 @@ def test_item_to_dict_omits_absent_optional_fields():
     assert "alignment_confidence" not in d
     assert "nd" not in d
     assert "nd_l1_weighted" not in d
+    assert "original_text" not in d
+    assert "revision_note" not in d
     assert d["difficulty_flags"] == []
+
+
+def test_item_to_dict_includes_revision_fields_only_when_note_present():
+    unchanged = Item(id="01-001", text="the cat sat")
+    assert "original_text" not in unchanged.to_dict()
+    assert "revision_note" not in unchanged.to_dict()
+
+    revised = Item(
+        id="01-002",
+        text="the cat sat on the mat",
+        original_text="the cat sat on teh mat",
+        revision_note="OCR誤読 'teh' を 'the' に修正",
+    )
+    d = revised.to_dict()
+    assert d["original_text"] == "the cat sat on teh mat"
+    assert d["revision_note"] == "OCR誤読 'teh' を 'the' に修正"
 
 
 def test_item_to_dict_includes_nd_fields_when_present():

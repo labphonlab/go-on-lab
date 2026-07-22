@@ -54,6 +54,12 @@ class Item:
     # report.md's OOV list rather than in this field.
     nd: Optional[int] = None
     nd_l1_weighted: Optional[int] = None
+    # Set only when classify.py corrected/completed/restructured this item's
+    # text relative to what was actually in the source file (see classify.py's
+    # system prompt) — original_text is the as-extracted version, revision_note
+    # is a one-line reason. Both empty means "text is exactly what was extracted."
+    original_text: str = ""
+    revision_note: str = ""
 
     def to_dict(self) -> dict:
         d = {
@@ -67,6 +73,9 @@ class Item:
             d["pos"] = self.pos
         if self.speaker:
             d["speaker"] = self.speaker
+        if self.revision_note:
+            d["original_text"] = self.original_text
+            d["revision_note"] = self.revision_note
         if self.audio is not None:
             d["audio"] = self.audio.to_dict()
         if self.priority_score is not None:

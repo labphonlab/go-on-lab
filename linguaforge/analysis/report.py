@@ -4,6 +4,9 @@ Must surface (per AGENTS.md):
   - the learning-method decision + SLA rationale per section
   - low-confidence / failed alignment spans
   - every extracted ja/ipa value, for human spot-check
+  - every item classify.py completed/corrected/restructured away from the
+    raw source text, with what changed and why — the "you may fix the
+    input, but never silently" contract
 """
 
 from __future__ import annotations
@@ -48,6 +51,25 @@ def render_report(
             lines.append(f"- ⚠️ {w}")
     else:
         lines.append("- 警告なし")
+    lines.append("")
+
+    revised_items = [(s, it) for s in course.sections for it in s.items if it.revision_note]
+    lines.append("## 入力テキストの補完・修正・再構成（要確認）")
+    lines.append("")
+    lines.append(
+        "解析層は誤字・文字化け・文の欠落など明らかな不備を教育的に補完・修正・再構成してよい設計"
+        "だが、変更内容は必ずここに記録される。納品前に一つずつ原文と見比べて承認すること。"
+    )
+    lines.append("")
+    if revised_items:
+        for section, item in revised_items:
+            lines.append(f"### {section.id} {section.title} / {item.id}")
+            lines.append(f"- 変更前: {item.original_text}")
+            lines.append(f"- 変更後: {item.text}")
+            lines.append(f"- 理由: {item.revision_note}")
+            lines.append("")
+    else:
+        lines.append("- 変更なし")
     lines.append("")
 
     lines.append("## 抽出内容の確認用一覧（訳・IPA・ND）")

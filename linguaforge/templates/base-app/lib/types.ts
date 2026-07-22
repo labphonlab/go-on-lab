@@ -17,6 +17,11 @@ export interface Item {
   priority_score?: number;
   nd?: number;
   nd_l1_weighted?: number;
+  // Present only if analysis/classify.py completed/corrected/restructured
+  // this item's text — see report.md's review section. Not shown to
+  // learners; this is a teacher pre-delivery review concern.
+  original_text?: string;
+  revision_note?: string;
 }
 
 export interface Section {

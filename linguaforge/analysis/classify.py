@@ -5,9 +5,19 @@ inferred (vocab / grammar form / phonetic feature / discourse pattern), and
 gets a learning_methods list + a one-line SLA rationale for report.md — this
 module is the "判定アルゴリズム" described in AGENTS.md.
 
+ClaudeClassifier is also allowed to complete/correct/restructure messy or
+incomplete source text (OCR garble, docx/pdf conversion artifacts, a
+truncated sentence) rather than passing it through verbatim — but never
+silently: any changed item carries original_text + revision_note, and
+report.py surfaces every one of them for human review before delivery.
+Sections with matching audio get a stricter instruction (transcription-level
+fixes only) since MFA alignment and dictation grading assume item text
+matches what's actually spoken.
+
 A HeuristicClassifier fallback covers offline/CI runs (no ANTHROPIC_API_KEY):
-it is intentionally crude and exists only so `samples/` E2E tests don't
-require network access. Real deliveries always go through ClaudeClassifier.
+it is intentionally crude (regex/shape-based, no text correction at all)
+and exists only so `samples/` E2E tests don't require network access. Real
+deliveries always go through ClaudeClassifier.
 """
 
 from __future__ import annotations
@@ -53,7 +63,7 @@ class SectionAnalysis:
     learning_target_summary: str
     learning_methods: list
     rationale: str
-    items: list  # list[dict]: text, ja, ipa, pos, speaker (dialogue only)
+    items: list  # list[dict]: text, ja, ipa, pos, speaker, original_text, revision_note
 
 
 _TOOL_SCHEMA = {
@@ -84,13 +94,21 @@ _TOOL_SCHEMA = {
                 "items": {
                     "type": "object",
                     "properties": {
-                        "text": {"type": "string"},
+                        "text": {"type": "string", "description": "学習項目として提示する最終テキスト（必要に応じ補完・修正・再構成済み）"},
                         "ja": {"type": "string", "description": "日本語訳"},
                         "ipa": {"type": "string", "description": "IPA表記"},
                         "pos": {"type": "string", "description": "品詞（vocabulary_listのみ）"},
                         "speaker": {"type": "string", "description": "話者名（dialogueのみ。例: A, B, Maria）"},
+                        "original_text": {
+                            "type": "string",
+                            "description": "text を元のテキストから補完・修正・再構成した場合のみ、変更前の原文をそのまま記載。変更していない場合は空文字。",
+                        },
+                        "revision_note": {
+                            "type": "string",
+                            "description": "text を変更した場合のみ、何をどう変えたか・なぜ変えたかを日本語1行で。変更していない場合は空文字。",
+                        },
                     },
-                    "required": ["text", "ja", "ipa"],
+                    "required": ["text", "ja", "ipa", "original_text", "revision_note"],
                 },
             },
         },
@@ -99,7 +117,8 @@ _TOOL_SCHEMA = {
 }
 
 _SYSTEM_PROMPT = """あなたは第二言語習得（SLA）研究に基づいて英語教材を解析する言語学者です。
-入力される教材の1節（Markdown）を読み、以下を行ってください:
+入力される教材の1節（Markdown。docx/pdf/html等から変換されたテキストの場合もある）を読み、
+以下を行ってください:
 
 1. content_type を vocabulary_list / dialogue / grammar_note / reading_passage / pattern_drill から1つ判定する
 2. その節で学習者が習得すべきもの（語彙・文法形式・音声特徴・談話パターン）を推定する
@@ -109,6 +128,25 @@ _SYSTEM_PROMPT = """あなたは第二言語習得（SLA）研究に基づいて
 4. 節内のテキストを項目（例文・語彙）に分割し、各項目について日本語訳とIPA表記を付与する
 5. content_type が dialogue の場合、各項目にその発話者名（speaker）を付与する
    （ロールプレイで話者ごとにミュート・切替するために使用する）
+
+## 入力テキストの補完・修正・再構成について
+
+PDF/OCR/docx変換や教師の走り書きに由来する誤字脱字・文字化け・文の途中切れ・脱字などの
+明らかな不備がある場合、学習項目として提示する前に教育的に適切な形へ補完・修正・再構成してよい。
+ただし以下を厳守すること:
+
+- 変更した場合は必ず items[].original_text に変更前の原文をそのまま、
+  items[].revision_note に変更内容と理由を日本語1行で記載する（例:
+  「OCR誤読 'teh' を 'the' に修正」「文末が欠落していたため文脈から補完」）。
+  変更していない項目は両方とも空文字のままにする
+- **音声ファイルが存在する節（下記ユーザーメッセージで明示される）では、書き起こしの
+  誤字レベルの補正に留め、実際に話されている内容と異なる修正はしないこと。**
+  音声アラインメントは項目テキストと実際の発話が一致している前提で動作するため、
+  内容を変えると音声タイムスタンプがずれ、ディクテーションの採点も不正確になる
+- 音声のない節（grammar_noteの例文など）では、教育的な観点からより踏み込んだ
+  補完・再構成を行ってよい
+- 教師が意図的に選んだ平易な表現・教育方針上の言い回しは尊重し、不必要な書き換えは行わないこと。
+  「直す」のではなく「明らかに壊れている・欠けている箇所を補う」姿勢を基本とする
 
 日本語母語の学習者を想定すること。IPAは可能な限り正確に付与すること。"""
 
@@ -126,6 +164,12 @@ class ClaudeClassifier:
         self._client = anthropic.Anthropic()
 
     def classify(self, section: RawSection, lang: str = "en") -> SectionAnalysis:
+        audio_note = (
+            f"[この節には音声ファイル {section.audio_file} が対応しています。"
+            "書き起こしの誤字レベルの補正に留めてください]"
+            if section.audio_file
+            else "[この節に対応する音声ファイルはありません]"
+        )
         message = self._client.messages.create(
             model=self.model,
             max_tokens=4096,
@@ -135,7 +179,7 @@ class ClaudeClassifier:
             messages=[
                 {
                     "role": "user",
-                    "content": f"# {section.title}\n\n{section.body}",
+                    "content": f"{audio_note}\n\n# {section.title}\n\n{section.body}",
                 }
             ],
         )
@@ -214,7 +258,17 @@ class HeuristicClassifier:
             speakers = [(m.group(1).strip() if m else "") for m in dialogue_lines]
 
         items = [
-            {"text": t, "ja": "", "ipa": "", "pos": "", "speaker": (speakers[i] if i < len(speakers) else "")}
+            {
+                "text": t,
+                "ja": "",
+                "ipa": "",
+                "pos": "",
+                "speaker": (speakers[i] if i < len(speakers) else ""),
+                # Pattern-matching only — never corrects/completes/restructures
+                # text, so there is never anything to report here.
+                "original_text": "",
+                "revision_note": "",
+            }
             for i, t in enumerate(texts)
             if t
         ]

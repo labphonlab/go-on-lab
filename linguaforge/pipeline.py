@@ -131,6 +131,8 @@ def run_pipeline(input_dir: Path, output_dir: Path, lang: str | None, mock: bool
                         priority_score=score,
                         nd=nd,
                         nd_l1_weighted=nd_l1,
+                        original_text=raw_item.get("original_text", ""),
+                        revision_note=raw_item.get("revision_note", ""),
                     )
                 )
 

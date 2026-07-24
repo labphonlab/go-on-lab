@@ -2,6 +2,9 @@ word,pos,ja,ipa,ngsl_rank,nd,fl,l1_weighted_nd,hvpt,unit
 opinion,noun,意見,/əˈpɪnjən/,1210,11,0.58,0.26,0,17
 agree,verb,賛成する・同意する,/əˈɡriː/,980,15,0.66,0.28,0,17
 disagree,verb,反対する・同意しない,/ˌdɪsəˈɡriː/,1850,8,0.40,0.28,0,17
+better,adjective/adverb,もっと良い,/ˈbɛtər/,620,19,0.82,0.22,0,17
+best,adjective/adverb,最も良い,/bɛst/,640,18,0.80,0.20,0,17
+more,adverb,もっと・より多く,/mɔːr/,650,18,0.80,0.25,0,17
 argument,noun,議論・言い合い,/ˈɑːrɡjəmənt/,1780,8,0.38,0.34,1,17
 reason,noun,理由,/ˈriːzən/,830,16,0.70,0.30,0,17
 point,noun,論点・要点,/pɔɪnt/,760,17,0.72,0.24,0,17

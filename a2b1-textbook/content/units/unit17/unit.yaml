@@ -17,6 +17,9 @@ vocabulary_targets:
   - opinion
   - agree
   - disagree
+  - better
+  - best
+  - more
   - argument
   - reason
   - point

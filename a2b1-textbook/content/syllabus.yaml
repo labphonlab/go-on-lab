@@ -157,7 +157,7 @@ units:
     grammar_focus: ["infinitive vs gerund: want to / enjoy -ing / decide to / avoid -ing"]
     vocabulary_target_count: 45
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 17
     title: "Giving Opinions and Agreeing/Disagreeing"
@@ -166,7 +166,7 @@ units:
     grammar_focus: ["I think / I don't think", "So do I / Neither do I"]
     vocabulary_target_count: 45
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 18
     title: "Telling a Story"
@@ -175,7 +175,7 @@ units:
     grammar_focus: ["narrative tenses review", "reported speech (light introduction)"]
     vocabulary_target_count: 50
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 19
     title: "Travel and Problems"
@@ -184,7 +184,7 @@ units:
     grammar_focus: ["second conditional (light introduction)", "past modals: should have"]
     vocabulary_target_count: 50
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 20
     title: "Looking Back, Looking Forward"

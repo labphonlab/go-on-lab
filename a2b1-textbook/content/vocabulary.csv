@@ -565,3 +565,196 @@ hand,noun,手,/hænd/,620,20,0.80,0.18,0,14
 building,noun,建物,/ˈbɪldɪŋ/,650,19,0.77,0.24,0,14
 by,preposition,〜によって（受動態の動作主）,/baɪ/,610,20,0.85,0.15,0,14
 as,conjunction,〜として,/æz/,615,20,0.85,0.15,0,14
+plan,noun/verb,計画・目標,/plæn/,680,15,0.68,0.30,0,16
+future,noun,将来,/ˈfjuːtʃər/,750,14,0.64,0.28,0,16
+become,verb,〜になる,/bɪˈkʌm/,610,17,0.74,0.26,0,16
+nurse,noun,看護師,/nɜːrs/,1500,8,0.38,0.24,0,16
+enjoy,verb,楽しむ,/ɪnˈdʒɔɪ/,920,12,0.55,0.28,0,16
+helping,verb (-ing form),助けること（help の -ing 形）,/ˈhɛlpɪŋ/,1900,5,0.24,0.20,0,16
+hope,verb/noun,望む・希望,/hoʊp/,660,16,0.70,0.26,0,16
+university,noun,大学,/ˌjuːnɪˈvɜːrsɪti/,1340,9,0.42,0.22,0,16
+decided,verb (past tense),決めた（decide の過去形）,/dɪˈsaɪdɪd/,830,13,0.52,0.24,0,16
+apply,verb,応募する・出願する,/əˈplaɪ/,950,11,0.48,0.22,0,16
+goal,noun,目標,/goʊl/,720,14,0.62,0.26,0,16
+dream,noun/verb,夢・夢見る,/driːm/,1470,8,0.36,0.24,0,16
+starting,verb (-ing form),始めること（start の -ing 形）,/ˈstɑːrtɪŋ/,1950,4,0.22,0.18,0,16
+own,adjective,自分自身の,/oʊn/,640,16,0.71,0.22,0,16
+business,noun,ビジネス・事業,/ˈbɪznɪs/,1020,10,0.46,0.22,0,16
+someday,adverb,いつか,/ˈsʌmdeɪ/,1850,5,0.24,0.18,0,16
+cooking,verb (-ing form),料理すること（cook の -ing 形）,/ˈkʊkɪŋ/,2000,4,0.20,0.18,0,16
+exciting,adjective,わくわくする,/ɪkˈsaɪtɪŋ/,1880,5,0.25,0.20,0,16
+travel,verb,旅行する,/ˈtrævəl/,980,11,0.50,0.42,1,16
+traveling,verb (-ing form),旅行すること,/ˈtrævəlɪŋ/,2150,3,0.16,0.40,1,16
+meeting,verb (-ing form),会うこと（meet の -ing 形）,/ˈmiːtɪŋ/,1180,9,0.44,0.20,0,16
+trying,verb (-ing form),試すこと（try の -ing 形）,/ˈtraɪɪŋ/,2050,4,0.19,0.18,0,16
+avoid,verb,避ける,/əˈvɔɪd/,1060,10,0.45,0.38,1,16
+spending,verb (-ing form),使うこと（spend の -ing 形）,/ˈspɛndɪŋ/,2100,3,0.17,0.20,0,16
+achieve,verb,達成する,/əˈtʃiːv/,1100,9,0.43,0.40,1,16
+reach,verb,到達する・達成する,/riːtʃ/,1120,9,0.44,0.36,1,16
+promise,verb/noun,約束する・約束,/ˈprɒmɪs/,900,12,0.53,0.24,0,16
+exam,noun,試験,/ɪɡˈzæm/,1450,7,0.35,0.22,0,16
+luck,noun,運,/lʌk/,1800,6,0.28,0.20,0,16
+decide,verb,決める,/dɪˈsaɪd/,820,13,0.54,0.24,0,16
+keep,verb,〜し続ける,/kiːp/,780,15,0.62,0.24,0,16
+expect,verb,期待する・予期する,/ɪkˈspɛkt/,1150,8,0.41,0.24,0,16
+consider,verb,検討する・考える,/kənˈsɪdər/,1200,8,0.40,0.24,0,16
+quit,verb,やめる,/kwɪt/,1540,6,0.30,0.22,0,16
+imagine,verb,想像する,/ɪˈmædʒɪn/,1580,6,0.29,0.22,0,16
+afford,verb,（金銭的・時間的に）余裕がある,/əˈfɔːrd/,1620,5,0.27,0.38,1,16
+manage,verb,何とかやり遂げる,/ˈmænɪdʒ/,1230,8,0.39,0.22,0,16
+volunteer,noun/verb,ボランティア（をする）,/ˌvɒlənˈtɪr/,1740,5,0.26,0.44,1,16
+graduate,verb,卒業する,/ˈɡrædʒueɪt/,1660,5,0.28,0.42,1,16
+degree,noun,学位,/dɪˈɡriː/,1700,5,0.27,0.24,0,16
+career,noun,キャリア・職業,/kəˈrɪr/,1300,7,0.38,0.40,1,16
+skill,noun,スキル・技能,/skɪl/,1380,7,0.37,0.26,0,16
+confident,adjective,自信のある,/ˈkɒnfɪdənt/,1420,7,0.36,0.42,1,16
+improve,verb,上達する・改善する,/ɪmˈpruːv/,1260,8,0.39,0.24,0,16
+abroad,adverb,海外へ・海外で,/əˈbrɔːd/,1780,5,0.25,0.22,0,16
+opinion,noun,意見,/əˈpɪnjən/,1210,11,0.58,0.26,0,17
+agree,verb,賛成する・同意する,/əˈɡriː/,980,15,0.66,0.28,0,17
+disagree,verb,反対する・同意しない,/ˌdɪsəˈɡriː/,1850,8,0.40,0.28,0,17
+better,adjective/adverb,もっと良い,/ˈbɛtər/,620,19,0.82,0.22,0,17
+best,adjective/adverb,最も良い,/bɛst/,640,18,0.80,0.20,0,17
+more,adverb,もっと・より多く,/mɔːr/,650,18,0.80,0.25,0,17
+argument,noun,議論・言い合い,/ˈɑːrɡjəmənt/,1780,8,0.38,0.34,1,17
+reason,noun,理由,/ˈriːzən/,830,16,0.70,0.30,0,17
+point,noun,論点・要点,/pɔɪnt/,760,17,0.72,0.24,0,17
+issue,noun,問題・論点,/ˈɪʃuː/,1150,12,0.56,0.22,0,17
+fair,adjective,公平な,/fɛr/,1420,10,0.50,0.32,1,17
+convince,verb,納得させる・説得する,/kənˈvɪns/,2180,6,0.28,0.34,1,17
+convinced,adjective,確信している,/kənˈvɪnst/,2260,5,0.26,0.34,0,17
+honestly,adverb,正直に言うと,/ˈɒnɪstli/,1900,7,0.36,0.24,0,17
+personally,adverb,個人的には,/ˈpɜːrsənəli/,2000,6,0.32,0.24,0,17
+exactly,adverb,まさにその通り,/ɪɡˈzæktli/,1080,13,0.60,0.22,0,17
+totally,adverb,完全に,/ˈtoʊtəli/,1650,9,0.44,0.20,0,17
+completely,adverb,完全に・すっかり,/kəmˈpliːtli/,1300,11,0.54,0.24,0,17
+sure,adjective,確かな・もちろん,/ʃʊr/,860,15,0.72,0.24,0,17
+however,adverb,しかしながら,/haʊˈɛvər/,950,14,0.62,0.30,1,17
+actually,adverb,実は,/ˈæktʃuəli/,1040,14,0.68,0.32,0,17
+pet,noun,ペット,/pɛt/,1700,9,0.44,0.22,0,17
+pets,noun,ペット（複数）,/pɛts/,1750,8,0.42,0.20,0,17
+cat,noun,猫,/kæt/,1550,10,0.48,0.20,0,17
+cats,noun,猫（複数）,/kæts/,1600,9,0.46,0.20,0,17
+dog,noun,犬,/dɔːɡ/,1500,11,0.50,0.22,0,17
+dogs,noun,犬（複数）,/dɔːɡz/,1540,10,0.48,0.22,0,17
+loyal,adjective,忠実な,/ˈlɔɪəl/,2400,4,0.22,0.32,1,17
+calm,adjective,落ち着いた・穏やかな,/kɑːm/,1780,8,0.40,0.28,0,17
+independent,adjective,自立した・独立した,/ˌɪndɪˈpɛndənt/,1900,7,0.36,0.34,1,17
+friendly,adjective,人懐っこい・親しみやすい,/ˈfrɛndli/,1420,10,0.50,0.30,1,17
+guess,verb,推測する・〜だと思う,/ɡɛs/,1050,14,0.62,0.24,0,17
+compromise,noun/verb,妥協（する）,/ˈkɒmprəmaɪz/,2600,3,0.16,0.34,1,17
+in my opinion,expression,私の意見では,/ɪn maɪ əˈpɪnjən/,2150,6,0.30,0.24,0,17
+I agree,expression,私もそう思います（賛成）,/aɪ əˈɡriː/,1900,7,0.36,0.26,0,17
+I disagree,expression,私はそう思いません（反対）,/aɪ ˌdɪsəˈɡriː/,2050,6,0.32,0.26,0,17
+So do I,expression,私も（そう）です,/soʊ duː aɪ/,2300,5,0.26,0.22,0,17
+Neither do I,expression,私も（そうでは）ないです,/ˈniːðər duː aɪ/,2550,4,0.20,0.30,1,17
+good point,expression,いい指摘だね,/ɡʊd pɔɪnt/,2100,6,0.30,0.22,0,17
+to be honest,expression,正直に言うと,/tuː biː ˈɒnɪst/,2250,5,0.26,0.24,0,17
+on the other hand,expression,一方で,/ɒn ðiː ˈʌðər hænd/,2400,5,0.24,0.28,0,17
+for example,expression,例えば,/fɔːr ɪɡˈzæmpəl/,680,18,0.78,0.22,0,17
+I see your point,expression,言いたいことは分かります,/aɪ siː jʊr pɔɪnt/,2600,4,0.20,0.26,0,17
+not really,expression,あまりそうでもない,/nɒt ˈriːəli/,1450,10,0.52,0.24,0,17
+I guess so,expression,まあそうかもね,/aɪ ɡɛs soʊ/,2350,5,0.24,0.22,0,17
+agree to disagree,expression,意見の違いを認め合う,/əˈɡriː tuː ˌdɪsəˈɡriː/,2700,3,0.16,0.28,0,17
+change your mind,expression,考えを変える,/tʃeɪndʒ jʊr maɪnd/,2450,4,0.22,0.24,0,17
+not necessarily,expression,必ずしもそうとは限らない,/nɒt ˌnɛsəˈsɛrəli/,2500,4,0.20,0.24,0,17
+trip,noun,旅行,/trɪp/,1050,14,0.66,0.34,0,18
+weekend,noun,週末,/ˈwiːkɛnd/,1042,12,0.71,0.30,0,18
+platform,noun,ホーム（駅の）,/ˈplætfɔːrm/,1450,9,0.52,0.38,1,18
+ticket,noun,切符,/ˈtɪkɪt/,1180,13,0.64,0.26,0,18
+stranger,noun,見知らぬ人,/ˈstreɪndʒər/,1620,8,0.42,0.40,1,18
+crowd,noun,人混み,/kraʊd/,1580,9,0.44,0.36,1,18
+announcement,noun,アナウンス,/əˈnaʊnsmənt/,1890,6,0.34,0.28,0,18
+mistake,noun,間違い,/mɪˈsteɪk/,1050,15,0.70,0.28,0,18
+memory,noun,記憶・思い出,/ˈmɛməri/,1240,12,0.60,0.34,0,18
+moment,noun,瞬間,/ˈmoʊmənt/,900,18,0.78,0.22,0,18
+adventure,noun,冒険,/ədˈvɛntʃər/,1780,7,0.38,0.32,0,18
+situation,noun,状況,/ˌsɪtʃuˈeɪʃən/,1150,11,0.58,0.24,0,18
+happened,verb,起こった,/ˈhæpənd/,620,20,0.84,0.20,0,18
+noticed,verb,気づいた,/ˈnoʊtɪst/,1280,11,0.56,0.26,0,18
+realized,verb,気づいた・悟った,/ˈriːəlaɪzd/,1350,10,0.54,0.38,1,18
+decided,verb,決めた,/dɪˈsaɪdɪd/,830,17,0.76,0.24,0,18
+mentioned,verb,言及した,/ˈmɛnʃənd/,1690,8,0.40,0.26,0,18
+missed,verb,乗り遅れた・逃した,/mɪst/,1150,12,0.58,0.24,0,18
+caught,verb,間に合った・捕まえた,/kɔːt/,1220,11,0.55,0.22,0,18
+hurried,verb,急いだ,/ˈhɜːrid/,2050,6,0.32,0.36,0,18
+rushed,verb,急いだ・慌てた,/rʌʃt/,1950,6,0.33,0.34,0,18
+apologized,verb,謝った,/əˈpɒlədʒaɪzd/,1830,7,0.36,0.32,0,18
+replied,verb,返事をした,/rɪˈplaɪd/,1420,10,0.52,0.42,1,18
+promised,verb,約束した,/ˈprɒmɪst/,1380,10,0.53,0.30,0,18
+warned,verb,警告した,/wɔːrnd/,1870,6,0.34,0.28,0,18
+complained,verb,文句を言った,/kəmˈpleɪnd/,1990,6,0.31,0.30,0,18
+panicked,verb,パニックになった,/ˈpænɪkt/,2200,5,0.28,0.24,0,18
+walking,verb,歩いている（最中）,/ˈwɔːkɪŋ/,830,19,0.80,0.24,0,18
+sitting,verb,座っている（最中）,/ˈsɪtɪŋ/,900,18,0.79,0.22,0,18
+talking,verb,話している（最中）,/ˈtɔːkɪŋ/,780,19,0.81,0.20,0,18
+nervous,adjective,緊張した,/ˈnɜːrvəs/,1310,11,0.57,0.44,1,18
+embarrassed,adjective,恥ずかしい,/ɪmˈbærəst/,1760,8,0.40,0.42,1,18
+confused,adjective,混乱した,/kənˈfjuːzd/,1540,9,0.46,0.30,0,18
+relieved,adjective,ほっとした,/rɪˈliːvd/,2020,6,0.32,0.46,1,18
+surprised,adjective,驚いた,/sərˈpraɪzd/,970,17,0.75,0.40,1,18
+shocked,adjective,ショックを受けた,/ʃɒkt/,1460,10,0.51,0.28,0,18
+terrified,adjective,とても怖がった,/ˈtɛrɪfaɪd/,2380,5,0.24,0.30,0,18
+amazing,adjective,すごい,/əˈmeɪzɪŋ/,1090,13,0.62,0.24,0,18
+meanwhile,adverb,その間に,/ˈmiːnwaɪl/,1670,8,0.40,0.34,0,18
+afterward,adverb,その後で,/ˈæftərwərd/,2280,5,0.26,0.24,0,18
+immediately,adverb,すぐに,/ɪˈmiːdiətli/,990,15,0.70,0.22,0,18
+gradually,adverb,徐々に,/ˈɡrædʒuəli/,1810,7,0.37,0.28,0,18
+luckily,adverb,幸運にも,/ˈlʌkɪli/,1590,9,0.45,0.36,1,18
+unfortunately,adverb,残念ながら,/ʌnˈfɔːrtʃənətli/,1140,12,0.59,0.26,0,18
+apparently,adverb,どうやら,/əˈpærəntli/,1720,8,0.39,0.28,0,18
+turned out,phrasal verb,結局〜だった,/tɜːrnd aʊt/,2100,6,0.30,0.24,0,18
+got lost,expression,道に迷った,/ɡɒt lɔːst/,2340,5,0.25,0.28,0,18
+ran into,phrasal verb,偶然出会った,/ræn ˈɪntuː/,2500,4,0.22,0.26,0,18
+ended up,phrasal verb,結局〜することになった,/ˈɛndɪd ʌp/,2600,4,0.20,0.24,0,18
+unexpectedly,adverb,予想外に,/ˌʌnɪkˈspɛktɪdli/,2460,4,0.20,0.20,0,18
+trip,noun,旅行,/trɪp/,780,15,0.62,0.25,0,19
+airport,noun,空港,/ˈeərpɔːrt/,900,14,0.58,0.30,0,19
+happened,verb (past tense),起こった,/ˈhæpənd/,650,19,0.70,0.20,0,19
+flight,noun,飛行機の便,/flaɪt/,1050,13,0.55,0.42,1,19
+connection,noun,乗り継ぎ,/kəˈnekʃən/,1780,9,0.40,0.28,0,19
+delayed,adjective,遅れた,/dɪˈleɪd/,1620,10,0.45,0.38,1,19
+missed,verb (past tense),乗り遅れた,/mɪst/,1150,12,0.50,0.24,0,19
+terrible,adjective,ひどい,/ˈterəbəl/,1380,11,0.48,0.44,1,19
+airline,noun,航空会社,/ˈeərlaɪn/,1490,9,0.42,0.26,0,19
+staff,noun,スタッフ・職員,/stæf/,1340,10,0.44,0.22,0,19
+gate,noun,搭乗口,/ɡeɪt/,1600,8,0.38,0.20,0,19
+until,preposition/conjunction,〜まで,/ənˈtɪl/,700,17,0.68,0.18,0,19
+stressful,adjective,ストレスの多い,/ˈstresfəl/,2150,6,0.30,0.24,0,19
+hotel,noun,ホテル,/hoʊˈtel/,980,14,0.60,0.22,0,19
+suitcase,noun,スーツケース,/ˈsuːtkeɪs/,2050,7,0.33,0.27,0,19
+missing,adjective,見当たらない・なくなった,/ˈmɪsɪŋ/,1420,10,0.46,0.23,0,19
+desk,noun,窓口・受付,/desk/,1490,9,0.41,0.19,0,19
+claim,noun/verb,申し立て・請求,/kleɪm/,1980,7,0.35,0.45,1,19
+send,verb,送る,/send/,760,18,0.66,0.21,0,19
+upset,adjective,動揺した,/ʌpˈset/,1860,7,0.34,0.25,0,19
+packed,verb (past tense),荷造りした,/pækt/,1710,8,0.37,0.23,0,19
+keep,verb,持っておく・保管する,/kiːp/,640,20,0.72,0.20,0,19
+passport,noun,パスポート,/ˈpæspɔːrt/,1550,10,0.47,0.28,0,19
+smart,adjective,賢い,/smɑːrt/,1290,11,0.49,0.24,0,19
+back,adverb,戻って・返して,/bæk/,610,20,0.75,0.19,0,19
+embassy,noun,大使館,/ˈembəsi/,2380,5,0.27,0.24,0,19
+immediately,adverb,すぐに,/ɪˈmiːdiətli/,1240,12,0.51,0.21,0,19
+delay,noun,遅れ,/dɪˈleɪ/,1660,9,0.40,0.36,0,19
+complained,verb (past tense),苦情を言った,/kəmˈpleɪnd/,2020,7,0.32,0.22,0,19
+travel,noun/verb,旅行する,/ˈtrævəl/,880,15,0.61,0.41,1,19
+insurance,noun,保険,/ɪnˈʃʊərəns/,2260,6,0.29,0.23,0,19
+point,noun,意見・要点,/pɔɪnt/,930,15,0.63,0.26,0,19
+hope,verb,望む,/hoʊp/,720,18,0.69,0.20,0,19
+better,adjective,もっと良い,/ˈbetər/,690,19,0.71,0.20,0,19
+stolen,verb (past participle),盗まれた,/ˈstoʊlən/,1900,7,0.33,0.26,0,19
+steal,verb,盗む,/stiːl/,2150,6,0.30,0.25,0,19
+wallet,noun,財布,/ˈwɑːlɪt/,1780,8,0.37,0.48,1,19
+refund,noun,返金,/ˈriːfʌnd/,2280,6,0.29,0.43,1,19
+reservation,noun,予約,/ˌrezərˈveɪʃən/,2150,7,0.31,0.40,1,19
+cancelled,verb (past tense),キャンセルされた,/ˈkænsəld/,1830,8,0.36,0.24,0,19
+customs,noun,税関,/ˈkʌstəmz/,1990,7,0.34,0.22,0,19
+queue,noun,列・行列,/kjuː/,2480,4,0.24,0.31,0,19
+security,noun,保安検査,/sɪˈkjʊərəti/,1360,11,0.47,0.29,0,19
+police,noun,警察,/pəˈliːs/,1020,14,0.57,0.46,1,19
+urgent,adjective,緊急の,/ˈɜːrdʒənt/,2040,7,0.32,0.39,1,19
+emergency,noun,緊急事態,/ɪˈmɜːrdʒənsi/,1680,9,0.39,0.27,0,19
+contact,verb,連絡する,/ˈkɑːntækt/,1150,12,0.50,0.23,0,19
+belongings,noun,持ち物,/bɪˈlɔːŋɪŋz/,2390,5,0.26,0.25,0,19
+tourist,noun,観光客,/ˈtʊərɪst/,1490,10,0.44,0.24,0,19
+apologize,verb,謝る,/əˈpɑːlədʒaɪz/,1920,7,0.33,0.26,0,19

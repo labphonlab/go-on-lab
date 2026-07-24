@@ -14,7 +14,8 @@ Unit 1「Making Plans with Friends」を通しで実装し、コンテンツス�
 | `scripts/vocab_check.py`（98%カバー率ゲート） | ✅ 動作確認済み・pytest あり |
 | `scripts/export_app.py`（→ LinguaForge JSON） | ✅ 動作確認済み・pytest あり |
 | `scripts/audio_gen.py`（TTS → MFA） | ⚠️ インターフェースのみ。TTS API キー・MFA が必要 |
-| `scripts/build_pdf.py`（→ Typst PDF） | ⚠️ Markdown→Typst 変換は実装済み・PDF コンパイルには `typst` CLI が必要 |
+| `scripts/build_pdf.py`（→ Typst PDF） | ⚠️ Markdown→Typst 変換・セクション QR 自動生成は実装済み・PDF コンパイルには `typst` CLI が必要 |
+| セクション QR 動線（`content/app_config.yaml` + `build/qr-map.json`） | ✅ 動作確認済み・pytest あり（`goon.jp` 側リダイレクト実装は Phase 2） |
 | `app/`（Next.js PWA） | ❌ 未着手（Phase 2） |
 | Supabase 認証・同期 | ❌ 未着手（Phase 2） |
 | 法務ページ（`go-on-research` リポジトリ側） | ❌ 未着手（Phase 2） |
@@ -33,9 +34,11 @@ python3 scripts/vocab_check.py
 python3 scripts/export_app.py --unit 1
 cat build/app-export/unit-01.json
 
-# 3. Typst ソースを生成（PDF コンパイルには typst CLI が別途必要）
+# 3. Typst ソース + セクション QR (SVG) + build/qr-map.json を生成
+#    （PDF コンパイルには typst CLI が別途必要）
 python3 scripts/build_pdf.py --unit 1 --typ-only
 cat build/pdf/unit01.typ
+cat build/qr-map.json
 
 # 4. 音声生成ジョブのプラン確認（実際の TTS 呼び出しはしない）
 python3 scripts/audio_gen.py --unit 1 --dry-run
@@ -55,9 +58,22 @@ python3 -m pytest scripts/tests/ -v
 語彙リスト（プロトタイプ用に手作業で選定）です。実際の教材採用時は、想定する入口レベル
 （英検準2級・中学卒業程度など）に応じて精査してください。
 
+## QR 動線（紙⇄アプリ）について
+
+`scripts/build_pdf.py` は `app_components` を持つセクションごとに、`content/app_config.yaml` の
+`deep_link_base`（`https://learn.goonresearch.jp`）を使ってディープリンク QR（SVG）を自動生成し、
+`goon.jp/u{unit}s{n}` 形式の短縮 URL を併記します。生成した対応表は `build/qr-map.json`
+（`short_code → deep_link`）に蓄積され、これが Phase 2 で実装する `goon.jp` 側リダイレクトの入力に
+なります。QR を紙面に手貼りすることはなく、必ずこのスクリプト経由で生成されるため、印刷される
+URL とアプリのルーティングが常に一致することをビルド時に保証します。
+
+セッションの継続・再開（開いたままならアプリ内ナビゲーション、閉じたら QR 再スキャンで
+IndexedDB の保存状態から復元）は Next.js アプリ側の実装（Phase 2）に依存します。
+
 ## 次にやること
 
 1. `scripts/build_pdf.py` の PDF 品質確認（`typst` をインストールして実際にコンパイル）
 2. `scripts/audio_gen.py` の TTS/MFA 接続（API キー・MFA モデルのセットアップ）
 3. Unit 2 以降のコンテンツ制作（`vocab_check.py` をゲートに、`syllabus.yaml` の骨格から拡張）
 4. Next.js アプリ（`learn.goonresearch.jp`）と Supabase 連携の実装（Phase 2）
+5. `goon.jp` 短縮ドメインのリダイレクト実装（`build/qr-map.json` を入力に）（Phase 2）

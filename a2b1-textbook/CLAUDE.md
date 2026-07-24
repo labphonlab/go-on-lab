@@ -45,7 +45,12 @@
 6. **Fluency**（アプリ）— シャドーイング3段階、4/3/2、既習素材のみ使用。strand: fluency development
 7. **Reflection**（紙＋アプリ連動）— Can-do 自己評価、達成記録欄
 
-紙面の各ユニット冒頭に QR コード（`https://learn.goonresearch.jp/u/{unit}` へのディープリンク）を印刷する。
+**QR 動線（紙⇄アプリの往復設計）**:
+
+- アプリ活動が登場する紙面の各箇所に、セクション単位のディープリンク QR（`https://learn.goonresearch.jp/u/{unit}/{section}`）を印刷する。QR の隣に短縮 URL（例 `goon.jp/u7s3`）を併記
+- QR は `build_pdf.py` が unit.yaml のセクション ID から自動生成して配置する（手作業での貼付は禁止。URL とコンテンツの整合性をビルド時に保証）
+- **開いたままなら続行**: 一度アプリを開いたら、再スキャンなしにアプリ内ナビゲーション（ユニットマップ・「次の活動へ」ボタン）で続きの活動に進める。活動終了画面には対応する紙面ページ番号を表示し、紙に戻す
+- **閉じたら QR で再開**: ブラウザやタブを閉じても、該当箇所の QR を読み直せばその活動が開き、IndexedDB に保存された進捗（シャドーイングの段階、SRS セッション途中の状態など）から再開できる。ディープリンク自体はステートレスに保ち、状態は常にローカル DB から復元する
 
 ## 5. リポジトリ構造
 
@@ -55,6 +60,7 @@ a2b1-textbook/
   content/
     syllabus.yaml            # 全体シラバス（Can-do・文法・語彙配当）
     vocabulary.csv           # word, ngsl_rank, nd, fl, l1_weighted_nd, hvpt, unit
+    app_config.yaml          # ディープリンクのベースURL・短縮ドメイン設定
     units/unit01/ … unit20/
       unit.yaml              # メタデータ（下記スキーマ）
       sections/*.md          # セクション本文（frontmatter 付き Markdown）
@@ -63,9 +69,10 @@ a2b1-textbook/
     vocab_check.py           # カバー率・未習語検出（ビルド時必須ゲート）
     audio_gen.py             # TTS → MFA アラインメント
     export_app.py            # → build/app-export/*.json
-    build_pdf.py             # → build/pdf/（Typst）
+    build_pdf.py             # → build/pdf/（Typst、セクションQR自動生成込み）
   app/                       # learn.goonresearch.jp（Next.js 14 PWA）
   build/
+    qr-map.json              # short_code → deep_link の対応表（リダイレクト設定に利用）
 ```
 
 ## 6. データスキーマ
@@ -89,6 +96,8 @@ sections:
     medium: both            # paper|app|both
     app_components: [karaoke_reader, shadowing, dictation]
 ```
+
+`app_components` が1つ以上あるセクションは、紙面ビルド時に自動的に QR コード（§4）が付与される。`app_components: []` かつ `medium: paper` のセクションには QR を配置しない。
 
 ### 6.2 アプリ用エクスポート JSON（LinguaForge 互換）
 
@@ -136,7 +145,8 @@ task_submissions(user_id, unit, task_type,  -- writing|speaking
 - **外部 API**: すべて Edge Function プロキシ経由（キーはサーバー側のみ）— OpenAI TTS / Whisper、Azure Pronunciation Assessment、Anthropic Claude（対話・採点）
 - **アカウント**: 任意。未ログインでも全機能。SRS 復習残数が一定を超えた時点で「記録を守るための登録」を提案する動線
 - **エクスポート**: ログインなしユーザー向けに学習データの JSON エクスポート/インポート（復元コード）を提供
-- **アクセス**: ユニット QR → `/u/{unit}`。DNS は goonresearch.jp に CNAME 1 本追加
+- **アクセス**: セクション QR → `/u/{unit}/{section}`（§4 の往復設計参照）。DNS は goonresearch.jp に CNAME 1 本追加
+- **セッション継続と再開**: 各活動の進捗はステップ単位で即時 IndexedDB に保存（autosave）。開いたままの画面ではアプリ内ナビゲーションで続行でき、閉じた後は同一 URL の再訪（QR 再スキャン）で保存状態から再開する。アプリのルート（`/`）を開いた場合は最後の学習位置への「続きから」ボタンを表示する。複数タブ同時利用は IndexedDB の last-write-wins で整合を取る
 
 ## 8. 法務ページ（goonresearch.jp 側・Astro サイトに追加）
 
@@ -156,21 +166,21 @@ task_submissions(user_id, unit, task_type,  -- writing|speaking
 - `vocab_check.py`: 各ユニットの Input が「累積既習＋当該ユニットターゲット」で 98% 以上カバーされることを CI で検証。未習語はビルドエラー
 - ストランド配分チェック: ユニットごとに 4 ストランドの活動時間見積りが 15–35% の範囲に収まること
 - 例文スタイル: 自然さ優先（不自然に複雑な統語・機械的例文を禁止）。解説は です・ます調、一文 40 字目安、文法用語は学習者向け言い換えを併記
-- pytest: export_app.py のスキーマ検証、SRS ロジック、同期のマージ規則
+- pytest: export_app.py のスキーマ検証、SRS ロジック、同期のマージ規則、QR short_code の一意性検証
 - E2E: ユニット 1 を用いた紙 PDF ビルド＋アプリ表示＋QR 遷移の通し確認
 
 ## 10. 開発フェーズ
 
 1. **Phase 1 — プロトタイプ**: ユニット 1 を紙面 PDF＋アプリで通しビルドし、テンプレートとスキーマを確定
-2. **Phase 2 — 基盤**: Supabase 認証・同期、roleplay_ai UI、法務 2 ページ、QR 動線
+2. **Phase 2 — 基盤**: Supabase 認証・同期、roleplay_ai UI、法務 2 ページ、QR 動線（短縮ドメイン `goon.jp` のリダイレクト実装、`build/qr-map.json` を入力に使用）
 3. **Phase 3 — 量産**: ユニット 2–20 のコンテンツ制作（vocab_check をゲートに）＋音声生成パイプライン
 4. **Phase 4 — QA・公開**: HVPT・発音評価の実機検証、βテスト、印刷入稿データ作成
 
 ## 11. 実装状況（このリポジトリでの Phase 1 進捗）
 
-- 完了: リポジトリ scaffold、`content/syllabus.yaml`（20ユニット概要）、`content/vocabulary.csv`（Unit 1 ターゲット語）、Unit 1 コンテンツ一式（`unit.yaml` + 8 セクション Markdown）、`vocab_check.py` と `export_app.py`（動作するビルドゲート、pytest 付き）
+- 完了: リポジトリ scaffold、`content/syllabus.yaml`（20ユニット概要）、`content/vocabulary.csv`（Unit 1 ターゲット語）、Unit 1 コンテンツ一式（`unit.yaml` + 8 セクション Markdown）、`vocab_check.py` と `export_app.py`（動作するビルドゲート、pytest 付き）、`content/app_config.yaml`、`build_pdf.py` のセクション QR 自動生成（SVG・`build/qr-map.json`）
 - 未着手（外部リソースが必要でこのサンドボックスでは実行不可）:
   - `audio_gen.py` は TTS/MFA への実接続が必要なためインターフェースのみ実装（スタブ）
-  - `build_pdf.py` は Typst 未インストールのためインターフェースのみ実装（スタブ）。`typst` を導入後、`build/pdf/unit01.pdf` を生成する
-  - `app/`（Next.js PWA）、Supabase 接続、法務ページは Phase 2 以降
-- 次の一手: Typst 導入と TTS API キー設定後、`scripts/build_pdf.py` と `scripts/audio_gen.py` を実装し Unit 1 の紙面 PDF・音声を実際に生成する
+  - `build_pdf.py` の最終 PDF コンパイルは Typst 未インストールのため未実行（`.typ` ソース生成と QR SVG 生成は実行済み）
+  - `app/`（Next.js PWA）、Supabase 接続、法務ページ、`goon.jp` 短縮ドメインのリダイレクト実装は Phase 2 以降
+- 次の一手: Typst 導入と TTS API キー設定後、Unit 1 の紙面 PDF・音声を実際に生成し、QR を含めた通しの E2E 確認を行う

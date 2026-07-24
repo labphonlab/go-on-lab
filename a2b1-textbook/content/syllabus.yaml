@@ -31,7 +31,7 @@ units:
     grammar_focus: ["simple past (regular/irregular review)", "sequencing words: first, then, after that"]
     vocabulary_target_count: 45
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 3
     title: "Have You Ever...?"
@@ -40,7 +40,7 @@ units:
     grammar_focus: ["present perfect: experience (have/has + past participle)", "ever / never"]
     vocabulary_target_count: 45
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 4
     title: "Comparing Things"
@@ -49,7 +49,7 @@ units:
     grammar_focus: ["comparatives", "superlatives", "as...as"]
     vocabulary_target_count: 45
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 5
     title: "Consolidation 1"

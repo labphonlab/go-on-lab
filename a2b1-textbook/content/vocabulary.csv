@@ -44,3 +44,138 @@ schedule,noun/verb,予定・スケジュール,/ˈskɛdʒuːl/,1420,11,0.57,0.30
 event,noun,行事・イベント,/ɪˈvɛnt/,1300,10,0.62,0.24,0,1
 suggestion,noun,提案,/səˈdʒɛstʃən/,2130,7,0.38,0.26,0,1
 looking forward to,expression,楽しみにしている,/ˈlʊkɪŋ ˈfɔːrwərd tuː/,2280,6,0.32,0.28,0,1
+weekend,noun,週末,/ˈwiːkɛnd/,1050,12,0.70,0.30,0,2
+meeting,noun,会議,/ˈmiːtɪŋ/,700,15,0.78,0.26,0,2
+boss,noun,上司,/bɔːs/,1500,10,0.55,0.24,0,2
+colleague,noun,同僚,/ˈkɒliːɡ/,2400,5,0.28,0.22,0,2
+project,noun,プロジェクト,/ˈprɒdʒɛkt/,1100,14,0.66,0.26,0,2
+deadline,noun,締め切り,/ˈdɛdlaɪn/,2650,4,0.22,0.20,0,2
+until,preposition,〜まで,/ənˈtɪl/,590,18,0.80,0.24,0,2
+cleaned,verb,掃除した,/kliːnd/,1850,9,0.45,0.26,0,2
+laundry,noun,洗濯（物）,/ˈlɔːndri/,2550,4,0.20,0.34,1,2
+dishes,noun,食器,/ˈdɪʃɪz/,1950,8,0.42,0.24,0,2
+shopping,noun,買い物,/ˈʃɒpɪŋ/,1400,11,0.60,0.24,0,2
+groceries,noun,食料品,/ˈɡroʊsəriz/,2300,5,0.26,0.26,1,2
+dinner,noun,夕食,/ˈdɪnər/,980,16,0.74,0.26,0,2
+appointment,noun,予約・約束,/əˈpɔɪntmənt/,2100,6,0.30,0.24,0,2
+doctor,noun,医者,/ˈdɒktər/,980,13,0.68,0.24,0,2
+visited,verb,訪れた,/ˈvɪzɪtɪd/,1150,10,0.56,0.30,1,2
+grandmother,noun,祖母,/ˈɡrænˌmʌðər/,1850,6,0.28,0.34,1,2
+brought,verb,持ってきた,/brɔːt/,1300,9,0.50,0.32,1,2
+cousin,noun,いとこ,/ˈkʌzən/,1950,7,0.34,0.26,0,2
+neighbor,noun,隣人,/ˈneɪbər/,1650,9,0.44,0.30,1,2
+coffee,noun,コーヒー,/ˈkɒfi/,1250,12,0.62,0.30,1,2
+tennis,noun,テニス,/ˈtɛnɪs/,2050,6,0.32,0.22,0,2
+soccer,noun,サッカー,/ˈsɒkər/,2150,6,0.30,0.20,0,2
+jogged,verb,ジョギングした,/dʒɒɡd/,2700,3,0.18,0.20,0,2
+relaxed,verb,くつろいだ,/rɪˈlækst/,1750,8,0.40,0.28,0,2
+relaxing,adjective,くつろげる,/rɪˈlæksɪŋ/,1900,7,0.36,0.32,1,2
+movie,noun,映画,/ˈmuːvi/,1180,9,0.62,0.28,0,2
+reviewed,verb,復習した,/rɪˈvjuːd/,1700,7,0.38,0.32,1,2
+test,noun,テスト,/tɛst/,900,15,0.72,0.22,0,2
+homework,noun,宿題,/ˈhoʊmwɜːrk/,1550,8,0.44,0.24,0,2
+trip,noun,旅行,/trɪp/,1050,13,0.64,0.32,1,2
+vacation,noun,休暇,/veɪˈkeɪʃən/,1600,7,0.38,0.34,1,2
+exciting,adjective,わくわくする,/ɪkˈsaɪtɪŋ/,1450,10,0.54,0.24,0,2
+boring,adjective,退屈な,/ˈbɔːrɪŋ/,1650,9,0.46,0.26,0,2
+exhausted,adjective,疲れ果てた,/ɪɡˈzɔːstɪd/,2200,5,0.24,0.24,0,2
+chores,noun,家事,/tʃɔːrz/,2500,4,0.20,0.22,0,2
+errand,noun,用事,/ˈɛrənd/,2750,3,0.16,0.20,0,2
+haircut,noun,散髪,/ˈhɛərkʌt/,2600,4,0.18,0.18,0,2
+package,noun,荷物・小包,/ˈpækɪdʒ/,1700,8,0.42,0.22,0,2
+mail,noun,郵便,/meɪl/,1150,11,0.58,0.20,0,2
+recipe,noun,レシピ,/ˈrɛsəpi/,2250,5,0.24,0.20,0,2
+catch up,phrasal verb,近況を報告し合う,/kætʃ ʌp/,2350,4,0.20,0.24,0,2
+get together,phrasal verb,集まる,/ɡɛt təˈɡɛðər/,2450,4,0.18,0.26,0,2
+all day,expression,一日中,/ɔːl deɪ/,1800,6,0.30,0.18,0,2
+all week,expression,一週間中,/ɔːl wiːk/,1900,5,0.26,0.18,0,2
+experience,noun,経験,/ɪkˈspɪəriəns/,930,13,0.68,0.28,0,3
+adventure,noun,冒険,/ədˈvɛntʃər/,1740,7,0.40,0.22,0,3
+journey,noun,旅,/ˈdʒɜːrni/,1980,6,0.34,0.24,0,3
+abroad,adverb,海外へ・海外で,/əˈbrɔːd/,1460,9,0.52,0.32,0,3
+traveled,verb (past participle),旅行した（travel の過去分詞）,/ˈtrævəld/,1150,11,0.58,0.30,0,3
+visited,verb (past participle),訪れた（visit の過去分詞）,/ˈvɪzɪtɪd/,1090,12,0.60,0.28,0,3
+climbed,verb (past participle),登った（climb の過去分詞）,/klaɪmd/,1670,8,0.42,0.26,0,3
+ridden,verb (past participle),乗ったことがある（ride の過去分詞）,/ˈrɪdən/,2080,5,0.30,0.34,1,3
+tasted,verb (past participle),味わった（taste の過去分詞）,/ˈteɪstɪd/,1820,7,0.38,0.22,0,3
+eaten,verb (past participle),食べた（eat の過去分詞）,/ˈiːtən/,970,14,0.66,0.24,0,3
+seen,verb (past participle),見た（see の過去分詞）,/siːn/,760,17,0.78,0.20,0,3
+done,verb (past participle),した（do の過去分詞）,/dʌn/,650,19,0.82,0.18,0,3
+ever,adverb,今までに,/ˈɛvər/,700,18,0.80,0.26,0,3
+recently,adverb,最近,/ˈriːsəntli/,1240,10,0.55,0.24,0,3
+many times,expression,何度も,/ˈmɛni taɪmz/,1350,10,0.54,0.22,0,3
+mountain,noun,山,/ˈmaʊntən/,1310,11,0.56,0.26,0,3
+ocean,noun,海（大洋）,/ˈoʊʃən/,1590,9,0.46,0.24,0,3
+island,noun,島,/ˈaɪlənd/,1430,10,0.50,0.24,0,3
+waterfall,noun,滝,/ˈwɔːtərfɔːl/,2360,4,0.24,0.32,1,3
+roller coaster,noun,ジェットコースター,/ˈroʊlər ˈkoʊstər/,2510,4,0.20,0.38,1,3
+airport,noun,空港,/ˈɛərpɔːrt/,1180,12,0.60,0.30,0,3
+passport,noun,パスポート,/ˈpæspɔːrt/,1860,7,0.37,0.28,0,3
+souvenir,noun,お土産,/ˌsuːvəˈnɪər/,2480,4,0.21,0.26,0,3
+culture,noun,文化,/ˈkʌltʃər/,1220,11,0.58,0.24,0,3
+festival,noun,祭り,/ˈfɛstɪvəl/,1620,9,0.44,0.34,1,3
+host family,expression,ホストファミリー,/hoʊst ˈfæməli/,2260,5,0.26,0.24,0,3
+instrument,noun,楽器,/ˈɪnstrəmənt/,1710,8,0.41,0.24,0,3
+marathon,noun,マラソン,/ˈmærəθɒn/,2130,6,0.30,0.36,1,3
+prize,noun,賞,/praɪz/,1500,10,0.52,0.24,0,3
+karaoke,noun,カラオケ,/ˌkæriˈoʊki/,2620,3,0.16,0.20,0,3
+singer,noun,歌手,/ˈsɪŋər/,1380,11,0.56,0.24,0,3
+curry,noun,カレー,/ˈkʌri/,2290,5,0.25,0.22,0,3
+soup,noun,スープ,/suːp/,1560,9,0.47,0.20,0,3
+amazing,adjective,すごい・驚くほどよい,/əˈmeɪzɪŋ/,1030,13,0.63,0.24,0,3
+exciting,adjective,わくわくする,/ɪkˈsaɪtɪŋ/,1140,12,0.59,0.22,0,3
+scary,adjective,怖い,/ˈskɛəri/,1790,8,0.39,0.26,0,3
+spicy,adjective,辛い,/ˈspaɪsi/,1950,6,0.33,0.24,0,3
+famous,adjective,有名な,/ˈfeɪməs/,900,15,0.70,0.34,1,3
+surprised,adjective,驚いた,/sərˈpraɪzd/,1060,13,0.62,0.34,1,3
+tiring,adjective,疲れる,/ˈtaɪərɪŋ/,2010,6,0.31,0.24,0,3
+view,noun,景色,/vjuː/,1270,11,0.57,0.36,1,3
+no way,expression,まさか・うそでしょ,/noʊ weɪ/,2170,5,0.27,0.20,0,3
+for real,expression,本当に・マジで,/fɔːr ˈriːəl/,2340,4,0.23,0.32,1,3
+wow,expression,すごい（驚きの声）,/waʊ/,1900,7,0.36,0.18,0,3
+skydiving,noun,スカイダイビング,/ˈskaɪdaɪvɪŋ/,2700,3,0.15,0.22,0,3
+apartment,noun,アパート・マンション,/əˈpɑːrtmənt/,1450,10,0.55,0.30,0,4
+apartments,noun,アパート（複数形）,/əˈpɑːrtmənts/,1460,9,0.50,0.28,0,4
+neighborhood,noun,近所・地域,/ˈneɪbərhʊd/,1980,6,0.32,0.24,0,4
+kitchen,noun,台所・キッチン,/ˈkɪtʃɪn/,1620,9,0.48,0.22,0,4
+supermarket,noun,スーパーマーケット,/ˈsuːpərˌmɑːrkɪt/,1710,7,0.40,0.20,0,4
+choice,noun,選択,/tʃɔɪs/,1340,11,0.58,0.26,0,4
+distance,noun,距離,/ˈdɪstəns/,1580,8,0.42,0.24,0,4
+price,noun,値段,/praɪs/,1090,14,0.63,0.34,0,4
+view,noun,眺め・景色,/vjuː/,1240,10,0.52,0.38,1,4
+yen,noun,円（通貨）,/jɛn/,2650,3,0.20,0.15,0,4
+expensive,adjective,高価な,/ɪkˈspɛnsɪv/,1460,9,0.47,0.28,0,4
+cheap,adjective,安い,/tʃiːp/,1620,8,0.44,0.26,0,4
+quiet,adjective,静かな,/ˈkwaɪət/,1370,10,0.55,0.30,0,4
+noisy,adjective,うるさい,/ˈnɔɪzi/,1980,6,0.34,0.22,0,4
+convenient,adjective,便利な,/kənˈviːniənt/,1830,7,0.38,0.32,1,4
+comfortable,adjective,快適な,/ˈkʌmfərtəbəl/,1690,8,0.41,0.28,0,4
+crowded,adjective,混雑した,/ˈkraʊdɪd/,2140,5,0.28,0.24,0,4
+safe,adjective,安全な,/seɪf/,1150,12,0.60,0.25,0,4
+dangerous,adjective,危険な,/ˈdeɪndʒərəs/,1780,7,0.39,0.26,0,4
+popular,adjective,人気のある,/ˈpɒpjʊlər/,1290,11,0.56,0.24,0,4
+modern,adjective,現代的な,/ˈmɒdərn/,1540,9,0.46,0.22,0,4
+delicious,adjective,美味しい,/dɪˈlɪʃəs/,1870,6,0.33,0.24,0,4
+friendly,adjective,親しみやすい,/ˈfrɛndli/,1420,10,0.50,0.30,1,4
+polite,adjective,礼儀正しい,/pəˈlaɪt/,2020,6,0.31,0.24,0,4
+famous,adjective,有名な,/ˈfeɪməs/,1330,11,0.57,0.22,0,4
+similar,adjective,似ている,/ˈsɪmɪlər/,1470,9,0.48,0.26,1,4
+cheaper,adjective,もっと安い（比較級）,/ˈtʃiːpər/,2200,5,0.25,0.20,0,4
+smaller,adjective,もっと小さい（比較級）,/ˈsmɔːlər/,2260,5,0.24,0.20,0,4
+quieter,adjective,もっと静かな（比較級）,/ˈkwaɪətər/,2310,4,0.22,0.20,0,4
+noisier,adjective,もっとうるさい（比較級）,/ˈnɔɪziər/,2480,4,0.20,0.18,0,4
+newer,adjective,もっと新しい（比較級）,/ˈnuːər/,2390,4,0.21,0.18,0,4
+closer,adjective,もっと近い（比較級）,/ˈkloʊsər/,2270,5,0.24,0.22,0,4
+safer,adjective,もっと安全な（比較級）,/ˈseɪfər/,2330,4,0.22,0.20,0,4
+bigger,adjective,もっと大きい（比較級）,/ˈbɪɡər/,2160,5,0.26,0.20,0,4
+as,conjunction,〜と同じくらい,/æz/,900,15,0.70,0.20,0,4
+more,adverb,もっと・より多く,/mɔːr/,650,18,0.80,0.25,0,4
+most,adverb,最も,/moʊst/,680,17,0.78,0.20,0,4
+better,adjective/adverb,もっと良い,/ˈbɛtər/,620,19,0.82,0.22,0,4
+best,adjective/adverb,最も良い,/bɛst/,640,18,0.80,0.20,0,4
+far,adverb/adjective,遠い・遠くに,/fɑːr/,780,16,0.74,0.28,1,4
+near,adverb/preposition,近い・近くに,/nɪr/,760,16,0.75,0.30,1,4
+decide,verb,決める,/dɪˈsaɪd/,1080,13,0.62,0.24,0,4
+visit,verb,訪れる,/ˈvɪzɪt/,990,15,0.68,0.36,1,4
+compare,verb,比べる・比較する,/kəmˈpɛr/,1520,9,0.45,0.28,1,4
+clean,adjective,清潔な・きれいな,/kliːn/,1010,14,0.66,0.24,1,4

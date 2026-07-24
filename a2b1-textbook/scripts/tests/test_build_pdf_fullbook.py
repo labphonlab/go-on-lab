@@ -1,8 +1,24 @@
+import csv
 from pathlib import Path
 
 import build_pdf
+import yaml
 
 REAL_CONTENT_DIR = Path(__file__).resolve().parent.parent.parent / "content"
+
+
+def _expected_qr_count(content_dir: Path) -> int:
+    app_config = build_pdf.load_app_config(content_dir)
+    total = 0
+    for unit_dir in build_pdf.discover_unit_dirs(content_dir):
+        unit_yaml = yaml.safe_load((unit_dir / "unit.yaml").read_text(encoding="utf-8"))
+        total += len(build_pdf.compute_qr_sections(unit_yaml, app_config))
+    return total
+
+
+def _expected_vocab_count(content_dir: Path) -> int:
+    with (content_dir / "vocabulary.csv").open(encoding="utf-8", newline="") as fh:
+        return sum(1 for _ in csv.DictReader(fh))
 
 
 def test_load_book_meta_has_required_fields():
@@ -28,7 +44,7 @@ def test_render_full_book_typst_contains_all_structural_pieces(tmp_path):
     assert "= 語彙索引" in source
     assert "= Can-do チェックリスト総覧" in source
     assert "= Unit 1: Making Plans with Friends" in source
-    assert len(qr_sections) == 5
+    assert len(qr_sections) == _expected_qr_count(REAL_CONTENT_DIR)
 
 
 def test_render_full_book_typst_vocab_index_sorted_and_complete():
@@ -43,7 +59,7 @@ def test_render_full_book_typst_vocab_index_sorted_and_complete():
     ]
     assert words_in_order == sorted(words_in_order, key=str.lower)
     assert "weekend" in words_in_order
-    assert len(words_in_order) == 45
+    assert len(words_in_order) == _expected_vocab_count(REAL_CONTENT_DIR)
 
 
 def test_render_title_and_copyright_pages_include_meta_fields():

@@ -1,9 +1,0 @@
-PyYAML>=6.0
-pytest>=8.0
-qrcode>=7.4
-Pillow>=10.0
-
-# Needed only for scripts/audio_gen.py's TTS step (not usable in this
-# sandbox -- no network egress / API key). Install where credentials are
-# available:
-# openai>=1.0

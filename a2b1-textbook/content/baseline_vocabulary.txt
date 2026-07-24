@@ -132,6 +132,8 @@ lived
 believe
 walk
 walked
+ride
+rode
 run
 ran
 sit
@@ -296,6 +298,27 @@ wait
 stay
 finish
 watch
+
+# --- 追加基礎語（Unit 5 総復習で必要になった汎用語） ---
+each
+other
+mine
+yours
+hers
+ours
+theirs
+fun
+interesting
+laugh
+laughed
+lot
+really
+scared
+story
+though
+top
+true
+usual
 
 # --- 不定代名詞 ---
 everyone
@@ -511,6 +534,7 @@ english
 japanese
 language
 thing
+things
 way
 place
 world

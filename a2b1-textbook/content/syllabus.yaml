@@ -58,7 +58,7 @@ units:
     grammar_focus: []
     vocabulary_target_count: 0
     consolidation: true
-    status: planned
+    status: implemented
 
   - unit: 6
     title: "Asking for Directions"

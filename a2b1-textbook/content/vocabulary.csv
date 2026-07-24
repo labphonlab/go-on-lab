@@ -179,3 +179,197 @@ decide,verb,決める,/dɪˈsaɪd/,1080,13,0.62,0.24,0,4
 visit,verb,訪れる,/ˈvɪzɪt/,990,15,0.68,0.36,1,4
 compare,verb,比べる・比較する,/kəmˈpɛr/,1520,9,0.45,0.28,1,4
 clean,adjective,清潔な・きれいな,/kliːn/,1010,14,0.66,0.24,1,4
+street,noun,通り,/striːt/,900,10,0.55,0.30,1,6
+corner,noun,角,/ˈkɔːrnər/,1250,9,0.50,0.26,0,6
+block,noun,区画・ブロック,/blɒk/,1400,11,0.48,0.24,0,6
+intersection,noun,交差点,/ˌɪntərˈsekʃən/,2450,4,0.22,0.26,0,6
+traffic light,noun,信号機,/ˈtræfɪk laɪt/,2100,5,0.30,0.34,1,6
+crosswalk,noun,横断歩道,/ˈkrɒswɔːk/,2600,3,0.18,0.32,1,6
+sidewalk,noun,歩道,/ˈsaɪdwɔːk/,1850,6,0.34,0.24,0,6
+bridge,noun,橋,/brɪdʒ/,1150,12,0.52,0.36,1,6
+sign,noun,標識・看板,/saɪn/,1020,14,0.58,0.22,0,6
+map,noun,地図,/mæp/,1080,13,0.56,0.20,0,6
+directions,noun,道案内・行き方,/dəˈrekʃənz/,1600,8,0.42,0.38,1,6
+straight,adverb,まっすぐに,/streɪt/,1300,9,0.46,0.40,1,6
+cross,verb,渡る,/krɒs/,1450,10,0.44,0.30,0,6
+past,preposition,〜を過ぎて,/pæst/,1700,7,0.36,0.22,0,6
+along,preposition,〜に沿って,/əˈlɒŋ/,1550,8,0.40,0.24,0,6
+near,preposition,〜の近くに,/nɪr/,980,15,0.60,0.26,0,6
+far,adverb,遠くに,/fɑːr/,900,16,0.62,0.35,1,6
+behind,preposition,〜の後ろに,/bɪˈhaɪnd/,1350,9,0.45,0.28,0,6
+opposite,preposition,〜の向かいに,/ˈɒpəzɪt/,1950,6,0.32,0.24,0,6
+next to,preposition,〜の隣に,/nekst tuː/,1500,7,0.42,0.22,0,6
+across from,preposition,〜の向かい側に,/əˈkrɒs frʌm/,2200,5,0.26,0.30,0,6
+in front of,preposition,〜の前に,/ɪn frʌnt ʌv/,1750,6,0.38,0.26,0,6
+lost,adjective,道に迷った,/lɒst/,1200,10,0.50,0.28,0,6
+bank,noun,銀行,/bæŋk/,1050,12,0.54,0.18,0,6
+pharmacy,noun,薬局,/ˈfɑːrməsi/,2350,4,0.24,0.30,0,6
+supermarket,noun,スーパーマーケット,/ˈsuːpərˌmɑːrkɪt/,1650,6,0.40,0.20,0,6
+library,noun,図書館,/ˈlaɪbrəri/,1400,8,0.44,0.32,1,6
+post office,noun,郵便局,/poʊst ˈɒfɪs/,1900,5,0.30,0.20,0,6
+bakery,noun,パン屋,/ˈbeɪkəri/,2150,5,0.28,0.22,0,6
+bookstore,noun,書店,/ˈbʊkstɔːr/,2050,5,0.29,0.24,0,6
+convenience store,noun,コンビニ,/kənˈviːniəns stɔːr/,2500,3,0.20,0.32,1,6
+keep going,phrasal verb,進み続ける,/kiːp ˈɡoʊɪŋ/,1850,6,0.34,0.20,0,6
+turn around,phrasal verb,引き返す,/tɜːrn əˈraʊnd/,2050,5,0.28,0.24,0,6
+get to,phrasal verb,〜に着く・たどり着く,/ɡet tuː/,1300,9,0.48,0.18,0,6
+excuse me,expression,すみません,/ɪkˈskjuːz miː/,950,12,0.64,0.30,0,6
+tourist,noun,観光客,/ˈtʊrɪst/,1800,7,0.36,0.28,0,6
+local,adjective,地元の,/ˈloʊkəl/,1400,8,0.42,0.20,0,6
+stranger,noun,見知らぬ人,/ˈstreɪndʒər/,2000,5,0.30,0.34,0,6
+helpful,adjective,親切な・役に立つ,/ˈhelpfəl/,1750,7,0.38,0.22,0,6
+minutes,noun,分（時間）,/ˈmɪnɪts/,1150,10,0.50,0.18,0,6
+walking distance,noun,徒歩圏内,/ˈwɔːkɪŋ ˈdɪstəns/,2400,4,0.22,0.26,0,6
+landmark,noun,目印・ランドマーク,/ˈlændmɑːrk/,2300,4,0.24,0.32,1,6
+gas station,noun,ガソリンスタンド,/ɡæs ˈsteɪʃən/,1700,6,0.34,0.22,0,6
+polite,adjective,丁寧な,/pəˈlaɪt/,1600,8,0.40,0.24,0,6
+where,adverb,どこ,/wer/,620,17,0.75,0.22,0,6
+within,preposition,〜以内に,/wɪˈðɪn/,1900,6,0.32,0.24,1,6
+menu,noun,メニュー,/ˈmɛnjuː/,1450,10,0.55,0.20,0,7
+order,noun/verb,注文（する）,/ˈɔːrdər/,680,19,0.82,0.30,0,7
+waiter,noun,ウェイター（男性）,/ˈweɪtər/,1980,7,0.38,0.28,0,7
+waitress,noun,ウェイトレス（女性）,/ˈweɪtrəs/,2350,5,0.28,0.26,1,7
+customer,noun,客,/ˈkʌstəmər/,1200,13,0.60,0.24,0,7
+reservation,noun,予約,/ˌrɛzərˈveɪʃən/,2100,6,0.34,0.30,1,7
+reserve,verb,予約する,/rɪˈzɜːrv/,2280,5,0.30,0.32,1,7
+bill,noun,会計・伝票,/bɪl/,1550,9,0.50,0.22,0,7
+receipt,noun,レシート,/rɪˈsiːt/,2420,4,0.24,0.20,0,7
+tip,noun/verb,チップ,/tɪp/,1700,8,0.44,0.24,0,7
+dish,noun,料理・皿,/dɪʃ/,1380,11,0.58,0.26,0,7
+meal,noun,食事,/miːl/,1150,12,0.62,0.24,0,7
+starter,noun,前菜,/ˈstɑːrtər/,2500,4,0.22,0.24,1,7
+main course,noun,メインディッシュ,/meɪn kɔːrs/,2050,6,0.32,0.22,0,7
+dessert,noun,デザート,/dɪˈzɜːrt/,1850,7,0.40,0.24,0,7
+soup,noun,スープ,/suːp/,1500,10,0.52,0.20,0,7
+salad,noun,サラダ,/ˈsæləd/,1620,9,0.48,0.22,0,7
+sandwich,noun,サンドイッチ,/ˈsænwɪtʃ/,1780,8,0.42,0.28,0,7
+burger,noun,バーガー,/ˈbɜːrɡər/,2200,6,0.30,0.30,0,7
+pizza,noun,ピザ,/ˈpiːtsə/,1650,9,0.46,0.18,0,7
+pasta,noun,パスタ,/ˈpɑːstə/,1900,7,0.38,0.20,0,7
+steak,noun,ステーキ,/steɪk/,2000,6,0.34,0.26,0,7
+chicken,noun,チキン,/ˈtʃɪkɪn/,1250,13,0.60,0.24,0,7
+rice,noun,ご飯・米,/raɪs/,1180,12,0.62,0.30,1,7
+bread,noun,パン,/brɛd/,1320,11,0.56,0.34,1,7
+coffee,noun,コーヒー,/ˈkɒfi/,920,16,0.72,0.22,0,7
+tea,noun,紅茶・お茶,/tiː/,1050,14,0.68,0.20,0,7
+juice,noun,ジュース,/dʒuːs/,1720,8,0.44,0.18,0,7
+sugar,noun,砂糖,/ˈʃʊɡər/,1600,9,0.46,0.28,0,7
+spicy,adjective,辛い,/ˈspaɪsi/,2150,6,0.32,0.26,0,7
+sweet,adjective,甘い,/swiːt/,1400,11,0.56,0.24,0,7
+delicious,adjective,とてもおいしい,/dɪˈlɪʃəs/,1520,10,0.54,0.24,0,7
+fresh,adjective,新鮮な,/frɛʃ/,1080,15,0.68,0.32,1,7
+plate,noun,皿,/pleɪt/,1470,10,0.54,0.24,0,7
+fork,noun,フォーク,/fɔːrk/,2280,5,0.28,0.34,1,7
+knife,noun,ナイフ,/naɪf/,2150,6,0.30,0.26,0,7
+spoon,noun,スプーン,/spuːn/,2320,5,0.26,0.28,0,7
+size,noun,サイズ,/saɪz/,890,17,0.74,0.22,0,7
+medium,adjective,中くらいの,/ˈmiːdiəm/,1580,9,0.46,0.20,0,7
+extra,adjective,追加の,/ˈɛkstrə/,1090,15,0.66,0.24,0,7
+allergic,adjective,アレルギーがある,/əˈlɜːrdʒɪk/,2600,3,0.16,0.30,1,7
+vegetarian,noun/adjective,ベジタリアン（の）,/ˌvɛdʒəˈtɛəriən/,2700,3,0.15,0.24,1,7
+recommend,verb,おすすめする,/ˌrɛkəˈmɛnd/,1780,8,0.42,0.28,1,7
+special,noun/adjective,本日のおすすめ・特別な,/ˈspɛʃəl/,760,18,0.78,0.22,0,7
+sold out,expression,売り切れ,/soʊld aʊt/,2450,4,0.20,0.20,0,7
+ready,adjective,準備ができた,/ˈrɛdi/,830,17,0.76,0.24,0,7
+serve,verb,（料理を）出す,/sɜːrv/,1350,11,0.58,0.30,0,7
+to go,expression,持ち帰りで,/tuː ɡoʊ/,2380,4,0.22,0.18,0,7
+actually,adverb,実は,/ˈæktʃuəli/,1040,14,0.68,0.32,0,7
+more,determiner/adverb,もっと（多くの）,/mɔːr/,610,20,0.85,0.26,0,7
+cheese,noun,チーズ,/tʃiːz/,1470,10,0.54,0.22,0,7
+of course,expression,もちろん,/əv kɔːrs/,940,16,0.70,0.20,0,7
+sure,adjective,確かな・もちろん,/ʃʊr/,860,15,0.74,0.24,1,7
+class,noun,クラス・授業,/klæs/,750,16,0.78,0.24,0,8
+classmate,noun,クラスメート・同級生,/ˈklæsmeɪt/,1900,7,0.40,0.26,0,8
+neighbor,noun,隣人・近所の人,/ˈneɪbər/,1550,9,0.48,0.30,0,8
+reunion,noun,同窓会・再会,/riːˈjuːnjən/,2650,4,0.20,0.22,0,8
+hair,noun,髪,/hɛər/,900,15,0.74,0.32,0,8
+glasses,noun,めがね,/ˈɡlæsɪz/,1400,10,0.55,0.34,0,8
+beard,noun,ひげ,/bɪərd/,2200,6,0.30,0.28,0,8
+curly,adjective,巻き毛の,/ˈkɜːrli/,2400,5,0.26,0.42,1,8
+straight,adjective,(髪が)まっすぐな・直毛の,/streɪt/,1250,12,0.60,0.46,1,8
+tall,adjective,背が高い,/tɔːl/,1000,14,0.70,0.24,0,8
+wearing,verb,着ている,/ˈwɛərɪŋ/,1150,13,0.65,0.26,0,8
+jacket,noun,ジャケット・上着,/ˈdʒækɪt/,1700,8,0.44,0.22,0,8
+sweater,noun,セーター,/ˈswɛtər/,2100,6,0.32,0.24,0,8
+scarf,noun,マフラー・スカーフ,/skɑːrf/,2500,4,0.22,0.26,0,8
+jeans,noun,ジーンズ,/dʒiːnz/,1800,7,0.40,0.20,0,8
+boots,noun,ブーツ,/buːts/,1950,6,0.35,0.22,0,8
+necklace,noun,ネックレス,/ˈnɛklɪs/,2300,5,0.25,0.38,1,8
+blue,adjective,青い,/bluː/,850,16,0.76,0.28,1,8
+red,adjective,赤い,/rɛd/,800,17,0.78,0.36,0,8
+green,adjective,緑の,/ɡriːn/,820,16,0.77,0.38,0,8
+black,adjective,黒い,/blæk/,780,17,0.79,0.24,0,8
+friendly,adjective,親しみやすい・フレンドリーな,/ˈfrɛndli/,1350,11,0.58,0.40,1,8
+kind,adjective,親切な,/kaɪnd/,700,18,0.80,0.20,0,8
+shy,adjective,恥ずかしがりの・内気な,/ʃaɪ/,1600,9,0.46,0.22,0,8
+confident,adjective,自信がある,/ˈkɒnfɪdənt/,1900,8,0.42,0.24,0,8
+funny,adjective,面白い・おかしい,/ˈfʌni/,1300,12,0.62,0.20,0,8
+serious,adjective,真面目な・深刻な,/ˈsɪəriəs/,1450,10,0.54,0.30,0,8
+polite,adjective,礼儀正しい,/pəˈlaɪt/,2050,7,0.36,0.24,0,8
+rude,adjective,失礼な,/ruːd/,2350,5,0.26,0.34,1,8
+generous,adjective,気前が良い・寛大な,/ˈdʒɛnərəs/,2550,4,0.20,0.36,1,8
+patient,adjective,忍耐強い,/ˈpeɪʃənt/,1750,8,0.44,0.26,0,8
+curious,adjective,好奇心が強い,/ˈkjʊəriəs/,2150,6,0.32,0.28,0,8
+creative,adjective,創造的な,/kriˈeɪtɪv/,1650,9,0.46,0.26,0,8
+honest,adjective,正直な,/ˈɒnɪst/,1850,7,0.38,0.22,0,8
+talkative,adjective,おしゃべりな,/ˈtɔːkətɪv/,2700,3,0.16,0.24,0,8
+quiet,adjective,静かな・物静かな,/ˈkwaɪət/,1200,12,0.60,0.24,0,8
+remind,verb,思い出させる,/rɪˈmaɪnd/,1500,10,0.50,0.24,0,8
+describe,verb,説明する・描写する,/dɪˈskraɪb/,1400,11,0.52,0.32,1,8
+recognize,verb,見分ける・気づく,/ˈrɛkəɡnaɪz/,1550,9,0.44,0.34,1,8
+introduce,verb,紹介する,/ˌɪntrəˈdjuːs/,1300,12,0.56,0.28,0,8
+mention,verb,言及する,/ˈmɛnʃən/,1600,9,0.46,0.24,0,8
+invention,noun,発明品,/ɪnˈvɛnʃən/,2000,7,0.36,0.26,0,8
+device,noun,装置・デバイス,/dɪˈvaɪs/,1250,12,0.58,0.36,1,8
+gadget,noun,便利な道具・ガジェット,/ˈɡædʒɪt/,2450,5,0.24,0.22,0,8
+material,noun,素材・材料,/məˈtɪəriəl/,1550,9,0.46,0.26,0,8
+wooden,adjective,木製の,/ˈwʊdən/,1900,7,0.38,0.20,0,8
+plastic,adjective,プラスチック(の),/ˈplæstɪk/,1350,11,0.56,0.32,1,8
+shape,noun,形,/ʃeɪp/,1150,13,0.62,0.24,0,8
+pattern,noun,模様・パターン,/ˈpætərn/,1500,10,0.50,0.28,0,8
+brand,noun,ブランド・銘柄,/brænd/,1700,8,0.42,0.30,1,8
+headache,noun,頭痛,/ˈhɛdeɪk/,1680,9,0.48,0.30,0,9
+stomachache,noun,腹痛,/ˈstʌməkeɪk/,2450,4,0.22,0.28,0,9
+toothache,noun,歯痛,/ˈtuːθeɪk/,2600,3,0.19,0.32,0,9
+earache,noun,耳の痛み,/ˈɪəreɪk/,2680,3,0.18,0.30,0,9
+sore throat,noun phrase,のどの痛み,/sɔːr θroʊt/,2300,5,0.24,0.30,0,9
+runny nose,noun phrase,鼻水,/ˈrʌni noʊz/,2520,4,0.20,0.26,0,9
+fever,noun,熱,/ˈfiːvər/,1550,11,0.55,0.44,1,9
+cough,noun/verb,せき（をする）,/kɔːf/,1720,10,0.46,0.36,0,9
+flu,noun,インフルエンザ,/fluː/,1980,7,0.36,0.38,1,9
+sick,adjective,具合が悪い・病気の,/sɪk/,900,17,0.78,0.30,0,9
+well,adverb/adjective,元気な・健康な,/wɛl/,300,20,0.85,0.20,0,9
+dizzy,adjective,めまいがする,/ˈdɪzi/,2280,6,0.28,0.32,0,9
+hurt,verb,痛む,/hɜːrt/,1050,15,0.62,0.28,0,9
+throat,noun,のど,/θroʊt/,1890,8,0.40,0.40,1,9
+stomach,noun,胃・お腹,/ˈstʌmək/,1420,10,0.52,0.30,0,9
+nose,noun,鼻,/noʊz/,1180,12,0.58,0.24,0,9
+temperature,noun,体温,/ˈtɛmprətʃər/,1350,9,0.50,0.26,0,9
+symptom,noun,症状,/ˈsɪmptəm/,2150,6,0.30,0.24,0,9
+rest,noun/verb,休息・休む,/rɛst/,780,18,0.75,0.28,0,9
+medicine,noun,薬,/ˈmɛdɪsɪn/,1240,12,0.60,0.26,0,9
+pharmacy,noun,薬局,/ˈfɑːrməsi/,2200,6,0.29,0.40,1,9
+pharmacist,noun,薬剤師,/ˈfɑːrməsɪst/,2650,4,0.20,0.42,1,9
+doctor,noun,医者,/ˈdɒktər/,980,16,0.70,0.24,0,9
+nurse,noun,看護師,/nɜːrs/,1460,10,0.53,0.28,0,9
+clinic,noun,診療所,/ˈklɪnɪk/,2080,7,0.33,0.24,0,9
+appointment,noun,予約,/əˈpɔɪntmənt/,2100,7,0.34,0.24,0,9
+prescription,noun,処方箋,/prɪˈskrɪpʃən/,2720,3,0.16,0.44,1,9
+painkiller,noun,鎮痛剤,/ˈpeɪnˌkɪlər/,2580,4,0.19,0.30,0,9
+pill,noun,錠剤,/pɪl/,1990,7,0.35,0.28,0,9
+vitamin,noun,ビタミン,/ˈvaɪtəmɪn/,1870,8,0.38,0.42,1,9
+tissue,noun,ティッシュ,/ˈtɪʃuː/,2020,7,0.33,0.22,0,9
+honey,noun,はちみつ,/ˈhʌni/,2350,5,0.24,0.26,0,9
+tea,noun,お茶・紅茶,/tiː/,860,16,0.68,0.20,0,9
+bandage,noun,包帯,/ˈbændɪdʒ/,2470,4,0.20,0.30,0,9
+exercise,noun/verb,運動（する）,/ˈɛksərsaɪz/,1180,13,0.56,0.24,0,9
+lie down,phrasal verb,横になる,/laɪ daʊn/,2260,6,0.27,0.32,0,9
+skip,verb,休む・サボる,/skɪp/,1780,9,0.42,0.30,0,9
+sneeze,verb,くしゃみをする,/sniːz/,2400,5,0.23,0.34,0,9
+throw up,phrasal verb,吐く,/θroʊ ʌp/,2340,5,0.22,0.36,1,9
+spread,verb,広がる・うつる,/sprɛd/,1520,10,0.48,0.36,0,9
+allergic,adjective,アレルギーがある,/əˈlɜːrdʒɪk/,2380,5,0.24,0.44,1,9
+better,adjective/adverb,より良く・回復して,/ˈbɛtər/,420,19,0.80,0.18,0,9
+shouldn't,contraction,〜すべきではない,/ˈʃʊdənt/,650,17,0.72,0.20,0,9
+call in sick,expression,病欠の連絡をする,/kɔːl ɪn sɪk/,2700,3,0.15,0.24,0,9
+get well soon,expression,お大事に,/ɡɛt wɛl suːn/,2500,4,0.18,0.22,0,9

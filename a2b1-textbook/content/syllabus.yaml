@@ -67,7 +67,7 @@ units:
     grammar_focus: ["imperatives", "prepositions of place", "could you / would you"]
     vocabulary_target_count: 45
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 7
     title: "Ordering Food and Making Requests"
@@ -76,7 +76,7 @@ units:
     grammar_focus: ["would like", "could I have...?", "polite request patterns"]
     vocabulary_target_count: 50
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 8
     title: "Describing People and Things"
@@ -85,7 +85,7 @@ units:
     grammar_focus: ["relative clauses: who / which / that"]
     vocabulary_target_count: 50
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 9
     title: "What's Wrong? Health and Advice"
@@ -94,7 +94,7 @@ units:
     grammar_focus: ["should / shouldn't", "have to / don't have to"]
     vocabulary_target_count: 45
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 10
     title: "Consolidation 2"

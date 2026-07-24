@@ -300,6 +300,11 @@ stay
 finish
 watch
 
+# --- 追加基礎語（Unit 15 総復習で必要になった汎用語） ---
+waiting
+finished
+another
+
 # --- 追加基礎語（Unit 10 総復習で必要になった汎用語） ---
 smile
 smiled

@@ -148,7 +148,7 @@ units:
     grammar_focus: []
     vocabulary_target_count: 0
     consolidation: true
-    status: planned
+    status: implemented
 
   - unit: 16
     title: "Hopes and Plans"

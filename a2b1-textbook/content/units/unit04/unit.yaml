@@ -22,7 +22,6 @@ vocabulary_targets:
   - choice
   - distance
   - price
-  - view
   - yen
   - expensive
   - cheap
@@ -38,7 +37,6 @@ vocabulary_targets:
   - delicious
   - friendly
   - polite
-  - famous
   - similar
   - cheaper
   - smaller

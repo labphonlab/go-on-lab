@@ -13,7 +13,6 @@ grammar_focus:
   - "sequencing words: first, then, after that, finally"
 
 vocabulary_targets:
-  - weekend
   - meeting
   - boss
   - colleague
@@ -39,7 +38,6 @@ vocabulary_targets:
   - jogged
   - relaxed
   - relaxing
-  - movie
   - reviewed
   - test
   - homework

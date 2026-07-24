@@ -15,13 +15,11 @@ grammar_focus:
 vocabulary_targets:
   - class
   - classmate
-  - neighbor
   - reunion
   - hair
   - glasses
   - beard
   - curly
-  - straight
   - tall
   - wearing
   - jacket
@@ -34,13 +32,11 @@ vocabulary_targets:
   - red
   - green
   - black
-  - friendly
   - kind
   - shy
   - confident
   - funny
   - serious
-  - polite
   - rude
   - generous
   - patient
@@ -48,7 +44,6 @@ vocabulary_targets:
   - creative
   - honest
   - talkative
-  - quiet
   - remind
   - describe
   - recognize

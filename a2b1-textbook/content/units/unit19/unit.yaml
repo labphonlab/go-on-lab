@@ -13,18 +13,12 @@ grammar_focus:
   - "past modals for regret: should have / should not have"
 
 vocabulary_targets:
-  - trip
-  - airport
-  - happened
   - flight
   - connection
-  - delayed
-  - missed
   - terrible
   - airline
   - staff
   - gate
-  - until
   - stressful
   - hotel
   - suitcase
@@ -32,36 +26,22 @@ vocabulary_targets:
   - desk
   - claim
   - send
-  - upset
-  - packed
-  - keep
-  - passport
   - smart
   - back
   - embassy
-  - immediately
   - delay
-  - complained
-  - travel
   - insurance
-  - point
-  - hope
-  - better
   - stolen
   - steal
   - wallet
-  - refund
-  - reservation
   - cancelled
   - customs
   - queue
   - security
-  - police
   - urgent
   - emergency
   - contact
   - belongings
-  - tourist
   - apologize
 
 sections:

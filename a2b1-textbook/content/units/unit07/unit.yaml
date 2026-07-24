@@ -29,7 +29,6 @@ vocabulary_targets:
   - starter
   - main course
   - dessert
-  - soup
   - salad
   - sandwich
   - burger
@@ -39,13 +38,10 @@ vocabulary_targets:
   - chicken
   - rice
   - bread
-  - coffee
   - tea
   - juice
   - sugar
-  - spicy
   - sweet
-  - delicious
   - fresh
   - plate
   - fork
@@ -62,11 +58,8 @@ vocabulary_targets:
   - ready
   - serve
   - to go
-  - actually
-  - more
   - cheese
   - of course
-  - sure
 
 sections:
   - id: "07-warmup"

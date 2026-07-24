@@ -22,7 +22,6 @@ vocabulary_targets:
   - window
   - bike
   - parked
-  - hurt
   - injured
   - witness
   - scene
@@ -30,7 +29,6 @@ vocabulary_targets:
   - ambulance
   - reporter
   - interview
-  - describe
   - exact
   - moment
   - noticed
@@ -57,9 +55,7 @@ vocabulary_targets:
   - wild
   - happened
   - little
-  - exciting
   - TV
-  - neighbor
   - shouting
   - immediately
   - flashing

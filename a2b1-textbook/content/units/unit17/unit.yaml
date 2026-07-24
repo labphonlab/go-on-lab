@@ -17,9 +17,6 @@ vocabulary_targets:
   - opinion
   - agree
   - disagree
-  - better
-  - best
-  - more
   - argument
   - reason
   - point
@@ -32,9 +29,7 @@ vocabulary_targets:
   - exactly
   - totally
   - completely
-  - sure
   - however
-  - actually
   - pet
   - pets
   - cat
@@ -44,7 +39,6 @@ vocabulary_targets:
   - loyal
   - calm
   - independent
-  - friendly
   - guess
   - compromise
   - in my opinion

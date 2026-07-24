@@ -13,10 +13,8 @@ grammar_focus:
   - "動名詞（-ing）をとる動詞: enjoy -ing / avoid -ing"
 
 vocabulary_targets:
-  - plan
   - future
   - become
-  - nurse
   - enjoy
   - helping
   - hope
@@ -30,10 +28,8 @@ vocabulary_targets:
   - business
   - someday
   - cooking
-  - exciting
   - travel
   - traveling
-  - meeting
   - trying
   - avoid
   - spending
@@ -42,7 +38,6 @@ vocabulary_targets:
   - promise
   - exam
   - luck
-  - decide
   - keep
   - expect
   - consider
@@ -55,9 +50,7 @@ vocabulary_targets:
   - degree
   - career
   - skill
-  - confident
   - improve
-  - abroad
 
 sections:
   - id: "16-warmup"

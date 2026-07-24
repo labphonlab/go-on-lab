@@ -29,8 +29,6 @@ vocabulary_targets:
   - cross
   - past
   - along
-  - near
-  - far
   - behind
   - opposite
   - next to
@@ -39,7 +37,6 @@ vocabulary_targets:
   - lost
   - bank
   - pharmacy
-  - supermarket
   - library
   - post office
   - bakery
@@ -57,7 +54,6 @@ vocabulary_targets:
   - walking distance
   - landmark
   - gas station
-  - polite
   - where
   - within
 

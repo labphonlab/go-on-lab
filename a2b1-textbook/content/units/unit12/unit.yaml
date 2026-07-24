@@ -14,24 +14,16 @@ grammar_focus:
 
 vocabulary_targets:
   - hiking
-  - weekend
-  - weather
   - forecast
-  - sunny
-  - mountain
   - trail
-  - movie
   - report
-  - deadline
   - overtime
   - cloudy
-  - plan
   - traffic
   - traffic jam
   - stuck
   - picnic
   - enough
-  - bring
   - clear up
   - depend on
   - free time
@@ -52,12 +44,9 @@ vocabulary_targets:
   - hurry
   - get worse
   - get better
-  - temperature
   - delayed
   - windy
   - storm
-  - probably
-  - definitely
 
 sections:
   - id: "12-warmup"

@@ -178,12 +178,13 @@ task_submissions(user_id, unit, task_type,  -- writing|speaking
 
 ## 11. 実装状況（このリポジトリでの進捗）
 
-- 完了: リポジトリ scaffold、`content/syllabus.yaml`（20ユニット概要）、`content/vocabulary.csv`（Unit 1 ターゲット語）、Unit 1 コンテンツ一式（`unit.yaml` + 8 セクション Markdown）、`vocab_check.py` と `export_app.py`（動作するビルドゲート、pytest 付き）、`content/app_config.yaml`、`build_pdf.py` のセクション QR 自動生成（SVG・`build/qr-map.json`）
-- KDP出版パイプライン（完了）: `content/book_meta.yaml`（書誌情報の単一ソース）、`content/front_matter/how-to-use.md`（このテキストの使い方）、`build_pdf.py --full-book`（前付け・目次・本文・語彙索引・Can-doチェックリスト総覧を1つの `.typ` に統合、KDPトリムサイズ 7×10in・ミラーマージン・ページ番号ローマ数字→算用数字切替）、`build_epub.py`（Kindle用EPUB3、QRの代わりにテキストリンク）、`build_cover.py`（電子版カバーPNGのプレースホルダー生成）、`docs/kdp-metadata.md`（出版ガイド・チェックリスト）
-- 執筆中: Unit 2〜20 の本文（`syllabus.yaml` の骨格をもとに、`vocab_check.py` をゲートに執筆継続）
+- **全20ユニットのコンテンツ執筆が完了**（`unit01`〜`unit20`、それぞれ `unit.yaml` + セクション Markdown）。`content/vocabulary.csv` は759語、`vocab_check.py` は全ユニットで100%カバー率、can_do ID の重複なしを確認済み
+- ビルドゲート（完了）: `vocab_check.py`（98%カバー率ゲート + can_do ID重複チェック、pytest 付き）、`export_app.py`（LinguaForge JSON、pytest 付き）
+- KDP出版パイプライン（完了）: `content/book_meta.yaml`（書誌情報の単一ソース）、`content/front_matter/how-to-use.md`（このテキストの使い方）、`build_pdf.py --full-book`（前付け・目次・本文20ユニット・語彙索引・Can-doチェックリスト総覧を1つの `.typ` に統合、KDPトリムサイズ 7×10in・ミラーマージン・ページ番号ローマ数字→算用数字切替）、`build_epub.py`（Kindle用EPUB3・全25章、QRの代わりにテキストリンク）、`build_cover.py`（電子版カバーPNGのプレースホルダー生成）、`docs/kdp-metadata.md`（出版ガイド・チェックリスト）
+- 既知の課題: 語彙ターゲットの重複（759語中93語、約12%）— 各ユニットを独立したエージェントに執筆させた設計上の副作用。KDP登録前にクリーンアップが必要（README参照）
 - 未着手（外部リソースが必要でこのサンドボックスでは実行不可）:
   - `audio_gen.py` は TTS/MFA への実接続が必要なためインターフェースのみ実装（スタブ）
-  - `build_pdf.py` の最終 PDF コンパイルは Typst 未インストールのため未実行（`.typ` ソース生成と QR SVG 生成は実行・検証済み）
+  - `build_pdf.py` の最終 PDF コンパイルは Typst 未インストールのため未実行（`.typ` ソース生成と QR SVG 生成は全20ユニットで実行・検証済み）
   - ペーパーバックのフルラップ表紙（背表紙込み）は最終ページ数が必要なため未生成
   - `app/`（Next.js PWA）、Supabase 接続、法務ページ、`goon.jp` 短縮ドメインのリダイレクト実装、KDPアカウントでの実際の出版操作は Phase 2 以降（KDP出版操作は発行者本人のみが実行可能）
-- 次の一手: Unit 2〜20 の執筆完了 → Typst 導入して `--full-book` を実コンパイル → フルラップ表紙デザイン → KDP登録
+- 次の一手: 語彙重複のクリーンアップ → Typst 導入して `--full-book` を実コンパイル → フルラップ表紙デザイン → KDP登録

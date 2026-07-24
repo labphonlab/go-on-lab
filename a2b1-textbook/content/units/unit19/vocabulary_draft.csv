@@ -1,0 +1,51 @@
+word,pos,ja,ipa,ngsl_rank,nd,fl,l1_weighted_nd,hvpt,unit
+trip,noun,旅行,/trɪp/,780,15,0.62,0.25,0,19
+airport,noun,空港,/ˈeərpɔːrt/,900,14,0.58,0.30,0,19
+happened,verb (past tense),起こった,/ˈhæpənd/,650,19,0.70,0.20,0,19
+flight,noun,飛行機の便,/flaɪt/,1050,13,0.55,0.42,1,19
+connection,noun,乗り継ぎ,/kəˈnekʃən/,1780,9,0.40,0.28,0,19
+delayed,adjective,遅れた,/dɪˈleɪd/,1620,10,0.45,0.38,1,19
+missed,verb (past tense),乗り遅れた,/mɪst/,1150,12,0.50,0.24,0,19
+terrible,adjective,ひどい,/ˈterəbəl/,1380,11,0.48,0.44,1,19
+airline,noun,航空会社,/ˈeərlaɪn/,1490,9,0.42,0.26,0,19
+staff,noun,スタッフ・職員,/stæf/,1340,10,0.44,0.22,0,19
+gate,noun,搭乗口,/ɡeɪt/,1600,8,0.38,0.20,0,19
+until,preposition/conjunction,〜まで,/ənˈtɪl/,700,17,0.68,0.18,0,19
+stressful,adjective,ストレスの多い,/ˈstresfəl/,2150,6,0.30,0.24,0,19
+hotel,noun,ホテル,/hoʊˈtel/,980,14,0.60,0.22,0,19
+suitcase,noun,スーツケース,/ˈsuːtkeɪs/,2050,7,0.33,0.27,0,19
+missing,adjective,見当たらない・なくなった,/ˈmɪsɪŋ/,1420,10,0.46,0.23,0,19
+desk,noun,窓口・受付,/desk/,1490,9,0.41,0.19,0,19
+claim,noun/verb,申し立て・請求,/kleɪm/,1980,7,0.35,0.45,1,19
+send,verb,送る,/send/,760,18,0.66,0.21,0,19
+upset,adjective,動揺した,/ʌpˈset/,1860,7,0.34,0.25,0,19
+packed,verb (past tense),荷造りした,/pækt/,1710,8,0.37,0.23,0,19
+keep,verb,持っておく・保管する,/kiːp/,640,20,0.72,0.20,0,19
+passport,noun,パスポート,/ˈpæspɔːrt/,1550,10,0.47,0.28,0,19
+smart,adjective,賢い,/smɑːrt/,1290,11,0.49,0.24,0,19
+back,adverb,戻って・返して,/bæk/,610,20,0.75,0.19,0,19
+embassy,noun,大使館,/ˈembəsi/,2380,5,0.27,0.24,0,19
+immediately,adverb,すぐに,/ɪˈmiːdiətli/,1240,12,0.51,0.21,0,19
+delay,noun,遅れ,/dɪˈleɪ/,1660,9,0.40,0.36,0,19
+complained,verb (past tense),苦情を言った,/kəmˈpleɪnd/,2020,7,0.32,0.22,0,19
+travel,noun/verb,旅行する,/ˈtrævəl/,880,15,0.61,0.41,1,19
+insurance,noun,保険,/ɪnˈʃʊərəns/,2260,6,0.29,0.23,0,19
+point,noun,意見・要点,/pɔɪnt/,930,15,0.63,0.26,0,19
+hope,verb,望む,/hoʊp/,720,18,0.69,0.20,0,19
+better,adjective,もっと良い,/ˈbetər/,690,19,0.71,0.20,0,19
+stolen,verb (past participle),盗まれた,/ˈstoʊlən/,1900,7,0.33,0.26,0,19
+steal,verb,盗む,/stiːl/,2150,6,0.30,0.25,0,19
+wallet,noun,財布,/ˈwɑːlɪt/,1780,8,0.37,0.48,1,19
+refund,noun,返金,/ˈriːfʌnd/,2280,6,0.29,0.43,1,19
+reservation,noun,予約,/ˌrezərˈveɪʃən/,2150,7,0.31,0.40,1,19
+cancelled,verb (past tense),キャンセルされた,/ˈkænsəld/,1830,8,0.36,0.24,0,19
+customs,noun,税関,/ˈkʌstəmz/,1990,7,0.34,0.22,0,19
+queue,noun,列・行列,/kjuː/,2480,4,0.24,0.31,0,19
+security,noun,保安検査,/sɪˈkjʊərəti/,1360,11,0.47,0.29,0,19
+police,noun,警察,/pəˈliːs/,1020,14,0.57,0.46,1,19
+urgent,adjective,緊急の,/ˈɜːrdʒənt/,2040,7,0.32,0.39,1,19
+emergency,noun,緊急事態,/ɪˈmɜːrdʒənsi/,1680,9,0.39,0.27,0,19
+contact,verb,連絡する,/ˈkɑːntækt/,1150,12,0.50,0.23,0,19
+belongings,noun,持ち物,/bɪˈlɔːŋɪŋz/,2390,5,0.26,0.25,0,19
+tourist,noun,観光客,/ˈtʊərɪst/,1490,10,0.44,0.24,0,19
+apologize,verb,謝る,/əˈpɑːlədʒaɪz/,1920,7,0.33,0.26,0,19

@@ -1,0 +1,109 @@
+unit: 16
+title: "Hopes and Plans"
+cefr_j: "B1.1"
+
+can_do:
+  - id: "B1.1-SI-11"
+    ja: "want to / hope to / plan to / decide to や enjoy -ing / avoid -ing など、動詞ごとの正しい形（不定詞か動名詞か）を使って、自分の将来の希望や目標を伝えることができる"
+  - id: "B1.1-SI-12"
+    ja: "相手に将来の希望・目標について質問し、答えの内容（何を望んでいるか、何を避けたいか）を理解することができる"
+
+grammar_focus:
+  - "不定詞をとる動詞: want to / hope to / plan to / decide to"
+  - "動名詞（-ing）をとる動詞: enjoy -ing / avoid -ing"
+
+vocabulary_targets:
+  - plan
+  - future
+  - become
+  - nurse
+  - enjoy
+  - helping
+  - hope
+  - university
+  - decided
+  - apply
+  - goal
+  - dream
+  - starting
+  - own
+  - business
+  - someday
+  - cooking
+  - exciting
+  - travel
+  - traveling
+  - meeting
+  - trying
+  - avoid
+  - spending
+  - achieve
+  - reach
+  - promise
+  - exam
+  - luck
+  - decide
+  - keep
+  - expect
+  - consider
+  - quit
+  - imagine
+  - afford
+  - manage
+  - volunteer
+  - graduate
+  - degree
+  - career
+  - skill
+  - confident
+  - improve
+  - abroad
+
+sections:
+  - id: "16-warmup"
+    type: warmup
+    strand: meaning_output
+    medium: paper
+    app_components: []
+
+  - id: "16-input-dialogue"
+    type: input_dialogue
+    strand: meaning_input
+    medium: both
+    app_components: [karaoke_reader, shadowing, dictation]
+
+  - id: "16-noticing"
+    type: noticing
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "16-form-pi"
+    type: form_pi
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "16-form-production"
+    type: form_production
+    strand: language_focus
+    medium: both
+    app_components: [cloze]
+
+  - id: "16-main-task"
+    type: main_task
+    strand: meaning_output
+    medium: both
+    app_components: [roleplay_ai]
+
+  - id: "16-fluency"
+    type: fluency
+    strand: fluency
+    medium: app
+    app_components: [shadowing, dictation]
+
+  - id: "16-reflection"
+    type: reflection
+    strand: meaning_output
+    medium: both
+    app_components: [can_do_survey]

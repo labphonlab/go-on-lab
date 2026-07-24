@@ -13,6 +13,8 @@ grammar_focus:
   - "Do you know...?"
 
 vocabulary_targets:
+  - where
+  - sure
   - excuse me
   - information
   - reception desk

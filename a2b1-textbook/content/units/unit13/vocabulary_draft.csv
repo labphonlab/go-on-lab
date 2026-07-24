@@ -1,4 +1,6 @@
 word,pos,ja,ipa,ngsl_rank,nd,fl,l1_weighted_nd,hvpt,unit
+where,adverb/conjunction,どこで（に）,/wɛr/,760,17,0.74,0.32,1,13
+sure,adjective,確かな・もちろん,/ʃʊr/,860,15,0.72,0.24,1,13
 excuse me,expression,すみません（呼びかけ）,/ɪkˈskjuːz miː/,1450,8,0.42,0.30,0,13
 information,noun,情報,/ˌɪnfərˈmeɪʃən/,700,14,0.66,0.28,0,13
 reception desk,noun phrase,受付,/rɪˈsɛpʃən dɛsk/,2350,5,0.24,0.32,0,13

@@ -1,0 +1,51 @@
+word,pos,ja,ipa,ngsl_rank,nd,fl,l1_weighted_nd,hvpt,unit
+beans,noun,豆（複数形）,/biːnz/,1850,8,0.42,0.22,0,14
+coffee,noun,コーヒー,/ˈkɒfi/,780,15,0.78,0.28,0,14
+farm,noun,農場,/fɑːrm/,1420,10,0.55,0.38,1,14
+grown,verb,育てられる（grow の過去分詞）,/ɡroʊn/,1680,9,0.40,0.35,0,14
+picked,verb,摘まれる（pick の過去分詞）,/pɪkt/,1540,11,0.52,0.26,0,14
+dried,verb,乾燥される（dry の過去分詞）,/draɪd/,1970,6,0.30,0.24,0,14
+roasted,verb,焙煎される（roast の過去分詞）,/ˈroʊstɪd/,2380,4,0.22,0.30,1,14
+packed,verb,詰められる（pack の過去分詞）,/pækt/,1760,9,0.44,0.20,0,14
+shipped,verb,出荷される（ship の過去分詞）,/ʃɪpt/,2210,5,0.26,0.22,0,14
+sold,verb,売られる（sell の過去分詞）,/soʊld/,1290,13,0.62,0.28,0,14
+factory,noun,工場,/ˈfæktəri/,1350,12,0.58,0.36,1,14
+company,noun,会社,/ˈkʌmpəni/,690,17,0.72,0.24,0,14
+wood,noun,木材,/wʊd/,1610,10,0.48,0.26,0,14
+built,verb,建てられる（build の過去分詞）,/bɪlt/,980,16,0.68,0.30,0,14
+designed,verb,デザインされる（design の過去分詞）,/dɪˈzaɪnd/,1890,7,0.36,0.28,0,14
+invented,verb,発明される（invent の過去分詞）,/ɪnˈvɛntɪd/,2050,6,0.32,0.25,0,14
+discovered,verb,発見される（discover の過去分詞）,/dɪˈskʌvərd/,1730,9,0.44,0.32,0,14
+planted,verb,植えられる（plant の過去分詞）,/ˈplæntɪd/,2140,5,0.28,0.22,0,14
+produced,verb,生産される（produce の過去分詞）,/prəˈdjuːst/,1470,11,0.50,0.34,0,14
+recycled,verb,リサイクルされる（recycle の過去分詞）,/riːˈsaɪkəld/,2270,5,0.24,0.26,1,14
+cotton,noun,綿,/ˈkɒtən/,2020,6,0.31,0.20,0,14
+leather,noun,革,/ˈlɛðər/,1990,7,0.34,0.42,1,14
+brick,noun,レンガ,/brɪk/,2310,4,0.20,0.35,1,14
+stone,noun,石,/stoʊn/,1580,10,0.47,0.24,0,14
+steel,noun,鋼鉄,/stiːl/,2160,6,0.27,0.28,0,14
+cup,noun,カップ,/kʌp/,1090,14,0.66,0.18,0,14
+recipe,noun,レシピ,/ˈrɛsɪpi/,1930,8,0.38,0.30,0,14
+ingredient,noun,材料・成分,/ɪnˈɡriːdiənt/,2260,5,0.23,0.33,0,14
+chocolate,noun,チョコレート,/ˈtʃɒklət/,1650,10,0.49,0.20,0,14
+sugar,noun,砂糖,/ˈʃʊɡər/,1310,13,0.60,0.26,0,14
+flour,noun,小麦粉,/ˈflaʊər/,2400,4,0.19,0.32,1,14
+bridge,noun,橋,/brɪdʒ/,1440,11,0.54,0.36,1,14
+local,adjective,地元の,/ˈloʊkəl/,760,18,0.74,0.22,0,14
+natural,adjective,自然の,/ˈnætʃərəl/,1180,13,0.59,0.25,0,14
+traditional,adjective,伝統的な,/trəˈdɪʃənəl/,1560,9,0.41,0.30,1,14
+handmade,adjective,手作りの,/ˌhændˈmeɪd/,2480,3,0.18,0.24,0,14
+modern,adjective,現代の,/ˈmɒdərn/,1240,12,0.57,0.28,0,14
+ancient,adjective,古代の,/ˈeɪnʃənt/,1920,7,0.35,0.26,0,14
+cafe,noun,カフェ,/kæˈfeɪ/,2050,6,0.33,0.18,0,14
+material,noun,材料,/məˈtɪəriəl/,1080,15,0.63,0.29,0,14
+product,noun,製品,/ˈprɒdʌkt/,900,17,0.70,0.31,1,14
+machine,noun,機械,/məˈʃiːn/,970,16,0.65,0.22,0,14
+where,adverb,どこで,/wɛr/,650,18,0.80,0.20,0,14
+century,noun,世紀,/ˈsɛntʃəri/,1370,12,0.56,0.27,0,14
+exported,verb,輸出される（export の過去分詞）,/ɪkˈspɔːrtɪd/,2560,3,0.16,0.23,0,14
+origin,noun,起源・産地,/ˈɒrɪdʒɪn/,1840,8,0.39,0.25,0,14
+hand,noun,手,/hænd/,620,20,0.80,0.18,0,14
+building,noun,建物,/ˈbɪldɪŋ/,650,19,0.77,0.24,0,14
+by,preposition,〜によって（受動態の動作主）,/baɪ/,610,20,0.85,0.15,0,14
+as,conjunction,〜として,/æz/,615,20,0.85,0.15,0,14

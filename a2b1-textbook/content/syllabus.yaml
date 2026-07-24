@@ -103,7 +103,7 @@ units:
     grammar_focus: []
     vocabulary_target_count: 0
     consolidation: true
-    status: planned
+    status: implemented
 
   - unit: 11
     title: "Talking About the Past in Detail"

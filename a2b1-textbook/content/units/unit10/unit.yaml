@@ -1,0 +1,61 @@
+unit: 10
+title: "Consolidation 2"
+cefr_j: "A2.2/B1.1"
+
+can_do:
+  - id: "A2.2-CONS-3"
+    ja: "道案内・注文・体調とアドバイス・人やものの説明を、場面に応じて使い分けることができる"
+  - id: "A2.2-CONS-4"
+    ja: "既習の語彙・表現を使って、時間を意識しながらすらすらと話す・読むことができる"
+
+grammar_focus: []
+vocabulary_targets: []
+
+sections:
+  - id: "10-warmup"
+    type: warmup
+    strand: meaning_output
+    medium: paper
+    app_components: []
+
+  - id: "10-input-reading"
+    type: input_reading
+    strand: meaning_input
+    medium: both
+    app_components: [karaoke_reader, shadowing]
+
+  - id: "10-noticing"
+    type: noticing
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "10-form-pi"
+    type: form_pi
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "10-form-production"
+    type: form_production
+    strand: language_focus
+    medium: both
+    app_components: [cloze]
+
+  - id: "10-main-task"
+    type: main_task
+    strand: meaning_output
+    medium: both
+    app_components: [roleplay_ai]
+
+  - id: "10-fluency"
+    type: fluency
+    strand: fluency
+    medium: app
+    app_components: [shadowing]
+
+  - id: "10-reflection"
+    type: reflection
+    strand: meaning_output
+    medium: both
+    app_components: [can_do_survey]

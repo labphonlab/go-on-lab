@@ -241,6 +241,7 @@ won't
 let's
 what's
 that's
+there's
 it's
 i'm
 you're
@@ -298,6 +299,11 @@ wait
 stay
 finish
 watch
+
+# --- 追加基礎語（Unit 10 総復習で必要になった汎用語） ---
+smile
+smiled
+thanked
 
 # --- 追加基礎語（Unit 5 総復習で必要になった汎用語） ---
 each

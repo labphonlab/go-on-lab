@@ -373,3 +373,195 @@ better,adjective/adverb,より良く・回復して,/ˈbɛtər/,420,19,0.80,0.18
 shouldn't,contraction,〜すべきではない,/ˈʃʊdənt/,650,17,0.72,0.20,0,9
 call in sick,expression,病欠の連絡をする,/kɔːl ɪn sɪk/,2700,3,0.15,0.24,0,9
 get well soon,expression,お大事に,/ɡɛt wɛl suːn/,2500,4,0.18,0.22,0,9
+strange,adjective,奇妙な・変な,/streɪndʒ/,1550,9,0.44,0.28,0,11
+crash,noun,衝突・激しい音,/kræʃ/,1780,8,0.40,0.30,1,11
+crashed into,verb phrase,〜に衝突した,/kræʃt ˈɪntuː/,2350,5,0.24,0.32,1,11
+accident,noun,事故,/ˈæksɪdənt/,1390,11,0.55,0.26,0,11
+noise,noun,物音・騒音,/nɔɪz/,1470,10,0.52,0.24,0,11
+loud,adjective,（音が）大きい,/laʊd/,1360,12,0.58,0.32,1,11
+window,noun,窓,/ˈwɪndoʊ/,1210,13,0.62,0.22,0,11
+bike,noun,自転車,/baɪk/,1450,10,0.54,0.20,0,11
+parked,adjective,駐車してある,/pɑːrkt/,1980,6,0.30,0.24,0,11
+hurt,adjective/verb,けがをした・痛める,/hɜːrt/,1250,12,0.58,0.34,1,11
+injured,adjective,けがをした,/ˈɪndʒərd/,1990,6,0.28,0.32,1,11
+witness,noun/verb,目撃者・目撃する,/ˈwɪtnəs/,2130,6,0.28,0.24,0,11
+scene,noun,現場・場面,/siːn/,1830,7,0.36,0.22,0,11
+police,noun,警察,/pəˈliːs/,1140,13,0.60,0.28,0,11
+ambulance,noun,救急車,/ˈæmbjələns/,2260,5,0.24,0.30,0,11
+reporter,noun,記者,/rɪˈpɔːrtər/,2040,6,0.30,0.34,1,11
+interview,noun/verb,インタビュー（する）,/ˈɪntərvjuː/,1710,8,0.40,0.24,0,11
+describe,verb,説明する・描写する,/dɪˈskraɪb/,1580,9,0.42,0.32,1,11
+exact,adjective,正確な,/ɪɡˈzækt/,1900,7,0.34,0.26,0,11
+moment,noun,瞬間,/ˈmoʊmənt/,1030,14,0.63,0.20,0,11
+noticed,verb (past tense),気づいた,/ˈnoʊtɪst/,1460,10,0.52,0.26,0,11
+realized,verb (past tense),気づいた・実感した,/ˈriːəlaɪzd/,1670,8,0.40,0.34,1,11
+meanwhile,adverb,その間に,/ˈmiːnwaɪl/,2170,6,0.28,0.24,0,11
+interrupted,verb (past tense),邪魔をした・中断させた,/ˌɪntəˈrʌptɪd/,2280,5,0.24,0.32,1,11
+outside,adverb/preposition,外で・外に,/ˌaʊtˈsaɪd/,1050,15,0.68,0.22,0,11
+inside,adverb/preposition,中で・中に,/ɪnˈsaɪd/,1090,14,0.66,0.22,0,11
+doing,verb,している（do の -ing 形）,/ˈduːɪŋ/,900,16,0.72,0.18,0,11
+watching,verb,見ている（watch の -ing 形）,/ˈwɒtʃɪŋ/,1230,12,0.58,0.20,0,11
+sitting,verb,座っている,/ˈsɪtɪŋ/,1320,11,0.55,0.22,0,11
+sofa,noun,ソファ,/ˈsoʊfə/,1990,6,0.30,0.20,0,11
+eating,verb,食べている,/ˈiːtɪŋ/,1160,13,0.60,0.20,0,11
+popcorn,noun,ポップコーン,/ˈpɒpkɔːrn/,2480,4,0.20,0.18,0,11
+charging,verb,充電している,/ˈtʃɑːrdʒɪŋ/,2020,6,0.28,0.26,0,11
+riding,verb,乗っている,/ˈraɪdɪŋ/,1540,9,0.44,0.24,0,11
+raining,verb,雨が降っている,/ˈreɪnɪŋ/,1690,8,0.40,0.24,0,11
+quickly,adverb,すぐに・急いで,/ˈkwɪkli/,1050,14,0.62,0.28,0,11
+owner,noun,持ち主・オーナー,/ˈoʊnər/,1420,10,0.50,0.26,0,11
+angry,adjective,怒った,/ˈæŋɡri/,1300,11,0.56,0.28,0,11
+upset,adjective,動揺した・気分を害した,/ʌpˈsɛt/,1870,7,0.36,0.26,0,11
+talking,verb,話している,/ˈtɔːkɪŋ/,1180,12,0.58,0.20,0,11
+alarm,noun,警報・アラーム,/əˈlɑːrm/,1610,9,0.44,0.30,0,11
+wild,adjective,とんでもない・激しい,/waɪld/,1520,9,0.44,0.24,0,11
+happened,verb (past tense),起こった,/ˈhæpənd/,850,17,0.76,0.20,0,11
+little,adjective/adverb,少し・小さい,/ˈlɪtəl/,620,19,0.80,0.24,0,11
+exciting,adjective,わくわくする,/ɪkˈsaɪtɪŋ/,1410,10,0.54,0.22,0,11
+TV,noun,テレビ,/ˌtiːˈviː/,950,16,0.72,0.18,0,11
+neighbor,noun,隣人・近所の人,/ˈneɪbər/,1590,9,0.44,0.30,0,11
+shouting,verb,叫んでいる,/ˈʃaʊtɪŋ/,1830,7,0.36,0.26,0,11
+immediately,adverb,すぐに・直ちに,/ɪˈmiːdiətli/,1360,10,0.50,0.24,0,11
+flashing,verb,点滅している,/ˈflæʃɪŋ/,2100,6,0.28,0.28,1,11
+hiking,noun,ハイキング,/ˈhaɪkɪŋ/,1900,7,0.36,0.24,0,12
+weekend,noun,週末,/ˈwiːkɛnd/,1040,12,0.70,0.30,0,12
+weather,noun,天気,/ˈwɛðər/,1150,9,0.61,0.42,1,12
+forecast,noun,天気予報,/ˈfɔːrkæst/,2150,6,0.30,0.34,1,12
+sunny,adjective,晴れの,/ˈsʌni/,1870,7,0.36,0.22,0,12
+mountain,noun,山,/ˈmaʊntən/,1310,11,0.56,0.26,0,12
+trail,noun,小道・トレイル,/treɪl/,2020,6,0.32,0.36,1,12
+movie,noun,映画,/ˈmuːvi/,1180,9,0.62,0.28,0,12
+report,noun,報告書・レポート,/rɪˈpɔːrt/,1080,13,0.60,0.38,1,12
+deadline,noun,締め切り,/ˈdɛdlaɪn/,2650,4,0.22,0.20,0,12
+overtime,noun,残業,/ˈoʊvərtaɪm/,2400,5,0.24,0.28,0,12
+cloudy,adjective,曇りの,/ˈklaʊdi/,2000,6,0.32,0.22,0,12
+plan,noun/verb,計画・予定,/plæn/,612,18,0.85,0.35,0,12
+traffic,noun,交通・車の流れ,/ˈtræfɪk/,1550,9,0.44,0.34,1,12
+traffic jam,noun phrase,交通渋滞,/ˈtræfɪk dʒæm/,2300,5,0.26,0.30,0,12
+stuck,adjective,動けない・詰まった,/stʌk/,1850,7,0.36,0.24,0,12
+picnic,noun,ピクニック,/ˈpɪknɪk/,2050,6,0.30,0.20,0,12
+enough,determiner/adverb,十分な,/ɪˈnʌf/,900,15,0.68,0.26,0,12
+bring,verb,持ってくる,/brɪŋ/,1090,20,0.73,0.32,1,12
+clear up,phrasal verb,（天気が）晴れる,/klɪr ʌp/,2200,5,0.26,0.28,0,12
+depend on,phrasal verb,〜次第である,/dɪˈpɛnd ɒn/,1400,10,0.52,0.24,0,12
+free time,noun phrase,自由な時間,/friː taɪm/,1600,8,0.42,0.30,1,12
+spare time,noun phrase,空き時間,/spɛr taɪm/,2350,5,0.24,0.26,0,12
+part-time job,noun phrase,アルバイト・パートの仕事,/ˈpɑːrt taɪm dʒɒb/,1900,7,0.36,0.24,0,12
+budget,noun,予算,/ˈbʌdʒɪt/,1750,8,0.40,0.22,0,12
+discount,noun,割引,/ˈdɪskaʊnt/,1980,7,0.36,0.24,0,12
+sale,noun,セール・安売り,/seɪl/,1350,11,0.56,0.20,0,12
+refund,noun,返金,/ˈriːfʌnd/,2500,4,0.20,0.28,1,12
+borrow,verb,借りる,/ˈbɒroʊ/,1620,9,0.44,0.30,1,12
+lend,verb,貸す,/lɛnd/,1980,6,0.32,0.22,0,12
+indoor,adjective,屋内の,/ˈɪndɔːr/,2150,6,0.30,0.20,0,12
+outdoor,adjective,屋外の,/ˈaʊtdɔːr/,2050,6,0.31,0.20,0,12
+finish early,expression,早く終わる,/ˈfɪnɪʃ ˈɜːrli/,1450,10,0.50,0.22,0,12
+stay late,expression,遅くまで残る,/steɪ leɪt/,1550,9,0.46,0.20,0,12
+on time,expression,時間通りに,/ɒn taɪm/,1250,12,0.58,0.22,0,12
+in time,expression,間に合って,/ɪn taɪm/,1500,10,0.50,0.22,0,12
+hurry,verb/noun,急ぐ,/ˈhʌri/,1420,10,0.52,0.26,0,12
+get worse,expression,悪化する,/ɡɛt wɜːrs/,1700,8,0.40,0.30,0,12
+get better,expression,良くなる,/ɡɛt ˈbɛtər/,1350,11,0.56,0.20,0,12
+temperature,noun,気温・温度,/ˈtɛmprətʃər/,1350,9,0.50,0.26,1,12
+delayed,adjective,遅れた,/dɪˈleɪd/,2050,6,0.30,0.24,0,12
+windy,adjective,風の強い,/ˈwɪndi/,2150,6,0.30,0.22,0,12
+storm,noun,嵐,/stɔːrm/,1900,7,0.36,0.28,0,12
+probably,adverb,おそらく,/ˈprɒbəbli/,1160,12,0.63,0.30,1,12
+definitely,adverb,絶対に,/ˈdɛfɪnɪtli/,1590,9,0.46,0.26,0,12
+where,adverb/conjunction,どこで（に）,/wɛr/,760,17,0.74,0.32,1,13
+sure,adjective,確かな・もちろん,/ʃʊr/,860,15,0.72,0.24,1,13
+excuse me,expression,すみません（呼びかけ）,/ɪkˈskjuːz miː/,1450,8,0.42,0.30,0,13
+information,noun,情報,/ˌɪnfərˈmeɪʃən/,700,14,0.66,0.28,0,13
+reception desk,noun phrase,受付,/rɪˈsɛpʃən dɛsk/,2350,5,0.24,0.32,0,13
+appointment,noun,予約・約束,/əˈpɔɪntmənt/,1550,8,0.40,0.26,0,13
+available,adjective,利用できる・空いている,/əˈveɪləbəl/,1200,10,0.52,0.38,1,13
+membership,noun,会員資格,/ˈmɛmbərʃɪp/,1950,6,0.30,0.24,0,13
+member,noun,会員,/ˈmɛmbər/,1050,12,0.60,0.26,0,13
+monthly,adjective,毎月の,/ˈmʌnθli/,1780,7,0.36,0.28,0,13
+fee,noun,料金,/fiː/,1680,6,0.34,0.22,0,13
+discount,noun,割引,/ˈdɪskaʊnt/,1620,7,0.37,0.24,0,13
+special,adjective,特別な,/ˈspɛʃəl/,900,15,0.68,0.26,0,13
+deposit,noun,保証金・預け金,/dɪˈpɒzɪt/,2100,5,0.27,0.24,0,13
+class,noun,授業・クラス,/klæs/,750,16,0.70,0.34,1,13
+swimming,noun,水泳,/ˈswɪmɪŋ/,1350,9,0.48,0.26,0,13
+instructor,noun,指導員,/ɪnˈstrʌktər/,2200,5,0.26,0.28,0,13
+schedule,noun/verb,予定表・予定を組む,/ˈskɛdʒuːl/,1420,11,0.55,0.30,0,13
+hours,noun,営業時間,/ˈaʊərz/,1080,11,0.56,0.22,0,13
+book,verb,予約する,/bʊk/,1000,13,0.58,0.28,0,13
+booking,noun,予約,/ˈbʊkɪŋ/,2050,6,0.30,0.24,0,13
+in advance,expression,前もって・事前に,/ɪn ədˈvæns/,2280,6,0.29,0.26,0,13
+popular,adjective,人気のある,/ˈpɒpjələr/,1150,11,0.58,0.24,0,13
+recommend,verb,勧める,/ˌrɛkəˈmɛnd/,1500,9,0.44,0.40,1,13
+whether,conjunction,〜かどうか,/ˈwɛðər/,1300,10,0.50,0.46,1,13
+locker,noun,ロッカー,/ˈlɒkər/,2250,5,0.25,0.36,1,13
+changing room,noun phrase,更衣室,/ˈtʃeɪndʒɪŋ ruːm/,2400,5,0.24,0.24,0,13
+hallway,noun,廊下,/ˈhɔːlweɪ/,2320,5,0.25,0.22,0,13
+pool,noun,プール,/puːl/,1500,8,0.44,0.20,0,13
+entrance,noun,入り口,/ˈɛntrəns/,1700,8,0.40,0.24,0,13
+elevator,noun,エレベーター,/ˈɛlɪveɪtər/,1900,7,0.36,0.42,1,13
+parking lot,noun phrase,駐車場,/ˈpɑːrkɪŋ lɒt/,2150,6,0.30,0.34,1,13
+nearby,adverb,近くに,/ˌnɪərˈbaɪ/,1650,8,0.42,0.24,0,13
+building,noun,建物,/ˈbɪldɪŋ/,800,15,0.66,0.26,0,13
+located,adjective,位置している,/ˈloʊkeɪtɪd/,1850,7,0.35,0.28,0,13
+visitor,noun,訪問者,/ˈvɪzɪtər/,1600,8,0.41,0.30,0,13
+brochure,noun,パンフレット,/broʊˈʃʊr/,2500,4,0.20,0.36,1,13
+form,noun,用紙・書式,/fɔːrm/,950,14,0.62,0.24,0,13
+fill out,phrasal verb,（用紙に）記入する,/fɪl aʊt/,2050,6,0.28,0.22,0,13
+sign,verb/noun,署名する・案内板,/saɪn/,1000,13,0.56,0.22,0,13
+bottom,noun,一番下・下部,/ˈbɒtəm/,1400,9,0.46,0.22,0,13
+date,noun,日付,/deɪt/,850,14,0.64,0.22,0,13
+helpful,adjective,役に立つ,/ˈhɛlpfəl/,1250,10,0.52,0.26,0,13
+more,adverb,もっと・さらに,/mɔːr/,620,18,0.78,0.22,0,13
+center,noun,センター・中心施設,/ˈsɛntər/,700,16,0.70,0.24,0,13
+thirty,number,30、三十,/ˈθɜːrti/,1100,10,0.55,0.44,1,13
+dollars,noun,ドル,/ˈdɒlərz/,1300,9,0.48,0.24,0,13
+beans,noun,豆（複数形）,/biːnz/,1850,8,0.42,0.22,0,14
+coffee,noun,コーヒー,/ˈkɒfi/,780,15,0.78,0.28,0,14
+farm,noun,農場,/fɑːrm/,1420,10,0.55,0.38,1,14
+grown,verb,育てられる（grow の過去分詞）,/ɡroʊn/,1680,9,0.40,0.35,0,14
+picked,verb,摘まれる（pick の過去分詞）,/pɪkt/,1540,11,0.52,0.26,0,14
+dried,verb,乾燥される（dry の過去分詞）,/draɪd/,1970,6,0.30,0.24,0,14
+roasted,verb,焙煎される（roast の過去分詞）,/ˈroʊstɪd/,2380,4,0.22,0.30,1,14
+packed,verb,詰められる（pack の過去分詞）,/pækt/,1760,9,0.44,0.20,0,14
+shipped,verb,出荷される（ship の過去分詞）,/ʃɪpt/,2210,5,0.26,0.22,0,14
+sold,verb,売られる（sell の過去分詞）,/soʊld/,1290,13,0.62,0.28,0,14
+factory,noun,工場,/ˈfæktəri/,1350,12,0.58,0.36,1,14
+company,noun,会社,/ˈkʌmpəni/,690,17,0.72,0.24,0,14
+wood,noun,木材,/wʊd/,1610,10,0.48,0.26,0,14
+built,verb,建てられる（build の過去分詞）,/bɪlt/,980,16,0.68,0.30,0,14
+designed,verb,デザインされる（design の過去分詞）,/dɪˈzaɪnd/,1890,7,0.36,0.28,0,14
+invented,verb,発明される（invent の過去分詞）,/ɪnˈvɛntɪd/,2050,6,0.32,0.25,0,14
+discovered,verb,発見される（discover の過去分詞）,/dɪˈskʌvərd/,1730,9,0.44,0.32,0,14
+planted,verb,植えられる（plant の過去分詞）,/ˈplæntɪd/,2140,5,0.28,0.22,0,14
+produced,verb,生産される（produce の過去分詞）,/prəˈdjuːst/,1470,11,0.50,0.34,0,14
+recycled,verb,リサイクルされる（recycle の過去分詞）,/riːˈsaɪkəld/,2270,5,0.24,0.26,1,14
+cotton,noun,綿,/ˈkɒtən/,2020,6,0.31,0.20,0,14
+leather,noun,革,/ˈlɛðər/,1990,7,0.34,0.42,1,14
+brick,noun,レンガ,/brɪk/,2310,4,0.20,0.35,1,14
+stone,noun,石,/stoʊn/,1580,10,0.47,0.24,0,14
+steel,noun,鋼鉄,/stiːl/,2160,6,0.27,0.28,0,14
+cup,noun,カップ,/kʌp/,1090,14,0.66,0.18,0,14
+recipe,noun,レシピ,/ˈrɛsɪpi/,1930,8,0.38,0.30,0,14
+ingredient,noun,材料・成分,/ɪnˈɡriːdiənt/,2260,5,0.23,0.33,0,14
+chocolate,noun,チョコレート,/ˈtʃɒklət/,1650,10,0.49,0.20,0,14
+sugar,noun,砂糖,/ˈʃʊɡər/,1310,13,0.60,0.26,0,14
+flour,noun,小麦粉,/ˈflaʊər/,2400,4,0.19,0.32,1,14
+bridge,noun,橋,/brɪdʒ/,1440,11,0.54,0.36,1,14
+local,adjective,地元の,/ˈloʊkəl/,760,18,0.74,0.22,0,14
+natural,adjective,自然の,/ˈnætʃərəl/,1180,13,0.59,0.25,0,14
+traditional,adjective,伝統的な,/trəˈdɪʃənəl/,1560,9,0.41,0.30,1,14
+handmade,adjective,手作りの,/ˌhændˈmeɪd/,2480,3,0.18,0.24,0,14
+modern,adjective,現代の,/ˈmɒdərn/,1240,12,0.57,0.28,0,14
+ancient,adjective,古代の,/ˈeɪnʃənt/,1920,7,0.35,0.26,0,14
+cafe,noun,カフェ,/kæˈfeɪ/,2050,6,0.33,0.18,0,14
+material,noun,材料,/məˈtɪəriəl/,1080,15,0.63,0.29,0,14
+product,noun,製品,/ˈprɒdʌkt/,900,17,0.70,0.31,1,14
+machine,noun,機械,/məˈʃiːn/,970,16,0.65,0.22,0,14
+where,adverb,どこで,/wɛr/,650,18,0.80,0.20,0,14
+century,noun,世紀,/ˈsɛntʃəri/,1370,12,0.56,0.27,0,14
+exported,verb,輸出される（export の過去分詞）,/ɪkˈspɔːrtɪd/,2560,3,0.16,0.23,0,14
+origin,noun,起源・産地,/ˈɒrɪdʒɪn/,1840,8,0.39,0.25,0,14
+hand,noun,手,/hænd/,620,20,0.80,0.18,0,14
+building,noun,建物,/ˈbɪldɪŋ/,650,19,0.77,0.24,0,14
+by,preposition,〜によって（受動態の動作主）,/baɪ/,610,20,0.85,0.15,0,14
+as,conjunction,〜として,/æz/,615,20,0.85,0.15,0,14

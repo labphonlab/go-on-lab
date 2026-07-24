@@ -112,7 +112,7 @@ units:
     grammar_focus: ["past continuous vs past simple", "while / when"]
     vocabulary_target_count: 50
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 12
     title: "If I Have Time..."
@@ -121,7 +121,7 @@ units:
     grammar_focus: ["first conditional (if + present, will)"]
     vocabulary_target_count: 45
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 13
     title: "Asking Indirectly"
@@ -130,7 +130,7 @@ units:
     grammar_focus: ["indirect questions: Could you tell me...?", "Do you know...?"]
     vocabulary_target_count: 45
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 14
     title: "Passive Voice in Everyday Life"
@@ -139,7 +139,7 @@ units:
     grammar_focus: ["passive voice: present simple / past simple"]
     vocabulary_target_count: 50
     consolidation: false
-    status: planned
+    status: implemented
 
   - unit: 15
     title: "Consolidation 3"

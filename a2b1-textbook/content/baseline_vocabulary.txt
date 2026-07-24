@@ -300,6 +300,16 @@ stay
 finish
 watch
 
+# --- 追加基礎語（Unit 20 総復習で必要になった汎用語） ---
+agreed
+teaches
+enjoys
+wants
+hopes
+doing
+pack
+studying
+
 # --- 追加基礎語（Unit 15 総復習で必要になった汎用語） ---
 waiting
 finished

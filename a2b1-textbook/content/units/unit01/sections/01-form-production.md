@@ -9,8 +9,6 @@ estimated_minutes: 10
 title_ja: "産出タスク：自分で書いてみよう"
 ---
 
-## Language Focus②：産出タスク
-
 今度は自分で文を作ります。（　）に **be going to** か **will** の正しい形を書きましょう。
 
 1. A: Why are you carrying that bag?　B: I ( 　　　 / going to visit ) my friend. I already planned it this morning. → **I'm going to visit**

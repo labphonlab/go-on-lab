@@ -9,8 +9,6 @@ estimated_minutes: 8
 title_ja: "気づき：be going to と will、shall we / why don't we"
 ---
 
-## Noticing：形に気づく
-
 対話をもう一度見て、太字の部分に注目しましょう。
 
 > Ben: I'**m going to go** to the new museum on Saturday.

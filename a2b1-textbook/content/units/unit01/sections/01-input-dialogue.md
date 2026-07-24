@@ -11,8 +11,6 @@ speakers: [Ben, Aya]
 proper_nouns: [Ben, Aya, Mika]
 ---
 
-## Input：対話を聞いてみましょう
-
 音声を聞きながら、Ben と Aya が週末の予定を立てる様子を読みましょう。
 
 **Ben:** Hi, Aya! Are you free this weekend?

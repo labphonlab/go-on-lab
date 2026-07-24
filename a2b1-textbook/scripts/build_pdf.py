@@ -213,13 +213,29 @@ def markdown_body_to_typst(body: str) -> str:
     return "\n".join(out)
 
 
-def render_unit_typst(
+def discover_unit_dirs(content_dir: Path) -> list[Path]:
+    units_dir = content_dir / "units"
+    if not units_dir.exists():
+        return []
+    return sorted(
+        (p for p in units_dir.iterdir() if p.is_dir() and (p / "unit.yaml").exists()),
+        key=lambda p: p.name,
+    )
+
+
+def render_unit_body_typst(
     content_dir: Path,
     unit_num: int,
     app_config: dict,
     qr_svg_dir: Path,
     qr_svg_dir_relative: str,
 ) -> tuple[str, list[QRSection]]:
+    """Render one unit's Can-do + sections (no page/text preamble).
+
+    Used both standalone (wrapped by render_unit_typst below) and as one
+    chapter inside the full-book manuscript (render_full_book_typst),
+    which supplies its own single #set page/#set text preamble up front.
+    """
     unit_dir = content_dir / "units" / f"unit{unit_num:02d}"
     unit_yaml = yaml.safe_load((unit_dir / "unit.yaml").read_text(encoding="utf-8"))
 
@@ -229,10 +245,6 @@ def render_unit_typst(
         generate_qr_svg(qr.deep_link, qr_svg_dir / f"{qr.section_id}.svg")
 
     parts = [
-        "#set page(paper: \"a4\", margin: 2.2cm)",
-        "#set text(font: \"Noto Sans CJK JP\", size: 10.5pt, lang: \"ja\")",
-        "#set heading(numbering: none)",
-        "",
         f"= Unit {unit_yaml['unit']}: {escape_typst(unit_yaml['title'])}",
         f"#text(size: 9pt, fill: gray)[CEFR-J {unit_yaml.get('cefr_j', '')}]",
         "",
@@ -272,6 +284,188 @@ def render_unit_typst(
     return "\n".join(parts), qr_sections
 
 
+def render_unit_typst(
+    content_dir: Path,
+    unit_num: int,
+    app_config: dict,
+    qr_svg_dir: Path,
+    qr_svg_dir_relative: str,
+) -> tuple[str, list[QRSection]]:
+    """Standalone single-unit .typ file (own page/text preamble). Used by
+    `--unit N` builds; the full-book build uses render_unit_body_typst
+    directly since it supplies one shared preamble for the whole book.
+    """
+    body, qr_sections = render_unit_body_typst(
+        content_dir, unit_num, app_config, qr_svg_dir, qr_svg_dir_relative
+    )
+    preamble = [
+        "#set page(paper: \"a4\", margin: 2.2cm)",
+        "#set text(font: \"Noto Sans CJK JP\", size: 10.5pt, lang: \"ja\")",
+        "#set heading(numbering: none)",
+        "",
+    ]
+    return "\n".join(preamble) + body, qr_sections
+
+
+def load_book_meta(content_dir: Path) -> dict:
+    path = content_dir / "book_meta.yaml"
+    return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+
+
+def render_book_preamble(book_meta: dict) -> str:
+    trim = book_meta["trim_size"]
+    return "\n".join(
+        [
+            "#set page(",
+            f'  width: {trim["width_in"]}in, height: {trim["height_in"]}in,',
+            "  margin: (",
+            f'    inside: {trim["margin_inside_in"]}in, outside: {trim["margin_outside_in"]}in,',
+            f'    top: {trim["margin_top_in"]}in, bottom: {trim["margin_bottom_in"]}in,',
+            "  ),",
+            "  numbering: none,",
+            ")",
+            '#set text(font: "Noto Sans CJK JP", size: 10.5pt, lang: "ja")',
+            "#set heading(numbering: none)",
+            "",
+        ]
+    )
+
+
+def render_title_page(book_meta: dict) -> str:
+    return "\n".join(
+        [
+            "#align(center + horizon)[",
+            "  #v(2cm)",
+            f'  #text(size: 26pt, weight: "bold")[{escape_typst(book_meta["title"])}]',
+            "  #v(0.6cm)",
+            f'  #text(size: 13pt)[{escape_typst(book_meta["subtitle"])}]',
+            "  #v(3cm)",
+            f'  #text(size: 12pt)[{escape_typst(book_meta["author"])}]',
+            "]",
+            "#pagebreak()",
+            "",
+        ]
+    )
+
+
+def render_copyright_page(book_meta: dict) -> str:
+    return "\n".join(
+        [
+            "#text(size: 9pt)[",
+            f'  {escape_typst(book_meta["title"])}：{escape_typst(book_meta["subtitle"])}',
+            "",
+            f'  © {book_meta["copyright_year"]} {escape_typst(book_meta["publisher"])}. All rights reserved.',
+            "",
+            "  本書の全部または一部を、発行者の書面による許諾なく複製・転載することを禁じます。",
+            "",
+            f'  発行： {escape_typst(book_meta["publisher"])}　{escape_typst(book_meta["publisher_url"])}',
+            f'  学習アプリ： {escape_typst(book_meta["app_url"])}',
+            f'  ISBN（紙版）： {escape_typst(str(book_meta["isbn_paperback"]))}',
+            f'  お問い合わせ： {escape_typst(book_meta["contact_email"])}',
+            "]",
+            "#pagebreak()",
+            "",
+        ]
+    )
+
+
+def render_front_matter_prose(content_dir: Path, section_id: str) -> str:
+    path = content_dir / "front_matter" / f"{section_id}.md"
+    meta, body = parse_frontmatter(path)
+    title = meta.get("title_ja", section_id)
+    heading = f"= {escape_typst(title)}\n\n"
+    return heading + markdown_body_to_typst(body) + "\n\n#pagebreak()\n"
+
+
+def render_table_of_contents() -> str:
+    # Typst's built-in outline walks the document's own heading tree, so
+    # this stays correct automatically as units/sections are added --
+    # nothing here needs to be regenerated by hand.
+    return '#outline(title: "目次", indent: auto, depth: 2)\n\n#pagebreak()\n'
+
+
+def render_vocabulary_index(content_dir: Path) -> str:
+    import csv
+
+    path = content_dir / "vocabulary.csv"
+    rows = []
+    with path.open(encoding="utf-8", newline="") as fh:
+        for row in csv.DictReader(fh):
+            rows.append(row)
+    rows.sort(key=lambda r: r["word"].lower())
+
+    parts = ["= 語彙索引", ""]
+    parts.append("#table(columns: (1fr, 1fr, 2fr, auto), align: left,")
+    parts.append("  [*語*], [*発音記号*], [*意味*], [*初出Unit*],")
+    for row in rows:
+        parts.append(
+            f'  [{escape_typst(row["word"])}], [{escape_typst(row["ipa"])}], '
+            f'[{escape_typst(row["ja"])}], [{escape_typst(row["unit"])}],'
+        )
+    parts.append(")")
+    parts.append("")
+    parts.append("#pagebreak()")
+    parts.append("")
+    return "\n".join(parts)
+
+
+def render_can_do_checklist(unit_yamls: list[dict]) -> str:
+    parts = ["= Can-do チェックリスト総覧", ""]
+    for unit_yaml in unit_yamls:
+        can_do = unit_yaml.get("can_do") or []
+        if not can_do:
+            continue
+        parts.append(f"== Unit {unit_yaml['unit']}: {escape_typst(unit_yaml['title'])}")
+        for cd in can_do:
+            parts.append(f'- #box(width: 0.5cm, height: 0.5cm, stroke: 0.5pt) {escape_typst(cd["ja"])}')
+        parts.append("")
+    return "\n".join(parts)
+
+
+def render_full_book_typst(content_dir: Path, build_dir: Path) -> tuple[str, list[QRSection]]:
+    book_meta = load_book_meta(content_dir)
+    app_config = load_app_config(content_dir)
+
+    unit_dirs = discover_unit_dirs(content_dir)
+    unit_yamls = [
+        yaml.safe_load((d / "unit.yaml").read_text(encoding="utf-8")) for d in unit_dirs
+    ]
+
+    parts = [render_book_preamble(book_meta)]
+
+    # Front matter uses lowercase roman numerals (i, ii, iii...); a #set
+    # rule applies to every page from that point in the flow forward, so
+    # this must come before any front-matter content is emitted.
+    parts.append('#set page(numbering: "i")')
+    parts.append("")
+    parts.append(render_title_page(book_meta))
+    parts.append(render_copyright_page(book_meta))
+    parts.append(render_front_matter_prose(content_dir, "how-to-use"))
+    parts.append(render_table_of_contents())
+
+    # Main matter restarts at Arabic 1 -- same rule: must precede Unit 1's
+    # content so it takes effect from the first main-matter page onward.
+    parts.append('#set page(numbering: "1")')
+    parts.append("#counter(page).update(1)")
+    parts.append("")
+
+    all_qr_sections: list[QRSection] = []
+    for unit_dir in unit_dirs:
+        unit_num = yaml.safe_load((unit_dir / "unit.yaml").read_text(encoding="utf-8"))["unit"]
+        qr_svg_dir_relative = f"qr/unit{unit_num:02d}"
+        qr_svg_dir = build_dir / qr_svg_dir_relative
+        body, qr_sections = render_unit_body_typst(
+            content_dir, unit_num, app_config, qr_svg_dir, qr_svg_dir_relative
+        )
+        parts.append(body)
+        all_qr_sections.extend(qr_sections)
+
+    parts.append(render_vocabulary_index(content_dir))
+    parts.append(render_can_do_checklist(unit_yamls))
+
+    return "\n".join(parts), all_qr_sections
+
+
 def compile_typst(typ_path: Path, pdf_path: Path) -> None:
     if shutil.which("typst") is None:
         raise EnvironmentError(
@@ -287,31 +481,40 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--content-dir", type=Path, default=DEFAULT_CONTENT_DIR)
     parser.add_argument("--build-dir", type=Path, default=DEFAULT_BUILD_DIR)
     parser.add_argument("--qr-map", type=Path, default=DEFAULT_QR_MAP_PATH)
-    parser.add_argument("--unit", type=int, required=True)
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--unit", type=int, help="build a single unit's standalone .typ/.pdf")
+    group.add_argument(
+        "--full-book", action="store_true", help="assemble every discovered unit + front/back matter"
+    )
     parser.add_argument("--typ-only", action="store_true", help="generate the .typ source but do not compile")
     args = parser.parse_args(argv)
 
     args.build_dir.mkdir(parents=True, exist_ok=True)
-    app_config = load_app_config(args.content_dir)
 
-    qr_svg_dir_relative = f"qr/unit{args.unit:02d}"
-    qr_svg_dir = args.build_dir / qr_svg_dir_relative
-    typst_source, qr_sections = render_unit_typst(
-        args.content_dir, args.unit, app_config, qr_svg_dir, qr_svg_dir_relative
-    )
+    if args.full_book:
+        typst_source, qr_sections = render_full_book_typst(args.content_dir, args.build_dir)
+        out_name = "full-book"
+    else:
+        app_config = load_app_config(args.content_dir)
+        qr_svg_dir_relative = f"qr/unit{args.unit:02d}"
+        qr_svg_dir = args.build_dir / qr_svg_dir_relative
+        typst_source, qr_sections = render_unit_typst(
+            args.content_dir, args.unit, app_config, qr_svg_dir, qr_svg_dir_relative
+        )
+        out_name = f"unit{args.unit:02d}"
 
-    typ_path = args.build_dir / f"unit{args.unit:02d}.typ"
+    typ_path = args.build_dir / f"{out_name}.typ"
     typ_path.write_text(typst_source, encoding="utf-8")
     print(f"wrote {typ_path}")
 
     if qr_sections:
         write_qr_manifest(args.qr_map, qr_sections)
-        print(f"wrote {len(qr_sections)} QR code(s) under {qr_svg_dir}, updated {args.qr_map}")
+        print(f"wrote {len(qr_sections)} QR code(s), updated {args.qr_map}")
 
     if args.typ_only:
         return 0
 
-    pdf_path = args.build_dir / f"unit{args.unit:02d}.pdf"
+    pdf_path = args.build_dir / f"{out_name}.pdf"
     try:
         compile_typst(typ_path, pdf_path)
     except EnvironmentError as exc:

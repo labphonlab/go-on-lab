@@ -178,13 +178,12 @@ task_submissions(user_id, unit, task_type,  -- writing|speaking
 
 ## 11. 実装状況（このリポジトリでの進捗）
 
-- **全20ユニットのコンテンツ執筆が完了**（`unit01`〜`unit20`、それぞれ `unit.yaml` + セクション Markdown）。`content/vocabulary.csv` は759語、`vocab_check.py` は全ユニットで100%カバー率、can_do ID の重複なしを確認済み
+- **全20ユニットのコンテンツ執筆が完了**（`unit01`〜`unit20`、それぞれ `unit.yaml` + セクション Markdown）。`content/vocabulary.csv` は644語（重複なし）、`vocab_check.py` は全ユニットで100%カバー率、can_do ID の重複なしを確認済み
 - ビルドゲート（完了）: `vocab_check.py`（98%カバー率ゲート + can_do ID重複チェック、pytest 付き）、`export_app.py`（LinguaForge JSON、pytest 付き）
-- KDP出版パイプライン（完了）: `content/book_meta.yaml`（書誌情報の単一ソース）、`content/front_matter/how-to-use.md`（このテキストの使い方）、`build_pdf.py --full-book`（前付け・目次・本文20ユニット・語彙索引・Can-doチェックリスト総覧を1つの `.typ` に統合、KDPトリムサイズ 7×10in・ミラーマージン・ページ番号ローマ数字→算用数字切替）、`build_epub.py`（Kindle用EPUB3・全25章、QRの代わりにテキストリンク）、`build_cover.py`（電子版カバーPNGのプレースホルダー生成）、`docs/kdp-metadata.md`（出版ガイド・チェックリスト）
-- 既知の課題: 語彙ターゲットの重複（759語中93語、約12%）— 各ユニットを独立したエージェントに執筆させた設計上の副作用。KDP登録前にクリーンアップが必要（README参照）
-- 未着手（外部リソースが必要でこのサンドボックスでは実行不可）:
+- KDP出版パイプライン（完了・実PDFコンパイル済み）: `content/book_meta.yaml`（書誌情報の単一ソース）、`content/front_matter/how-to-use.md`（このテキストの使い方）、`build_pdf.py --full-book`（前付け・目次・本文20ユニット・語彙索引・Can-doチェックリスト総覧を1つの `.typ` に統合、KDPトリムサイズ 7×10in・ミラーマージン・ページ番号ローマ数字→算用数字切替）— **typst 0.13.1 で実際にコンパイルし199ページのPDFを生成、目視確認済み**（コンパイル時に見つかった不具合3件は修正済み: Unit 5/10/15/20の見出し重複、Unit 14の`<u>`タグ、Can-doチェックリストの目次汚染）。`build_epub.py`（Kindle用EPUB3・全25章、QRの代わりにテキストリンク）、`build_cover.py`（電子版カバーPNG）、`build_paperback_cover.py`（紙版フルラップ表紙PDF、背表紙幅は199ページから算出した目安値）、`docs/kdp-metadata.md`（出版ガイド・チェックリスト）
+- 未着手（外部リソースまたは発行者本人の判断が必要）:
   - `audio_gen.py` は TTS/MFA への実接続が必要なためインターフェースのみ実装（スタブ）
-  - `build_pdf.py` の最終 PDF コンパイルは Typst 未インストールのため未実行（`.typ` ソース生成と QR SVG 生成は全20ユニットで実行・検証済み）
-  - ペーパーバックのフルラップ表紙（背表紙込み）は最終ページ数が必要なため未生成
+  - 本番用CJKフォント（`Noto Sans CJK JP`）での最終再コンパイル（このサンドボックスでは代替フォントIPAGothicに自動フォールバックして検証）
+  - フルラップ表紙・電子版カバーのプロデザイン化、背表紙幅・のど余白のKDP公式値との照合
   - `app/`（Next.js PWA）、Supabase 接続、法務ページ、`goon.jp` 短縮ドメインのリダイレクト実装、KDPアカウントでの実際の出版操作は Phase 2 以降（KDP出版操作は発行者本人のみが実行可能）
-- 次の一手: 語彙重複のクリーンアップ → Typst 導入して `--full-book` を実コンパイル → フルラップ表紙デザイン → KDP登録
+- 次の一手: 本番フォントでの最終再コンパイル → 表紙デザイン確定 → KDP登録

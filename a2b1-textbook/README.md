@@ -4,21 +4,22 @@ CEFR A2→B1 総合英語テキスト（独習用・紙＋アプリ、KDP出版�
 
 ## 現在の状態
 
-**全20ユニットの本文執筆が完了しました。** KDP（紙版・電子版）向けの出版パイプラインも一式実装済みです。
-残るのは、印刷用 PDF の実コンパイル・表紙デザイン・音声生成など、外部ツール/専門作業が必要な工程です
-（下表参照）。
+**全20ユニットの本文執筆が完了し、印刷用PDF（199ページ）も実際にコンパイル・目視確認済みです。**
+語彙の重複も解消済み。残るのは、表紙のプロデザイン化・音声生成・KDPアカウントでの実際の出版操作など、
+専門作業/発行者本人の判断が必要な工程です（下表参照）。
 
 | コンポーネント | 状態 |
 |---|---|
 | `content/syllabus.yaml`（20ユニット概要） | ✅ 実装済み |
-| `content/vocabulary.csv`（759語） + `content/baseline_vocabulary.txt` | ✅ 全20ユニット分実装済み |
-| `content/units/unit01/` 〜 `unit20/` | ✅ **全20ユニット実装済み**（unit.yaml + 8セクション、Unit 5/10/15/20 は復習ユニットにつき7セクション） |
+| `content/vocabulary.csv`（644語・重複なし） + `content/baseline_vocabulary.txt` | ✅ 全20ユニット分実装済み |
+| `content/units/unit01/` 〜 `unit20/` | ✅ **全20ユニット実装済み**（unit.yaml + 8セクション、Unit 5/10/15/20 は復習ユニット） |
 | `scripts/vocab_check.py`（98%カバー率ゲート + can_do ID重複チェック） | ✅ 全20ユニットで100%カバー率、動作確認済み・pytest あり |
 | `scripts/export_app.py`（→ LinguaForge JSON） | ✅ 全20ユニットで動作確認済み・pytest あり |
 | `scripts/audio_gen.py`（TTS → MFA） | ⚠️ インターフェースのみ。TTS API キー・MFA が必要 |
-| `scripts/build_pdf.py`（→ Typst PDF、`--unit` / `--full-book`） | ⚠️ 生成は実装・検証済み（全20ユニット分の `.typ` 生成を確認）。PDF コンパイルには `typst` CLI が必要（未検証） |
+| `scripts/build_pdf.py`（→ Typst PDF、`--unit` / `--full-book`） | ✅ **実際にコンパイル済み**（typst 0.13.1、199ページ、目次・QR・表組み・語彙索引すべて正常表示） |
 | `scripts/build_epub.py`（→ Kindle EPUB） | ✅ 実装・検証済み（全20ユニット・25章、zip構造・XHTML整形式まで確認） |
 | `scripts/build_cover.py`（→ 電子版カバー PNG） | ✅ 実装済み（プレースホルダーデザイン） |
+| `scripts/build_paperback_cover.py`（→ 紙版フルラップ表紙 PDF） | ✅ 実装・コンパイル確認済み（背表紙幅は目安値、KDP計算ツールでの確認が必要） |
 | `docs/kdp-metadata.md`（KDP出版ガイド） | ✅ 作成済み |
 | セクション QR 動線（`content/app_config.yaml` + `build/qr-map.json`） | ✅ 全20ユニット・100個のQRで動作確認済み・pytest あり（`goon.jp` 側リダイレクト実装は Phase 2） |
 | `app/`（Next.js PWA） | ❌ 未着手（Phase 2） |
@@ -50,16 +51,17 @@ python3 scripts/vocab_check.py
 # 2. アプリ用 JSON を書き出す（全ユニット分）
 python3 scripts/export_app.py --all
 
-# 3. 紙版原稿を生成
-python3 scripts/build_pdf.py --unit 1 --typ-only        # 単一ユニットのみ
-python3 scripts/build_pdf.py --full-book --typ-only      # 前付け・後付け込みの全20ユニット
-#   → typst インストール後は --typ-only を外すとPDFまで生成
+# 3. 紙版原稿を生成（typst がインストール済みなら実際にPDFまで生成）
+python3 scripts/build_pdf.py --unit 1        # 単一ユニットのみ
+python3 scripts/build_pdf.py --full-book     # 前付け・後付け込みの全20ユニット（199ページ）
+#   → typst 未インストールの場合は --typ-only を付けて .typ 生成のみ行う
 
 # 4. Kindle 用 EPUB を生成（全20ユニット・25章）
 python3 scripts/build_epub.py
 
-# 5. 電子版カバー画像を生成
-python3 scripts/build_cover.py
+# 5. 表紙を生成
+python3 scripts/build_cover.py                              # 電子版カバー PNG
+python3 scripts/build_paperback_cover.py --pages 199         # 紙版フルラップ表紙 PDF（要 typst）
 
 # 6. 音声生成ジョブのプラン確認（実際の TTS 呼び出しはしない）
 python3 scripts/audio_gen.py --unit 1 --dry-run
@@ -101,11 +103,11 @@ python3 -m pytest scripts/tests/ -v
 日本語話者が知覚しにくい音素対を含む語のフラグ）も同様に仮の判定です。
 
 各ユニットは独立したエージェントに執筆させたため（`vocab_check.py` のカバー率ゲートは各ユニットが
-「既習語彙＋自ユニットの新出語」だけで98%以上を満たせば通過する設計）、ユニット間で同じ単語が
-重複してターゲット語に選ばれていることがあります（759語中93語、約12%。例: "weekend" が Unit 1 と
-Unit 2 の両方の新出語になっている）。ビルドは通りますが、巻末の語彙索引に同じ語が複数回出てしまう
-点は既知の課題です。KDP登録前に、重複語を洗い出して片方を別の語に差し替えるクリーンアップを
-行ってください。
+「既習語彙＋自ユニットの新出語」だけで98%以上を満たせば通過する設計）、当初はユニット間で同じ単語が
+重複してターゲット語に選ばれていました（759語中93語）。**この重複は解消済みです**：各語を最初に
+登場するユニットのみのターゲットとして残し、後続ユニットの `vocabulary_targets`/`vocabulary.csv`
+からは削除しました（対話本文の変更は不要 — `vocab_check.py` の累積カバー率モデル上、後続ユニットに
+とってその語はすでに「既習語彙」になっているため）。現在 644語、重複ゼロです。
 
 `content/baseline_vocabulary.txt` は「Unit 1 開始時点で学習者が既に知っている」という前提の
 語彙リスト（プロトタイプ用に手作業で選定、全ユニット執筆を通して段階的に拡充）です。実際の教材
@@ -127,9 +129,9 @@ IndexedDB の保存状態から復元）は Next.js アプリ側の実装（Phas
 
 ## 次にやること
 
-1. 語彙重複のクリーンアップ（759語中93語の重複を解消）
-2. `scripts/build_pdf.py` の PDF 品質確認（`typst` をインストールして全20ユニットを実際にコンパイル）
-3. ペーパーバックのフルラップ表紙デザイン（最終ページ数確定後）
+1. 本番用の日本語フォント（`Noto Sans CJK JP` 等）をインストールした環境での最終PDF再コンパイル
+2. のど余白・フルラップ表紙の背表紙幅（現在は目安値）を KDP 公式ツールで確認・調整
+3. 表紙（電子版・紙版とも）をプロのデザインに差し替え
 4. `scripts/audio_gen.py` の TTS/MFA 接続（API キー・MFA モデルのセットアップ、全20ユニット分の音声生成）
 5. KDPアカウント登録・原稿アップロード・出版（`docs/kdp-metadata.md` のチェックリスト参照、発行者本人の作業）
 6. Next.js アプリ（`learn.goonresearch.jp`）と Supabase 連携の実装（Phase 2）

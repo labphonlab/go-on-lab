@@ -81,6 +81,33 @@ sections:
     assert "spaceship" in section.unknown_tokens
 
 
+def test_real_content_has_no_duplicate_can_do_ids():
+    dupes = vocab_check.find_duplicate_can_do_ids(REAL_CONTENT_DIR)
+    assert dupes == {}
+
+
+def test_find_duplicate_can_do_ids_detects_collision(tmp_path):
+    content_dir = tmp_path / "content"
+    units_dir = content_dir / "units"
+    for unit_num, can_do_id in ((1, "A2.2-SI-1"), (2, "A2.2-SI-1")):
+        unit_dir = units_dir / f"unit{unit_num:02d}"
+        unit_dir.mkdir(parents=True)
+        (unit_dir / "unit.yaml").write_text(
+            f"""
+unit: {unit_num}
+title: "Test Unit {unit_num}"
+can_do:
+  - id: "{can_do_id}"
+    ja: "duplicate on purpose"
+sections: []
+""",
+            encoding="utf-8",
+        )
+
+    dupes = vocab_check.find_duplicate_can_do_ids(content_dir)
+    assert dupes == {"A2.2-SI-1": [1, 2]}
+
+
 def test_vocabulary_csv_mismatch_fails_gate(tmp_path):
     content_dir = tmp_path / "content"
     content_dir.mkdir()

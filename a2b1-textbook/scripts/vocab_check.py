@@ -238,6 +238,22 @@ def run(content_dir: Path, threshold: float) -> tuple[list[UnitCheckResult], boo
     return results, all_passed
 
 
+def find_duplicate_can_do_ids(content_dir: Path) -> dict[str, list[int]]:
+    """Return {can_do_id: [unit_numbers...]} for any id used by 2+ units.
+
+    can_do_id is used as a DB key (can_do_responses.can_do_id, CLAUDE.md
+    section 6.3), so it must be globally unique across the whole book, not
+    just within a unit. Units are authored somewhat independently (see
+    scripts.md / commit history), so collisions can slip in.
+    """
+    seen: dict[str, list[int]] = {}
+    for unit_dir in discover_units(content_dir):
+        unit_yaml = yaml.safe_load((unit_dir / "unit.yaml").read_text(encoding="utf-8"))
+        for cd in unit_yaml.get("can_do", []):
+            seen.setdefault(cd["id"], []).append(unit_yaml["unit"])
+    return {cid: units for cid, units in seen.items() if len(units) > 1}
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--content-dir", type=Path, default=DEFAULT_CONTENT_DIR)
@@ -245,6 +261,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     results, all_passed = run(args.content_dir, args.threshold)
+    duplicate_can_do_ids = find_duplicate_can_do_ids(args.content_dir)
 
     for unit_result in results:
         status = "PASS" if unit_result.passed(args.threshold) else "FAIL"
@@ -261,11 +278,22 @@ def main(argv: list[str] | None = None) -> int:
                 unique_unknown = sorted(set(section.unknown_tokens))
                 print(f"        unknown words: {unique_unknown}")
 
-    if all_passed:
+    if duplicate_can_do_ids:
+        print("\nDuplicate can_do IDs (must be globally unique across the book):")
+        for can_do_id, units in sorted(duplicate_can_do_ids.items()):
+            print(f"    {can_do_id}: used by units {units}")
+
+    final_ok = all_passed and not duplicate_can_do_ids
+    if final_ok:
         print(f"\nAll units pass the {args.threshold:.0%} coverage gate.")
         return 0
 
-    print(f"\nBUILD FAILED: one or more units did not reach {args.threshold:.0%} coverage.")
+    reasons = []
+    if not all_passed:
+        reasons.append(f"one or more units did not reach {args.threshold:.0%} coverage")
+    if duplicate_can_do_ids:
+        reasons.append("duplicate can_do IDs found")
+    print(f"\nBUILD FAILED: {'; '.join(reasons)}.")
     return 1
 
 

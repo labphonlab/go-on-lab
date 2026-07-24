@@ -8,9 +8,9 @@ app_components: [can_do_survey]
 estimated_minutes: 5
 title_ja: "振り返り"
 can_do_survey:
-  - id: "A2.2-SI-13"
+  - id: "A2.2-SI-17"
     ja: "レストランやカフェで、メニューについて質問しながら丁寧に注文できる"
-  - id: "A2.2-SI-14"
+  - id: "A2.2-SI-18"
     ja: "店員に対して、丁寧な言い方でものを頼んだり追加を依頼したりできる"
 ---
 

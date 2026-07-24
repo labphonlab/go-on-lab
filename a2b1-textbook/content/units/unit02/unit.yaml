@@ -1,0 +1,109 @@
+unit: 2
+title: "Talking About Your Week"
+cefr_j: "A2.2"
+
+can_do:
+  - id: "A2.2-SP-1"
+    ja: "先週の出来事を、first・then・finally などの語を使って時系列で話すことができる"
+  - id: "A2.2-WR-1"
+    ja: "先週したことについて、時を表す語を使って短い段落を書くことができる"
+
+grammar_focus:
+  - "simple past tense (regular and irregular verbs)"
+  - "sequencing words: first, then, after that, finally"
+
+vocabulary_targets:
+  - weekend
+  - meeting
+  - boss
+  - colleague
+  - project
+  - deadline
+  - until
+  - cleaned
+  - laundry
+  - dishes
+  - shopping
+  - groceries
+  - dinner
+  - appointment
+  - doctor
+  - visited
+  - grandmother
+  - brought
+  - cousin
+  - neighbor
+  - coffee
+  - tennis
+  - soccer
+  - jogged
+  - relaxed
+  - relaxing
+  - movie
+  - reviewed
+  - test
+  - homework
+  - trip
+  - vacation
+  - exciting
+  - boring
+  - exhausted
+  - chores
+  - errand
+  - haircut
+  - package
+  - mail
+  - recipe
+  - catch up
+  - get together
+  - all day
+  - all week
+
+sections:
+  - id: "02-warmup"
+    type: warmup
+    strand: meaning_output
+    medium: paper
+    app_components: []
+
+  - id: "02-input-dialogue"
+    type: input_dialogue
+    strand: meaning_input
+    medium: both
+    app_components: [karaoke_reader, shadowing, dictation]
+
+  - id: "02-noticing"
+    type: noticing
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "02-form-pi"
+    type: form_pi
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "02-form-production"
+    type: form_production
+    strand: language_focus
+    medium: both
+    app_components: [cloze]
+
+  - id: "02-main-task"
+    type: main_task
+    strand: meaning_output
+    medium: both
+    app_components: [roleplay_ai]
+
+  - id: "02-fluency"
+    type: fluency
+    strand: fluency
+    medium: app
+    app_components: [shadowing, dictation]
+
+  - id: "02-reflection"
+    type: reflection
+    strand: meaning_output
+    medium: both
+    app_components: [can_do_survey]

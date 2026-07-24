@@ -410,12 +410,17 @@ def render_vocabulary_index(content_dir: Path) -> str:
 
 
 def render_can_do_checklist(unit_yamls: list[dict]) -> str:
+    # Per-unit groupings are set in bold rather than as `==` headings so
+    # they don't flood the auto-generated table of contents (render_table_of_contents)
+    # with 20 near-duplicate "Unit N: Title" entries alongside the real ones.
     parts = ["= Can-do チェックリスト総覧", ""]
     for unit_yaml in unit_yamls:
         can_do = unit_yaml.get("can_do") or []
         if not can_do:
             continue
-        parts.append(f"== Unit {unit_yaml['unit']}: {escape_typst(unit_yaml['title'])}")
+        parts.append(f"#v(0.6em)")
+        parts.append(f'#text(weight: "bold")[Unit {unit_yaml["unit"]}: {escape_typst(unit_yaml["title"])}]')
+        parts.append("")
         for cd in can_do:
             parts.append(f'- #box(width: 0.5cm, height: 0.5cm, stroke: 0.5pt) {escape_typst(cd["ja"])}')
         parts.append("")

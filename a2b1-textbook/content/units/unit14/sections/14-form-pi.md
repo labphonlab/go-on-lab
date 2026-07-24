@@ -13,21 +13,21 @@ title_ja: "解釈タスク：誰が・何がされるのかを聞き分ける"
 
 ### タスク A（する側か、される側か）
 
-それぞれの文の主語（下線部）が、動作を「する側」か「される側」か、○をつけましょう。
+それぞれの文の主語（太字部分）が、動作を「する側」か「される側」か、○をつけましょう。
 
-1. <u>The letter</u> was written by Tom.
+1. **The letter** was written by Tom.
    → ( a. 手紙が書いた ／ **b. 手紙は書かれた** )
 
-2. <u>Tom</u> wrote the letter.
+2. **Tom** wrote the letter.
    → ( **a. トムが書いた** ／ b. トムは書かれた )
 
-3. <u>This chocolate</u> is made in Belgium.
+3. **This chocolate** is made in Belgium.
    → ( a. このチョコレートが作る ／ **b. このチョコレートは作られる** )
 
-4. <u>A company</u> makes this chocolate in Belgium.
+4. **A company** makes this chocolate in Belgium.
    → ( **a. 会社が作る** ／ b. 会社は作られる )
 
-5. <u>This bridge</u> was built in 1889.
+5. **This bridge** was built in 1889.
    → ( a. この橋が建てた ／ **b. この橋は建てられた** )
 
 ### タスク B（今のことか、過去の一回のことか）

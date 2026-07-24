@@ -39,8 +39,6 @@ roleplay:
     conversation coherent from start to finish?
 ---
 
-## Main Task：知らない街で（総合）
-
 **紙面での準備（アプリを使う前に）**
 
 今回は1つの会話の中で、Units 6〜9 の4つの文法をすべて使います。

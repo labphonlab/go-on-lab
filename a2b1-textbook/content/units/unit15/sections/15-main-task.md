@@ -44,8 +44,6 @@ roleplay:
     accurate and coherent?
 ---
 
-## Main Task：工場見学（総合）
-
 **紙面での準備（アプリを使う前に）**
 
 今回も1つの会話の中で、Units 11〜14 の4つの文法を使います。

@@ -39,8 +39,6 @@ roleplay:
     at least two of the four grammar points correctly?
 ---
 
-## Main Task：近況報告（総合）
-
 **紙面での準備（アプリを使う前に）**
 
 1. 自分自身の「先月の出来事」「経験」「来月の予定」「比較（前の月と今月、または2つのもの）」を1つずつ簡単にメモしましょう。

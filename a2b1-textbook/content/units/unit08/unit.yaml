@@ -1,0 +1,114 @@
+unit: 8
+title: "Describing People and Things"
+cefr_j: "B1.1"
+
+can_do:
+  - id: "B1.1-SI-1"
+    ja: "関係代名詞（who / which / that）を使って、人やものについてより詳しく説明できる"
+  - id: "B1.1-SI-2"
+    ja: "関係代名詞を使った説明を聞いたり読んだりして、話題になっている人やものが分かる"
+
+grammar_focus:
+  - "relative clauses with who / that (describing people)"
+  - "relative clauses with which / that (describing things)"
+
+vocabulary_targets:
+  - class
+  - classmate
+  - neighbor
+  - reunion
+  - hair
+  - glasses
+  - beard
+  - curly
+  - straight
+  - tall
+  - wearing
+  - jacket
+  - sweater
+  - scarf
+  - jeans
+  - boots
+  - necklace
+  - blue
+  - red
+  - green
+  - black
+  - friendly
+  - kind
+  - shy
+  - confident
+  - funny
+  - serious
+  - polite
+  - rude
+  - generous
+  - patient
+  - curious
+  - creative
+  - honest
+  - talkative
+  - quiet
+  - remind
+  - describe
+  - recognize
+  - introduce
+  - mention
+  - invention
+  - device
+  - gadget
+  - material
+  - wooden
+  - plastic
+  - shape
+  - pattern
+  - brand
+
+sections:
+  - id: "08-warmup"
+    type: warmup
+    strand: meaning_output
+    medium: paper
+    app_components: []
+
+  - id: "08-input-dialogue"
+    type: input_dialogue
+    strand: meaning_input
+    medium: both
+    app_components: [karaoke_reader, shadowing, dictation]
+
+  - id: "08-noticing"
+    type: noticing
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "08-form-pi"
+    type: form_pi
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "08-form-production"
+    type: form_production
+    strand: language_focus
+    medium: both
+    app_components: [cloze]
+
+  - id: "08-main-task"
+    type: main_task
+    strand: meaning_output
+    medium: both
+    app_components: [roleplay_ai]
+
+  - id: "08-fluency"
+    type: fluency
+    strand: fluency
+    medium: app
+    app_components: [shadowing, dictation]
+
+  - id: "08-reflection"
+    type: reflection
+    strand: meaning_output
+    medium: both
+    app_components: [can_do_survey]

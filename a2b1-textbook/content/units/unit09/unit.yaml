@@ -1,0 +1,109 @@
+unit: 9
+title: "What's Wrong? Health and Advice"
+cefr_j: "A2.2"
+
+can_do:
+  - id: "A2.2-SI-15"
+    ja: "体の具合や痛みについて、簡単な表現で伝えることができる"
+  - id: "A2.2-SI-16"
+    ja: "should / shouldn't を使って、簡単なアドバイスをしたり、アドバイスを求めたりできる"
+
+grammar_focus:
+  - "should / shouldn't"
+  - "have to / don't have to"
+
+vocabulary_targets:
+  - headache
+  - stomachache
+  - toothache
+  - earache
+  - sore throat
+  - runny nose
+  - fever
+  - cough
+  - flu
+  - sick
+  - well
+  - dizzy
+  - hurt
+  - throat
+  - stomach
+  - nose
+  - temperature
+  - symptom
+  - rest
+  - medicine
+  - pharmacy
+  - pharmacist
+  - doctor
+  - nurse
+  - clinic
+  - appointment
+  - prescription
+  - painkiller
+  - pill
+  - vitamin
+  - tissue
+  - honey
+  - tea
+  - bandage
+  - exercise
+  - lie down
+  - skip
+  - sneeze
+  - throw up
+  - spread
+  - allergic
+  - better
+  - shouldn't
+  - call in sick
+  - get well soon
+
+sections:
+  - id: "09-warmup"
+    type: warmup
+    strand: meaning_output
+    medium: paper
+    app_components: []
+
+  - id: "09-input-dialogue"
+    type: input_dialogue
+    strand: meaning_input
+    medium: both
+    app_components: [karaoke_reader, shadowing, dictation]
+
+  - id: "09-noticing"
+    type: noticing
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "09-form-pi"
+    type: form_pi
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "09-form-production"
+    type: form_production
+    strand: language_focus
+    medium: both
+    app_components: [cloze]
+
+  - id: "09-main-task"
+    type: main_task
+    strand: meaning_output
+    medium: both
+    app_components: [roleplay_ai]
+
+  - id: "09-fluency"
+    type: fluency
+    strand: fluency
+    medium: app
+    app_components: [shadowing, dictation]
+
+  - id: "09-reflection"
+    type: reflection
+    strand: meaning_output
+    medium: both
+    app_components: [can_do_survey]

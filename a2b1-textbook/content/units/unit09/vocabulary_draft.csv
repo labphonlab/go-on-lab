@@ -1,0 +1,46 @@
+word,pos,ja,ipa,ngsl_rank,nd,fl,l1_weighted_nd,hvpt,unit
+headache,noun,頭痛,/ˈhɛdeɪk/,1680,9,0.48,0.30,0,9
+stomachache,noun,腹痛,/ˈstʌməkeɪk/,2450,4,0.22,0.28,0,9
+toothache,noun,歯痛,/ˈtuːθeɪk/,2600,3,0.19,0.32,0,9
+earache,noun,耳の痛み,/ˈɪəreɪk/,2680,3,0.18,0.30,0,9
+sore throat,noun phrase,のどの痛み,/sɔːr θroʊt/,2300,5,0.24,0.30,0,9
+runny nose,noun phrase,鼻水,/ˈrʌni noʊz/,2520,4,0.20,0.26,0,9
+fever,noun,熱,/ˈfiːvər/,1550,11,0.55,0.44,1,9
+cough,noun/verb,せき（をする）,/kɔːf/,1720,10,0.46,0.36,0,9
+flu,noun,インフルエンザ,/fluː/,1980,7,0.36,0.38,1,9
+sick,adjective,具合が悪い・病気の,/sɪk/,900,17,0.78,0.30,0,9
+well,adverb/adjective,元気な・健康な,/wɛl/,300,20,0.85,0.20,0,9
+dizzy,adjective,めまいがする,/ˈdɪzi/,2280,6,0.28,0.32,0,9
+hurt,verb,痛む,/hɜːrt/,1050,15,0.62,0.28,0,9
+throat,noun,のど,/θroʊt/,1890,8,0.40,0.40,1,9
+stomach,noun,胃・お腹,/ˈstʌmək/,1420,10,0.52,0.30,0,9
+nose,noun,鼻,/noʊz/,1180,12,0.58,0.24,0,9
+temperature,noun,体温,/ˈtɛmprətʃər/,1350,9,0.50,0.26,0,9
+symptom,noun,症状,/ˈsɪmptəm/,2150,6,0.30,0.24,0,9
+rest,noun/verb,休息・休む,/rɛst/,780,18,0.75,0.28,0,9
+medicine,noun,薬,/ˈmɛdɪsɪn/,1240,12,0.60,0.26,0,9
+pharmacy,noun,薬局,/ˈfɑːrməsi/,2200,6,0.29,0.40,1,9
+pharmacist,noun,薬剤師,/ˈfɑːrməsɪst/,2650,4,0.20,0.42,1,9
+doctor,noun,医者,/ˈdɒktər/,980,16,0.70,0.24,0,9
+nurse,noun,看護師,/nɜːrs/,1460,10,0.53,0.28,0,9
+clinic,noun,診療所,/ˈklɪnɪk/,2080,7,0.33,0.24,0,9
+appointment,noun,予約,/əˈpɔɪntmənt/,2100,7,0.34,0.24,0,9
+prescription,noun,処方箋,/prɪˈskrɪpʃən/,2720,3,0.16,0.44,1,9
+painkiller,noun,鎮痛剤,/ˈpeɪnˌkɪlər/,2580,4,0.19,0.30,0,9
+pill,noun,錠剤,/pɪl/,1990,7,0.35,0.28,0,9
+vitamin,noun,ビタミン,/ˈvaɪtəmɪn/,1870,8,0.38,0.42,1,9
+tissue,noun,ティッシュ,/ˈtɪʃuː/,2020,7,0.33,0.22,0,9
+honey,noun,はちみつ,/ˈhʌni/,2350,5,0.24,0.26,0,9
+tea,noun,お茶・紅茶,/tiː/,860,16,0.68,0.20,0,9
+bandage,noun,包帯,/ˈbændɪdʒ/,2470,4,0.20,0.30,0,9
+exercise,noun/verb,運動（する）,/ˈɛksərsaɪz/,1180,13,0.56,0.24,0,9
+lie down,phrasal verb,横になる,/laɪ daʊn/,2260,6,0.27,0.32,0,9
+skip,verb,休む・サボる,/skɪp/,1780,9,0.42,0.30,0,9
+sneeze,verb,くしゃみをする,/sniːz/,2400,5,0.23,0.34,0,9
+throw up,phrasal verb,吐く,/θroʊ ʌp/,2340,5,0.22,0.36,1,9
+spread,verb,広がる・うつる,/sprɛd/,1520,10,0.48,0.36,0,9
+allergic,adjective,アレルギーがある,/əˈlɜːrdʒɪk/,2380,5,0.24,0.44,1,9
+better,adjective/adverb,より良く・回復して,/ˈbɛtər/,420,19,0.80,0.18,0,9
+shouldn't,contraction,〜すべきではない,/ˈʃʊdənt/,650,17,0.72,0.20,0,9
+call in sick,expression,病欠の連絡をする,/kɔːl ɪn sɪk/,2700,3,0.15,0.24,0,9
+get well soon,expression,お大事に,/ɡɛt wɛl suːn/,2500,4,0.18,0.22,0,9

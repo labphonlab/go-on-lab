@@ -1,0 +1,46 @@
+word,pos,ja,ipa,ngsl_rank,nd,fl,l1_weighted_nd,hvpt,unit
+excuse me,expression,すみません（呼びかけ）,/ɪkˈskjuːz miː/,1450,8,0.42,0.30,0,13
+information,noun,情報,/ˌɪnfərˈmeɪʃən/,700,14,0.66,0.28,0,13
+reception desk,noun phrase,受付,/rɪˈsɛpʃən dɛsk/,2350,5,0.24,0.32,0,13
+appointment,noun,予約・約束,/əˈpɔɪntmənt/,1550,8,0.40,0.26,0,13
+available,adjective,利用できる・空いている,/əˈveɪləbəl/,1200,10,0.52,0.38,1,13
+membership,noun,会員資格,/ˈmɛmbərʃɪp/,1950,6,0.30,0.24,0,13
+member,noun,会員,/ˈmɛmbər/,1050,12,0.60,0.26,0,13
+monthly,adjective,毎月の,/ˈmʌnθli/,1780,7,0.36,0.28,0,13
+fee,noun,料金,/fiː/,1680,6,0.34,0.22,0,13
+discount,noun,割引,/ˈdɪskaʊnt/,1620,7,0.37,0.24,0,13
+special,adjective,特別な,/ˈspɛʃəl/,900,15,0.68,0.26,0,13
+deposit,noun,保証金・預け金,/dɪˈpɒzɪt/,2100,5,0.27,0.24,0,13
+class,noun,授業・クラス,/klæs/,750,16,0.70,0.34,1,13
+swimming,noun,水泳,/ˈswɪmɪŋ/,1350,9,0.48,0.26,0,13
+instructor,noun,指導員,/ɪnˈstrʌktər/,2200,5,0.26,0.28,0,13
+schedule,noun/verb,予定表・予定を組む,/ˈskɛdʒuːl/,1420,11,0.55,0.30,0,13
+hours,noun,営業時間,/ˈaʊərz/,1080,11,0.56,0.22,0,13
+book,verb,予約する,/bʊk/,1000,13,0.58,0.28,0,13
+booking,noun,予約,/ˈbʊkɪŋ/,2050,6,0.30,0.24,0,13
+in advance,expression,前もって・事前に,/ɪn ədˈvæns/,2280,6,0.29,0.26,0,13
+popular,adjective,人気のある,/ˈpɒpjələr/,1150,11,0.58,0.24,0,13
+recommend,verb,勧める,/ˌrɛkəˈmɛnd/,1500,9,0.44,0.40,1,13
+whether,conjunction,〜かどうか,/ˈwɛðər/,1300,10,0.50,0.46,1,13
+locker,noun,ロッカー,/ˈlɒkər/,2250,5,0.25,0.36,1,13
+changing room,noun phrase,更衣室,/ˈtʃeɪndʒɪŋ ruːm/,2400,5,0.24,0.24,0,13
+hallway,noun,廊下,/ˈhɔːlweɪ/,2320,5,0.25,0.22,0,13
+pool,noun,プール,/puːl/,1500,8,0.44,0.20,0,13
+entrance,noun,入り口,/ˈɛntrəns/,1700,8,0.40,0.24,0,13
+elevator,noun,エレベーター,/ˈɛlɪveɪtər/,1900,7,0.36,0.42,1,13
+parking lot,noun phrase,駐車場,/ˈpɑːrkɪŋ lɒt/,2150,6,0.30,0.34,1,13
+nearby,adverb,近くに,/ˌnɪərˈbaɪ/,1650,8,0.42,0.24,0,13
+building,noun,建物,/ˈbɪldɪŋ/,800,15,0.66,0.26,0,13
+located,adjective,位置している,/ˈloʊkeɪtɪd/,1850,7,0.35,0.28,0,13
+visitor,noun,訪問者,/ˈvɪzɪtər/,1600,8,0.41,0.30,0,13
+brochure,noun,パンフレット,/broʊˈʃʊr/,2500,4,0.20,0.36,1,13
+form,noun,用紙・書式,/fɔːrm/,950,14,0.62,0.24,0,13
+fill out,phrasal verb,（用紙に）記入する,/fɪl aʊt/,2050,6,0.28,0.22,0,13
+sign,verb/noun,署名する・案内板,/saɪn/,1000,13,0.56,0.22,0,13
+bottom,noun,一番下・下部,/ˈbɒtəm/,1400,9,0.46,0.22,0,13
+date,noun,日付,/deɪt/,850,14,0.64,0.22,0,13
+helpful,adjective,役に立つ,/ˈhɛlpfəl/,1250,10,0.52,0.26,0,13
+more,adverb,もっと・さらに,/mɔːr/,620,18,0.78,0.22,0,13
+center,noun,センター・中心施設,/ˈsɛntər/,700,16,0.70,0.24,0,13
+thirty,number,30、三十,/ˈθɜːrti/,1100,10,0.55,0.44,1,13
+dollars,noun,ドル,/ˈdɒlərz/,1300,9,0.48,0.24,0,13

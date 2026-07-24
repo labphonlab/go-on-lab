@@ -1,0 +1,109 @@
+unit: 12
+title: "If I Have Time..."
+cefr_j: "B1.1"
+
+can_do:
+  - id: "B1.1-SI-5"
+    ja: "「もし〜なら、〜するだろう」のように、起こりそうな条件とその結果について話すことができる"
+  - id: "B1.1-SI-6"
+    ja: "相手が言う条件と結果の文（if を使った簡単な文）を聞いて、内容を理解できる"
+
+grammar_focus:
+  - "first conditional: if + present simple, will + verb"
+  - "if vs when (起こるかわからない条件／起こるとわかっている未来のこと)"
+
+vocabulary_targets:
+  - hiking
+  - weekend
+  - weather
+  - forecast
+  - sunny
+  - mountain
+  - trail
+  - movie
+  - report
+  - deadline
+  - overtime
+  - cloudy
+  - plan
+  - traffic
+  - traffic jam
+  - stuck
+  - picnic
+  - enough
+  - bring
+  - clear up
+  - depend on
+  - free time
+  - spare time
+  - part-time job
+  - budget
+  - discount
+  - sale
+  - refund
+  - borrow
+  - lend
+  - indoor
+  - outdoor
+  - finish early
+  - stay late
+  - on time
+  - in time
+  - hurry
+  - get worse
+  - get better
+  - temperature
+  - delayed
+  - windy
+  - storm
+  - probably
+  - definitely
+
+sections:
+  - id: "12-warmup"
+    type: warmup
+    strand: meaning_output
+    medium: paper
+    app_components: []
+
+  - id: "12-input-dialogue"
+    type: input_dialogue
+    strand: meaning_input
+    medium: both
+    app_components: [karaoke_reader, shadowing, dictation]
+
+  - id: "12-noticing"
+    type: noticing
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "12-form-pi"
+    type: form_pi
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "12-form-production"
+    type: form_production
+    strand: language_focus
+    medium: both
+    app_components: [cloze]
+
+  - id: "12-main-task"
+    type: main_task
+    strand: meaning_output
+    medium: both
+    app_components: [roleplay_ai]
+
+  - id: "12-fluency"
+    type: fluency
+    strand: fluency
+    medium: app
+    app_components: [shadowing, dictation]
+
+  - id: "12-reflection"
+    type: reflection
+    strand: meaning_output
+    medium: both
+    app_components: [can_do_survey]

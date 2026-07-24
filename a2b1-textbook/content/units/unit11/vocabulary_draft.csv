@@ -1,0 +1,51 @@
+word,pos,ja,ipa,ngsl_rank,nd,fl,l1_weighted_nd,hvpt,unit
+strange,adjective,奇妙な・変な,/streɪndʒ/,1550,9,0.44,0.28,0,11
+crash,noun,衝突・激しい音,/kræʃ/,1780,8,0.40,0.30,1,11
+crashed into,verb phrase,〜に衝突した,/kræʃt ˈɪntuː/,2350,5,0.24,0.32,1,11
+accident,noun,事故,/ˈæksɪdənt/,1390,11,0.55,0.26,0,11
+noise,noun,物音・騒音,/nɔɪz/,1470,10,0.52,0.24,0,11
+loud,adjective,（音が）大きい,/laʊd/,1360,12,0.58,0.32,1,11
+window,noun,窓,/ˈwɪndoʊ/,1210,13,0.62,0.22,0,11
+bike,noun,自転車,/baɪk/,1450,10,0.54,0.20,0,11
+parked,adjective,駐車してある,/pɑːrkt/,1980,6,0.30,0.24,0,11
+hurt,adjective/verb,けがをした・痛める,/hɜːrt/,1250,12,0.58,0.34,1,11
+injured,adjective,けがをした,/ˈɪndʒərd/,1990,6,0.28,0.32,1,11
+witness,noun/verb,目撃者・目撃する,/ˈwɪtnəs/,2130,6,0.28,0.24,0,11
+scene,noun,現場・場面,/siːn/,1830,7,0.36,0.22,0,11
+police,noun,警察,/pəˈliːs/,1140,13,0.60,0.28,0,11
+ambulance,noun,救急車,/ˈæmbjələns/,2260,5,0.24,0.30,0,11
+reporter,noun,記者,/rɪˈpɔːrtər/,2040,6,0.30,0.34,1,11
+interview,noun/verb,インタビュー（する）,/ˈɪntərvjuː/,1710,8,0.40,0.24,0,11
+describe,verb,説明する・描写する,/dɪˈskraɪb/,1580,9,0.42,0.32,1,11
+exact,adjective,正確な,/ɪɡˈzækt/,1900,7,0.34,0.26,0,11
+moment,noun,瞬間,/ˈmoʊmənt/,1030,14,0.63,0.20,0,11
+noticed,verb (past tense),気づいた,/ˈnoʊtɪst/,1460,10,0.52,0.26,0,11
+realized,verb (past tense),気づいた・実感した,/ˈriːəlaɪzd/,1670,8,0.40,0.34,1,11
+meanwhile,adverb,その間に,/ˈmiːnwaɪl/,2170,6,0.28,0.24,0,11
+interrupted,verb (past tense),邪魔をした・中断させた,/ˌɪntəˈrʌptɪd/,2280,5,0.24,0.32,1,11
+outside,adverb/preposition,外で・外に,/ˌaʊtˈsaɪd/,1050,15,0.68,0.22,0,11
+inside,adverb/preposition,中で・中に,/ɪnˈsaɪd/,1090,14,0.66,0.22,0,11
+doing,verb,している（do の -ing 形）,/ˈduːɪŋ/,900,16,0.72,0.18,0,11
+watching,verb,見ている（watch の -ing 形）,/ˈwɒtʃɪŋ/,1230,12,0.58,0.20,0,11
+sitting,verb,座っている,/ˈsɪtɪŋ/,1320,11,0.55,0.22,0,11
+sofa,noun,ソファ,/ˈsoʊfə/,1990,6,0.30,0.20,0,11
+eating,verb,食べている,/ˈiːtɪŋ/,1160,13,0.60,0.20,0,11
+popcorn,noun,ポップコーン,/ˈpɒpkɔːrn/,2480,4,0.20,0.18,0,11
+charging,verb,充電している,/ˈtʃɑːrdʒɪŋ/,2020,6,0.28,0.26,0,11
+riding,verb,乗っている,/ˈraɪdɪŋ/,1540,9,0.44,0.24,0,11
+raining,verb,雨が降っている,/ˈreɪnɪŋ/,1690,8,0.40,0.24,0,11
+quickly,adverb,すぐに・急いで,/ˈkwɪkli/,1050,14,0.62,0.28,0,11
+owner,noun,持ち主・オーナー,/ˈoʊnər/,1420,10,0.50,0.26,0,11
+angry,adjective,怒った,/ˈæŋɡri/,1300,11,0.56,0.28,0,11
+upset,adjective,動揺した・気分を害した,/ʌpˈsɛt/,1870,7,0.36,0.26,0,11
+talking,verb,話している,/ˈtɔːkɪŋ/,1180,12,0.58,0.20,0,11
+alarm,noun,警報・アラーム,/əˈlɑːrm/,1610,9,0.44,0.30,0,11
+wild,adjective,とんでもない・激しい,/waɪld/,1520,9,0.44,0.24,0,11
+happened,verb (past tense),起こった,/ˈhæpənd/,850,17,0.76,0.20,0,11
+little,adjective/adverb,少し・小さい,/ˈlɪtəl/,620,19,0.80,0.24,0,11
+exciting,adjective,わくわくする,/ɪkˈsaɪtɪŋ/,1410,10,0.54,0.22,0,11
+TV,noun,テレビ,/ˌtiːˈviː/,950,16,0.72,0.18,0,11
+neighbor,noun,隣人・近所の人,/ˈneɪbər/,1590,9,0.44,0.30,0,11
+shouting,verb,叫んでいる,/ˈʃaʊtɪŋ/,1830,7,0.36,0.26,0,11
+immediately,adverb,すぐに・直ちに,/ɪˈmiːdiətli/,1360,10,0.50,0.24,0,11
+flashing,verb,点滅している,/ˈflæʃɪŋ/,2100,6,0.28,0.28,1,11

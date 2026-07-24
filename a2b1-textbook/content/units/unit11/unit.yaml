@@ -1,0 +1,114 @@
+unit: 11
+title: "Talking About the Past in Detail"
+cefr_j: "B1.1"
+
+can_do:
+  - id: "B1.1-SI-3"
+    ja: "過去のある時点で何が起きていたか（背景）と、そこで起こった出来事を分けて話せる"
+  - id: "B1.1-SI-4"
+    ja: "背景説明と主な出来事が混ざった話を聞いて、出来事の順序を正しく理解できる"
+
+grammar_focus:
+  - "past continuous vs. past simple"
+  - "while / when + interrupted actions"
+
+vocabulary_targets:
+  - strange
+  - crash
+  - crashed into
+  - accident
+  - noise
+  - loud
+  - window
+  - bike
+  - parked
+  - hurt
+  - injured
+  - witness
+  - scene
+  - police
+  - ambulance
+  - reporter
+  - interview
+  - describe
+  - exact
+  - moment
+  - noticed
+  - realized
+  - meanwhile
+  - interrupted
+  - outside
+  - inside
+  - doing
+  - watching
+  - sitting
+  - sofa
+  - eating
+  - popcorn
+  - charging
+  - riding
+  - raining
+  - quickly
+  - owner
+  - angry
+  - upset
+  - talking
+  - alarm
+  - wild
+  - happened
+  - little
+  - exciting
+  - TV
+  - neighbor
+  - shouting
+  - immediately
+  - flashing
+
+sections:
+  - id: "11-warmup"
+    type: warmup
+    strand: meaning_output
+    medium: paper
+    app_components: []
+
+  - id: "11-input-dialogue"
+    type: input_dialogue
+    strand: meaning_input
+    medium: both
+    app_components: [karaoke_reader, shadowing, dictation]
+
+  - id: "11-noticing"
+    type: noticing
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "11-form-pi"
+    type: form_pi
+    strand: language_focus
+    medium: paper
+    app_components: []
+
+  - id: "11-form-production"
+    type: form_production
+    strand: language_focus
+    medium: both
+    app_components: [cloze]
+
+  - id: "11-main-task"
+    type: main_task
+    strand: meaning_output
+    medium: both
+    app_components: [roleplay_ai]
+
+  - id: "11-fluency"
+    type: fluency
+    strand: fluency
+    medium: app
+    app_components: [shadowing, dictation]
+
+  - id: "11-reflection"
+    type: reflection
+    strand: meaning_output
+    medium: both
+    app_components: [can_do_survey]

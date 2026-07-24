@@ -1,0 +1,46 @@
+word,pos,ja,ipa,ngsl_rank,nd,fl,l1_weighted_nd,hvpt,unit
+hiking,noun,ハイキング,/ˈhaɪkɪŋ/,1900,7,0.36,0.24,0,12
+weekend,noun,週末,/ˈwiːkɛnd/,1040,12,0.70,0.30,0,12
+weather,noun,天気,/ˈwɛðər/,1150,9,0.61,0.42,1,12
+forecast,noun,天気予報,/ˈfɔːrkæst/,2150,6,0.30,0.34,1,12
+sunny,adjective,晴れの,/ˈsʌni/,1870,7,0.36,0.22,0,12
+mountain,noun,山,/ˈmaʊntən/,1310,11,0.56,0.26,0,12
+trail,noun,小道・トレイル,/treɪl/,2020,6,0.32,0.36,1,12
+movie,noun,映画,/ˈmuːvi/,1180,9,0.62,0.28,0,12
+report,noun,報告書・レポート,/rɪˈpɔːrt/,1080,13,0.60,0.38,1,12
+deadline,noun,締め切り,/ˈdɛdlaɪn/,2650,4,0.22,0.20,0,12
+overtime,noun,残業,/ˈoʊvərtaɪm/,2400,5,0.24,0.28,0,12
+cloudy,adjective,曇りの,/ˈklaʊdi/,2000,6,0.32,0.22,0,12
+plan,noun/verb,計画・予定,/plæn/,612,18,0.85,0.35,0,12
+traffic,noun,交通・車の流れ,/ˈtræfɪk/,1550,9,0.44,0.34,1,12
+traffic jam,noun phrase,交通渋滞,/ˈtræfɪk dʒæm/,2300,5,0.26,0.30,0,12
+stuck,adjective,動けない・詰まった,/stʌk/,1850,7,0.36,0.24,0,12
+picnic,noun,ピクニック,/ˈpɪknɪk/,2050,6,0.30,0.20,0,12
+enough,determiner/adverb,十分な,/ɪˈnʌf/,900,15,0.68,0.26,0,12
+bring,verb,持ってくる,/brɪŋ/,1090,20,0.73,0.32,1,12
+clear up,phrasal verb,（天気が）晴れる,/klɪr ʌp/,2200,5,0.26,0.28,0,12
+depend on,phrasal verb,〜次第である,/dɪˈpɛnd ɒn/,1400,10,0.52,0.24,0,12
+free time,noun phrase,自由な時間,/friː taɪm/,1600,8,0.42,0.30,1,12
+spare time,noun phrase,空き時間,/spɛr taɪm/,2350,5,0.24,0.26,0,12
+part-time job,noun phrase,アルバイト・パートの仕事,/ˈpɑːrt taɪm dʒɒb/,1900,7,0.36,0.24,0,12
+budget,noun,予算,/ˈbʌdʒɪt/,1750,8,0.40,0.22,0,12
+discount,noun,割引,/ˈdɪskaʊnt/,1980,7,0.36,0.24,0,12
+sale,noun,セール・安売り,/seɪl/,1350,11,0.56,0.20,0,12
+refund,noun,返金,/ˈriːfʌnd/,2500,4,0.20,0.28,1,12
+borrow,verb,借りる,/ˈbɒroʊ/,1620,9,0.44,0.30,1,12
+lend,verb,貸す,/lɛnd/,1980,6,0.32,0.22,0,12
+indoor,adjective,屋内の,/ˈɪndɔːr/,2150,6,0.30,0.20,0,12
+outdoor,adjective,屋外の,/ˈaʊtdɔːr/,2050,6,0.31,0.20,0,12
+finish early,expression,早く終わる,/ˈfɪnɪʃ ˈɜːrli/,1450,10,0.50,0.22,0,12
+stay late,expression,遅くまで残る,/steɪ leɪt/,1550,9,0.46,0.20,0,12
+on time,expression,時間通りに,/ɒn taɪm/,1250,12,0.58,0.22,0,12
+in time,expression,間に合って,/ɪn taɪm/,1500,10,0.50,0.22,0,12
+hurry,verb/noun,急ぐ,/ˈhʌri/,1420,10,0.52,0.26,0,12
+get worse,expression,悪化する,/ɡɛt wɜːrs/,1700,8,0.40,0.30,0,12
+get better,expression,良くなる,/ɡɛt ˈbɛtər/,1350,11,0.56,0.20,0,12
+temperature,noun,気温・温度,/ˈtɛmprətʃər/,1350,9,0.50,0.26,1,12
+delayed,adjective,遅れた,/dɪˈleɪd/,2050,6,0.30,0.24,0,12
+windy,adjective,風の強い,/ˈwɪndi/,2150,6,0.30,0.22,0,12
+storm,noun,嵐,/stɔːrm/,1900,7,0.36,0.28,0,12
+probably,adverb,おそらく,/ˈprɒbəbli/,1160,12,0.63,0.30,1,12
+definitely,adverb,絶対に,/ˈdɛfɪnɪtli/,1590,9,0.46,0.26,0,12

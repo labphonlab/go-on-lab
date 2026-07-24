@@ -1,0 +1,46 @@
+word,pos,ja,ipa,ngsl_rank,nd,fl,l1_weighted_nd,hvpt,unit
+opinion,noun,意見,/əˈpɪnjən/,1210,11,0.58,0.26,0,17
+agree,verb,賛成する・同意する,/əˈɡriː/,980,15,0.66,0.28,0,17
+disagree,verb,反対する・同意しない,/ˌdɪsəˈɡriː/,1850,8,0.40,0.28,0,17
+argument,noun,議論・言い合い,/ˈɑːrɡjəmənt/,1780,8,0.38,0.34,1,17
+reason,noun,理由,/ˈriːzən/,830,16,0.70,0.30,0,17
+point,noun,論点・要点,/pɔɪnt/,760,17,0.72,0.24,0,17
+issue,noun,問題・論点,/ˈɪʃuː/,1150,12,0.56,0.22,0,17
+fair,adjective,公平な,/fɛr/,1420,10,0.50,0.32,1,17
+convince,verb,納得させる・説得する,/kənˈvɪns/,2180,6,0.28,0.34,1,17
+convinced,adjective,確信している,/kənˈvɪnst/,2260,5,0.26,0.34,0,17
+honestly,adverb,正直に言うと,/ˈɒnɪstli/,1900,7,0.36,0.24,0,17
+personally,adverb,個人的には,/ˈpɜːrsənəli/,2000,6,0.32,0.24,0,17
+exactly,adverb,まさにその通り,/ɪɡˈzæktli/,1080,13,0.60,0.22,0,17
+totally,adverb,完全に,/ˈtoʊtəli/,1650,9,0.44,0.20,0,17
+completely,adverb,完全に・すっかり,/kəmˈpliːtli/,1300,11,0.54,0.24,0,17
+sure,adjective,確かな・もちろん,/ʃʊr/,860,15,0.72,0.24,0,17
+however,adverb,しかしながら,/haʊˈɛvər/,950,14,0.62,0.30,1,17
+actually,adverb,実は,/ˈæktʃuəli/,1040,14,0.68,0.32,0,17
+pet,noun,ペット,/pɛt/,1700,9,0.44,0.22,0,17
+pets,noun,ペット（複数）,/pɛts/,1750,8,0.42,0.20,0,17
+cat,noun,猫,/kæt/,1550,10,0.48,0.20,0,17
+cats,noun,猫（複数）,/kæts/,1600,9,0.46,0.20,0,17
+dog,noun,犬,/dɔːɡ/,1500,11,0.50,0.22,0,17
+dogs,noun,犬（複数）,/dɔːɡz/,1540,10,0.48,0.22,0,17
+loyal,adjective,忠実な,/ˈlɔɪəl/,2400,4,0.22,0.32,1,17
+calm,adjective,落ち着いた・穏やかな,/kɑːm/,1780,8,0.40,0.28,0,17
+independent,adjective,自立した・独立した,/ˌɪndɪˈpɛndənt/,1900,7,0.36,0.34,1,17
+friendly,adjective,人懐っこい・親しみやすい,/ˈfrɛndli/,1420,10,0.50,0.30,1,17
+guess,verb,推測する・〜だと思う,/ɡɛs/,1050,14,0.62,0.24,0,17
+compromise,noun/verb,妥協（する）,/ˈkɒmprəmaɪz/,2600,3,0.16,0.34,1,17
+in my opinion,expression,私の意見では,/ɪn maɪ əˈpɪnjən/,2150,6,0.30,0.24,0,17
+I agree,expression,私もそう思います（賛成）,/aɪ əˈɡriː/,1900,7,0.36,0.26,0,17
+I disagree,expression,私はそう思いません（反対）,/aɪ ˌdɪsəˈɡriː/,2050,6,0.32,0.26,0,17
+So do I,expression,私も（そう）です,/soʊ duː aɪ/,2300,5,0.26,0.22,0,17
+Neither do I,expression,私も（そうでは）ないです,/ˈniːðər duː aɪ/,2550,4,0.20,0.30,1,17
+good point,expression,いい指摘だね,/ɡʊd pɔɪnt/,2100,6,0.30,0.22,0,17
+to be honest,expression,正直に言うと,/tuː biː ˈɒnɪst/,2250,5,0.26,0.24,0,17
+on the other hand,expression,一方で,/ɒn ðiː ˈʌðər hænd/,2400,5,0.24,0.28,0,17
+for example,expression,例えば,/fɔːr ɪɡˈzæmpəl/,680,18,0.78,0.22,0,17
+I see your point,expression,言いたいことは分かります,/aɪ siː jʊr pɔɪnt/,2600,4,0.20,0.26,0,17
+not really,expression,あまりそうでもない,/nɒt ˈriːəli/,1450,10,0.52,0.24,0,17
+I guess so,expression,まあそうかもね,/aɪ ɡɛs soʊ/,2350,5,0.24,0.22,0,17
+agree to disagree,expression,意見の違いを認め合う,/əˈɡriː tuː ˌdɪsəˈɡriː/,2700,3,0.16,0.28,0,17
+change your mind,expression,考えを変える,/tʃeɪndʒ jʊr maɪnd/,2450,4,0.22,0.24,0,17
+not necessarily,expression,必ずしもそうとは限らない,/nɒt ˌnɛsəˈsɛrəli/,2500,4,0.20,0.24,0,17

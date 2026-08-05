@@ -202,7 +202,13 @@ const click = (sel) => { const b = D.querySelector(sel); if (b) { b.click(); ret
     check(kinds[kinds.length - 1] === "errorReport", "sent an error report after the retries");
     check(screen() === "screen-result", "the participant still sees the success screen");
   } else {
-    check(posted.length === 1, `uploaded exactly once (got ${posted.length}: ${kinds.join(",")})`);
+    const configured = !!(spec && spec.config && spec.config.dataServerUrl);
+    if (!configured) {
+      check(false, "dataServerUrl is not set in the list config -- this build would " +
+                   "collect nothing; rebuild with the Apps Script /exec URL");
+    } else {
+      check(posted.length === 1, `uploaded exactly once (got ${posted.length}: ${kinds.join(",")})`);
+    }
   }
   if (posted.length) verify(posted[0], spec);
   report();

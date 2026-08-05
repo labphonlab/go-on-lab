@@ -376,6 +376,13 @@
     margin-top: 16px;
   }
 
+  .trial-question {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: center;
+    margin: 18px 0 14px;
+  }
   .trial-header {
     text-align: center;
     font-size: 18px;
@@ -881,19 +888,24 @@
 
   <!-- 読み込み画面 -->
   <section id="screen-headphone" class="hidden">
-    <h2 data-i18n="headphone.1">ヘッドホンの確認</h2>
-    <p data-i18n="headphone.4">この課題はヘッドホン・イヤホンでのみ正しく動作します。3 つの音のうち最も小さいものを選んでください。</p>
-    <p data-i18n-pre="headphone.5" data-i18n-post="headphone.6">全 <span id="hpTotal">6</span> 問です。</p>
-    <p id="hpProgress" class="muted"></p>
-    <div id="hpArea"><button id="hpStart" class="primary" data-i18n="headphone.3">開始</button></div>
-    <p id="hpError" class="error hidden"></p>
+    <div class="card">
+      <h2 style="margin-top:0;" data-i18n="headphone.1">ヘッドホンの確認</h2>
+      <p data-i18n="headphone.4">この課題はヘッドホン・イヤホンでのみ正しく動作します。3 つの音のうち最も小さいものを選んでください。</p>
+      <p class="note" data-i18n-pre="headphone.5" data-i18n-post="headphone.6">全 <span id="hpTotal">6</span> 問です。</p>
+      <p id="hpProgress" class="note"></p>
+      <div id="hpArea" style="margin-top: 20px;">
+        <button class="btn-primary" id="hpStart" data-i18n="headphone.3">開始</button>
+      </div>
+      <p id="hpError" class="error hidden"></p>
+    </div>
   </section>
 
   <section id="screen-headphone-fail" class="hidden">
-    <h2 data-i18n="headphone-fail.1">ここまでです</h2>
-    <p data-i18n="headphone-fail.2">ヘッドホンの確認を通過できなかったため、この実験は続けられません。
-       スピーカーでの受験や、環境音の大きい場所での受験では正確に測定できないためです。</p>
-    <p data-i18n="headphone-fail.3">ご協力ありがとうございました。</p>
+    <div class="card">
+      <h2 style="margin-top:0;" data-i18n="headphone-fail.1">ここまでです</h2>
+      <p data-i18n="headphone-fail.2">ヘッドホンの確認を通過できなかったため、この実験は続けられません。スピーカーでの受験や、環境音の大きい場所での受験では正確に測定できないためです。</p>
+      <p class="note" data-i18n="headphone-fail.3">ご協力ありがとうございました。</p>
+    </div>
   </section>
 
   <section id="screen-loading" class="hidden">
@@ -918,6 +930,9 @@
 
       <!-- AX / AXB 専用: どの刺激が再生中かを示す -->
       <div class="ax-pair-display hidden" id="axPairDisplay"></div>
+
+      <!-- gating: 各ゲートで問われることを出しておく -->
+      <div class="trial-question hidden" id="trialQuestion"></div>
 
       <button class="btn-play hidden" id="playBtn" data-i18n="trial.3">▶ 再生</button>
       <div class="play-info" id="playInfo" data-i18n="trial.4">画面の表示に従ってください</div>
@@ -1005,6 +1020,7 @@ const DEFAULT_CONFIG = {
   gatingConfidence: { min: 1, max: 4, minLabel: "当てずっぽう", maxLabel: "かなり自信あり",
                       prompt: "今のまとまりについて、どの程度確信がありますか" },
   uiLang: "ja",            // "ja" | "en" — ?lang=en で上書きできる
+  audioStartTimeoutMs: 8000,  // これだけ待って鳴り始めなければ再生失敗とみなす
   gatingBreakEveryBlocks: 4,
   gatingBlocksUrl: "",                  // ブロック定義 JSON。?list= で差し替え可
   gatingBlocks: [],                     // または直接埋め込む
@@ -1190,7 +1206,11 @@ const UI_EN = {
   "axb.question": "Was X more like A or more like B?",
   "count.practice": "{n} trials",
   "count.main": "the main trials ({n} of them)",
-  "chart.accuracy": "Proportion correct"
+  "chart.accuracy": "Proportion correct",
+  "hp.blocked": "Your browser would not play the sound. Check that your device is not muted, then try again.",
+  "hp.retry": "Play again",
+  "trial.rate": "Rate what you heard",
+  "trial.choose": "Choose what you heard"
 };
 
 // 日本語の実行時文字列。UI_EN と対になるので、片方だけ足しても気付けるように
@@ -1216,7 +1236,11 @@ const UI_JA = {
   "axb.question": "X は A と B のどちらに似ていますか？",
   "count.practice": "{n} 試行",
   "count.main": "本試行（{n} 試行）",
-  "chart.accuracy": "正答率"
+  "chart.accuracy": "正答率",
+  "hp.blocked": "ブラウザが音を再生できませんでした。端末が消音になっていないか確認して、もう一度お試しください。",
+  "hp.retry": "もう一度再生",
+  "trial.rate": "聞こえた音を評価してください",
+  "trial.choose": "聞こえた音を選んでください"
 };
 
 function t(key) {
@@ -1251,6 +1275,10 @@ function applyUiLang() {
     const v = UI_EN[el.getAttribute("data-i18n-ph")];
     if (v != null) el.setAttribute("placeholder", v);
   });
+  // 母語欄は日本語話者向けに「日本語」で初期化してある。英語で実施するなら
+  // 空にする。既定値のまま送信されると、母語が全員日本語として記録される。
+  const nat = document.getElementById("nativeLanguage");
+  if (nat && nat.value === "日本語") nat.value = "";
 }
 
 let CONFIG = loadConfigFromStorage() || JSON.parse(JSON.stringify(DEFAULT_CONFIG));
@@ -1274,7 +1302,10 @@ async function applyUrlCellAssignment() {
   const url = CONFIG.gatingBlocksUrl ||
               ("lists/" + (cond || "default") + "_list" + (list || "1") + ".json");
   try {
-    const spec = await (await fetch(url)).json();
+    // no-store。このファイルは参加者のセッションそのものを決めるので、
+    // 実施中に直しても古い写しが配られる状況を作ってはいけない。
+    // 刺激音声は中身が変わらないのでキャッシュさせてよい (むしろさせたい)。
+    const spec = await (await fetch(url, { cache: "no-store" })).json();
     // 参加者のブラウザには設定パネルの保存値がないので、実験固有の設定
     // (同意文・教示・質問文・ヘッドホン検査の有無) はリスト JSON が運ぶ。
     // これで配布する index.html を上流と 1 バイトも変えずに済む。
@@ -1399,6 +1430,7 @@ const progressFill = document.getElementById("progressFill");
 const playBtn      = document.getElementById("playBtn");
 const playInfo     = document.getElementById("playInfo");
 const responseGrid = document.getElementById("responseGrid");
+const trialQuestion = document.getElementById("trialQuestion");
 const restartBtn   = document.getElementById("restartBtn");
 const restartCard  = document.getElementById("restartCard");
 const targetLabelEl = document.getElementById("targetLabel");
@@ -1805,13 +1837,32 @@ function startBlock(practice) {
 function playFile(file) {
   return new Promise((resolve, reject) => {
     const a = audioMap.get(file) || new Audio(file);
-    a.onended = () => { a.onended = null; a.onerror = null; resolve(); };
-    a.onerror = () => { a.onended = null; a.onerror = null; reject(new Error("audio load error: " + file)); };
+    // 音声が「鳴らない」形は 2 つある。エラーで落ちる場合と、何も起きないまま
+    // 止まる場合。後者では onerror も play() の rejection も来ないので、待つ
+    // 側は永久に待つ。実際に起きるのは通信が切れたとき、音声デバイスが無い
+    // とき、iOS で読み込みが黙って失敗したとき。参加者から見れば画面が固まる。
+    // 鳴り始めと鳴り終わりの両方に上限を置き、駄目なら reject して呼び出し側の
+    // 「押して再生」やり直しに落とす。
+    let startTimer = null, endTimer = null;
+    const done = (fn, arg) => {
+      clearTimeout(startTimer); clearTimeout(endTimer);
+      a.onended = null; a.onerror = null; a.onplaying = null;
+      fn(arg);
+    };
+    a.onended = () => done(resolve);
+    a.onerror = () => done(reject, new Error("audio load error: " + file));
+    a.onplaying = () => {
+      clearTimeout(startTimer);
+      const cap = ((isFinite(a.duration) && a.duration > 0 ? a.duration : 10) + 5) * 1000;
+      endTimer = setTimeout(() => done(reject, new Error("audio stalled: " + file)), cap);
+    };
+    startTimer = setTimeout(() => done(reject, new Error("audio never started: " + file)),
+                            CONFIG.audioStartTimeoutMs || 8000);
     try { a.currentTime = 0; } catch (e) {}
     audio = a;
     const p = a.play();
     if (p && typeof p.catch === "function") {
-      p.catch(reject);
+      p.catch((err) => done(reject, err));
     }
   });
 }
@@ -1831,6 +1882,14 @@ async function runTrial() {
   itiDisplay.classList.add("hidden");
   axPairDisplay.classList.add("hidden");
   playInfo.textContent = "";
+  if (CONFIG.paradigm === "gating") {
+    trialQuestion.textContent = stim.kind === "confidence"
+      ? (CONFIG.gatingConfidence.prompt || "")
+      : (CONFIG.gatingQuestion || "");
+    trialQuestion.classList.remove("hidden");
+  } else {
+    trialQuestion.classList.add("hidden");
+  }
 
   // 注視点 (fixation)
   fixationDisplay.classList.remove("hidden");
@@ -1916,7 +1975,26 @@ async function runHeadphoneCheck() {
     area.innerHTML = "<p class='muted'>" + t("hp.playing") + "</p>";
     for (let k = 0; k < 3; k++) {
       area.innerHTML = "<p style='font-size:2rem'>" + (k + 1) + "</p>";
-      await playFile(toneDataURI(200, 0.8, k === quiet ? HP_GAIN / 2 : HP_GAIN, k === anti));
+      // 再生がブラウザに拒まれることがある (自動再生制限、iOS の消音スイッチ、
+      // 音声デバイスなし)。ここで例外を投げると画面に数字が出たまま何も
+      // 起きなくなり、参加者には進む手段も理由も残らない。押し直せるようにする。
+      let played = false;
+      while (!played) {
+        try {
+          await playFile(toneDataURI(200, 0.8, k === quiet ? HP_GAIN / 2 : HP_GAIN, k === anti));
+          played = true;
+        } catch (err) {
+          await new Promise((resolve) => {
+            area.innerHTML = "<p class='note'>" + t("hp.blocked") + "</p>";
+            const b = document.createElement("button");
+            b.className = "btn-primary";
+            b.textContent = t("hp.retry");
+            b.addEventListener("click", () => { area.innerHTML =
+              "<p style='font-size:2rem'>" + (k + 1) + "</p>"; resolve(); }, { once: true });
+            area.appendChild(b);
+          });
+        }
+      }
       await sleep(250);
     }
     const choice = await new Promise((resolve) => {
@@ -1940,7 +2018,7 @@ async function runHeadphoneCheck() {
 async function runConfidenceTrial(stim) {
   const ra = document.getElementById("ratingArea");
   responseGrid.classList.add("hidden");
-  playInfo.textContent = CONFIG.gatingConfidence.prompt || "";
+  playInfo.textContent = "";
   const scale = document.getElementById("ratingScale");
   scale.innerHTML = "";
   for (let i = CONFIG.gatingConfidence.min; i <= CONFIG.gatingConfidence.max; i++) {
@@ -1962,9 +2040,11 @@ async function runSingleStimulusTrial(stim) {
   await playFile(stim.file);
   trialFirstPlayTime = performance.now();
   setResponseButtonsEnabled(true);
-  playInfo.textContent = CONFIG.paradigm === "rating"
-    ? "聞こえた音を評価してください"
-    : "聞こえた音を選んでください";
+  // gating は問い自体が画面に出ているので、重ねて指示を出さない。
+  // 「聞こえた音を選んでください」は 2 択の是非を答える課題には合わない。
+  playInfo.textContent = CONFIG.paradigm === "gating" ? ""
+    : CONFIG.paradigm === "rating" ? t("trial.rate")
+    : t("trial.choose");
 }
 
 async function runAXTrial(stim) {

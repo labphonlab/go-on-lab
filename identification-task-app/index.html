@@ -880,6 +880,22 @@
   </section>
 
   <!-- 読み込み画面 -->
+  <section id="screen-headphone" class="hidden">
+    <h2>ヘッドホンの確認</h2>
+    <p>この課題はヘッドホン・イヤホンでのみ正しく動作します。3 つの音のうち
+       <strong>最も小さい</strong>ものを選んでください。全 <span id="hpTotal">6</span> 問です。</p>
+    <p id="hpProgress" class="muted"></p>
+    <div id="hpArea"><button id="hpStart" class="primary">開始</button></div>
+    <p id="hpError" class="error hidden"></p>
+  </section>
+
+  <section id="screen-headphone-fail" class="hidden">
+    <h2>ここまでです</h2>
+    <p>ヘッドホンの確認を通過できなかったため、この実験は続けられません。
+       スピーカーでの受験や、環境音の大きい場所での受験では正確に測定できないためです。</p>
+    <p>ご協力ありがとうございました。</p>
+  </section>
+
   <section id="screen-loading" class="hidden">
     <div class="card">
       <h2 style="text-align:center; margin-top:0;">音声を準備しています…</h2>
@@ -971,7 +987,7 @@
    設定は localStorage に自動保存・JSON でエクスポート/インポート可能。
    ============================================================ */
 const DEFAULT_CONFIG = {
-  paradigm: "identification",           // "identification" | "ax" | "axb" | "rating"
+  paradigm: "identification",           // "identification" | "ax" | "axb" | "rating" | "gating"
   experimentName: "identification_pie_buy",
   dataServerUrl: "https://script.google.com/macros/s/AKfycbymD6t3TiqaPsBTm5RPVSV1fvuqg7BgD_yU3fYUg4cQzgfaUhCxxxbIb_lKRM2ICg1v/exec",
 
@@ -981,6 +997,19 @@ const DEFAULT_CONFIG = {
   axLabels: { same: "同じ", different: "違う" },
   axbLabels: { A: "A に似ている", B: "B に似ている" },
   ratingScale: { min: 1, max: 7, minLabel: "とても pie", maxLabel: "とても buy" },
+  // gating: 同じ箇所を少しずつ長くしながら繰り返し聞かせ、判断が変わる時点を測る。
+  // 1 ブロック = 1 事例で、その中の gate は必ず昇順に提示する（順序そのものが
+  // 測定対象なので、ここだけは randomizeTrials の対象外）。
+  gatingLabels: { yes: "はい", no: "いいえ" },
+  gatingQuestion: "この話者は言い直そうとしていましたか",
+  gatingConfidence: { min: 1, max: 4, minLabel: "当てずっぽう", maxLabel: "かなり自信あり",
+                      prompt: "今のまとまりについて、どの程度確信がありますか" },
+  gatingBreakEveryBlocks: 4,
+  gatingBlocksUrl: "",                  // ブロック定義 JSON。?list= で差し替え可
+  gatingBlocks: [],                     // または直接埋め込む
+  headphoneCheck: false,                // 逆位相トーンによるヘッドホン装着確認
+  headphoneCheckTrials: 6,
+  headphoneCheckPass: 5,
 
   // 試行構造
   repetitionsPerStimulus: 6,
@@ -1015,6 +1044,33 @@ const DEFAULT_CONFIG = {
 };
 
 let CONFIG = loadConfigFromStorage() || JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+
+/* ------------------------------------------------------------------
+   gating のセル割り付け。?cond=<condition>&list=<n> を付けると
+   lists/<cond>_list<n>.json を読みに行き、CONFIG.gatingBlocks を
+   差し替える。パネル配信で 1 つの URL を配りながらセルを分けられる。
+   ------------------------------------------------------------------ */
+async function applyUrlCellAssignment() {
+  const q = new URLSearchParams(location.search);
+  const cond = q.get("cond");
+  const list = q.get("list");
+  if (!cond && !list) return;
+
+  CONFIG.paradigm = "gating";
+  CONFIG.condition = cond || "";
+  CONFIG.listId = list || "";
+  const url = CONFIG.gatingBlocksUrl ||
+              ("lists/" + (cond || "default") + "_list" + (list || "1") + ".json");
+  try {
+    const spec = await (await fetch(url)).json();
+    CONFIG.gatingBlocks = spec.blocks || [];
+    if (spec.condition) CONFIG.condition = spec.condition;
+    if (spec.list != null) CONFIG.listId = String(spec.list);
+    CONFIG.experimentName = CONFIG.experimentName || "gating";
+  } catch (e) {
+    alert("試行リストを読み込めませんでした: " + url);
+  }
+}
 
 /* ============================================================
    設定の永続化 (localStorage / JSON / URL ハッシュ)
@@ -1082,6 +1138,8 @@ let focusBlurEvents = [];
    DOM
    ============================================================ */
 const screenConsent       = document.getElementById("screen-consent");
+const screenHeadphone     = document.getElementById("screen-headphone");
+const screenHeadphoneFail = document.getElementById("screen-headphone-fail");
 const screenSetup         = document.getElementById("screen-setup");
 const screenInstructions  = document.getElementById("screen-instructions");
 const screenLoading       = document.getElementById("screen-loading");
@@ -1149,6 +1207,7 @@ function sleep(ms) {
 }
 
 function buildMainTrialList() {
+  if (CONFIG.paradigm === "gating") return buildGatingTrialList(false);
   let all = [];
   for (let i = 0; i < CONFIG.repetitionsPerStimulus; i++) {
     all = all.concat(CONFIG.stimuli);
@@ -1156,7 +1215,42 @@ function buildMainTrialList() {
   return CONFIG.randomizeTrials ? shuffle(all) : all;
 }
 
+/* gating: ブロック（= 1 事例）の順序はランダム化するが、ブロック内の gate は
+   昇順のまま。各ブロックの末尾に確信度を尋ねる疑似試行を 1 つ挟む。      */
+function buildGatingTrialList(practice) {
+  const blocks = (CONFIG.gatingBlocks || []).filter(b => !!b.is_practice === !!practice);
+  const order = CONFIG.randomizeTrials ? shuffle(blocks.slice()) : blocks.slice();
+  const out = [];
+  order.forEach((b, bi) => {
+    const gates = b.gates.slice().sort((x, y) => x.gate_ms - y.gate_ms);
+    gates.forEach((g, gi) => {
+      out.push({
+        kind: "gate",
+        id: b.item_id + "_g" + Math.abs(g.gate_ms),
+        file: g.stimulus,
+        item_id: b.item_id,
+        item_type: b.item_type,
+        gate_ms: g.gate_ms,
+        gate_index: gi,
+        n_gates: gates.length,
+        block_position: bi,
+        label: b.item_type + "@" + g.gate_ms
+      });
+    });
+    out.push({
+      kind: "confidence",
+      id: b.item_id + "_conf",
+      item_id: b.item_id,
+      item_type: b.item_type,
+      block_position: bi,
+      label: "confidence"
+    });
+  });
+  return out;
+}
+
 function buildPracticeTrialList() {
+  if (CONFIG.paradigm === "gating") return buildGatingTrialList(true);
   if (CONFIG.numPracticeTrials <= 0) return [];
   const steps = CONFIG.stimuli.map((s) => Number(s.continuumStep)).filter((n) => !isNaN(n));
   if (steps.length === 0) return CONFIG.stimuli.slice(0, CONFIG.numPracticeTrials);
@@ -1174,6 +1268,8 @@ function buildPracticeTrialList() {
 function showScreen(name) {
   const map = {
     "consent":        screenConsent,
+    "headphone":      screenHeadphone,
+    "headphone-fail": screenHeadphoneFail,
     "setup":          screenSetup,
     "instructions":   screenInstructions,
     "loading":        screenLoading,
@@ -1230,6 +1326,7 @@ function playTestBeep() {
 }
 
 function stimulusFiles(stim) {
+  if (CONFIG.paradigm === "gating") return stim.file ? [stim.file] : [];
   return [stim.file, stim.fileA, stim.fileX, stim.fileB].filter(Boolean);
 }
 
@@ -1296,6 +1393,7 @@ function paradigmResponseOptions() {
   if (CONFIG.paradigm === "identification") return CONFIG.responseOptions.slice();
   if (CONFIG.paradigm === "ax")             return [CONFIG.axLabels.same, CONFIG.axLabels.different];
   if (CONFIG.paradigm === "axb")            return [CONFIG.axbLabels.A, CONFIG.axbLabels.B];
+  if (CONFIG.paradigm === "gating")         return [CONFIG.gatingLabels.yes, CONFIG.gatingLabels.no];
   return [];
 }
 
@@ -1406,9 +1504,23 @@ function setupToInstructions() {
 }
 
 async function instructionsToPractice() {
-  if (!CONFIG.stimuli || CONFIG.stimuli.length === 0) {
+  const emptyGating = CONFIG.paradigm === "gating" &&
+                      (!CONFIG.gatingBlocks || CONFIG.gatingBlocks.length === 0);
+  if (emptyGating || (CONFIG.paradigm !== "gating" &&
+                      (!CONFIG.stimuli || CONFIG.stimuli.length === 0))) {
     alert("刺激リストが空です。\n実験者は ?config=1 でパネルを開き、刺激を追加してください。");
     return;
+  }
+
+  if (CONFIG.headphoneCheck) {
+    showScreen("headphone");
+    const started = await new Promise((resolve) => {
+      document.getElementById("hpStart").addEventListener("click", () => resolve(true), { once: true });
+    });
+    if (started) {
+      const passed = await runHeadphoneCheck();
+      if (!passed) { showScreen("headphone-fail"); return; }
+    }
   }
   if (!CONFIG.dataServerUrl) {
     if (!confirm("データ送信先 URL が未設定です。データは保存されませんが、続行しますか？")) return;
@@ -1500,7 +1612,10 @@ async function runTrial() {
   fixationDisplay.classList.add("hidden");
 
   try {
-    if (CONFIG.paradigm === "identification" || CONFIG.paradigm === "rating") {
+    if (CONFIG.paradigm === "gating") {
+      if (stim.kind === "confidence") { await runConfidenceTrial(stim); return; }
+      await runSingleStimulusTrial(stim);
+    } else if (CONFIG.paradigm === "identification" || CONFIG.paradigm === "rating") {
       await runSingleStimulusTrial(stim);
     } else if (CONFIG.paradigm === "ax") {
       await runAXTrial(stim);
@@ -1518,6 +1633,101 @@ async function runTrial() {
       showError(trialError, "音声を読み込めませんでした");
     }
   }
+}
+
+/* ============================================================
+   ヘッドホン装着確認 (Woods et al. 2017, antiphase method)
+   3 音のうち 1 つを 6 dB 下げ、別の 1 つを逆位相ステレオにする。
+   スピーカーでは逆位相音が空間で打ち消されて最も小さく聞こえるため
+   誤答しやすく、ヘッドホンでは打ち消されない。トーンは実行時に合成
+   するので追加の音源ファイルを持たなくてよい。
+   ============================================================ */
+let headphoneCheckScore = "";
+
+// 全振幅の 200 Hz 純音はヘッドホンでは相当に大きい。基準を -6 dBFS に下げ、
+// 小さい方の音はそこからさらに半分 (-12 dBFS) にする。差は Woods et al. と同じ 6 dB。
+const HP_GAIN = 0.5;
+
+function toneDataURI(freq, seconds, gain, antiphase) {
+  // 3 音とも必ずステレオで作る。逆位相の音だけステレオにすると、
+  // モノラルとステレオの経路差そのものが手がかりになりかねない。
+  const sr = 44100, n = Math.floor(sr * seconds), ch = 2;
+  const bytes = 44 + n * 2 * ch, buf = new ArrayBuffer(bytes), v = new DataView(buf);
+  const wr = (o, str) => { for (let i = 0; i < str.length; i++) v.setUint8(o + i, str.charCodeAt(i)); };
+  wr(0, "RIFF"); v.setUint32(4, bytes - 8, true); wr(8, "WAVEfmt ");
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, ch, true);
+  v.setUint32(24, sr, true); v.setUint32(28, sr * 2 * ch, true);
+  v.setUint16(32, 2 * ch, true); v.setUint16(34, 16, true);
+  wr(36, "data"); v.setUint32(40, n * 2 * ch, true);
+  const ramp = Math.floor(sr * 0.02);
+  for (let i = 0; i < n; i++) {
+    let a = Math.sin(2 * Math.PI * freq * i / sr) * gain;
+    if (i < ramp) a *= i / ramp;
+    if (i > n - ramp) a *= (n - i) / ramp;
+    const smp = Math.max(-1, Math.min(1, a)) * 32767;
+    v.setInt16(44 + i * 4, smp, true);
+    v.setInt16(44 + i * 4 + 2, antiphase ? -smp : smp, true);
+  }
+  let bin = ""; const u8 = new Uint8Array(buf);
+  for (let i = 0; i < u8.length; i++) bin += String.fromCharCode(u8[i]);
+  return "data:audio/wav;base64," + btoa(bin);
+}
+
+async function runHeadphoneCheck() {
+  const total = CONFIG.headphoneCheckTrials || 6;
+  const area = document.getElementById("hpArea");
+  const prog = document.getElementById("hpProgress");
+  document.getElementById("hpTotal").textContent = total;
+  let correct = 0;
+
+  for (let t = 0; t < total; t++) {
+    // 正解位置は毎回引き直す。t % 3 のような規則にすると 1,2,3,1,2,3 と並び、
+    // ヘッドホンを着けていなくても数試行で規則に気付けば通過できてしまう。
+    const pos = shuffle([0, 1, 2]);
+    const quiet = pos[0];
+    const anti  = pos[1];
+    prog.textContent = (t + 1) + " / " + total;
+    area.innerHTML = "<p class='muted'>再生中…</p>";
+    for (let k = 0; k < 3; k++) {
+      area.innerHTML = "<p style='font-size:2rem'>" + (k + 1) + "</p>";
+      await playFile(toneDataURI(200, 0.8, k === quiet ? HP_GAIN / 2 : HP_GAIN, k === anti));
+      await sleep(250);
+    }
+    const choice = await new Promise((resolve) => {
+      area.innerHTML = "<p>どの音が最も小さかったですか</p>";
+      [1, 2, 3].forEach((label, idx) => {
+        const b = document.createElement("button");
+        b.className = "response-btn";
+        b.textContent = label;
+        b.addEventListener("click", () => resolve(idx));
+        area.appendChild(b);
+      });
+    });
+    if (choice === quiet) correct++;
+  }
+
+  headphoneCheckScore = correct + "/" + total;
+  return correct >= (CONFIG.headphoneCheckPass || 5);
+}
+
+/* ブロック末の確信度。音声は鳴らさず評定尺度だけを出す。          */
+async function runConfidenceTrial(stim) {
+  const ra = document.getElementById("ratingArea");
+  document.getElementById("responseArea").classList.add("hidden");
+  playInfo.textContent = CONFIG.gatingConfidence.prompt || "";
+  const scale = document.getElementById("ratingScale");
+  scale.innerHTML = "";
+  for (let i = CONFIG.gatingConfidence.min; i <= CONFIG.gatingConfidence.max; i++) {
+    const btn = document.createElement("button");
+    btn.className = "rating-btn";
+    btn.textContent = i;
+    btn.addEventListener("click", () => recordResponse(i));
+    scale.appendChild(btn);
+  }
+  document.getElementById("ratingMinLabel").textContent = CONFIG.gatingConfidence.minLabel;
+  document.getElementById("ratingMaxLabel").textContent = CONFIG.gatingConfidence.maxLabel;
+  ra.classList.remove("hidden");
+  trialFirstPlayTime = performance.now();
 }
 
 async function runSingleStimulusTrial(stim) {
@@ -1620,7 +1830,24 @@ async function recordResponse(response) {
       playCount: playCount,
       timestamp: formatTimestamp(new Date())
     };
-    if (CONFIG.paradigm === "identification") {
+    if (CONFIG.paradigm === "gating") {
+      row.itemId        = stim.item_id;
+      row.itemType      = stim.item_type;
+      row.blockPosition = stim.block_position;
+      if (stim.kind === "confidence") {
+        row.trialKind  = "confidence";
+        row.confidence = response;
+      } else {
+        row.trialKind = "gate";
+        row.file      = stim.file;
+        row.gateMs    = stim.gate_ms;
+        row.gateIndex = stim.gate_index;
+        row.response  = response;
+        // 「言い直そうとしていた」= yes を repair 判断とみなす
+        row.saidRepair = (response === CONFIG.gatingLabels.yes) ? 1 : 0;
+        row.isCorrect  = (row.saidRepair === (stim.item_type === "repair" ? 1 : 0)) ? 1 : 0;
+      }
+    } else if (CONFIG.paradigm === "identification") {
       row.file = stim.file;
       row.response = response;
     } else if (CONFIG.paradigm === "rating") {
@@ -1643,6 +1870,11 @@ async function recordResponse(response) {
     results.push(row);
   }
 
+  if (CONFIG.paradigm === "gating") {
+    document.getElementById("ratingArea").classList.add("hidden");
+    document.getElementById("responseArea").classList.remove("hidden");
+  }
+
   // ITI: 短いブランク
   playInfo.textContent = "";
   itiDisplay.classList.remove("hidden");
@@ -1657,6 +1889,24 @@ async function recordResponse(response) {
     } else {
       finishExperiment();
     }
+    return;
+  }
+
+  // gating は 1 事例 = 15 gate の系列なので、休憩は必ずブロックの切れ目に置く。
+  // 系列の途中で中断すると「積み重なる情報」という gating の前提が壊れる。
+  if (!isPractice && CONFIG.paradigm === "gating" && CONFIG.gatingBreakEveryBlocks > 0) {
+    const prev = trialList[currentTrialIndex - 1];
+    const here = trialList[currentTrialIndex];
+    const atBoundary = prev && prev.kind === "confidence" && here;
+    if (atBoundary && here.block_position % CONFIG.gatingBreakEveryBlocks === 0) {
+      breakProgress.textContent = currentTrialIndex;
+      document.querySelector("#screen-break .break-counter").innerHTML =
+        "<strong>" + here.block_position + "</strong> / " +
+        (trialList[trialList.length - 1].block_position + 1) + " 事例 完了";
+      showScreen("break");
+      return;
+    }
+    runTrial();
     return;
   }
 
@@ -1708,6 +1958,10 @@ async function finishExperiment() {
 function buildPayload(extra) {
   return Object.assign({
     experimentName: CONFIG.experimentName,
+    paradigm: CONFIG.paradigm,
+    condition: CONFIG.condition || "",
+    listId: CONFIG.listId || "",
+    headphoneCheckScore: headphoneCheckScore,
     sessionId: sessionId,
     participant: participantInfo,
     responseButtonOrder: responseButtonOrder,
@@ -2324,8 +2578,11 @@ const _params = new URLSearchParams(location.search);
 if (_params.get("config") === "1") {
   openConfigPanel();
 } else {
-  applyConfigToUI();
-  showScreen("consent");
+  // gating のセル割り付け (?cond=&list=) は同意画面を出す前に解決しておく
+  applyUrlCellAssignment().then(() => {
+    applyConfigToUI();
+    showScreen("consent");
+  });
 }
 
 // URL に ?admin=1 を付けるか、5回タップで「最初に戻る」ボタンを表示(研究者用)

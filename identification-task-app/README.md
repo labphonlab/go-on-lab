@@ -135,6 +135,55 @@ const responseOptions = ["A", "B", "わからない"];
 Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNumber` は
 実際の提示順、`stimulusId` はその試行で提示された刺激の ID。
 
+## gating（逐次ゲーティング）パラダイム
+
+音声を少しずつ長くしながら同じ判断を繰り返し求め、「どの時点で判断できるように
+なるか」を測るパラダイム。他の 4 つと違い、試行は独立ではなく**ブロック**を作る。
+1 ブロック = 同じ事例のゲートを短い順に全部聞き、最後に確信度を答える。
+
+刺激は `stimuli` 配列ではなく JSON で与える。
+
+```json
+{
+  "condition": "ja_conversation", "list": 1,
+  "blocks": [
+    { "item_id": "JA_S01_12.3", "item_type": "repair", "is_practice": false,
+      "gates": [ { "gate_ms": -300, "stimulus": "stimuli/ja/x_g300.wav" },
+                 { "gate_ms": -280, "stimulus": "stimuli/ja/x_g280.wav" } ] }
+  ]
+}
+```
+
+参加者ごとの割り付けは URL で行う。
+
+```
+index.html?cond=ja_conversation&list=1
+```
+
+これで `lists/ja_conversation_list1.json` が読み込まれ、`paradigm` は自動的に
+`gating` になる。`condition` と `listId` は送信データに含まれる。
+
+設定できる項目:
+
+| 設定 | 既定値 | 内容 |
+| --- | --- | --- |
+| `gatingQuestion` | この話者は言い直そうとしていましたか | 各ゲートで出す質問文 |
+| `gatingLabels` | はい / いいえ | 2 択の回答ラベル |
+| `gatingConfidence` | 1–4 | ブロック末の確信度尺度 |
+| `gatingBreakEveryBlocks` | 4 | 何ブロックごとに休憩を入れるか |
+| `gatingBlocksUrl` | (空) | JSON を URL 規則以外の場所から読む場合 |
+
+ブロックの提示順は参加者ごとにシャッフルされるが、**ブロック内のゲート順は必ず
+短い順**で、途中に休憩は入らない。「情報が積み重なる」という前提が壊れるため。
+
+### ヘッドホン検査
+
+`headphoneCheck: true` にすると、教示のあとに Woods et al. (2017) 方式の
+逆位相検査が入る。3 つの音のうち最も小さいものを選ぶ課題を `headphoneCheckTrials`
+回行い、`headphoneCheckPass` 問正解しないと先へ進めない。スピーカーでは
+逆位相成分が打ち消されないため正答できない。正答数は `headphoneCheckScore`
+として記録される。gating 専用ではなく、どのパラダイムでも使える。
+
 ## サーバー（Google Sheets）への保存設定
 
 実験の反応データは、参加者のブラウザから直接 Google スプレッドシートに送信されます。
@@ -185,6 +234,7 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
        pSheet = ss.insertSheet(PARTICIPANTS_SHEET);
        pSheet.appendRow([
          "submittedAt", "sessionId", "experimentName",
+         "condition", "listId", "headphoneCheckScore",
          "name", "dateOfBirth", "age",
          "gender", "handedness",
          "nativeLanguage",
@@ -197,6 +247,8 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
      }
      pSheet.appendRow([
        submittedAt, sessionId, data.experimentName || "",
+       data.condition || "", data.listId || "",
+       data.headphoneCheckScore != null ? data.headphoneCheckScore : "",
        p.name || "", p.dateOfBirth || "", p.age || "",
        p.gender || "", p.handedness || "",
        p.nativeLanguage || "",
@@ -217,10 +269,12 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
      let rSheet = ss.getSheetByName(sheetName);
      if (!rSheet) {
        rSheet = ss.insertSheet(sheetName);
-       rSheet.appendRow(["submittedAt", "sessionId", "experimentName"].concat(headers));
+       rSheet.appendRow(["submittedAt", "sessionId", "experimentName",
+                         "condition", "listId"].concat(headers));
      }
      const rows = (data.results || []).map(r => {
-       const base = [submittedAt, sessionId, data.experimentName || ""];
+       const base = [submittedAt, sessionId, data.experimentName || "",
+                     data.condition || "", data.listId || ""];
        return base.concat(headers.map((h) => r[h] != null ? r[h] : ""));
      });
      if (rows.length > 0) {
@@ -237,6 +291,11 @@ Fisher–Yates 法でシャッフルされる。CSV に保存される `trialNum
      if (p === "rating")         return common.concat(["file", "rating"]);
      if (p === "ax")             return common.concat(["fileA", "fileX", "correctAnswer", "response", "isCorrect"]);
      if (p === "axb")            return common.concat(["fileA", "fileX", "fileB", "correctAnswer", "response", "isCorrect"]);
+     // gating: 1 事例 = 15 gate + 確信度 1 行。trialKind で 2 種類の行を区別する
+     if (p === "gating")         return common.concat(["trialKind", "itemId", "itemType",
+                                                       "blockPosition", "gateMs", "gateIndex",
+                                                       "file", "response", "saidRepair",
+                                                       "isCorrect", "confidence"]);
      return common.concat(["file", "response"]);
    }
 
@@ -327,6 +386,9 @@ const experimentName = "identification_rl";
 | `submittedAt` | アプリから送信された時刻 |
 | `sessionId` | セッションID (自動生成。`participants` と `results` を結合するキー) |
 | `experimentName` | `index.html` で設定した実験名 |
+| `condition` | 割り付けられた条件 (gating で `?cond=` を使った場合) |
+| `listId` | 割り付けられたリスト番号 (gating で `?list=` を使った場合) |
+| `headphoneCheckScore` | ヘッドホン検査の正答数 (無効時は空欄) |
 | `name` | 氏名 |
 | `dateOfBirth` | 生年月日 |
 | `age` | 年齢 (生年月日から自動計算) |
@@ -352,6 +414,7 @@ const experimentName = "identification_rl";
 | `submittedAt` | アプリから送信された時刻 |
 | `sessionId` | セッションID (`participants` と結合するキー) |
 | `experimentName` | 実験名 |
+| `condition` / `listId` | 割り付けセル (行だけで解析できるよう results 側にも持たせる) |
 | `trialNumber` | 提示順 |
 | `stimulusId` | 刺激ID |
 | `file` | 音声ファイルのパス |
@@ -361,6 +424,23 @@ const experimentName = "identification_rl";
 | `reactionTimeMs` | 反応時間 (ms、初回再生〜回答) |
 | `playCount` | その試行で再生した回数 |
 | `timestamp` | 回答時刻 (参加者端末ローカル時刻) |
+
+シート名はパラダイムごとに分かれます (`results_identification`, `results_gating` など)。
+`gating` では 1 事例が 15 gate + 確信度 1 回の計 16 行になり、
+上記に加えて次の列が記録されます。
+
+| 列名 | 内容 |
+| --- | --- |
+| `trialKind` | `gate` (各ゲートの判断) か `confidence` (事例末の確信度) |
+| `itemId` | 事例ID (同一事例の 16 行を束ねるキー) |
+| `itemType` | 事例の種類 (`repair` / フィラー種別) |
+| `blockPosition` | その事例が何番目のブロックとして提示されたか (0 始まり) |
+| `gateMs` | ゲート位置 (中断点を 0 とした ms。負値は中断点より前) |
+| `gateIndex` | ブロック内でのゲートの通し番号 (0 = 最も早いゲート) |
+| `response` | その gate での回答ラベル |
+| `saidRepair` | 「言い直そうとしていた」と答えたら 1 |
+| `isCorrect` | `saidRepair` が `itemType` と一致すれば 1 |
+| `confidence` | 確信度 (`trialKind` が `confidence` の行のみ) |
 
 ### Apps Script のコードを更新した場合
 

@@ -90,10 +90,26 @@ def main():
         r"<(" + TAGGABLE + r")\b([^>]*)>([^<>]+)</\1>"
         r"|<(label)\b([^>]*)>([^<>]+)(<span class=\"required\">\*</span>)</\4>"
         r"|<(label)\b([^>]*)>(<input[^>]*>)([^<>]+)</\8>"
-        r"|(placeholder)=\"([^\"]+)\""
+        # the trailing group lets a second run see the tag it already added;
+        # without it every run appends another data-i18n-ph to the same element
+        r"|(placeholder)=\"([^\"]+)\"( data-i18n-ph=\"[^\"]*\")?"
     )
+    # Keys already in the file must not be handed out again. Re-running the
+    # tool restarts the per-screen counters, so without this an element tagged
+    # on a later run takes "setup.1" from one tagged on an earlier run and two
+    # different strings end up sharing a translation.
+    taken = set(re.findall(r'data-i18n(?:-pre|-post|-ph)?="([^"]+)"', src))
+
     out, counts, entries = [], {}, {}
     cursor, changed = 0, 0
+
+    def next_key(sc):
+        while True:
+            counts[sc] = counts.get(sc, 0) + 1
+            k = f"{sc}.{counts[sc]}"
+            if k not in taken:
+                taken.add(k)
+                return k
 
     for m in pat.finditer(src):
         if m.start() < lo or m.start() > hi or is_blocked(m.start()):
@@ -109,7 +125,7 @@ def main():
             attr, attrs, text = "data-i18n-post", m.group(9), m.group(11)
             rebuild = lambda a: f"<label{attrs} {a}>{m.group(10)}{text}</label>"
         else:                                # placeholder attribute
-            attr, attrs, text = "data-i18n-ph", "", m.group(13)
+            attr, attrs, text = "data-i18n-ph", m.group(14) or "", m.group(13)
             rebuild = lambda a: f'placeholder="{text}" {a}'
 
         if not text.strip() or not JA.search(text):
@@ -118,9 +134,7 @@ def main():
         if have:
             key = have.group(1)
         else:
-            sc = screen_of(m.start())
-            counts[sc] = counts.get(sc, 0) + 1
-            key = f"{sc}.{counts[sc]}"
+            key = next_key(screen_of(m.start()))
             out.append(src[cursor:m.start()])
             out.append(rebuild(f'{attr}="{key}"'))
             cursor = m.end()

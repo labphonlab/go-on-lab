@@ -679,7 +679,7 @@
 
   <!-- 同意・概要画面 -->
   <section id="screen-consent" class="hidden">
-    <h1 id="consentTitle">音声知覚タスク</h1>
+    <h1 id="consentTitle" data-i18n="consent.1">音声知覚タスク</h1>
     <div class="card">
       <div id="consentBody">
       <h2 style="margin-top:0;">実験の概要</h2>
@@ -711,118 +711,118 @@
 
       <label class="checkbox-field">
         <input type="checkbox" id="consentCheckbox">
-        <span>上記の説明を理解し、研究への参加に同意します。</span>
+        <span data-i18n="consent.2">上記の説明を理解し、研究への参加に同意します。</span>
       </label>
 
       <div style="margin-top: 20px;">
-        <button class="btn-primary" id="toSetupBtn" disabled>次へ進む</button>
+        <button class="btn-primary" id="toSetupBtn" disabled data-i18n="consent.3">次へ進む</button>
       </div>
     </div>
   </section>
 
   <!-- 設定画面 -->
   <section id="screen-setup" class="hidden">
-    <h1>音声知覚タスク</h1>
+    <h1 data-i18n="setup.1">音声知覚タスク</h1>
     <div class="card">
-      <p class="note" style="margin-top:0;">ご協力ありがとうございます。まずいくつかの質問にお答えください（<span class="required">*</span> は必須）。</p>
+      <p class="note" style="margin-top:0;" data-i18n-html="setup.h1">ご協力ありがとうございます。まずいくつかの質問にお答えください（<span class="required">*</span> は必須）。</p>
 
-      <h3 class="form-section-h">基本情報</h3>
+      <h3 class="form-section-h" data-i18n="setup.2">基本情報</h3>
 
       <div class="field">
-        <label for="participantName">お名前（氏名）<span class="required">*</span></label>
-        <input type="text" id="participantName" placeholder="例: 山田太郎" autocomplete="name">
+        <label for="participantName" data-i18n-pre="setup.3">お名前（氏名）<span class="required">*</span></label>
+        <input type="text" id="participantName" placeholder="例: 山田太郎" data-i18n-ph="setup.4" autocomplete="name">
       </div>
 
       <div class="field">
-        <label for="dateOfBirth">生年月日<span class="required">*</span></label>
+        <label for="dateOfBirth" data-i18n-pre="setup.5">生年月日<span class="required">*</span></label>
         <input type="date" id="dateOfBirth" autocomplete="bday">
       </div>
 
       <div class="field">
-        <label>性別<span class="required">*</span></label>
+        <label data-i18n-pre="setup.6">性別<span class="required">*</span></label>
         <div class="radio-group" id="genderGroup">
-          <label><input type="radio" name="gender" value="男性"> 男性</label>
-          <label><input type="radio" name="gender" value="女性"> 女性</label>
-          <label><input type="radio" name="gender" value="その他"> その他</label>
-          <label><input type="radio" name="gender" value="回答しない"> 回答しない</label>
+          <label data-i18n-post="setup.7"><input type="radio" name="gender" value="男性"> 男性</label>
+          <label data-i18n-post="setup.8"><input type="radio" name="gender" value="女性"> 女性</label>
+          <label data-i18n-post="setup.9"><input type="radio" name="gender" value="その他"> その他</label>
+          <label data-i18n-post="setup.10"><input type="radio" name="gender" value="回答しない"> 回答しない</label>
         </div>
       </div>
 
       <div class="field">
-        <label>利き手<span class="required">*</span></label>
+        <label data-i18n-pre="setup.11">利き手<span class="required">*</span></label>
         <div class="radio-group" id="handednessGroup">
-          <label><input type="radio" name="handedness" value="右"> 右利き</label>
-          <label><input type="radio" name="handedness" value="左"> 左利き</label>
-          <label><input type="radio" name="handedness" value="両"> 両利き</label>
+          <label data-i18n-post="setup.12"><input type="radio" name="handedness" value="右"> 右利き</label>
+          <label data-i18n-post="setup.13"><input type="radio" name="handedness" value="左"> 左利き</label>
+          <label data-i18n-post="setup.14"><input type="radio" name="handedness" value="両"> 両利き</label>
         </div>
       </div>
 
-      <h3 class="form-section-h">言語背景</h3>
+      <h3 class="form-section-h" data-i18n="setup.15">言語背景</h3>
 
       <div class="field">
-        <label for="nativeLanguage">第一言語（母語）<span class="required">*</span></label>
-        <input type="text" id="nativeLanguage" value="日本語" placeholder="例: 日本語">
+        <label for="nativeLanguage" data-i18n-pre="setup.16">第一言語（母語）<span class="required">*</span></label>
+        <input type="text" id="nativeLanguage" value="日本語" placeholder="例: 日本語" data-i18n-ph="setup.17">
       </div>
 
       <div class="field">
-        <label for="l2Language">主な第二言語（任意）</label>
-        <input type="text" id="l2Language" placeholder="例: 英語">
+        <label for="l2Language" data-i18n="setup.18">主な第二言語（任意）</label>
+        <input type="text" id="l2Language" placeholder="例: 英語" data-i18n-ph="setup.19">
       </div>
 
       <div class="field">
-        <label for="l2Aoa">第二言語の学習開始年齢〔歳〕（任意）</label>
-        <input type="number" id="l2Aoa" min="0" max="100" inputmode="numeric" placeholder="例: 12">
+        <label for="l2Aoa" data-i18n="setup.20">第二言語の学習開始年齢〔歳〕（任意）</label>
+        <input type="number" id="l2Aoa" min="0" max="100" inputmode="numeric" placeholder="例: 12" data-i18n-ph="setup.21">
       </div>
 
       <div class="field">
-        <label for="l2Proficiency">第二言語の習熟度（任意）</label>
+        <label for="l2Proficiency" data-i18n="setup.22">第二言語の習熟度（任意）</label>
         <select id="l2Proficiency">
-          <option value="">選択してください</option>
-          <option value="初級">初級</option>
-          <option value="中級">中級</option>
-          <option value="上級">上級</option>
-          <option value="ネイティブレベル">ネイティブレベル</option>
+          <option value="" data-i18n="setup.23">選択してください</option>
+          <option value="初級" data-i18n="setup.24">初級</option>
+          <option value="中級" data-i18n="setup.25">中級</option>
+          <option value="上級" data-i18n="setup.26">上級</option>
+          <option value="ネイティブレベル" data-i18n="setup.27">ネイティブレベル</option>
         </select>
       </div>
 
       <div class="field">
-        <label for="otherLanguages">その他の使用言語（任意）</label>
-        <textarea id="otherLanguages" placeholder="例: フランス語（大学から、2年）、韓国語（独学）"></textarea>
+        <label for="otherLanguages" data-i18n="setup.28">その他の使用言語（任意）</label>
+        <textarea id="otherLanguages" placeholder="例: フランス語（大学から、2年）、韓国語（独学）" data-i18n-ph="setup.29"></textarea>
       </div>
 
-      <h3 class="form-section-h">生育地・方言</h3>
+      <h3 class="form-section-h" data-i18n="setup.30">生育地・方言</h3>
 
       <div class="field">
-        <label for="placeOfBirth">出生地・都道府県（任意）</label>
-        <input type="text" id="placeOfBirth" placeholder="例: 東京都">
-      </div>
-
-      <div class="field">
-        <label for="placeOfUpbringing">主に育った地域・都道府県（任意）</label>
-        <input type="text" id="placeOfUpbringing" placeholder="例: 大阪府">
+        <label for="placeOfBirth" data-i18n="setup.31">出生地・都道府県（任意）</label>
+        <input type="text" id="placeOfBirth" placeholder="例: 東京都" data-i18n-ph="setup.32">
       </div>
 
       <div class="field">
-        <label for="dialect">使用する方言（任意）</label>
-        <input type="text" id="dialect" placeholder="例: 関西弁、特になし">
+        <label for="placeOfUpbringing" data-i18n="setup.33">主に育った地域・都道府県（任意）</label>
+        <input type="text" id="placeOfUpbringing" placeholder="例: 大阪府" data-i18n-ph="setup.34">
+      </div>
+
+      <div class="field">
+        <label for="dialect" data-i18n="setup.35">使用する方言（任意）</label>
+        <input type="text" id="dialect" placeholder="例: 関西弁、特になし" data-i18n-ph="setup.36">
       </div>
 
       <div class="checklist">
-        <strong>始める前のチェック（スマホの場合）</strong>
+        <strong data-i18n="setup.37">始める前のチェック（スマホの場合）</strong>
         <ul>
-          <li>イヤホン・ヘッドホンを接続してください（普段使っているもので OK）</li>
-          <li><strong>iPhone をお使いの方</strong>: 本体側面の「消音スイッチ」が ON（オレンジ）だと音が出ません。OFF にしてください</li>
-          <li>音量を聞きやすい大きさに合わせてください</li>
-          <li>静かな環境で実施してください</li>
-          <li>実験中に画面が暗くならないよう、自動ロックを長めに設定することをおすすめします</li>
+          <li data-i18n="setup.38">イヤホン・ヘッドホンを接続してください（普段使っているもので OK）</li>
+          <li data-i18n-post="setup.p1"><strong data-i18n="setup.39">iPhone をお使いの方</strong>: 本体側面の「消音スイッチ」が ON（オレンジ）だと音が出ません。OFF にしてください</li>
+          <li data-i18n="setup.40">音量を聞きやすい大きさに合わせてください</li>
+          <li data-i18n="setup.41">静かな環境で実施してください</li>
+          <li data-i18n="setup.42">実験中に画面が暗くならないよう、自動ロックを長めに設定することをおすすめします</li>
         </ul>
-        <button class="btn-test" id="testSoundBtn">音量チェック（テスト音を再生）</button>
+        <button class="btn-test" id="testSoundBtn" data-i18n="setup.43">音量チェック（テスト音を再生）</button>
       </div>
 
-      <p class="note">「開始する」を押すと実験が始まります。各試行で「再生」を押して音声を聞き、聞こえた単語（<strong>pie</strong> または <strong>buy</strong>）を選んでください。</p>
+      <p class="note" data-i18n-html="setup.h2">「開始する」を押すと実験が始まります。各試行で「再生」を押して音声を聞き、聞こえた単語（<strong>pie</strong> または <strong>buy</strong>）を選んでください。</p>
 
       <div style="margin-top: 20px;">
-        <button class="btn-primary" id="startBtn">次へ進む</button>
+        <button class="btn-primary" id="startBtn" data-i18n="setup.44">次へ進む</button>
       </div>
       <div class="error" id="setupError"></div>
     </div>
@@ -830,12 +830,12 @@
 
   <!-- 教示画面 -->
   <section id="screen-instructions" class="hidden">
-    <h1>実験の進め方</h1>
+    <h1 data-i18n="instructions.1">実験の進め方</h1>
     <div class="card">
       <div id="instructionsBody"></div>
-      <p class="note">準備ができたら「練習を始める」を押してください。押した後、音声ファイルの読み込みが始まります（10〜30 秒）。</p>
+      <p class="note" data-i18n="instructions.2">準備ができたら「練習を始める」を押してください。押した後、音声ファイルの読み込みが始まります（10〜30 秒）。</p>
       <div style="margin-top: 20px;">
-        <button class="btn-primary" id="toPracticeBtn">練習を始める</button>
+        <button class="btn-primary" id="toPracticeBtn" data-i18n="instructions.3">練習を始める</button>
       </div>
     </div>
   </section>
@@ -843,12 +843,12 @@
   <!-- 練習開始画面 -->
   <section id="screen-practice-intro" class="hidden">
     <div class="card">
-      <span class="badge badge-practice">練習</span>
-      <h2 style="margin-top:0;">練習試行を始めます</h2>
-      <p>これから <strong>6 試行</strong> の練習を行います。本試行と同じ要領で答えてください。</p>
-      <p class="note">「+」が表示されたら、続いて流れる音声を聞いて、聞こえた単語を選んでください。</p>
+      <span class="badge badge-practice" data-i18n="practice-intro.1">練習</span>
+      <h2 style="margin-top:0;" data-i18n="practice-intro.2">練習試行を始めます</h2>
+      <p data-i18n-pre="practice-intro.6" data-i18n-post="practice-intro.7">これから <strong id="practiceCountLabel" data-i18n="practice-intro.3">6 試行</strong> の練習を行います。本試行と同じ要領で答えてください。</p>
+      <p class="note" data-i18n="practice-intro.4">「+」が表示されたら、続いて流れる音声を聞いて、聞こえた単語を選んでください。</p>
       <div style="margin-top: 20px;">
-        <button class="btn-primary" id="startPracticeBtn">始める</button>
+        <button class="btn-primary" id="startPracticeBtn" data-i18n="practice-intro.5">始める</button>
       </div>
     </div>
   </section>
@@ -856,11 +856,11 @@
   <!-- 練習終了画面 -->
   <section id="screen-practice-done" class="hidden">
     <div class="card">
-      <h2 style="margin-top:0; color:#34a853;">✓ 練習が終わりました</h2>
-      <p>これから <strong>本試行（66 試行）</strong>を始めます。途中で 1 回の休憩があります。</p>
-      <p class="note">操作の仕方は練習と同じです。聞こえたままの直感で素早く答えてください。</p>
+      <h2 style="margin-top:0; color:#34a853;" data-i18n="practice-done.1">✓ 練習が終わりました</h2>
+      <p data-i18n-pre="practice-done.5" data-i18n-post="practice-done.6">これから <strong id="mainCountLabel" data-i18n="practice-done.2">本試行（66 試行）</strong>を始めます。途中で 1 回の休憩があります。</p>
+      <p class="note" data-i18n="practice-done.3">操作の仕方は練習と同じです。聞こえたままの直感で素早く答えてください。</p>
       <div style="margin-top: 20px;">
-        <button class="btn-primary" id="startMainBtn">本試行を始める</button>
+        <button class="btn-primary" id="startMainBtn" data-i18n="practice-done.4">本試行を始める</button>
       </div>
     </div>
   </section>
@@ -868,40 +868,40 @@
   <!-- 休憩画面 -->
   <section id="screen-break" class="hidden">
     <div class="card">
-      <h2 style="margin-top:0;">休憩</h2>
-      <p>ここで一息ついてください。準備ができたら再開してください。</p>
+      <h2 style="margin-top:0;" data-i18n="break.1">休憩</h2>
+      <p data-i18n="break.2">ここで一息ついてください。準備ができたら再開してください。</p>
       <div class="break-counter">
-        <strong id="breakProgress">33</strong> / 66 試行 完了
+        <strong id="breakProgress">33</strong><span data-i18n="break.4"> / 66 試行 完了</span>
       </div>
       <div style="margin-top: 20px;">
-        <button class="btn-primary" id="resumeBtn">続きを始める</button>
+        <button class="btn-primary" id="resumeBtn" data-i18n="break.3">続きを始める</button>
       </div>
     </div>
   </section>
 
   <!-- 読み込み画面 -->
   <section id="screen-headphone" class="hidden">
-    <h2>ヘッドホンの確認</h2>
-    <p>この課題はヘッドホン・イヤホンでのみ正しく動作します。3 つの音のうち
-       <strong>最も小さい</strong>ものを選んでください。全 <span id="hpTotal">6</span> 問です。</p>
+    <h2 data-i18n="headphone.1">ヘッドホンの確認</h2>
+    <p data-i18n="headphone.4">この課題はヘッドホン・イヤホンでのみ正しく動作します。3 つの音のうち最も小さいものを選んでください。</p>
+    <p data-i18n-pre="headphone.5" data-i18n-post="headphone.6">全 <span id="hpTotal">6</span> 問です。</p>
     <p id="hpProgress" class="muted"></p>
-    <div id="hpArea"><button id="hpStart" class="primary">開始</button></div>
+    <div id="hpArea"><button id="hpStart" class="primary" data-i18n="headphone.3">開始</button></div>
     <p id="hpError" class="error hidden"></p>
   </section>
 
   <section id="screen-headphone-fail" class="hidden">
-    <h2>ここまでです</h2>
-    <p>ヘッドホンの確認を通過できなかったため、この実験は続けられません。
+    <h2 data-i18n="headphone-fail.1">ここまでです</h2>
+    <p data-i18n="headphone-fail.2">ヘッドホンの確認を通過できなかったため、この実験は続けられません。
        スピーカーでの受験や、環境音の大きい場所での受験では正確に測定できないためです。</p>
-    <p>ご協力ありがとうございました。</p>
+    <p data-i18n="headphone-fail.3">ご協力ありがとうございました。</p>
   </section>
 
   <section id="screen-loading" class="hidden">
     <div class="card">
-      <h2 style="text-align:center; margin-top:0;">音声を準備しています…</h2>
+      <h2 style="text-align:center; margin-top:0;" data-i18n="loading.1">音声を準備しています…</h2>
       <div class="progress-bar"><div class="progress-fill" id="loadingFill"></div></div>
       <div class="loading-msg" id="loadingMsg">0 / 0</div>
-      <p class="note">通信環境によっては少し時間がかかります。このまま少々お待ちください。</p>
+      <p class="note" data-i18n="loading.2">通信環境によっては少し時間がかかります。このまま少々お待ちください。</p>
     </div>
   </section>
 
@@ -910,17 +910,17 @@
     <div class="card">
       <span class="badge" id="trialBadge"></span>
       <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-      <div class="trial-header" id="trialHeader">試行</div>
+      <div class="trial-header" id="trialHeader" data-i18n="trial.1">試行</div>
       <div class="trial-counter"><span id="trialNum">1</span> / <span id="trialTotal">66</span></div>
 
       <div class="fixation hidden" id="fixationDisplay">+</div>
-      <div class="iti hidden" id="itiDisplay">・・・</div>
+      <div class="iti hidden" id="itiDisplay" data-i18n="trial.2">・・・</div>
 
       <!-- AX / AXB 専用: どの刺激が再生中かを示す -->
       <div class="ax-pair-display hidden" id="axPairDisplay"></div>
 
-      <button class="btn-play hidden" id="playBtn">▶ 再生</button>
-      <div class="play-info" id="playInfo">画面の表示に従ってください</div>
+      <button class="btn-play hidden" id="playBtn" data-i18n="trial.3">▶ 再生</button>
+      <div class="play-info" id="playInfo" data-i18n="trial.4">画面の表示に従ってください</div>
 
       <!-- Identification / AX / AXB の回答ボタン -->
       <div class="response-grid" id="responseGrid"></div>
@@ -941,38 +941,38 @@
   <!-- 送信中画面 -->
   <section id="screen-uploading" class="hidden">
     <div class="card">
-      <h2 style="text-align:center; margin-top:0;">結果を送信しています…</h2>
-      <div class="loading-msg">そのままお待ちください</div>
-      <p class="note">通信環境により数秒〜十数秒かかる場合があります。<strong>このタブを閉じないでください。</strong></p>
+      <h2 style="text-align:center; margin-top:0;" data-i18n="uploading.1">結果を送信しています…</h2>
+      <div class="loading-msg" data-i18n="uploading.2">そのままお待ちください</div>
+      <p class="note" data-i18n-pre="uploading.4">通信環境により数秒〜十数秒かかる場合があります。<strong data-i18n="uploading.3">このタブを閉じないでください。</strong></p>
     </div>
   </section>
 
   <!-- 結果画面 -->
   <section id="screen-result" class="hidden">
-    <h1>お疲れさまでした</h1>
+    <h1 data-i18n="result.1">お疲れさまでした</h1>
 
     <div class="card">
-      <h2 style="color:#34a853; margin-top:0;">✓ 結果を保存しました</h2>
-      <p class="note">ご協力ありがとうございました。ブラウザを閉じていただいて構いません。</p>
+      <h2 style="color:#34a853; margin-top:0;" data-i18n="result.2">✓ 結果を保存しました</h2>
+      <p class="note" data-i18n="result.3">ご協力ありがとうございました。ブラウザを閉じていただいて構いません。</p>
     </div>
 
     <div class="card">
-      <h2 style="margin-top:0;">あなたの結果</h2>
+      <h2 style="margin-top:0;" data-i18n="result.4">あなたの結果</h2>
       <div class="summary-grid" id="summaryGrid"></div>
     </div>
 
     <div class="card">
-      <h2><span id="targetLabel">/r/</span> 応答率</h2>
+      <h2 data-i18n-post="result.7"><span id="targetLabel">/r/</span> 応答率</h2>
       <div class="chart-wrap"><canvas id="chartResponse"></canvas></div>
     </div>
 
     <div class="card">
-      <h2>平均反応時間</h2>
+      <h2 data-i18n="result.5">平均反応時間</h2>
       <div class="chart-wrap"><canvas id="chartRT"></canvas></div>
     </div>
 
     <div class="card" id="restartCard" style="display:none;">
-      <button class="btn-secondary" id="restartBtn" style="width:100%;">最初に戻る(研究者用)</button>
+      <button class="btn-secondary" id="restartBtn" style="width:100%;" data-i18n="result.6">最初に戻る(研究者用)</button>
     </div>
   </section>
 
@@ -1004,6 +1004,7 @@ const DEFAULT_CONFIG = {
   gatingQuestion: "この話者は言い直そうとしていましたか",
   gatingConfidence: { min: 1, max: 4, minLabel: "当てずっぽう", maxLabel: "かなり自信あり",
                       prompt: "今のまとまりについて、どの程度確信がありますか" },
+  uiLang: "ja",            // "ja" | "en" — ?lang=en で上書きできる
   gatingBreakEveryBlocks: 4,
   gatingBlocksUrl: "",                  // ブロック定義 JSON。?list= で差し替え可
   gatingBlocks: [],                     // または直接埋め込む
@@ -1043,6 +1044,213 @@ const DEFAULT_CONFIG = {
   instructionsBody: ""  // 空ならビルトイン
 };
 
+// ============================================================================
+// 画面表示言語
+//
+// 参加者が英語母語話者の場合、同意・デモグラフィック・教示がすべて日本語だと
+// 実施できない。同意本文と教示は CONFIG.consentBody / instructionsBody で
+// 差し替えられるので、ここで扱うのはそれ以外の「画面の枠」— フォーム項目、
+// ボタン、進行中のメッセージ。
+//
+// 日本語が原文で、UI_EN はその差分。?lang=en または CONFIG.uiLang = "en" で
+// 適用する。キーは tools/extract_i18n.py が index.html に data-i18n として
+// 埋め込んだもので、同スクリプトを再実行すれば表との過不足が分かる。
+//
+// ラジオボタンの value（"男性" など）は訳さない。value は記録される回答コード
+// そのもので、訳すと同じ研究の 2 つの言語群が同じ回答を別の値で記録すること
+// になる。表示だけ英語にし、記録は一本化する。
+// ============================================================================
+const UI_EN = {
+  "consent.1": "Speech Perception Task",
+  "consent.2": "I have read and understood the information above, and I agree to take part.",
+  "consent.3": "Continue",
+
+  "setup.1": "Speech Perception Task",
+  "setup.2": "About you",
+  "setup.3": "Name",
+  "setup.4": "e.g. Alex Morgan",
+  "setup.5": "Date of birth",
+  "setup.6": "Gender",
+  "setup.7": "Male",
+  "setup.8": "Female",
+  "setup.9": "Other",
+  "setup.10": "Prefer not to say",
+  "setup.11": "Handedness",
+  "setup.12": "Right-handed",
+  "setup.13": "Left-handed",
+  "setup.14": "Ambidextrous",
+  "setup.15": "Language background",
+  "setup.16": "First language (native language)",
+  "setup.17": "e.g. English",
+  "setup.18": "Main second language (optional)",
+  "setup.19": "e.g. Spanish",
+  "setup.20": "Age you began learning your second language, in years (optional)",
+  "setup.21": "e.g. 12",
+  "setup.22": "Proficiency in your second language (optional)",
+  "setup.23": "Please choose",
+  "setup.24": "Beginner",
+  "setup.25": "Intermediate",
+  "setup.26": "Advanced",
+  "setup.27": "Native-like",
+  "setup.28": "Any other languages you use (optional)",
+  "setup.29": "e.g. French (from university, 2 years), Korean (self-taught)",
+  "setup.30": "Where you grew up",
+  "setup.31": "Place of birth — country and region (optional)",
+  "setup.32": "e.g. Manchester, UK",
+  "setup.33": "Where you mainly grew up — country and region (optional)",
+  "setup.34": "e.g. Toronto, Canada",
+  "setup.35": "Any regional variety or dialect you speak (optional)",
+  "setup.36": "e.g. Northern English, none in particular",
+  "setup.37": "Before you start (if you are on a phone)",
+  "setup.38": "Plug in earphones or headphones (whatever you normally use is fine)",
+  "setup.39": "If you are using an iPhone",
+  "setup.40": "Set the volume to a comfortable level",
+  "setup.41": "Please take part somewhere quiet",
+  "setup.42": "We suggest lengthening your auto-lock so the screen does not dim during the task",
+  "setup.43": "Volume check (play a test sound)",
+  "setup.44": "Continue",
+
+  "instructions.1": "How the task works",
+  "instructions.2": "When you are ready, press “Start practice”. The audio files will then begin loading (10–30 seconds).",
+  "instructions.3": "Start practice",
+
+  "practice-intro.1": "Practice",
+  "practice-intro.2": "Practice trials are about to begin",
+  "practice-intro.3": "6 trials",
+  "practice-intro.4": "When you see “+”, listen to the sound that follows and choose the word you heard.",
+  "practice-intro.5": "Begin",
+
+  "practice-done.1": "✓ Practice complete",
+  "practice-done.2": "Main trials (66 trials)",
+  "practice-done.3": "This works exactly like the practice. Answer quickly, going with what you heard.",
+  "practice-done.4": "Start the main trials",
+
+  "break.1": "Break",
+  "break.2": "Take a moment. Carry on whenever you are ready.",
+  "break.3": "Continue",
+
+  "headphone.1": "Headphone check",
+  "headphone.3": "Start",
+  "headphone-fail.1": "That is as far as we can go",
+  "headphone-fail.2": "You did not pass the headphone check, so this study cannot continue. Taking part over speakers, or somewhere noisy, would not give us a usable measurement.",
+  "headphone-fail.3": "Thank you for your time.",
+
+  "loading.1": "Preparing the audio…",
+  "loading.2": "This can take a moment depending on your connection. Please wait.",
+
+  "trial.1": "Trial",
+  "trial.2": "···",
+  "trial.3": "▶ Play",
+  "trial.4": "Please follow the instructions on screen",
+
+  "uploading.1": "Sending your results…",
+  "uploading.2": "Please wait",
+  "uploading.3": "Please do not close this tab.",
+
+  "result.1": "All done",
+  "result.2": "✓ Your results have been saved",
+  "result.3": "Thank you for taking part. You may now close your browser.",
+  "result.4": "Your results",
+  "result.5": "Mean reaction time",
+  "result.6": "Back to the start (researcher)",
+  "result.7": " response rate",
+
+  // 文中にタグを挟む箇所
+  "setup.h1": "Thank you for helping with this study. First, a few questions about you (<span class=\"required\">*</span> = required).",
+  "setup.h2": "Pressing “Continue” starts the task. On each trial, press “Play”, listen, and choose your answer.",
+  "setup.p1": ": if the silent switch on the side of the phone is on (showing orange) you will hear nothing. Please switch it off",
+  "practice-intro.6": "You are about to do ",
+  "practice-intro.7": " of practice. Answer just as you will in the main task.",
+  "practice-done.5": "Next comes the ",
+  "practice-done.6": ", with one break partway through.",
+  "break.4": " / 66 trials complete",
+  "headphone.4": "This task only works properly over headphones or earphones. Of the three sounds, choose the quietest.",
+  "headphone.5": "There are ",
+  "headphone.6": " questions in total.",
+  "uploading.4": "Depending on your connection this can take a few seconds. ",
+
+  // 実行時メッセージ
+  "err.name": "Please enter your name.",
+  "err.dob": "Please enter your date of birth.",
+  "err.gender": "Please select a gender.",
+  "err.handedness": "Please select your handedness.",
+  "err.native": "Please enter your first language.",
+  "err.listLoad": "Could not load the trial list:",
+  "trial.pressPlay": "Please press “Play”",
+  "trial.playing": "Playing…",
+  "hp.playing": "Playing…",
+  "hp.which": "Which sound was the quietest?",
+  "badge.practice": "Practice",
+  "badge.main": "Main",
+  "badge.practiceTrial": "Practice trial",
+  "badge.trial": "Trial",
+  "break.doneTrials": "trials complete",
+  "break.doneItems": "items complete",
+  "ax.question": "Were A and X the same, or different?",
+  "axb.question": "Was X more like A or more like B?",
+  "count.practice": "{n} trials",
+  "count.main": "the main trials ({n} of them)"
+};
+
+// 日本語の実行時文字列。UI_EN と対になるので、片方だけ足しても気付けるように
+// 同じキー空間に置く。
+const UI_JA = {
+  "err.name": "お名前を入力してください。",
+  "err.dob": "生年月日を入力してください。",
+  "err.gender": "性別を選択してください。",
+  "err.handedness": "利き手を選択してください。",
+  "err.native": "母語を入力してください。",
+  "err.listLoad": "試行リストを読み込めませんでした:",
+  "trial.pressPlay": "「再生」を押してください",
+  "trial.playing": "再生中…",
+  "hp.playing": "再生中…",
+  "hp.which": "どの音が最も小さかったですか",
+  "badge.practice": "練習",
+  "badge.main": "本試行",
+  "badge.practiceTrial": "練習試行",
+  "badge.trial": "試行",
+  "break.doneTrials": "試行 完了",
+  "break.doneItems": "事例 完了",
+  "ax.question": "A と X は同じですか、違いますか？",
+  "axb.question": "X は A と B のどちらに似ていますか？",
+  "count.practice": "{n} 試行",
+  "count.main": "本試行（{n} 試行）"
+};
+
+function t(key) {
+  if (CONFIG.uiLang === "en" && UI_EN[key] != null) return UI_EN[key];
+  return UI_JA[key] != null ? UI_JA[key] : key;
+}
+
+function applyUiLang() {
+  if (CONFIG.uiLang !== "en") return;
+  document.documentElement.lang = "en";
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const v = UI_EN[el.getAttribute("data-i18n")];
+    if (v != null) el.textContent = v;
+  });
+  // 先頭のテキストノードだけ差し替える (<label>ラベル<span>*</span></label>)
+  document.querySelectorAll("[data-i18n-pre]").forEach((el) => {
+    const v = UI_EN[el.getAttribute("data-i18n-pre")];
+    if (v != null && el.firstChild && el.firstChild.nodeType === 3) el.firstChild.nodeValue = v;
+  });
+  // 末尾のテキストノードだけ差し替える (<label><input> ラベル</label>)
+  document.querySelectorAll("[data-i18n-post]").forEach((el) => {
+    const v = UI_EN[el.getAttribute("data-i18n-post")];
+    const last = el.lastChild;
+    if (v != null && last && last.nodeType === 3) last.nodeValue = " " + v;
+  });
+  // 文中にタグを含み、かつ id を持つ子要素がない箇所はまるごと差し替える
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+    const v = UI_EN[el.getAttribute("data-i18n-html")];
+    if (v != null) el.innerHTML = v;
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
+    const v = UI_EN[el.getAttribute("data-i18n-ph")];
+    if (v != null) el.setAttribute("placeholder", v);
+  });
+}
+
 let CONFIG = loadConfigFromStorage() || JSON.parse(JSON.stringify(DEFAULT_CONFIG));
 
 /* ------------------------------------------------------------------
@@ -1052,6 +1260,7 @@ let CONFIG = loadConfigFromStorage() || JSON.parse(JSON.stringify(DEFAULT_CONFIG
    ------------------------------------------------------------------ */
 async function applyUrlCellAssignment() {
   const q = new URLSearchParams(location.search);
+  if (q.get("lang") === "en" || q.get("lang") === "ja") CONFIG.uiLang = q.get("lang");
   const cond = q.get("cond");
   const list = q.get("list");
   if (!cond && !list) return;
@@ -1064,11 +1273,12 @@ async function applyUrlCellAssignment() {
   try {
     const spec = await (await fetch(url)).json();
     CONFIG.gatingBlocks = spec.blocks || [];
+    if (spec.ui_lang) CONFIG.uiLang = spec.ui_lang;
     if (spec.condition) CONFIG.condition = spec.condition;
     if (spec.list != null) CONFIG.listId = String(spec.list);
     CONFIG.experimentName = CONFIG.experimentName || "gating";
   } catch (e) {
-    alert("試行リストを読み込めませんでした: " + url);
+    alert(t("err.listLoad") + " " + url);
   }
 }
 
@@ -1472,11 +1682,11 @@ function validateSetup() {
   const handedness = getRadio("handedness");
   const native = nativeInput.value.trim();
 
-  if (!name)       { showError(setupError, "お名前を入力してください。"); nameInput.focus(); return null; }
-  if (!dob)        { showError(setupError, "生年月日を入力してください。"); dobInput.focus(); return null; }
-  if (!gender)     { showError(setupError, "性別を選択してください。"); return null; }
-  if (!handedness) { showError(setupError, "利き手を選択してください。"); return null; }
-  if (!native)     { showError(setupError, "母語を入力してください。"); nativeInput.focus(); return null; }
+  if (!name)       { showError(setupError, t("err.name")); nameInput.focus(); return null; }
+  if (!dob)        { showError(setupError, t("err.dob")); dobInput.focus(); return null; }
+  if (!gender)     { showError(setupError, t("err.gender")); return null; }
+  if (!handedness) { showError(setupError, t("err.handedness")); return null; }
+  if (!native)     { showError(setupError, t("err.native")); nativeInput.focus(); return null; }
 
   return {
     name: name,
@@ -1561,11 +1771,19 @@ function startBlock(practice) {
   }
   isPractice = practice;
   trialList = practice ? practiceList : mainList;
+  // 画面に出す試行数は実際のリスト長から作る。固定文字列にしておくと、
+  // 刺激セットを差し替えたときに数字だけが古いまま残る。
+  const fill = (id, key, n) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t(key).replace("{n}", n);
+  };
+  fill("practiceCountLabel", "count.practice", practiceList.length);
+  fill("mainCountLabel", "count.main", mainList.length);
   currentTrialIndex = 0;
   trialTotalEl.textContent = trialList.length;
-  trialBadge.textContent = practice ? "練習" : "本試行";
+  trialBadge.textContent = practice ? t("badge.practice") : t("badge.main");
   trialBadge.className = "badge " + (practice ? "badge-practice" : "badge-main");
-  trialHeader.textContent = practice ? "練習試行" : "試行";
+  trialHeader.textContent = practice ? t("badge.practiceTrial") : t("badge.trial");
   buildResponseButtons();
   if (practice) {
     showScreen("practice-intro");
@@ -1627,7 +1845,7 @@ async function runTrial() {
     if (String(err).indexOf("NotAllowed") >= 0 || String(err).indexOf("audio load") < 0) {
       playBtn.classList.remove("hidden");
       playBtn.disabled = false;
-      playInfo.textContent = "「再生」を押してください";
+      playInfo.textContent = t("trial.pressPlay");
       currentManualStim = stim;
     } else {
       showError(trialError, "音声を読み込めませんでした");
@@ -1687,14 +1905,14 @@ async function runHeadphoneCheck() {
     const quiet = pos[0];
     const anti  = pos[1];
     prog.textContent = (t + 1) + " / " + total;
-    area.innerHTML = "<p class='muted'>再生中…</p>";
+    area.innerHTML = "<p class='muted'>" + t("hp.playing") + "</p>";
     for (let k = 0; k < 3; k++) {
       area.innerHTML = "<p style='font-size:2rem'>" + (k + 1) + "</p>";
       await playFile(toneDataURI(200, 0.8, k === quiet ? HP_GAIN / 2 : HP_GAIN, k === anti));
       await sleep(250);
     }
     const choice = await new Promise((resolve) => {
-      area.innerHTML = "<p>どの音が最も小さかったですか</p>";
+      area.innerHTML = "<p>" + t("hp.which") + "</p>";
       [1, 2, 3].forEach((label, idx) => {
         const b = document.createElement("button");
         b.className = "response-btn";
@@ -1731,7 +1949,7 @@ async function runConfidenceTrial(stim) {
 }
 
 async function runSingleStimulusTrial(stim) {
-  playInfo.textContent = "再生中…";
+  playInfo.textContent = t("trial.playing");
   playCount = 1;
   await playFile(stim.file);
   trialFirstPlayTime = performance.now();
@@ -1744,7 +1962,7 @@ async function runSingleStimulusTrial(stim) {
 async function runAXTrial(stim) {
   axPairDisplay.classList.remove("hidden");
   axPairDisplay.innerHTML = '<span class="seg1">A</span> &nbsp; <span class="seg2">X</span>';
-  playInfo.textContent = "再生中…";
+  playInfo.textContent = t("trial.playing");
   playCount = 1;
 
   axPairDisplay.classList.add("playing-1");
@@ -1759,13 +1977,13 @@ async function runAXTrial(stim) {
 
   trialFirstPlayTime = performance.now();
   setResponseButtonsEnabled(true);
-  playInfo.textContent = "A と X は同じですか、違いますか？";
+  playInfo.textContent = t("ax.question");
 }
 
 async function runAXBTrial(stim) {
   axPairDisplay.classList.remove("hidden");
   axPairDisplay.innerHTML = '<span class="seg1">A</span> &nbsp; <span class="seg2">X</span> &nbsp; <span class="seg3">B</span>';
-  playInfo.textContent = "再生中…";
+  playInfo.textContent = t("trial.playing");
   playCount = 1;
 
   axPairDisplay.classList.add("playing-1");
@@ -1786,7 +2004,7 @@ async function runAXBTrial(stim) {
 
   trialFirstPlayTime = performance.now();
   setResponseButtonsEnabled(true);
-  playInfo.textContent = "X は A と B のどちらに似ていますか？";
+  playInfo.textContent = t("axb.question");
 }
 
 let currentManualStim = null;
@@ -1795,7 +2013,7 @@ function manualPlay() {
   if (!currentManualStim) return;
   clearError(trialError);
   playBtn.disabled = true;
-  playInfo.textContent = "再生中…";
+  playInfo.textContent = t("trial.playing");
   playFile(currentManualStim.file).then(() => {
     trialFirstPlayTime = performance.now();
     playBtn.classList.add("hidden");
@@ -1902,7 +2120,7 @@ async function recordResponse(response) {
       breakProgress.textContent = currentTrialIndex;
       document.querySelector("#screen-break .break-counter").innerHTML =
         "<strong>" + here.block_position + "</strong> / " +
-        (trialList[trialList.length - 1].block_position + 1) + " 事例 完了";
+        (trialList[trialList.length - 1].block_position + 1) + " " + t("break.doneItems");
       showScreen("break");
       return;
     }
@@ -1914,7 +2132,7 @@ async function recordResponse(response) {
   if (!isPractice && CONFIG.breakAfterNTrials > 0 && currentTrialIndex === CONFIG.breakAfterNTrials) {
     breakProgress.textContent = currentTrialIndex;
     document.querySelector("#screen-break .break-counter").innerHTML =
-      "<strong>" + currentTrialIndex + "</strong> / " + trialList.length + " 試行 完了";
+      "<strong>" + currentTrialIndex + "</strong> / " + trialList.length + " " + t("break.doneTrials");
     showScreen("break");
     return;
   }
@@ -2580,6 +2798,9 @@ if (_params.get("config") === "1") {
 } else {
   // gating のセル割り付け (?cond=&list=) は同意画面を出す前に解決しておく
   applyUrlCellAssignment().then(() => {
+    // 順序が重要。applyUiLang を先に流し、researcher が CONFIG で明示的に
+    // 与えた文言（同意タイトル・同意本文・教示）が後から上書きするようにする。
+    applyUiLang();
     applyConfigToUI();
     showScreen("consent");
   });

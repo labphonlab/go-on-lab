@@ -1189,7 +1189,8 @@ const UI_EN = {
   "ax.question": "Were A and X the same, or different?",
   "axb.question": "Was X more like A or more like B?",
   "count.practice": "{n} trials",
-  "count.main": "the main trials ({n} of them)"
+  "count.main": "the main trials ({n} of them)",
+  "chart.accuracy": "Proportion correct"
 };
 
 // 日本語の実行時文字列。UI_EN と対になるので、片方だけ足しても気付けるように
@@ -1214,7 +1215,8 @@ const UI_JA = {
   "ax.question": "A と X は同じですか、違いますか？",
   "axb.question": "X は A と B のどちらに似ていますか？",
   "count.practice": "{n} 試行",
-  "count.main": "本試行（{n} 試行）"
+  "count.main": "本試行（{n} 試行）",
+  "chart.accuracy": "正答率"
 };
 
 function t(key) {
@@ -1260,7 +1262,8 @@ let CONFIG = loadConfigFromStorage() || JSON.parse(JSON.stringify(DEFAULT_CONFIG
    ------------------------------------------------------------------ */
 async function applyUrlCellAssignment() {
   const q = new URLSearchParams(location.search);
-  if (q.get("lang") === "en" || q.get("lang") === "ja") CONFIG.uiLang = q.get("lang");
+  const urlLang = (q.get("lang") === "en" || q.get("lang") === "ja") ? q.get("lang") : null;
+  if (urlLang) CONFIG.uiLang = urlLang;
   const cond = q.get("cond");
   const list = q.get("list");
   if (!cond && !list) return;
@@ -1272,10 +1275,15 @@ async function applyUrlCellAssignment() {
               ("lists/" + (cond || "default") + "_list" + (list || "1") + ".json");
   try {
     const spec = await (await fetch(url)).json();
+    // 参加者のブラウザには設定パネルの保存値がないので、実験固有の設定
+    // (同意文・教示・質問文・ヘッドホン検査の有無) はリスト JSON が運ぶ。
+    // これで配布する index.html を上流と 1 バイトも変えずに済む。
+    if (spec.config) Object.assign(CONFIG, spec.config);
     CONFIG.gatingBlocks = spec.blocks || [];
-    if (spec.ui_lang) CONFIG.uiLang = spec.ui_lang;
     if (spec.condition) CONFIG.condition = spec.condition;
     if (spec.list != null) CONFIG.listId = String(spec.list);
+    // URL で明示された言語が最優先。条件ごとの既定は JSON 側に置く。
+    if (urlLang) CONFIG.uiLang = urlLang;
     CONFIG.experimentName = CONFIG.experimentName || "gating";
   } catch (e) {
     alert(t("err.listLoad") + " " + url);
@@ -1898,13 +1906,13 @@ async function runHeadphoneCheck() {
   document.getElementById("hpTotal").textContent = total;
   let correct = 0;
 
-  for (let t = 0; t < total; t++) {
+  for (let n = 0; n < total; n++) {
     // 正解位置は毎回引き直す。t % 3 のような規則にすると 1,2,3,1,2,3 と並び、
     // ヘッドホンを着けていなくても数試行で規則に気付けば通過できてしまう。
     const pos = shuffle([0, 1, 2]);
     const quiet = pos[0];
     const anti  = pos[1];
-    prog.textContent = (t + 1) + " / " + total;
+    prog.textContent = (n + 1) + " / " + total;
     area.innerHTML = "<p class='muted'>" + t("hp.playing") + "</p>";
     for (let k = 0; k < 3; k++) {
       area.innerHTML = "<p style='font-size:2rem'>" + (k + 1) + "</p>";
@@ -1931,7 +1939,7 @@ async function runHeadphoneCheck() {
 /* ブロック末の確信度。音声は鳴らさず評定尺度だけを出す。          */
 async function runConfidenceTrial(stim) {
   const ra = document.getElementById("ratingArea");
-  document.getElementById("responseArea").classList.add("hidden");
+  responseGrid.classList.add("hidden");
   playInfo.textContent = CONFIG.gatingConfidence.prompt || "";
   const scale = document.getElementById("ratingScale");
   scale.innerHTML = "";
@@ -2090,7 +2098,7 @@ async function recordResponse(response) {
 
   if (CONFIG.paradigm === "gating") {
     document.getElementById("ratingArea").classList.add("hidden");
-    document.getElementById("responseArea").classList.remove("hidden");
+    responseGrid.classList.remove("hidden");
   }
 
   // ITI: 短いブランク
@@ -2168,8 +2176,8 @@ async function finishExperiment() {
     sendErrorReport(uploadResult.error);
   }
 
-  renderSummary();
-  renderCharts();
+  try { renderSummary(); } catch (e) { /* 集計表示は本質ではない */ }
+  try { renderCharts(); } catch (e) { /* グラフ描画の失敗で足止めしない */ }
   showScreen("result");
 }
 
@@ -2271,7 +2279,8 @@ function renderSummary() {
   } else if (CONFIG.paradigm === "rating") {
     const mean = results.reduce((s, r) => s + Number(r.rating), 0) / n;
     html += "<div><strong>平均評価:</strong> " + mean.toFixed(2) + "</div>";
-  } else if (CONFIG.paradigm === "ax" || CONFIG.paradigm === "axb") {
+  } else if (CONFIG.paradigm === "ax" || CONFIG.paradigm === "axb" ||
+             CONFIG.paradigm === "gating") {
     const correct = results.filter((r) => r.isCorrect === 1).length;
     const withAnswer = results.filter((r) => r.isCorrect === 0 || r.isCorrect === 1).length;
     if (withAnswer > 0) {
@@ -2284,7 +2293,10 @@ function renderSummary() {
 function aggregateByStep() {
   const map = new Map();
   results.forEach((r) => {
-    const step = Number(r.continuumStep);
+    // gating には連続体ステップがない。横軸は gate 位置 (中断点までの ms)。
+    // 確信度の行は音を聞いた判断ではないので集計から外す。
+    if (CONFIG.paradigm === "gating" && r.trialKind !== "gate") return;
+    const step = CONFIG.paradigm === "gating" ? Number(r.gateMs) : Number(r.continuumStep);
     if (isNaN(step)) return;
     if (!map.has(step)) {
       map.set(step, { count: 0, target: 0, rtSum: 0, ratingSum: 0, correctSum: 0 });
@@ -2296,7 +2308,8 @@ function aggregateByStep() {
       if (r.response === CONFIG.targetResponseForGraph) agg.target += 1;
     } else if (CONFIG.paradigm === "rating") {
       agg.ratingSum += Number(r.rating);
-    } else if (CONFIG.paradigm === "ax" || CONFIG.paradigm === "axb") {
+    } else if (CONFIG.paradigm === "ax" || CONFIG.paradigm === "axb" ||
+               CONFIG.paradigm === "gating") {
       if (r.isCorrect === 1) agg.correctSum += 1;
     }
   });
@@ -2332,9 +2345,10 @@ function renderCharts() {
     primaryLabel = "平均評価";
     yMin = CONFIG.ratingScale.min;
     yMax = CONFIG.ratingScale.max;
-  } else if (CONFIG.paradigm === "ax" || CONFIG.paradigm === "axb") {
+  } else if (CONFIG.paradigm === "ax" || CONFIG.paradigm === "axb" ||
+             CONFIG.paradigm === "gating") {
     primaryData = data.map((d) => +d.accuracy.toFixed(3));
-    primaryLabel = "正答率";
+    primaryLabel = t("chart.accuracy");
   }
 
   document.getElementById("targetLabel").textContent = primaryLabel;
@@ -2657,8 +2671,8 @@ function defaultInstructionsBody() {
 function applyConfigToUI() {
   // タイトル
   if (CONFIG.consentTitle) {
-    const t = document.getElementById("consentTitle");
-    if (t) t.textContent = CONFIG.consentTitle;
+    const el = document.getElementById("consentTitle");
+    if (el) el.textContent = CONFIG.consentTitle;
   }
   // 同意本文（CONFIG.consentBody が空ならパラダイム別デフォルト）
   const cBody = document.getElementById("consentBody");
